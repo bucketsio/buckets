@@ -1,0 +1,12 @@
+{
+  "name": "buckets",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "4.x",
+    "logfmt": "1.1.x"
+  }
+}
