@@ -1,0 +1,28 @@
+{
+  "name": "Buckets Frontend",
+  "version": "0.0.0",
+  "authors": [
+    "David Kaneda <dk@morfunk.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chaplin": "~1.0.0"
+  },
+  "devDependencies": {
+    "bootstrap": "~3.1.1",
+    "modernizr": "~2.8.1"
+  },
+  "exportsOverride": {
+    "modernizr": {
+      "": "modernizr.js"
+    }
+  }
+}
