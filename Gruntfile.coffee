@@ -37,6 +37,7 @@ module.exports = (grunt) ->
             'public/fontastic/styles.css'
             'public/css/normalize.css'
             '**/toastr/**/*.css'
+            'public/vendor/bootstrap/**/*.css'
             'public/css/index.css'
           ]
 
@@ -56,7 +57,7 @@ module.exports = (grunt) ->
       app:
         files:
           'public/css/buckets.css': [
-            'public/css/**/*.css'
+            'public/css/buckets.css'
           ]
 
     express:
@@ -104,7 +105,7 @@ module.exports = (grunt) ->
 
       vendor:
         files: ['bower_components/**/*']
-        tasks: ['uglify:vendor']
+        tasks: ['uglify:vendor', 'bower', 'browserify:app']
 
       assets:
         files: ['client/assets/**/*.*']

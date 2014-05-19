@@ -6,19 +6,18 @@ Chaplin = require 'chaplin'
 
 Layout = require 'views/layout'
 routes = require 'routes'
-mediator = require 'mediator'
 
 module.exports = class App extends Chaplin.Application
   title: 'Buckets'
   initialize: ->
-    @initRouter routes, root: '/admin/'
+    @initRouter routes, {root: '/admin/', trailing: yes}
     @initDispatcher
       controllerPath: 'client/source/controllers/'
       controllerSuffix: '_controller.coffee'
 
-    @mediator = mediator
+    @mediator = Chaplin.mediator
 
-    mediator.layout = new Layout
+    Chaplin.mediator.layout = new Layout
       title: 'Buckets WOOT'
 
     # startup
