@@ -46,6 +46,11 @@ module.exports = (grunt) ->
         cwd: 'client/assets'
         src: ['**/*']
         dest: 'public/'
+      fontastic:
+        expand: yes
+        cwd: 'client/assets/fontastic/fonts/'
+        src: ['*']
+        dest: 'public/css/fonts/'
 
     cssmin:
       app:
