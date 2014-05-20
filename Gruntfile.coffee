@@ -118,7 +118,7 @@ module.exports = (grunt) ->
         tasks: ['copy']
 
       style:
-        files: ['client/style/**/*.styl']
+        files: ['client/style/**/*.{styl,less}']
         tasks: ['build-style']
 
       express:
