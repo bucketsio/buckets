@@ -36,8 +36,7 @@ module.exports = (grunt) ->
           'public/css/buckets.css': [
             'public/fontastic/styles.css'
             'public/css/normalize.css'
-            '**/toastr/**/*.css'
-            'public/vendor/bootstrap/**/*.css'
+            'public/vendor/**/*.css'
             'public/css/index.css'
           ]
 
@@ -87,12 +86,19 @@ module.exports = (grunt) ->
       app:
         files:
           'public/js/buckets.js': ['public/js/buckets.js']
-        options:
-          sourceMap: true
 
       vendor:
-        files:
-          'public/js/vendor.js': ['public/vendor/**/*.js']
+        dest: 'public/js/vendor.js'
+        src: [
+          'public/vendor/spin.js/spin.js'
+          'public/vendor/ladda/js/ladda.js'
+          'public/vendor/ladda/js/ladda.jquery.js'
+          'public/vendor/**/*.js'
+        ]
+        filter: 'isFile'
+
+      options:
+        sourceMap: true
 
     watch:
       bower:
@@ -105,7 +111,7 @@ module.exports = (grunt) ->
 
       vendor:
         files: ['bower_components/**/*']
-        tasks: ['uglify:vendor', 'bower', 'browserify:app']
+        tasks: ['bower', 'uglify:vendor', 'browserify:app']
 
       assets:
         files: ['client/assets/**/*.*']
@@ -144,7 +150,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build-scripts', ['browserify:app', 'uglify:app']
 
   grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['copy', 'bower', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'build', ['copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
   grunt.registerTask 'dev', ['build', 'express:dev', 'watch']

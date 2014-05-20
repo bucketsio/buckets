@@ -18,14 +18,16 @@ module.exports = class App extends Chaplin.Application
     @mediator = Chaplin.mediator
 
     Chaplin.mediator.layout = new Layout
-      title: 'Buckets WOOT'
+      title: 'Buckets'
+      titleTemplate: (data) ->
+        str = ''
+        str += "#{data.subtitle} · " if data.subtitle
+        str += data.title
+
 
     # startup
     @initComposer()
     @start()
     Object.freeze? @
 
-
-window.bkts = new App
-
-console.log window.bkts
+$ -> window.bkts = new App

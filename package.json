@@ -1,8 +1,7 @@
 {
   "name": "Buckets",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Manage content better.",
-  "main": "index.js",
   "scripts": {
     "test": ""
   },
@@ -29,6 +28,8 @@
     "coffeeify": "~0.6.0",
     "handlebars": "~1.3.0",
     "hbsfy": "~1.3.2",
-    "grunt-contrib-concat": "~0.4.0"
+    "grunt-contrib-concat": "~0.4.0",
+    "coffee-script": "~1.7.1",
+    "express": "~4.2.0"
   }
 }
