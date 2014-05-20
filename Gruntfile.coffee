@@ -8,36 +8,57 @@ module.exports = (grunt) ->
         options:
           targetDir: 'public/vendor/'
           layout: 'byComponent'
+          cleanTargetDir: yes
 
     browserify:
       app:
         files:
           'public/js/buckets.js': ['client/source/**/*.{coffee,hbs}']
-      options:
-        browserifyOptions:
-          fullPaths: false
-          extensions: ['.coffee', '.hbs']
-        transform: ['coffeeify', 'hbsfy']
-        bundleOptions:
-          debug: true
-        alias: [
-          './bower_components/backbone/backbone.js:backbone'
-          './bower_components/jquery/dist/jquery.js:jquery'
-          './bower_components/chaplin/chaplin.js:chaplin'
-          './bower_components/underscore/underscore.js:underscore'
-        ]
+        options:
+          transform: ['coffeeify', 'hbsfy']
+          bundleOptions:
+            debug: yes
+          browserifyOptions:
+            fullPaths: true
+            basedir: "./client/source/"
+            commondir: "./client/source/"
+            extensions: ['.coffee', '.hbs']
+            paths: ['./client/source', 'node_modules']
+          alias: [
+            './bower_components/backbone/backbone.js:backbone'
+            './bower_components/jquery/dist/jquery.js:jquery'
+            './bower_components/chaplin/chaplin.js:chaplin'
+            './bower_components/underscore/underscore.js:underscore'
+          ]
+    concat:
+      style:
+        files:
+          'public/css/buckets.css': [
+            'public/fontastic/styles.css'
+            'public/css/normalize.css'
+            '**/toastr/**/*.css'
+            'public/vendor/bootstrap/**/*.css'
+            'public/css/index.css'
+          ]
 
     copy:
       assets:
         expand: yes
         cwd: 'client/assets'
-        src: ['*']
+        src: ['**/*']
         dest: 'public/'
+      fontastic:
+        expand: yes
+        cwd: 'client/assets/fontastic/fonts/'
+        src: ['*']
+        dest: 'public/css/fonts/'
 
     cssmin:
       app:
         files:
-          'public/css/buckets.css': ['public/css/**/*.css']
+          'public/css/buckets.css': [
+            'public/css/buckets.css'
+          ]
 
     express:
       dev:
@@ -49,7 +70,7 @@ module.exports = (grunt) ->
 
     modernizr:
       app:
-        devFile: 'public/vendor/modernizr/modernizr.js'
+        devFile: 'bower_components/modernizr/modernizr.js'
         outputFile: 'public/js/modernizr.min.js'
         files: 
           src: ['public/js/buckets.{css,js}']
@@ -69,14 +90,26 @@ module.exports = (grunt) ->
         options:
           sourceMap: true
 
+      vendor:
+        files:
+          'public/js/vendor.js': ['public/vendor/**/*.js']
+
     watch:
+      bower:
+        files: ['bower.json']
+        tasks: ['bower']
+
       clientjs:
-        files: ['client/**/*.coffee']
-        tasks: ['build']
+        files: ['client/**/*.{coffee,hbs}']
+        tasks: ['browserify:app']
+
+      vendor:
+        files: ['bower_components/**/*']
+        tasks: ['uglify:vendor', 'bower', 'browserify:app']
 
       assets:
         files: ['client/assets/**/*.*']
-        tasks: ['copy:assets']
+        tasks: ['copy']
 
       style:
         files: ['client/style/**/*.styl']
@@ -90,12 +123,14 @@ module.exports = (grunt) ->
           livereload: true
 
       livereload:
-        options: livereload: true
+        options:
+          livereload: true
         files: ['public/**/*']
       
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-coffeelint'
+  grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
@@ -105,11 +140,12 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-modernizr'
 
-  grunt.registerTask 'build-style', ['stylus']
+  grunt.registerTask 'build-style', ['stylus', 'concat:style']
+  grunt.registerTask 'build-scripts', ['browserify:app', 'uglify:app']
 
   grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['copy', 'bower', 'browserify', 'build-style', 'modernizr']
-  grunt.registerTask 'minify', ['build', 'uglify', 'cssmin']
+  grunt.registerTask 'build', ['copy', 'bower', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
   grunt.registerTask 'dev', ['build', 'express:dev', 'watch']
 

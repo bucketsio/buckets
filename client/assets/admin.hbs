@@ -10,11 +10,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <script src="/js/modernizr.min.js"></script>
+    <link rel="stylesheet" href="/{{adminSegment}}/css/buckets.css">
+    <script src="/{{adminSegment}}/js/modernizr.min.js"></script>
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -23,11 +20,17 @@
 
     <!-- Add your site or application content here -->
     
-    <h1>Buckets Pre-pre-pre-alpha</h1>
+    <h1><a href="/{{adminSegment}}/"><span class="buckets-icon buckets-icon-bucket"></span> Buckets</a> <span class="version-badge">Pre-alpha</span></h1>
+
+    <div id="bkts-content"></div>
+    <div id="bkts-ftr">
+      Made with ♥︎ on <a href="http://assemblymade.com/buckets">Assembly</a>
+    </div>
     
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-    <script src="/js/buckets.js"></script>
+    <script src="/{{adminSegment}}/js/vendor.js"></script>
+    <script src="/{{adminSegment}}/js/buckets.js"></script>
 
     <script src="//localhost:35729/livereload.js"></script>
   </body>
