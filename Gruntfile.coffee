@@ -21,10 +21,10 @@ module.exports = (grunt) ->
         bundleOptions:
           debug: true
         alias: [
-          './bower_components/backbone/backbone.js:backbone'
-          './bower_components/jquery/dist/jquery.js:jquery'
-          './bower_components/chaplin/chaplin.js:chaplin'
-          './bower_components/underscore/underscore.js:underscore'
+          './app/bower_components/backbone/backbone.js:backbone'
+          './app/bower_components/jquery/dist/jquery.js:jquery'
+          './app/bower_components/chaplin/chaplin.js:chaplin'
+          './app/bower_components/underscore/underscore.js:underscore'
         ]
 
     copy:
@@ -45,7 +45,7 @@ module.exports = (grunt) ->
           script: 'server/index.coffee'
       options:
         spawn: false
-        opts: ['node_modules/coffee-script/bin/coffee']
+        opts: ['node_modules/coffeeify/node_modules/coffee-script/bin/coffee']
 
     modernizr:
       app:
