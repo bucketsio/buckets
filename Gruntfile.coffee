@@ -38,6 +38,7 @@ module.exports = (grunt) ->
             'public/css/normalize.css'
             'public/vendor/**/*.css'
             'public/css/index.css'
+            'public/css/bootstrap.css'
           ]
 
     copy:
@@ -66,6 +67,11 @@ module.exports = (grunt) ->
       options:
         spawn: false
         opts: ['node_modules/coffee-script/bin/coffee']
+
+    less:
+      app:
+        files:
+          "public/css/bootstrap.css": "client/style/bootstrap.less"
 
     modernizr:
       app:
@@ -139,6 +145,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
+  grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -146,7 +153,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-modernizr'
 
-  grunt.registerTask 'build-style', ['stylus', 'concat:style']
+  grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
   grunt.registerTask 'build-scripts', ['browserify:app', 'uglify:app']
 
   grunt.registerTask 'default', ['build']
