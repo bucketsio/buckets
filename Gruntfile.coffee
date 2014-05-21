@@ -37,8 +37,8 @@ module.exports = (grunt) ->
             'public/fontastic/styles.css'
             'public/css/normalize.css'
             'public/vendor/**/*.css'
-            'public/css/index.css'
             'public/css/bootstrap.css'
+            'public/css/index.css'
           ]
 
     copy:
