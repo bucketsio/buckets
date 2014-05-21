@@ -14,4 +14,12 @@ module.exports = class FirstUserView extends PageView
 
   submitForm: (e) ->
     e.preventDefault()
-    @$btn.ladda 'start'
+
+    data = @$(e.currentTarget).formParams false
+
+    btn = @$btn.ladda 'start'
+    
+    @model.save(data).always( ->
+      btn.ladda 'stop'
+    ).done ->
+      toastr.success 'User created!'

@@ -13,17 +13,20 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "bootstrap": "~3.1.1",
     "chaplin": "~1.0.0",
     "modernizr": "~2.8.1",
     "swag": "~0.7.0",
     "toastr": "~2.0.3",
-    "ladda": "~0.9.3"
+    "ladda": "~0.9.3",
+    "jquery.formParams": "~0.1.1"
   },
   "exportsOverride": {
+    "jquery.formParams": {
+      "js": "jquery.formParams.js"
+    },
     "modernizr": {
       "": "modernizr.js"
     },

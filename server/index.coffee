@@ -17,9 +17,7 @@ app.use bodyParser()
 app.use expressSession secret: config.buckets.salt
 
 # Load Routes
-# for api in util.loadClasses "#{__dirname}/api/"
-#   console.log api
-# app.use "/#{config.apiSegment}", api for api in util.loadClasses "#{__dirname}/api/"
+app.use "/#{config.buckets.apiSegment}", api for api in util.loadClasses "#{__dirname}/api/"
 app.use "/#{config.buckets.adminSegment}", require('./routes/admin')
 
 # @todo Make me a module
