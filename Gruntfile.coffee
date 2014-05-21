@@ -70,8 +70,13 @@ module.exports = (grunt) ->
 
     less:
       app:
-        files:
-          "public/css/bootstrap.css": "client/style/bootstrap.less"
+        files: [{
+          expand: true,
+          cwd: 'client/style'
+          src: ['*.less']
+          dest: 'public/css/'
+          ext: '.css'
+        }]
 
     modernizr:
       app:
