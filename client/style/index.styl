@@ -1,43 +1,65 @@
 $orange = #d43116
 
-body
-  color #555
-  font-family 'Avenir Next', Helvetica, sans-serif
+// Most basic variables are in LESS at bootstrap.less
 
 a
   color $orange
 
 h1
-  color #111
-  font-weight 700
 
   .bkts-icon
     display block
 
   a
-    text-decoration none
-    color darken($orange, 10)
+    color #999
+
+    &:hover
+      text-decoration none
+
+body
+  display table
+  width 100%
+  display flex
+  min-height 100vh
+  flex-direction column
 
 h1 .buckets-icon
   position relative
-  top .1em
+  // top .1em
+  vertical-align middle
   
 .version-badge
-  font-size .5em
+  font-size 12px
   border-radius 3px
-  border 2px solid #ddd
+  border 2px solid #ccc
   padding .1em .4em
+  margin-bottom 0 0 .4em
   color #aaa
-  vertical-align middle
-  font-weight 500
+  vertical-align top
+  font-weight 600
   display inline-block
-  margin-left .2em
 
 #bkts-content
   font-size 1.2em
   margin 40px 0
   text-align center
+  flex 1
 
 #bkts-ftr
+  margin 100px 0 20px
   color #888
   text-align center
+
+#bkts-hdr
+  color #555
+  padding 5px 20px
+
+.form-control:focus
+  box-shadow none !important
+
+
+
+hr.tiny
+  width 5%
+  margin 5px auto
+  border-bottom 2px solid #eee

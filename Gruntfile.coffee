@@ -35,7 +35,6 @@ module.exports = (grunt) ->
         files:
           'public/css/buckets.css': [
             'public/fontastic/styles.css'
-            'public/css/normalize.css'
             'public/vendor/**/*.css'
             'public/css/bootstrap.css'
             'public/css/index.css'
@@ -70,13 +69,11 @@ module.exports = (grunt) ->
 
     less:
       app:
-        files: [{
-          expand: true,
-          cwd: 'client/style'
-          src: ['*.less']
-          dest: 'public/css/'
-          ext: '.css'
-        }]
+        expand: true,
+        cwd: 'client/style'
+        src: ['**/*.less']
+        dest: 'public/css/'
+        ext: '.css'
 
     modernizr:
       app:
@@ -121,7 +118,7 @@ module.exports = (grunt) ->
         tasks: ['browserify:app']
 
       vendor:
-        files: ['bower_components/**/*']
+        files: ['bower_components/**/*.{js,css}']
         tasks: ['bower', 'uglify:vendor', 'browserify:app']
 
       assets:

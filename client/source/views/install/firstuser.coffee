@@ -1,5 +1,5 @@
 PageView = require 'views/base/page'
-
+_ = require 'underscore'
 tpl = require 'templates/install/firstuser'
 
 module.exports = class FirstUserView extends PageView
@@ -8,6 +8,8 @@ module.exports = class FirstUserView extends PageView
   render: ->
     super
     @$btn = @$('button[type=submit]').ladda()
+    _.defer => 
+      @$('.form-control').eq(0).focus()
 
   events:
     'submit form': 'submitForm'

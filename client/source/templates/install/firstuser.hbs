@@ -1,18 +1,19 @@
 <form class="container-fluid">
-  <h1>Please create your admin account below:</h1>
+  <div class="col-md-4 col-md-offset-4">
+    <h3>Let’s get you an admin account:</h3>
 
-  <div class="form-group">
-    <label for="nameInput">Name</label>
-    <input type="text" class="form-control" id="nameInput" name="name" placeholder="Full name">
+    <div class="form-group">
+      <input type="text" class="form-control" name="name" placeholder="Full name">
+    </div>
+    
+    <div class="form-group">
+      <input type="email" class="form-control" name="email" id="emailInput" placeholder="Email">
+    </div>
+    
+    <div class="form-group">
+      <input type="password" class="form-control" name="password" placeholder="Password">
+    </div>
+    
+    <button class="btn btn-primary ladda-button" data-style="zoom-in" value="Blah" type="submit">Submit</button>
   </div>
-  
-  <div class="form-group">
-    <input type="email" class="form-control" name="email" id="emailInput" placeholder="Email">
-  </div>
-  
-  <div class="form-group">
-    <input type="password" class="form-control" name="password" placeholder="Password">
-  </div>
-  
-  <button class="ladda-button" data-color="mint" data-style="zoom-in" value="Blah" type="submit">Submit</button>
 </form>
