@@ -4,13 +4,14 @@ User = require '../models/user'
 
 module.exports = app = express()
 
-app.post '/users', (req, res) ->
-  newUser = new User req.body
+app.route('/users')
+  .post (req, res) ->
+    newUser = new User req.body
+    
+    if newUser.checkValid()
+      newUser.save().then (user) ->
+        res.send user
 
-  newUser.save().then (user) ->
-    res.send newUser
-
-app.get '/users', (req, res) ->
-  User.delete().run()
-  User.filter({}).run().then (users) ->
-    res.send users
+  .get (req, res) ->
+    User.filter({}).run().then (users) ->
+      res.send users

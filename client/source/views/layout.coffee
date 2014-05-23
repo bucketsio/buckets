@@ -1,5 +1,7 @@
 Chaplin = require 'chaplin'
 
+helpers = require 'views/helpers'
+
 module.exports = class Layout extends Chaplin.Layout
   initialize: ->
     super

@@ -21,7 +21,7 @@ module.exports = (grunt) ->
           browserifyOptions:
             fullPaths: true
             basedir: "./client/source/"
-            commondir: "./client/source/"
+            commondir: "./client/source/" 
             extensions: ['.coffee', '.hbs']
             paths: ['./client/source', 'node_modules']
           alias: [
@@ -156,7 +156,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-modernizr'
 
   grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
-  grunt.registerTask 'build-scripts', ['browserify:app', 'uglify:app']
+  grunt.registerTask 'build-scripts', ['browserify:app']
 
   grunt.registerTask 'default', ['build']
   grunt.registerTask 'build', ['copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']

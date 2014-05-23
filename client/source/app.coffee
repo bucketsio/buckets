@@ -1,21 +1,22 @@
 Backbone = require 'backbone'
-
 Backbone.$ = $
-
 Chaplin = require 'chaplin'
 
+User = require 'models/user'
 Layout = require 'views/layout'
 routes = require 'routes'
 
 module.exports = class App extends Chaplin.Application
   title: 'Buckets'
-  initialize: ->
-    @initRouter routes, {root: '/admin/', trailing: yes}
+  initialize: (@options = {}) ->
+    @initRouter routes, {root: '/admin/'}
     @initDispatcher
       controllerPath: 'client/source/controllers/'
       controllerSuffix: '_controller.coffee'
 
     @mediator = Chaplin.mediator
+    @mediator.options = @options
+    @mediator.user = new User @options.user if @options.user
 
     Chaplin.mediator.layout = new Layout
       title: 'Buckets'
@@ -24,10 +25,9 @@ module.exports = class App extends Chaplin.Application
         str += "#{data.subtitle} · " if data.subtitle
         str += data.title
 
-
-    # startup
+    # Startup
     @initComposer()
     @start()
     Object.freeze? @
 
-$ -> window.bkts = new App
+window.App = App
