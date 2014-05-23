@@ -21,7 +21,7 @@ module.exports = (grunt) ->
           browserifyOptions:
             fullPaths: true
             basedir: "./client/source/"
-            commondir: "./client/source/" 
+            commondir: "./client/source/"
             extensions: ['.coffee', '.hbs']
             paths: ['./client/source', 'node_modules']
           alias: [
