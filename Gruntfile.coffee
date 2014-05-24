@@ -1,3 +1,6 @@
+r = require 'rethinkdb'
+config = require './server/config'
+
 module.exports = (grunt) ->
 
   grunt.initConfig
@@ -61,11 +64,14 @@ module.exports = (grunt) ->
 
     express:
       dev:
-        options:
-          script: 'server/index.coffee'
-      options:
         spawn: false
+      server:
+        options:
+          background: false
+      options:
+        script: 'server/index.coffee'
         opts: ['node_modules/coffee-script/bin/coffee']
+
 
     less:
       app:
@@ -140,6 +146,18 @@ module.exports = (grunt) ->
         options:
           livereload: true
         files: ['public/**/*']
+
+  grunt.registerTask 'checkDatabase', (next, stuff...)->
+    done = this.async()
+
+    r.connect config.rethinkdb, (err, conn) ->
+      if err
+        throw "\nBuckets could not connect to RethinkDB :/\n".magenta + "See the " + "README.md".bold + " for more info on installing RethinkDB and check your settings at " + "server/config.coffee".bold + "."
+        exit
+      else
+        console.log "Successfully connected to the database.\n"
+        conn.close()
+        done()
       
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
@@ -162,6 +180,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
-  grunt.registerTask 'dev', ['build', 'express:dev', 'watch']
-
-  # grunt.registerTask 'serve', ['minify', 'express:dev', 'watch'] # Find way to do without watch?
+  grunt.registerTask 'dev', ['checkDatabase', 'build', 'express:dev', 'watch']
+  grunt.registerTask 'serve', ['checkDatabase', 'minify', 'express:server']
