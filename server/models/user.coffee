@@ -1,6 +1,7 @@
 db = require '../lib/db'
 validator = require 'validator'
 bcrypt = require 'bcrypt'
+crypto = require 'crypto'
 
 module.exports = User = db.createModel 'User',
     name:
@@ -22,6 +23,9 @@ User.define 'checkValid', ->
 User.define 'checkPassword', (password) ->
   bcrypt.compareSync password, @password
 
-User.docAddListener 'saving', (doc) ->
+User.docAddListener 'saving', (user) ->
   salt = bcrypt.genSaltSync()
-  doc.password = bcrypt.hashSync doc.password, salt
+  user.password = bcrypt.hashSync user.password, salt
+
+User.addListener 'retrieved', (user) ->
+  user.email_hash = crypto.createHash('md5').update(user.email).digest('hex') if user.email
