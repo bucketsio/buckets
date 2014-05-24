@@ -23,7 +23,11 @@ app.use passport.initialize()
 app.use passport.session()
 
 # Load Routes for the API, admin, and frontend
-app.use "/#{config.buckets.apiSegment}", api for api in util.loadClasses "#{__dirname}/api/"
+try
+  app.use "/#{config.buckets.apiSegment}", api for api in util.loadClasses "#{__dirname}/routes/api/"
+catch e
+  console.log e
+  throw 'Missing API Class'.red
 app.use "/#{config.buckets.adminSegment}", require('./routes/admin')
 app.use require('./routes/frontend')
 
