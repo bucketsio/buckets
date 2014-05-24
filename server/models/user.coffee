@@ -1,5 +1,6 @@
 db = require '../lib/db'
 validator = require 'validator'
+bcrypt = require 'bcrypt'
 
 module.exports = User = db.createModel 'User',
     name:
@@ -16,7 +17,11 @@ User.define 'checkValid', ->
   errors.push 'name' unless @name?.length > 1
   errors.push 'password' unless @password?.length > 1
 
-  true
+  return errors if errors
 
 User.define 'checkPassword', (password) ->
-  password is @password
+  bcrypt.compareSync password, @password
+
+User.docAddListener 'saving', (doc) ->
+  salt = bcrypt.genSaltSync()
+  doc.password = bcrypt.hashSync doc.password, salt
