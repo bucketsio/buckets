@@ -181,4 +181,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
   grunt.registerTask 'dev', ['checkDatabase', 'build', 'express:dev', 'watch']
+  grunt.registerTask 'devserve', ['checkDatabase', 'express:dev', 'watch']
   grunt.registerTask 'serve', ['checkDatabase', 'minify', 'express:server']
