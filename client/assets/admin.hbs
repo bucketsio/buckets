@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="/{{adminSegment}}/css/buckets.css">
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,600,300italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'>
     <script src="/{{adminSegment}}/js/modernizr.min.js"></script>
   </head>
   <body>
@@ -18,19 +19,38 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
+    <header id="bkts-hdr">
+      <h1><a href="/{{adminSegment}}/"><span class="buckets-icon buckets-icon-bucket"></span></a> <span class="version-badge">pre-alpha</span></h1>
+    </header>
     
-    <h1><a href="/{{adminSegment}}/"><span class="buckets-icon buckets-icon-bucket"></span> Buckets</a> <span class="version-badge">Pre-alpha</span></h1>
-
     <div id="bkts-content"></div>
-    <div id="bkts-ftr">
-      Made with ♥︎ on <a href="http://assemblymade.com/buckets">Assembly</a>
-    </div>
+
+    <footer id="bkts-ftr">
+      <hr class="tiny">
+      <a href="/" class="noscript">Return to website</a> · Made with ♥︎ on <a href="http://assemblymade.com/buckets" target="_blank">Assembly</a>
+    </footer>
     
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
     <script src="/{{adminSegment}}/js/vendor.js"></script>
     <script src="/{{adminSegment}}/js/buckets.js"></script>
+    <script>
+      $(function(){
+        window.bkts = new App({
+
+          adminSegment: '{{adminSegment}}'
+
+          {{#if needsInstall}}
+            ,needsInstall: {{needsInstall}}
+          {{/if}}
+
+          {{#if user}}
+            ,user: {{json user}}
+          {{/if}}
+        });
+      })
+
+    </script>
 
     <script src="//localhost:35729/livereload.js"></script>
   </body>

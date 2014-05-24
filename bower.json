@@ -13,28 +13,29 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "bootstrap": "~3.1.1",
     "chaplin": "~1.0.0",
     "modernizr": "~2.8.1",
     "swag": "~0.7.0",
     "toastr": "~2.0.3",
-    "ladda": "~0.9.3"
+    "ladda": "~0.9.3",
+    "jquery.formParams": "~0.1.1",
+    "underscore": "~1.6.0"
   },
   "exportsOverride": {
-    "modernizr": {
-      "": "modernizr.js"
+    "jquery.formParams": {
+      "js": "jquery.formParams.js"
     },
     "ladda": {
       "js": "js/{ladda.js,ladda.jquery.js}",
-      "css": "dist/ladda.min.css"
+      "css": "dist/ladda-themeless.min.css"
     },
     "bootstrap": {
       "js": "dist/js/bootstrap.js",
       "fonts": "dist/fonts/**/*.*"
     },
-    "/(backbone|chaplin|underscore|jquery)/": {}
+    "/(backbone|chaplin|underscore|jquery|modernizr|handlebars)/": {}
   }
 }

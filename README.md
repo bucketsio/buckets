@@ -11,6 +11,12 @@ This is a product being built by the Assembly community. You can help push this 
 
 [RethinkDB](http://rethinkdb.com), [Node.js](http://nodejs.org) and the following globals:
 
+
+```
+  brew install protobuff
+```
+
+
 ```
 	npm install -g grunt-cli
 ```
