@@ -18,4 +18,6 @@ module.exports = class InstallController extends Controller
     @view = new FirstUserView
       model: newUser
 
-    newUser.on 'sync', => @redirectTo url: '/'
+    newUser.on 'sync', => 
+      mediator.options.needsInstall = no
+      @redirectTo url: '/'
