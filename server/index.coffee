@@ -2,6 +2,7 @@ express = require 'express'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
 expressSession = require 'express-session'
+colors = require 'colors'
 
 passport = require './lib/auth'
 util = require './lib/util'
@@ -28,4 +29,4 @@ app.use require('./routes/frontend')
 
 app.listen config.buckets.port
 
-console.log "Buckets is running at http://localhost:#{config.buckets.port}/"
+console.log "\nBuckets".yellow + " is running at " + "http://localhost:#{config.buckets.port}/".underline.bold
