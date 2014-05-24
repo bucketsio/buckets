@@ -36,20 +36,25 @@
     <script src="/{{adminSegment}}/js/buckets.js"></script>
     <script>
       $(function(){
-        window.bkts = new App({
+        try {
+          window.bkts = new App({
 
-          adminSegment: '{{adminSegment}}'
+            adminSegment: '{{adminSegment}}'
 
-          {{#if needsInstall}}
-            ,needsInstall: {{needsInstall}}
-          {{/if}}
+            {{#if needsInstall}}
+              ,needsInstall: {{needsInstall}}
+            {{/if}}
 
-          {{#if user}}
-            ,user: {{json user}}
-          {{/if}}
-        });
+            {{#if user}}
+              ,user: {{json user}}
+            {{/if}}
+          });
+        } catch (e) {
+          if (e && e.message && window.jQuery) {
+            $('#bkts-content').append("<div class=\"container\"><div class=\"alert center alert-danger\"><strong>There was an error loading the Buckets JavaScript.</strong> <br>If you’re the site developer, have you run <code>grunt build</code> or <code>grunt dev</code>?</div></div>")
+          } 
+        }
       })
-
     </script>
 
     <script src="//localhost:35729/livereload.js"></script>
