@@ -24,7 +24,8 @@ app.use passport.session()
 
 # Load Routes for the API, admin, and frontend
 try
-  app.use "/#{config.buckets.apiSegment}", api for api in util.loadClasses "#{__dirname}/routes/api/"
+  for api in util.loadClasses "#{__dirname}/routes/api/"
+    app.use "/#{config.buckets.apiSegment}", api if api.init
 catch e
   console.log e
   throw 'Missing API Class'.red
