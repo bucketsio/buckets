@@ -32,8 +32,8 @@ grunt serve
 
 #### Additional Documentation
 
-* [Frontend Architecture](docs/frontend.md).
-* [Database](docs/database.md).
+* [Frontend Architecture](docs/frontend.md)
+* [Database](docs/database.md)
 
 ### Contributing
 
