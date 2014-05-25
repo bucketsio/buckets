@@ -1,19 +1,19 @@
 Chaplin = require 'chaplin'
 
-helpers = require 'views/helpers'
-
 module.exports = class Layout extends Chaplin.Layout
+
+  regions:
+    'header': '#bkts-header'
+
   initialize: ->
     super
 
     toastr.options =
       debug: false
       positionClass: "toast-top-full-width"
-      # onclick: null
       showDuration: 100
-      hideDuration: 200
-      # hideDuration: 1000
-      timeOut: 2000
+      hideDuration: 300
+      timeOut: 2100
       extendedTimeOut: 1000
       showEasing: 'swing'
       hideEasing: 'linear'

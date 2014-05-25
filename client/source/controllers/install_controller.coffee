@@ -1,14 +1,10 @@
 Controller = require 'lib/controller'
 User = require 'models/user'
 FirstUserView = require 'views/install/firstuser'
-StartView = require 'views/start'
+
+mediator = require('chaplin').mediator
 
 module.exports = class InstallController extends Controller
-
-  start: ->
-    @adjustTitle 'Welcome'
-
-    @view = new StartView
 
   firstuser: ->
     @adjustTitle 'Install'

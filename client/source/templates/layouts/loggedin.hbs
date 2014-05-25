@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <nav class="col-sm-3">
+      <ul class="nav nav-pills nav-stacked nav-primary">
+        <li><a href="/{{adminSegment}}/buckets/add">{{icon 'add'}} New Bucket</a></li>
+        <li class="divider"></li>
+        <li><a href="/{{adminSegment}}/templates">{{icon 'file-code'}} Templates</a></li>
+        <li><a href="/{{adminSegment}}/routes">{{icon 'direction-sign'}} Routes</a></li>
+        <li class="divider"></li>
+        <li><a href="/{{adminSegment}}/settings">{{icon 'setting-gear'}} Settings</a></li>
+        <li><a href="/{{adminSegment}}/users">{{icon 'contacts'}} Users</a></li>
+        <li class="divider"></li>
+      </ul>
+
+      <div class="usernav">
+        <div class="pull-left">
+          {{gravatar email_hash}}
+        </div>
+         {{name}} · <a class="noscript" href="/{{adminSegment}}/logout">Log out</a>
+      </div>
+    </nav>
+    <div class="page col-sm-9">
+      
+    </div>    
+  </div>
+</div>
