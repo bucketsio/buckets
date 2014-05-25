@@ -18,7 +18,7 @@ npm install -g grunt-cli
 Then install the local Node dependencies:
 
 ```
-	npm install
+npm install
 ```
 
 ### Running Buckets
@@ -28,6 +28,12 @@ At this point, you should be able to run:
 ```
 grunt serve
 ```
+
+### Running tests
+
+- `grunt test:client`: To run client tests
+- `grunt test:server`: To run server tests
+- `grunt test`: To run both client and server tests
 
 #### Additional Documentation
 
