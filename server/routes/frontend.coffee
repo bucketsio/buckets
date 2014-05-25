@@ -8,5 +8,5 @@ module.exports = app = express()
 
 app.set 'views', "#{__dirname}/../../public"
 
-app.get '/', (req, res) ->
+app.get '*', (req, res) ->
   res.render 'frontend'
