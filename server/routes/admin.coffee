@@ -26,10 +26,10 @@ app.get '/logout', (req, res) ->
 
 app.all '*', (req, res) ->
   # This is kinda dumb, but whatever
-  User.count().execute (err, numberUsers) ->
+  User.count({}).exec (err, userCount) ->
     res.send 500 if err
 
     res.render 'admin',
       user: req.user
       adminSegment: config.buckets.adminSegment
-      needsInstall: numberUsers is 0
+      needsInstall: userCount is 0

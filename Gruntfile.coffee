@@ -1,3 +1,6 @@
+config = require './server/config'
+mongoose = require 'mongoose'
+
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
@@ -169,6 +172,12 @@ module.exports = (grunt) ->
           livereload: true
         files: ['public/**/*']
 
+  grunt.registerTask 'checkDatabase', (next, stuff...)->
+    connection = mongoose.connect config.db, (err) ->
+      if err
+        throw "\nBuckets could not connect to MongoDB :/\n".magenta + "See the " + 'README.md'.bold + " for more info on installing MongoDB and check your settings at " + 'server/config.coffee'.bold + "."
+        exit
+
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-coffeelint'
@@ -191,9 +200,9 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
-  grunt.registerTask 'dev', ['build', 'express:dev', 'watch']
-  grunt.registerTask 'devserve', ['express:dev', 'watch']
-  grunt.registerTask 'serve', ['minify', 'express:server']
+  grunt.registerTask 'dev', ['checkDatabase', 'express:dev', 'build', 'watch']
+  grunt.registerTask 'devserve', ['checkDatabase', 'express:dev', 'watch']
+  grunt.registerTask 'serve', ['checkDatabase', 'minify', 'express:server']
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']

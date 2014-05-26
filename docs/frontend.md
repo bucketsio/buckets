@@ -9,7 +9,7 @@ Once you’ve installed the project dependencies, use Grunt.js to build, serve, 
 * `grunt dev` — **This’ll be your main jam.** Creates a local server (localhost:3000) and runs “watch” for all files. Any changes to server CoffeeScript will restart the Node server and then reload the browser. Any changes to client-side CoffeeScript, Stylus, or Handlebars will re-compile, then reload the browser.
 * `grunt build` (default) — Prepares to deploy a development branch of Buckets.
 * `grunt serve` — Does a standard build, minifies the assets, and serves the app.
-* `grunt devserve` — Does a standard build, minifies the assets, and serves the app.
+* `grunt devserve` — Simply serves the app and watches. Useful for when a server error occurs and you don’t want to rebuild with `grunt dev` from scratch.
 
 ### JavaScript Architecture
 
