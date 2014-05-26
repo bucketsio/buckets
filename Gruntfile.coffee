@@ -1,5 +1,5 @@
-r = require 'rethinkdb'
 config = require './server/config'
+mongoose = require 'mongoose'
 
 module.exports = (grunt) ->
 
@@ -148,17 +148,11 @@ module.exports = (grunt) ->
         files: ['public/**/*']
 
   grunt.registerTask 'checkDatabase', (next, stuff...)->
-    done = this.async()
-
-    r.connect config.rethinkdb, (err, conn) ->
+    connection = mongoose.connect config.db, (err) ->
       if err
-        throw "\nBuckets could not connect to RethinkDB :/\n".magenta + "See the " + "README.md".bold + " for more info on installing RethinkDB and check your settings at " + "server/config.coffee".bold + "."
+        throw "\nBuckets could not connect to MongoDB :/\n".magenta + "See the " + 'README.md'.bold + " for more info on installing MongoDB and check your settings at " + 'server/config.coffee'.bold + "."
         exit
-      else
-        console.log "Successfully connected to the database.\n"
-        conn.close()
-        done()
-      
+
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-coffeelint'
@@ -180,6 +174,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
-  grunt.registerTask 'dev', ['checkDatabase', 'build', 'express:dev', 'watch']
+  grunt.registerTask 'dev', ['checkDatabase', 'express:dev', 'build', 'watch']
   grunt.registerTask 'devserve', ['checkDatabase', 'express:dev', 'watch']
   grunt.registerTask 'serve', ['checkDatabase', 'minify', 'express:server']

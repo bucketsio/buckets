@@ -1,31 +1,43 @@
-db = require '../lib/db'
-validator = require 'validator'
 bcrypt = require 'bcrypt'
 crypto = require 'crypto'
+mongoose = require 'mongoose'
+db = require '../lib/database'
 
-module.exports = User = db.createModel 'User',
-    name:
-      _type: String
-      enforce_missing: yes
-    email: String
-    password: 
-      _type: String
-      enforce_missing: yes
+Schema = mongoose.Schema
 
-User.define 'checkValid', ->
-  errors = []
-  errors.push 'email' unless validator.isEmail @email
-  errors.push 'name' unless @name?.length > 1
-  errors.push 'password' unless @password?.length > 1
+userSchema = new Schema
+  name: 
+    type: String
+    required: true
+  email: 
+    type: String
+    required: true
+    lowercase: true
+    trim: true
+    unique: true
+  password:
+    type: String
+    required: true
+    set: (password) ->
+      return unless password
+      salt = bcrypt.genSaltSync()
+      bcrypt.hashSync password, salt
+  activated: 
+    type: Boolean
+    default: false
+  last_active:
+    type: Date
+    default: Date.now
+  date_created:
+    type: Date
+    default: Date.now
 
-  return errors if errors
-
-User.define 'checkPassword', (password) ->
+userSchema.methods.authenticate = (password, callback) ->
   bcrypt.compareSync password, @password
 
-User.docAddListener 'saving', (user) ->
-  salt = bcrypt.genSaltSync()
-  user.password = bcrypt.hashSync user.password, salt
+userSchema.virtual('email_hash').get ->
+  crypto.createHash('md5').update(@email).digest('hex') if @email
 
-User.addListener 'retrieved', (user) ->
-  user.email_hash = crypto.createHash('md5').update(user.email).digest('hex') if user.email
+userSchema.set 'toJSON', virtuals: true
+
+module.exports = db.model 'User', userSchema

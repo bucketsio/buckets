@@ -8,11 +8,12 @@ app.route('/users')
   .post (req, res) ->
     newUser = new User req.body
     
-    if newUser.checkValid()
-      newUser.save().then (user) ->
-        res.send user
+    newUser.save (err) ->
+      if err
+        res.send err, 400
+      else
+        res.send newUser, 200
 
   .get (req, res) ->
-    # User.delete().run()
-    User.filter({}).run().then (users) ->
+    User.find (users) ->
       res.send users
