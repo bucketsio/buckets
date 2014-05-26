@@ -12,7 +12,6 @@ Buckets is a simple, open source, content management system for Node.js.
 
 
 ```
-brew install protobuff
 npm install -g grunt-cli
 ```
 

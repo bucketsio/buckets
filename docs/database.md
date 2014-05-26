@@ -1,14 +1,14 @@
-Buckets uses [RethinkDB](http://rethinkdb.com/) as it’s database.
+Buckets uses [MongoDB](http://www.mongodb.org) as it’s database.
 
 On Mac OS X, you can quickly install with:
 
-```brew install rethinkdb```
+```brew install mongodb```
 
-If you want to start RethinkDB automatically with your Mac, you include an easy LaunchAgent:
+If you want to start MongoDB automatically with your Mac, you include an easy LaunchAgent:
 
 ```
-  ln -sfv /usr/local/opt/rethinkdb/*.plist ~/Library/LaunchAgents
-  launchctl load ~/Library/LaunchAgents/homebrew.mxcl.rethinkdb.plist
+  ln -sfv /usr/local/opt/mongodb/*.plist ~/Library/LaunchAgents
+  launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
 ```
 
-For Windows/Linux users, please just refer to RethinkDB homepage and follow the installation instructions.
+For Windows/Linux users, please just refer to MongoDB homepage and follow the installation instructions.
