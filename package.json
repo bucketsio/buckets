@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Manage content better.",
   "scripts": {
-    "test": ""
+    "test": "grunt test"
   },
   "author": "",
   "devDependencies": {
@@ -27,7 +27,6 @@
     "grunt-contrib-uglify": "~0.4.0",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-express-server": "~0.4.17",
-    "grunt-mocha": "~0.4.10",
     "grunt-modernizr": "~0.5.2",
     "handlebars": "~1.3.0",
     "hbs": "~2.6.0",
@@ -36,6 +35,13 @@
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
     "serve-static": "~1.1.0",
-    "validator": "^3.12.0"
+    "validator": "^3.12.0",
+    "mocha": "~1.19.0",
+    "supertest": "~0.12.1",
+    "sinon": "~1.10.0",
+    "grunt-contrib-testem": "~0.5.16",
+    "grunt-shell": "~0.7.0",
+    "testem": "~0.6.15",
+    "chai": "~1.9.1"
   }
 }

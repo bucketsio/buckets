@@ -14,25 +14,43 @@ module.exports = (grunt) ->
           cleanTargetDir: yes
 
     browserify:
+      options:
+        transform: ['coffeeify', 'hbsfy']
+        bundleOptions:
+          debug: yes
+        browserifyOptions:
+          fullPaths: true
+          basedir: './client/source/'
+          commondir: './client/source/'
+          extensions: ['.coffee', '.hbs']
+          paths: ['./client/source', 'node_modules']
+        alias: [
+          './bower_components/backbone/backbone.js:backbone'
+          './bower_components/jquery/dist/jquery.js:jquery'
+          './bower_components/chaplin/chaplin.js:chaplin'
+          './bower_components/underscore/underscore.js:underscore'
+        ]
       app:
         files:
           'public/js/buckets.js': ['client/source/**/*.{coffee,hbs}']
+      tests:
+        files:
+          'tmp/tests.js': ['test/client/**/*.coffee']
+
+    testem:
+      basic:
         options:
-          transform: ['coffeeify', 'hbsfy']
-          bundleOptions:
-            debug: yes
-          browserifyOptions:
-            fullPaths: true
-            basedir: "./client/source/"
-            commondir: "./client/source/"
-            extensions: ['.coffee', '.hbs']
-            paths: ['./client/source', 'node_modules']
-          alias: [
-            './bower_components/backbone/backbone.js:backbone'
-            './bower_components/jquery/dist/jquery.js:jquery'
-            './bower_components/chaplin/chaplin.js:chaplin'
-            './bower_components/underscore/underscore.js:underscore'
-          ]
+          parallel: 2
+          framework: 'mocha'
+          src_files: ['tmp/tests.js']
+          serve_files: ['tmp/tests.js']
+          launch_in_dev: ['phantomjs', 'chrome']
+          launch_in_ci: ['phantomjs', 'chrome']
+
+    shell:
+      mocha:
+        command: './node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server'
+
     concat:
       style:
         files:
@@ -85,7 +103,7 @@ module.exports = (grunt) ->
       app:
         devFile: 'bower_components/modernizr/modernizr.js'
         outputFile: 'public/js/modernizr.min.js'
-        files: 
+        files:
           src: ['public/js/buckets.{css,js}']
 
     stylus:
@@ -123,9 +141,17 @@ module.exports = (grunt) ->
         files: ['client/**/*.{coffee,hbs}']
         tasks: ['browserify:app']
 
+      clientTest:
+        files: ['test/client/**/*.coffee', 'client/**/*.{coffee,hbs}']
+        tasks: ['test:client']
+
+      serverTest:
+        files: ['test/server/**/*.coffee', 'server/**/*.coffee']
+        tasks: ['shell:mocha']
+
       vendor:
         files: ['bower_components/**/*.{js,css}']
-        tasks: ['bower', 'uglify:vendor', 'browserify:app']
+        tasks: ['bower', 'uglify:vendor', 'browserify']
 
       assets:
         files: ['client/assets/**/*.*']
@@ -152,19 +178,24 @@ module.exports = (grunt) ->
       if err
         throw "\nBuckets could not connect to MongoDB :/\n".magenta + "See the " + 'README.md'.bold + " for more info on installing MongoDB and check your settings at " + 'server/config.coffee'.bold + "."
         exit
+      else
+        console.log "Successfully connected to the database.\n"
+        conn.close()
+        done()
 
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-coffeelint'
+  grunt.loadNpmTasks 'grunt-shell'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
+  grunt.loadNpmTasks 'grunt-contrib-testem'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
-  grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-modernizr'
 
   grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
@@ -177,3 +208,9 @@ module.exports = (grunt) ->
   grunt.registerTask 'dev', ['checkDatabase', 'express:dev', 'build', 'watch']
   grunt.registerTask 'devserve', ['checkDatabase', 'express:dev', 'watch']
   grunt.registerTask 'serve', ['checkDatabase', 'minify', 'express:server']
+
+  grunt.registerTask 'test:server', ['build', 'shell:mocha']
+  grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test', ['test:server', 'test:client']
+
+  # grunt.registerTask 'serve', ['minify', 'express:dev', 'watch'] # Find way to do without watch?
