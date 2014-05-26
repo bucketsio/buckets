@@ -107,9 +107,6 @@
 .buckets-icon-alert:before {
   content: "z";
 }
-.buckets-icon-user-add:before {
-  content: "A";
-}
 .buckets-icon-dropbox:before {
   content: "B";
 }
@@ -133,12 +130,6 @@
 }
 .buckets-icon-cog:before {
   content: "I";
-}
-.buckets-icon-torso:before {
-  content: "J";
-}
-.buckets-icon-web:before {
-  content: "K";
 }
 .buckets-icon-user:before {
   content: "K";
@@ -172,4 +163,52 @@
 }
 .buckets-icon-shift-2:before {
   content: "P";
+}
+.buckets-icon-contacts-1:before {
+  content: "Q";
+}
+.buckets-icon-user-add:before {
+  content: "q";
+}
+.buckets-icon-smiley:before {
+  content: "R";
+}
+.buckets-icon-smiley-happy:before {
+  content: "S";
+}
+.buckets-icon-smiley-sad:before {
+  content: "T";
+}
+.buckets-icon-stationery:before {
+  content: "U";
+}
+.buckets-icon-file-code:before {
+  content: "V";
+}
+.buckets-icon-book:before {
+  content: "X";
+}
+.buckets-icon-tabbed-book:before {
+  content: "Y";
+}
+.buckets-icon-briefcase-1:before {
+  content: "0";
+}
+.buckets-icon-drawer-2:before {
+  content: "2";
+}
+.buckets-icon-tag:before {
+  content: "3";
+}
+.buckets-icon-add-circle:before {
+  content: "A";
+}
+.buckets-icon-add:before {
+  content: "4";
+}
+.buckets-icon-direction-sign:before {
+  content: "Z";
+}
+.buckets-icon-setting-gear:before {
+  content: "J";
 }

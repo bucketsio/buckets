@@ -1,14 +1,10 @@
 Controller = require 'lib/controller'
 User = require 'models/user'
 FirstUserView = require 'views/install/firstuser'
-StartView = require 'views/start'
+
+mediator = require('chaplin').mediator
 
 module.exports = class InstallController extends Controller
-
-  start: ->
-    @adjustTitle 'Welcome'
-
-    @view = new StartView
 
   firstuser: ->
     @adjustTitle 'Install'
@@ -18,4 +14,6 @@ module.exports = class InstallController extends Controller
     @view = new FirstUserView
       model: newUser
 
-    newUser.on 'sync', => @redirectTo url: '/'
+    newUser.on 'sync', => 
+      mediator.options.needsInstall = no
+      @redirectTo url: '/'

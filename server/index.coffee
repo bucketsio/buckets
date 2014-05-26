@@ -2,6 +2,7 @@ express = require 'express'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
 expressSession = require 'express-session'
+colors = require 'colors'
 
 passport = require './lib/auth'
 util = require './lib/util'
@@ -22,10 +23,15 @@ app.use passport.initialize()
 app.use passport.session()
 
 # Load Routes for the API, admin, and frontend
-app.use "/#{config.buckets.apiSegment}", api for api in util.loadClasses "#{__dirname}/api/"
+try
+  for api in util.loadClasses "#{__dirname}/routes/api/"
+    app.use "/#{config.buckets.apiSegment}", api if api.init
+catch e
+  console.log e
+  throw 'Missing API Class'.red
 app.use "/#{config.buckets.adminSegment}", require('./routes/admin')
 app.use require('./routes/frontend')
 
 app.listen config.buckets.port
 
-console.log "Buckets is running at http://localhost:#{config.buckets.port}/"
+console.log "\nBuckets".yellow + " is running at " + "http://localhost:#{config.buckets.port}/".underline.bold

@@ -1,0 +1,37 @@
+<h1>
+  {{#if _id}}
+    Edit Bucket
+  {{else}}
+    New Bucket
+  {{/if}}
+</h1>
+
+{{input 'text' 'name' placeholder='ie. Articles, Songs, Products, etc.'}}
+
+{{input 'text' 'variable' placeholder="variable_name"}}
+
+<h4>Icon</h4>
+
+<div style="font-size: 30px">
+  {{icon 'photos'}} 
+  {{icon 'calendar'}}
+  {{icon 'movie'}}
+  {{icon 'music-note'}}
+  {{icon 'map-pin'}}
+  {{icon 'quote'}}
+  {{icon 'clipboard'}}
+  {{icon 'bag'}}
+  {{icon 'bubble'}}
+  {{icon 'edit'}}
+</div>
+
+<h4>Color</h4>
+
+<div class="swatches">
+  <div class="teal"></teal>
+  <div class="purple"></teal>
+  <div class="red"></teal>
+  <div class="yellow"></teal>
+</div>
+
+{{submit 'Save Bucket'}}

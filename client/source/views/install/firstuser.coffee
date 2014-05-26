@@ -1,9 +1,13 @@
-PageView = require 'views/base/page'
 _ = require 'underscore'
+
+View = require 'lib/view'
+
 tpl = require 'templates/install/firstuser'
 
-module.exports = class FirstUserView extends PageView
+module.exports = class FirstUserView extends View
   template: tpl
+  container: '#bkts-content'
+  autoRender: yes
   
   render: ->
     super

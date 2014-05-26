@@ -7,9 +7,11 @@
   },
   "author": "",
   "devDependencies": {
+    "bcrypt": "^0.7.8",
     "body-parser": "~1.0.2",
     "coffee-script": "~1.7.1",
     "coffeeify": "~0.6.0",
+    "colors": "^0.6.2",
     "cookie-parser": "~1.0.1",
     "express": "~4.2.0",
     "express-session": "~1.0.4",

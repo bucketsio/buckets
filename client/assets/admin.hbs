@@ -11,7 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="/{{adminSegment}}/css/buckets.css">
-    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,600,300italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Petrona' rel='stylesheet' type='text/css'>
+
     <script src="/{{adminSegment}}/js/modernizr.min.js"></script>
   </head>
   <body>
@@ -20,14 +21,18 @@
     <![endif]-->
 
     <header id="bkts-hdr">
-      <h1><a href="/{{adminSegment}}/"><span class="buckets-icon buckets-icon-bucket"></span></a> <span class="version-badge">pre-alpha</span></h1>
+      <div class="container">
+        <h1><a href="/{{adminSegment}}/"><span class="buckets-icon buckets-icon-bucket"></span></a> <span class="version-badge">pre-alpha</span></h1>
+      </div>
     </header>
     
     <div id="bkts-content"></div>
 
     <footer id="bkts-ftr">
-      <hr class="tiny">
-      <a href="/" class="noscript">Return to website</a> · Made with ♥︎ on <a href="http://assemblymade.com/buckets" target="_blank">Assembly</a>
+      <div class="container">
+        <hr class="tiny">
+        <a href="/" class="noscript">Return to website</a> · Made with ♥︎ on <a href="http://assemblymade.com/buckets" target="_blank">Assembly</a> · <a href="https://github.com/asm-products/buckets" target="_blank"><span class="icon buckets-icon-github"></span></a>
+      </div>
     </footer>
     
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -36,20 +41,25 @@
     <script src="/{{adminSegment}}/js/buckets.js"></script>
     <script>
       $(function(){
-        window.bkts = new App({
+        try {
+          window.bkts = new App({
 
-          adminSegment: '{{adminSegment}}'
+            adminSegment: '{{adminSegment}}'
 
-          {{#if needsInstall}}
-            ,needsInstall: {{needsInstall}}
-          {{/if}}
+            {{#if needsInstall}}
+              ,needsInstall: {{needsInstall}}
+            {{/if}}
 
-          {{#if user}}
-            ,user: {{json user}}
-          {{/if}}
-        });
+            {{#if user}}
+              ,user: {{json user}}
+            {{/if}}
+          });
+        } catch (e) {
+          if (e && e.message && window.jQuery) {
+            $('#bkts-content').append("<div class=\"container\"><div class=\"alert center alert-danger\"><strong>There was an error loading the Buckets JavaScript.</strong> <br>If you’re the site developer, have you run <code>grunt build</code> or <code>grunt dev</code>?</div></div>")
+          } 
+        }
       })
-
     </script>
 
     <script src="//localhost:35729/livereload.js"></script>
