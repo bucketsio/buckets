@@ -141,11 +141,11 @@ module.exports = (grunt) ->
         tasks: ['browserify:app']
 
       clientTest:
-        files: ['test/client/**/*.coffee', 'client/**/*.{coffee,hbs}']
+        files: ['test/client/**/*.coffee']
         tasks: ['test:client']
 
       serverTest:
-        files: ['test/server/**/*.coffee', 'server/**/*.coffee']
+        files: ['test/server/**/*.coffee']
         tasks: ['shell:mocha']
 
       vendor:
