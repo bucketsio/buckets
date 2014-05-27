@@ -1,6 +1,6 @@
 {
-  "name": "Buckets",
-  "version": "0.0.1",
+  "name": "buckets",
+  "version": "0.0.2",
   "description": "Manage content better.",
   "scripts": {
     "test": "grunt test"
