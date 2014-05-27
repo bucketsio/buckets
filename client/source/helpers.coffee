@@ -1,6 +1,8 @@
 Handlebars = require 'hbsfy/runtime'
 mediator = require 'mediator'
 
+Swag.registerHelpers Handlebars
+
 Handlebars.registerHelper 'adminSegment', ->
   mediator.options.adminSegment
 
@@ -18,11 +20,15 @@ Handlebars.registerHelper 'input', (type, name, options) ->
     " id=\"#{options.hash.id}\""
   else
     ''
-  console.log options
+
+  value = if options.hash?.value
+    " value=\"#{options.hash.value}\""
+  else
+    ''
 
   new Handlebars.SafeString """
     <div class="form-group">
-      <input type="#{type}" name="#{name}" class="form-control"#{placeholder}#{idAttr}>
+      <input type="#{type}" name="#{name}" class="form-control"#{placeholder}#{idAttr}#{value}>
     </div>
   """
 

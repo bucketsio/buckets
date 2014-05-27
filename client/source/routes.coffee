@@ -12,7 +12,7 @@ module.exports = (match) ->
   match 'buckets/add', 'buckets#add'
   match 'buckets/:slug', 'buckets#listEntries'
 
-  match 'templates', 'templates#edit'
+  match 'templates(/*filename)', 'templates#edit'
   match 'routes', 'routes#list'
 
   match 'settings', 'settings#basic'
