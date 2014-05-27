@@ -26,9 +26,14 @@ Handlebars.registerHelper 'input', (type, name, options) ->
   else
     ''
 
+  sluggify = if options.hash?.sluggify
+    " data-sluggify=\"#{options.hash.sluggify}\""
+  else
+    ''
+
   new Handlebars.SafeString """
     <div class="form-group">
-      <input type="#{type}" name="#{name}" class="form-control"#{placeholder}#{idAttr}#{value}>
+      <input type="#{type}" name="#{name}" class="form-control"#{placeholder}#{idAttr}#{value}#{sluggify}>
     </div>
   """
 

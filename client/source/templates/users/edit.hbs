@@ -10,9 +10,8 @@
     {{#unless _id}}
       {{input 'password' 'password' placeholder="Password"}}
     {{else}}
-      <a href="#remove">Remove this user</a>
+      <a class="btn btn-link" href="#remove">Remove this user</a>
     {{/unless}}
   {{/is}}
-
-  {{submit}}
+  {{submit text="Save User"}}
 </form>

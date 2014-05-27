@@ -24,7 +24,8 @@ module.exports = class EditUserView extends View
     @model.save(data).done =>
       @dispose()
 
-  clickRemove: ->
+  clickRemove: (e) ->
+    e.preventDefault()
     @model.destroy(wait: yes).done ->
       toastr.success 'User has been removed.'
       @dispose()
