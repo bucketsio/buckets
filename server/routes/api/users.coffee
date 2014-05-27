@@ -17,3 +17,27 @@ app.route('/users')
   .get (req, res) ->
     User.find {}, (err, users) ->
       res.send users
+
+app.route('/users/:userID')
+
+  .get (req, res) ->
+    User.findOne _id: req.params.userID, (err, user) ->
+    res.send user if user
+
+  .delete (req, res) ->
+    User.remove _id: req.params.userID, (err) ->
+      if err
+        res.send e: err, 400
+      else
+        res.send 200
+  .put (req, res) ->
+    delete req.body._id
+    User.findOneAndUpdate {_id: req.params.userID}, req.body, (err, user) ->
+      console.log err, user
+      if err
+        res.send e: err, 400
+      else
+        res.send user, 200
+
+# @todo Update user
+# app.post '/users/:userID', (req, res) ->

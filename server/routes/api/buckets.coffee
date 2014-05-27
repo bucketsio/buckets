@@ -13,6 +13,5 @@ app.route('/buckets')
         res.send user
 
   .get (req, res) ->
-
-    Bucket.filter({}).run().then (buckets) ->
+    Bucket.find {}, (buckets) ->
       res.send buckets
