@@ -18,7 +18,6 @@ Handlebars.registerHelper 'input', (type, name, options) ->
     " id=\"#{options.hash.id}\""
   else
     ''
-  console.log options
 
   new Handlebars.SafeString """
     <div class="form-group">

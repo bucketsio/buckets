@@ -1,4 +1,4 @@
 PageView = require 'views/base/page'
 
-module.exports = class EditBucketView extends PageView
+module.exports = class EditRouteView extends PageView
   
