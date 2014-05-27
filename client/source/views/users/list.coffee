@@ -8,11 +8,33 @@ tpl = require 'templates/users/list'
 module.exports = class UsersList extends PageView
   template: tpl
 
+  listen:
+    'sync collection': 'render'
+
   events:
     'click [href="#add"]': 'clickAdd'
+    'click .users a': 'clickEdit'
 
   clickAdd: (e) ->
     e.preventDefault()
-    @subview 'newUser', new EditUserView
-      model: new User
+    newUser = new User
+
+    @subview 'editUser', new EditUserView
+      model: newUser
+      container: @$el
+
+    @listenToOnce newUser, 'sync', =>
+      @collection.add newUser
+      @render()
+
+  clickEdit: (e) ->
+    e.preventDefault()
+
+    $el = @$(e.currentTarget)
+    idx = $el.parent('li').index()
+
+    user = @collection.at idx
+
+    @subview 'editUser', new EditUserView
+      model: user
       container: @$el

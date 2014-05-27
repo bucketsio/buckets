@@ -3,7 +3,7 @@
 <a href="#add" class="btn btn-default">Add a user</a>
 
 {{#if items}}
-  <ul class="nav nav-stacked nav-pills">
+  <ul class="nav nav-stacked nav-pills users">
   {{#each items}}
     <li><a href="#"><strong>{{gravatar email_hash}} {{name}}</strong> <span class="muted">{{email}}</span></a></li>
   {{/each}}

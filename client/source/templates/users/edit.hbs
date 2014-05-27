@@ -1,5 +1,18 @@
-{{input 'text' 'name' placeholder="Full name" value=name}}
-{{input 'text' 'email' placeholder="Email" value=email}}
-{{input 'password' 'password' placeholder="Password" value=password}}
+<form>
+  {{input 'text' 'name' placeholder="Full name" value=name}}
+  {{input 'text' 'email' placeholder="Email" value=email}}
+  {{#is _id currentUser._id}}
+    <h4>Change your password</h4>
+    {{input 'password' 'oldpassword' placeholder="Old password"}}
+    {{input 'password' 'newpassword1' placeholder="New password"}}
+    {{input 'password' 'newpassword2' placeholder="Confirm new password"}}
+  {{else}}
+    {{#unless _id}}
+      {{input 'password' 'password' placeholder="Password"}}
+    {{else}}
+      <a href="#remove">Remove this user</a>
+    {{/unless}}
+  {{/is}}
 
-{{submit}}
+  {{submit}}
+</form>
