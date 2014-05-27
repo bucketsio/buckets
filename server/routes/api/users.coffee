@@ -15,5 +15,5 @@ app.route('/users')
         res.send newUser, 200
 
   .get (req, res) ->
-    User.find (users) ->
+    User.find {}, (err, users) ->
       res.send users
