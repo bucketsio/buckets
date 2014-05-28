@@ -38,9 +38,11 @@ module.exports = class TemplateEditor extends PageView
 
   clickDelete: (e) ->
     e.preventDefault()
-    index = @collection.indexOf @model
-    nextTemplate = @collection.at if index+1 is @collection.length then index-1 else index+1
-
+    
+    if confirm 'Are you sure?'
+      index = @collection.indexOf @model
+      nextTemplate = @collection.at if index+1 is @collection.length then index-1 else index+1
+    
     @model.destroy(wait: yes).done =>
       @model = nextTemplate
       @render()
