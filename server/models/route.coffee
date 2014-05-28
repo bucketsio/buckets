@@ -1,6 +1,6 @@
 mongoose = require 'mongoose'
 db = require '../lib/database'
-pathRegexp = require('express/lib/utils').pathRegexp
+pathRegexp = require('path-to-regexp')
 
 routeSchema = new mongoose.Schema
   urlPattern:

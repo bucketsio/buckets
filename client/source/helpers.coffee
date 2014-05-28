@@ -49,5 +49,8 @@ Handlebars.registerHelper 'gravatar', (email_hash) ->
     <div class="avatar" style="background-image: url(http://www.gravatar.com/avatar/#{email_hash})"></div>
   """
 
+Handlebars.registerHelper 'highlightWildcards', (path) ->
+  new Handlebars.SafeString path.replace /\/:([a-zA-Z0-9-_]*)/g, '/<strong class="bkts-wildcard">:$1</strong>'
+
 Handlebars.registerHelper 'debug', ->
   console.log @, arguments

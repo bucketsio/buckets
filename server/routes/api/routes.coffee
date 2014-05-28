@@ -1,8 +1,10 @@
 express = require 'express'
 
+Route = require '../../models/route'
+
 module.exports = app = express()
 
-app.route('routes/')
+app.route('/routes')
   .get (req, res) ->
     Route.find().sort(urlPattern: 1).exec (err, routes) ->
       if err
@@ -10,8 +12,8 @@ app.route('routes/')
       else if routes
         res.send routes
 
-  .post '/routes', (req, res) ->
-
+  .post (req, res) ->
+    console.log 'hrm'
     newRoute = new Route req.body
 
     newRoute.save (err) ->
@@ -26,7 +28,7 @@ app.route('/routes/:routeID')
       if err
         res.send 400, err
       else
-        res.send 200
+        res.send 200, {}
 
   .put (req, res) ->
     Route.findById(req.params.routeID).exec (err, route) ->

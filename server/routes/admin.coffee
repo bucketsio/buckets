@@ -11,7 +11,7 @@ hbs = require 'hbs'
 hbs.registerHelper 'json', (context) ->
   new hbs.handlebars.SafeString JSON.stringify(context)
 
-app.set 'views', "#{__dirname}/../../public"
+app.set 'views', "#{__dirname}/../views"
 
 app.use express.static '#{__dirname}/../public/'
 

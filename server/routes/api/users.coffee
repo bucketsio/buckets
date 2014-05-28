@@ -29,7 +29,7 @@ app.route('/users/:userID')
       if err
         res.send e: err, 400
       else
-        res.send 200
+        res.send {}, 200
   .put (req, res) ->
     delete req.body._id
     User.findOneAndUpdate {_id: req.params.userID}, req.body, (err, user) ->

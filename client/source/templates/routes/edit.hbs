@@ -1,5 +1,12 @@
+<form>
 
-{{input 'text' 'route' 'blah'}}
+{{input 'text' 'urlPattern' placeholder="/myroute/:param" value=urlPattern}}
+<input type="hidden" name="template" value="index">
 
-{{submit 'Add route'}}
+{{#if _id}}
+  {{submit text='Save route'}}
+{{else}}
+  {{submit text='Add route'}}
+{{/if}}
 
+</form>
