@@ -173,7 +173,7 @@ module.exports = (grunt) ->
         files: ['public/**/*']
 
   grunt.registerTask 'checkDatabase', (next, stuff...)->
-    connection = mongoose.connect config.db, (err) ->
+    connection = mongoose.createConnection config.db, (err) ->
       if err
         throw "\nBuckets could not connect to MongoDB :/\n".magenta + "See the " + 'README.md'.bold + " for more info on installing MongoDB and check your settings at " + 'server/config.coffee'.bold + "."
         exit
