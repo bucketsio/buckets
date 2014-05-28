@@ -4,6 +4,8 @@
 
 Buckets is a simple, open source, content management system for Node.js.
 
+[![Build Status](https://travis-ci.org/asm-products/buckets.svg?branch=master)](https://travis-ci.org/asm-products/buckets)
+
 # Installing Buckets
 
 ### Pre-requirements
