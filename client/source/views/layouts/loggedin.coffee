@@ -19,4 +19,4 @@ module.exports = class LoggedInLayout extends View
 
   initialize: ->
     super
-    @listenTo mediator.buckets, 'sync', => @render()
+    @listenTo mediator.buckets, 'sync add', => @render()
