@@ -11,6 +11,8 @@ module.exports = (match) ->
 
   match 'buckets/add', 'buckets#add'
   match 'buckets/:slug', 'buckets#listEntries'
+  match 'buckets/:slug/add', 'buckets#addEntry'
+  match 'buckets/:slug/settings', 'buckets#settings'
 
   match 'templates(/*filename)', 'templates#edit'
   match 'routes', 'routes#list'
@@ -20,4 +22,4 @@ module.exports = (match) ->
 
   match '', 'buckets#dashboard'
 
-  match ':missing*', 'bucket#missing'
+  match ':missing*', 'buckets#missing'

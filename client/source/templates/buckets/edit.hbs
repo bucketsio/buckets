@@ -1,37 +1,62 @@
-<h1>
-  {{#if _id}}
-    Edit Bucket
-  {{else}}
-    New Bucket
-  {{/if}}
-</h1>
+<form class="row">
+  <div class="col-md-6">
+    <h1>
+      {{#if _id}}
+        Edit Bucket
+      {{else}}
+        New Bucket
+      {{/if}}
+    </h1>
 
-{{input 'text' 'name' placeholder='ie. Articles, Songs, Products, etc.' sluggify='variable'}}
+    {{input 'text' 'name' placeholder='ie. Articles, Songs, Products, etc.' sluggify='slug' value=name}}
 
-{{input 'text' 'variable' placeholder="variable_name"}}
+    {{input 'text' 'slug' placeholder="slug" value=slug}}
 
-<h4>Icon</h4>
+    <h4>Icon</h4>
 
-<div style="font-size: 30px">
-  {{icon 'photos'}} 
-  {{icon 'calendar'}}
-  {{icon 'movie'}}
-  {{icon 'music-note'}}
-  {{icon 'map-pin'}}
-  {{icon 'quote'}}
-  {{icon 'clipboard'}}
-  {{icon 'bag'}}
-  {{icon 'bubble'}}
-  {{icon 'edit'}}
-</div>
+    <div class="swatches icons">
+      <input type="hidden" name="icon" value="">
+      <div data-value="edit" class="selected">
+        {{icon 'edit'}}
+      </div>
+      <div data-value="photos">
+        {{icon 'photos'}}
+      </div>
+      <div data-value="calendar">
+        {{icon 'calendar'}}
+      </div>
+      <div data-value="movie">
+        {{icon 'movie'}}
+      </div>
+      <div data-value="music-note">
+        {{icon 'music-note'}}
+      </div>
+      <div data-value="map-pin">
+        {{icon 'map-pin'}}
+      </div>
+      <div data-value="quote">
+        {{icon 'quote'}}
+      </div>
+    </div>
 
-<h4>Color</h4>
+    <h4>Color</h4>
 
-<div class="swatches">
-  <div class="teal"></teal>
-  <div class="purple"></teal>
-  <div class="red"></teal>
-  <div class="yellow"></teal>
-</div>
+    <input type="hidden" name="color" value="">
 
-{{submit 'Save Bucket'}}
+    <div class="swatches colors">
+      <div data-value="teal" class="teal selected"></div>
+      <div data-value="purple" class="purple"></div>
+      <div data-value="red" class="red"></div>
+      <div data-value="yellow" class="yellow"></div>
+      <div data-value="blue" class="blue"></div>
+      <div data-value="orange" class="orange"></div>
+    </div>
+
+    {{#if _id}}
+      <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
+    {{/if}}
+    <div class="pull-right">
+      {{submit text='Save Bucket'}}
+    </div>
+  </div>
+</form>

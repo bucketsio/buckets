@@ -1,6 +1,14 @@
+// Note: Most basic variables are in LESS at bootstrap.less
+
 @import 'nib'
 
-// Most basic variables are in LESS at bootstrap.less
+
+$red = #df4949
+$blue = #334d5c
+$orange = #e27a3f
+$yellow = #efc94c
+$teal = #45b29d
+$purple = #825a7b
 
 h1
 
@@ -39,7 +47,9 @@ body
   font-family 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, 'Segoe UI', Segoe, Roboto, sans-serif;
 
 h4
-  font-size 12px
+  margin-top 14px
+  margin-bottom 8px
+  font-size 11px
   text-transform uppercase
   color #999
   font-weight 500
@@ -94,9 +104,10 @@ h4
   vertical-align middle
   line-height .95em
 
-nav
-  .nav > li > a
+.nav-primary
+  > li > a
     padding-left 40px
+
   .icon
     position absolute
     left 8px
@@ -106,6 +117,12 @@ nav
     margin-right 4px
     color #888
 
+  .bucket-add
+    position absolute
+    top 0
+    right 0
+    padding-left 15px
+
 hr.tiny
   width 5%
   margin 8px auto
@@ -113,6 +130,71 @@ hr.tiny
 
 textarea.code
   font-family Menlo, 'Courier New', monospace
+
+
+.swatches
+  overflow hidden
+
+.swatches > div
+  width 30px
+  height 30px
+  font-size 30px
+  text-align center
+  float left
+  margin 0 10px 10px 0
+  position relative
+  cursor pointer
+
+.swatches.icons
+  div
+    opacity .5
+  .selected
+    opacity 1
+
+.swatches.colors
+  .selected:after
+    display block
+    content ''
+    position absolute
+    top 40%
+    left 40%
+    background-color #fff
+    border-radius 100%
+    width 20%
+    height 20%
+
+  > .teal
+    background-color $teal
+  > .blue
+    background-color $blue
+  > .orange
+    background-color $orange
+  > .yellow
+    background-color $yellow
+  > .red
+    background-color $red
+  > .purple
+    background-color $purple
+
+.bucket
+  &.color-teal 
+    a, .icon
+      color $teal
+  &.color-blue 
+    a, .icon
+      color $blue
+  &.color-orange 
+    a, .icon
+      color $orange
+  &.color-yellow 
+    a, .icon
+      color $yellow
+  &.color-red 
+    a, .icon
+      color $red
+  &.color-purple 
+    a, .icon
+      color $purple
 
 // h3
 //   color #87cdc2

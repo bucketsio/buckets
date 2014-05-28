@@ -2,6 +2,8 @@ Chaplin = require 'chaplin'
 
 LoggedInLayout = require 'views/layouts/loggedin'
 
+Buckets = require 'models/buckets'
+
 mediator = Chaplin.mediator
 
 module.exports = class Controller extends Chaplin.Controller
@@ -16,4 +18,14 @@ module.exports = class Controller extends Chaplin.Controller
       return @redirectTo url: 'login'
 
     else if mediator.user?.get('id')
-      @reuse 'dashboard', LoggedInLayout, model: mediator.user
+
+      renderDash = =>
+        @reuse 'dashboard', LoggedInLayout, 
+          model: mediator.user
+
+      if mediator.buckets
+        renderDash()
+      else
+        mediator.buckets = new Buckets
+        mediator.buckets.fetch().done renderDash
+        

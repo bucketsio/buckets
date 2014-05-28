@@ -33,11 +33,7 @@ app.route('/users/:userID')
   .put (req, res) ->
     delete req.body._id
     User.findOneAndUpdate {_id: req.params.userID}, req.body, (err, user) ->
-      console.log err, user
       if err
         res.send e: err, 400
       else
         res.send user, 200
-
-# @todo Update user
-# app.post '/users/:userID', (req, res) ->

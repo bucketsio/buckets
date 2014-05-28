@@ -2,7 +2,16 @@
   <div class="row">
     <nav class="col-sm-3">
       <ul class="nav nav-pills nav-stacked nav-primary">
+        {{#each buckets}}
+          <li class="bucket color-{{color}}">
+            <a href="/{{adminSegment}}/buckets/{{slug}}">
+              {{icon icon}} {{name}}
+            </a>
+            <a class="bucket-add" href="/{{adminSegment}}/buckets/{{slug}}/add">+</a>
+          </li>
+        {{/each}}
         <li><a href="/{{adminSegment}}/buckets/add">{{icon 'add'}} New Bucket</a></li>
+
         <li class="divider"></li>
         <li><a href="/{{adminSegment}}/templates">{{icon 'file-code'}} Templates</a></li>
         <li><a href="/{{adminSegment}}/routes">{{icon 'direction-sign'}} Routes</a></li>

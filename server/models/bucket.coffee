@@ -12,15 +12,21 @@ bucketSchema = new mongoose.Schema
     required: yes
   slug:
     type: String
-    unique: yes
+    index:
+      unique: yes
+    required: yes
   titleLabel: 
     type: String
     default: 'Title'
   icon:
     type: String
-    default: 'bucket'
+    enum: ['photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'edit']
+    default: 'edit'
+    required: yes
   color:
     type: String
+    enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange']
+    required: yes
   publishToSite:
     type: Boolean
     default: no

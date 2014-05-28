@@ -8,7 +8,7 @@ Buckets is a simple, open source, content management system for Node.js.
 
 ### Pre-requirements
 
-[RethinkDB](http://rethinkdb.com), [Node.js](http://nodejs.org) and the following globals:
+[MongoDB](http://www.mongodb.org), [Node.js](http://nodejs.org) and the following globals:
 
 
 ```

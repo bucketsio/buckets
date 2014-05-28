@@ -25,8 +25,9 @@ module.exports = class Layout extends Chaplin.Layout
 
   keyUpSluggify: (e) ->
     $el = @$(e.currentTarget)
-          
+    
     val = $el.val()
     $target = @$("input[name=\"#{$el.data('sluggify')}\"]")
 
     slug = val.toLowerCase().replace(/\ /g, '-').replace(/[^a-zA-Z0-9-_]/g, '')
+    $target.val slug
