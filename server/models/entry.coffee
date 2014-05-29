@@ -1,7 +1,7 @@
 mongoose = require 'mongoose'
-db = require '../lib/database'
+chrono = require 'chrono-node'
 
-date = require 'date.js'
+db = require '../lib/database'
 
 Schema = mongoose.Schema
 
@@ -42,9 +42,11 @@ entrySchema.pre 'save', (next) ->
   next()
 
 entrySchema.path('publishDate').set (val) ->
-  parsed = date(val)
-  console.log parsed is Date.now()
-  parsed
+  parsed = chrono.parse(val)
+  if parsed?[0]?.startDate
+    parsed[0].startDate
+  else
+    Date.now()
 
 entrySchema.path('description').validate (val) ->
   val?.length < 140

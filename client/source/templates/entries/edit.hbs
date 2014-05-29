@@ -10,13 +10,16 @@
 
   <div class="row">
     <div class="col-md-8">
-      {{input 'text' 'title' placeholder="Title"}}
+      {{input 'text' 'title' placeholder="Title" value=title}}
       <div class="alert alert-warning">TBD: Custom fields</div>
 
       {{submit text="Save"}}
     </div>
     <div class="col-md-4">
-      {{input 'text' 'keywords' placeholder="keywords" label="Keywords"}}
+      <h4>Publish</h4>
+      {{input 'text' 'publishDate' placeholder="Now" value=publishDate}}
+      <h4>Meta</h4>
+      {{input 'text' 'Keywords' placeholder="keywords" label="Keywords"}}
       <textarea name="description" class="form-control" placeholder="Description"></textarea>
       <input type="hidden" name="author" value="{{user._id}}">
     </div>
