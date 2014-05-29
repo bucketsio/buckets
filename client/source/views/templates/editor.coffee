@@ -25,10 +25,13 @@ module.exports = class TemplateEditor extends PageView
 
   render: ->
     super()
-    ace.edit(@$('.code')[0])
+    @$code = @$('textarea.code')
+    @editor = ace.edit(@$('.code.editor')[0])
+    @editor.getSession().setValue(@$code.val())
 
   submitForm: (e) ->
     e.preventDefault()
+    @$code.val(@editor.getSession().getValue())
     data = @$(e.currentTarget).formParams(no)
     @model.save(data).done =>
       toastr.success 'Saved Template'
