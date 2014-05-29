@@ -22,7 +22,11 @@ module.exports = class TemplateEditor extends PageView
     @model = @collection.findWhere filename: @options?.filename
     @model ?= @options.newTemplate.clone()
     super
-    
+
+  render: ->
+    super()
+    ace.edit(@$('.code')[0])
+
   submitForm: (e) ->
     e.preventDefault()
     data = @$(e.currentTarget).formParams(no)
@@ -38,11 +42,11 @@ module.exports = class TemplateEditor extends PageView
 
   clickDelete: (e) ->
     e.preventDefault()
-    
+
     if confirm 'Are you sure?'
       index = @collection.indexOf @model
       nextTemplate = @collection.at if index+1 is @collection.length then index-1 else index+1
-    
+
     @model.destroy(wait: yes).done =>
       @model = nextTemplate
       @render()
