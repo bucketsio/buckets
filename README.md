@@ -31,6 +31,8 @@ At this point, you should be able to run:
 grunt serve
 ```
 
+After building, Buckets should then be accessible at the default address: [http://localhost:3000/](http://localhost:3000/)
+
 ### Running tests
 
 - `grunt test:client`: To run client tests
