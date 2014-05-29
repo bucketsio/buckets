@@ -23,20 +23,18 @@ module.exports = (grunt) ->
           commondir: './client/source/'
           extensions: ['.coffee', '.hbs']
           paths: ['./client/source', 'node_modules']
+        alias: [
+          './bower_components/backbone/backbone.js:backbone'
+          './bower_components/jquery/dist/jquery.js:jquery'
+          './bower_components/chaplin/chaplin.js:chaplin'
+          './bower_components/underscore/underscore.js:underscore'
+        ]
       app:
         files:
           'public/js/buckets.js': ['client/source/**/*.{coffee,hbs}']
-        options:
-          alias: [
-            './bower_components/backbone/backbone.js:backbone'
-            './bower_components/jquery/dist/jquery.js:jquery'
-            './bower_components/chaplin/chaplin.js:chaplin'
-            './bower_components/underscore/underscore.js:underscore'
-          ]
       tests:
         files:
           'tmp/tests.js': ['test/client/**/*.coffee']
-
     testem:
       basic:
         options:
