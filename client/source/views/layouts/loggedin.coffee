@@ -3,7 +3,7 @@ _ = require 'underscore'
 View = require 'lib/view'
 tpl = require 'templates/layouts/loggedin'
 
-mediator = require 'mediator'
+mediator = require('chaplin').mediator
 
 module.exports = class LoggedInLayout extends View
   template: tpl

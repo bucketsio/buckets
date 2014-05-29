@@ -3,7 +3,7 @@ _ = require 'underscore'
 View = require 'lib/view'
 tpl = require 'templates/users/edit'
 
-mediator = require 'mediator'
+mediator = require('chaplin').mediator
 
 module.exports = class EditUserView extends View
   template: tpl

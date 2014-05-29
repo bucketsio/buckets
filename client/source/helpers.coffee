@@ -1,5 +1,5 @@
 Handlebars = require 'hbsfy/runtime'
-mediator = require 'mediator'
+mediator = require('chaplin').mediator
 
 Swag.registerHelpers Handlebars
 
