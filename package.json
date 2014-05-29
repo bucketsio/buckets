@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Manage content better.",
   "scripts": {
+    "start": "grunt serve",
     "test": "grunt test"
   },
   "author": "",
