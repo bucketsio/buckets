@@ -86,6 +86,7 @@ module.exports = (grunt) ->
         options:
           background: false
       options:
+        port: process.env.PORT or 3000
         script: 'server/index.coffee'
         opts: ['node_modules/coffee-script/bin/coffee']
 
