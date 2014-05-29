@@ -6,6 +6,20 @@
     "test": "grunt test"
   },
   "author": "",
+  "bugs": {
+    "url": "https://assemblymade.com/buckets/wips"
+  },
+  "keywords": [
+    "cms",
+    "node",
+    "js",
+    "javascript",
+    "mongo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asm-products/buckets.git"
+  },
   "devDependencies": {
     "bcrypt": "^0.7.8",
     "body-parser": "~1.0.2",
