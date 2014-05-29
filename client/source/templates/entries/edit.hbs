@@ -1,5 +1,24 @@
-{{#if _id}}
-  <h1>Edit Entry</h1>
-{{else}}
-  <h1>New {{bucket.singular}}</h1>
-{{/if}}
+<form>
+  <input type="hidden" name="author" value="{{user._id}}">
+  <input type="hidden" name="bucket" value="{{bucket._id}}">
+
+  {{#if _id}}
+    <h1>Edit Entry</h1>
+  {{else}}
+    <h1>New {{bucket.singular}}</h1>
+  {{/if}}
+
+  <div class="row">
+    <div class="col-md-8">
+      {{input 'text' 'title' placeholder="Title"}}
+      <div class="alert alert-warning">TBD: Custom fields</div>
+
+      {{submit text="Save"}}
+    </div>
+    <div class="col-md-4">
+      {{input 'text' 'keywords' placeholder="keywords" label="Keywords"}}
+      <textarea name="description" class="form-control" placeholder="Description"></textarea>
+      <input type="hidden" name="author" value="{{user._id}}">
+    </div>
+  </div>
+</form>

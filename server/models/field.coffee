@@ -12,8 +12,7 @@ fieldSchema = new mongoose.Schema
     required: yes
   required: Boolean
   instructions: String
-  fieldType:
-    type: String
+  fieldType: String
   settings: mongoose.Schema.Types.Mixed
   dateCreated:
     type: Date

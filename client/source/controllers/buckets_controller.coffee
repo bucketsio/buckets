@@ -52,6 +52,7 @@ module.exports = class BucketsController extends Controller
       @view = new EntryEditView
         model: @entry
         bucket: bucket
+        user: mediator.user
 
   settings: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
