@@ -1,6 +1,10 @@
 <div class="container">
   <div class="row">
     <nav class="col-sm-3">
+      <header id="bkts-hdr">
+        <h1><a href="/{{adminSegment}}/"><span class="buckets-icon buckets-icon-bucket"></span></a> <span class="version-badge">pre-alpha</span></h1>
+      </header>
+      
       <ul class="nav nav-pills nav-stacked nav-primary">
         {{#each buckets}}
           <li class="bucket color-{{color}}">
@@ -13,8 +17,8 @@
         <li><a href="/{{adminSegment}}/buckets/add">{{icon 'add'}} New Bucket</a></li>
 
         <li class="divider"></li>
-        <li><a href="/{{adminSegment}}/templates">{{icon 'file-code'}} Templates</a></li>
         <li><a href="/{{adminSegment}}/routes">{{icon 'direction-sign'}} Routes</a></li>
+        <li><a href="/{{adminSegment}}/templates">{{icon 'file-code'}} Templates</a></li>
         <li class="divider"></li>
         <li><a href="/{{adminSegment}}/settings">{{icon 'setting-gear'}} Settings</a></li>
         <li><a href="/{{adminSegment}}/users">{{icon 'contacts'}} Users</a></li>

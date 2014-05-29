@@ -23,5 +23,4 @@ module.exports = class EntryEditView extends PageView
   submitForm: (e) ->
     e.preventDefault()
     data = @$el.formParams(no)
-    @model.save(data).done ->
-      toastr.success 'Data saved'
+    @model.save(data)

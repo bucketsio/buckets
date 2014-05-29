@@ -1,28 +1,28 @@
 <form>
-<div class="row">
-  <div class="col-md-3">
-    <a href="#new" class="btn btn-default btn-block">New Template</a>
-    <br>
-    <ul class="nav nav-stacked nav-pills">
-    {{#each items}}
-      <li{{#is filename ../filename}} class="active"{{/is}}>
-        <a href="/{{adminSegment}}/templates/{{filename}}">{{filename}}</a>
-      </li>
-    {{/each}}
-    </ul>
-    
-    <hr>
-    
-    {{input 'text' 'filename' placeholder="Filename" value=filename}}
+  <h1>Templates</h1>
+  <div class="row">
+    <div class="col-md-3">
+      <a href="#new" class="btn btn-default btn-block">New Template</a>
+      <br>
+      <ul class="nav nav-stacked nav-pills">
+      {{#each items}}
+        <li{{#is filename ../filename}} class="active"{{/is}}>
+          <a href="/{{adminSegment}}/templates/{{filename}}">{{filename}}</a>
+        </li>
+      {{/each}}
+      </ul>
+      
+      <hr>
+      
+      {{input 'text' 'filename' attrs='placeholder="Filename"' value=filename}}
 
-    <div class="pull-right">
-      <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
-      {{submit text='Save'}}
+      <div class="pull-right">
+        <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
+        {{submit text='Save'}}
+      </div>
+    </div>
+    <div class="col-md-9">
+      <textarea name="contents" rows="20" class="form-control code">{{contents}}</textarea>
     </div>
   </div>
-  <div class="col-md-9">
-    <textarea name="contents" rows="20" class="form-control code">{{contents}}</textarea>
-  </div>
-</div>
 <form>
-{{debug}}

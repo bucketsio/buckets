@@ -13,7 +13,6 @@ app.route('/routes')
         res.send routes
 
   .post (req, res) ->
-    console.log 'hrm'
     newRoute = new Route req.body
 
     newRoute.save (err) ->

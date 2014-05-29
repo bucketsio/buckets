@@ -16,7 +16,10 @@ app.route('/entries')
         res.send 200, entry
 
   .get (req, res) ->
-    Entry.find {}, (err, entries) ->
+    query = {}
+    query.bucket = req.query.bucket if req.query.bucket
+
+    Entry.find(query).populate('author').exec (err, entries) ->
       res.send 200, entries
 
 app.route('/entries/:entryID')
@@ -33,6 +36,7 @@ app.route('/entries/:entryID')
       else
         res.send 200, entry
   .delete (req, res) ->
+    delete req.body._id
     Entry.remove _id: req.params.userID, (err) ->
       if err
         res.send e: err, 400

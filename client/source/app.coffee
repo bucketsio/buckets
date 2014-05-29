@@ -20,7 +20,6 @@ module.exports = class App extends Chaplin.Application
 
     Chaplin.mediator.layout = new Layout
       title: 'Buckets'
-      scrollTo: false
       titleTemplate: (data) ->
         str = ''
         str += "#{data.subtitle} · " if data.subtitle

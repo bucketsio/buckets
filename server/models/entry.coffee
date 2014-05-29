@@ -25,12 +25,9 @@ entrySchema = new Schema
   createdDate:
     type: Date
     default: Date.now
-  template:
-    type: Schema.Types.ObjectId
-    ref: 'Template'
   author:
     type: Schema.Types.ObjectId
-    ref: 'Person'
+    ref: 'User'
   bucket:
     type: Schema.Types.ObjectId
     ref: 'Bucket'

@@ -8,6 +8,7 @@ EntryEditView = require 'views/entries/edit'
 Bucket = require 'models/bucket'
 Buckets = require 'models/buckets'
 Entry = require 'models/entry'
+Entries = require 'models/entries'
 
 mediator = require('chaplin').mediator
 
@@ -37,9 +38,16 @@ module.exports = class BucketsController extends Controller
 
   listEntries: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
-    @adjustTitle bucket.get('name')
-    @view = new EntriesList
-      bucket: bucket
+
+    if bucket
+      @adjustTitle bucket.get('name')
+
+      @entries = new Entries
+
+      @entries.fetch( data: {bucket: bucket.get('id')}, processData: yes ).done =>
+        @view = new EntriesList
+          collection: @entries
+          bucket: bucket
 
   addEntry: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
@@ -49,10 +57,33 @@ module.exports = class BucketsController extends Controller
 
       @entry = new Entry
 
+      @listenToOnce @entry, 'sync', =>
+        toastr.success 'Entry added'
+        @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+
       @view = new EntryEditView
         model: @entry
         bucket: bucket
         user: mediator.user
+
+  editEntry: (params) ->
+    bucket = mediator.buckets?.findWhere slug: params.slug
+    console.log params, bucket
+    if bucket and params.entryID
+      @adjustTitle 'New ' + bucket.get('singular')
+
+      @entry = new Entry _id: params.entryID
+
+      @entry.fetch().done =>
+
+        @listenToOnce @entry, 'sync', =>
+          toastr.success 'Entry saved'
+          @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+
+        @view = new EntryEditView
+          model: @entry
+          bucket: bucket
+          user: mediator.user
 
   settings: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug

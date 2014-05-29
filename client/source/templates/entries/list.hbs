@@ -1,4 +1,19 @@
-<h1>{{bucket.name}}</h1>
-<a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">New {{bucket.singular}}</a>
+<a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link pull-right">{{icon 'cog'}}</a>
 
-<a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings">{{icon 'cog'}}</a>
+<h1>{{bucket.name}}</h1>
+
+{{#any items}}
+  <a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">New {{bucket.singular}}</a>
+{{/any}}
+
+{{#each items}}
+  <h3><a href="/{{adminSegment}}/buckets/{{../bucket.slug}}/{{id}}">{{title}}</a></h3>
+  <h4>from <a href="/{{adminSegment}}/users/{{author._id}}">{{author.name}}</a></h4>
+{{else}}
+  <div class="center">
+    <div class="info">
+      <h2>{{dumbBlankSlate bucket.name}}</h2>
+      <a class="btn btn-default btn-lg" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">New {{bucket.singular}}</a>
+    </div>
+  </div>
+{{/each}}
