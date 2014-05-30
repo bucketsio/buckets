@@ -23,7 +23,8 @@
     "ladda": "~0.9.3",
     "jquery.formParams": "~0.1.1",
     "underscore": "~1.6.0",
-    "moment": "~2.6.0"
+    "moment": "~2.6.0",
+    "ace-builds": "~1.1.3"
   },
   "exportsOverride": {
     "jquery.formParams": {
@@ -37,6 +38,6 @@
       "js": "dist/js/bootstrap.js",
       "fonts": "dist/fonts/**/*.*"
     },
-    "/(backbone|chaplin|underscore|jquery|modernizr|handlebars)/": {}
+    "/(backbone|chaplin|underscore|jquery|modernizr|handlebars|ace-builds)/": {}
   }
 }
