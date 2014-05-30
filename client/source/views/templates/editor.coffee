@@ -28,16 +28,18 @@ module.exports = class TemplateEditor extends PageView
     super()
     @$code = @$('textarea.code')
     Modernizr.load
-      load: ["/#{mediator.options.adminSegment}/js/ace.min.js"]
+      load: ["/#{mediator.options.adminSegment}/js/ace/ace.js"]
       complete: @bindAceEditor
 
   bindAceEditor: =>
-    @editor = ace.edit(@$('.code.editor')[0])
-    @editor.getSession().setValue(@$code.val())
+    ace.config.set 'basePath', "/#{mediator.options.adminSegment}/js/ace/"
+    @editorSession = ace.edit(@$('.code.editor')[0]).getSession()
+    @editorSession.setMode 'ace/mode/html'
+    @editorSession.setValue @$code.val()
 
   submitForm: (e) ->
     e.preventDefault()
-    @$code.val(@editor.getSession().getValue()) if @editor?
+    @$code.val(@editorSession.getValue()) if @editorSession?
     data = @$(e.currentTarget).formParams(no)
     @model.save(data).done =>
       toastr.success 'Saved Template'

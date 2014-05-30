@@ -71,8 +71,10 @@ module.exports = (grunt) ->
         src: ['*']
         dest: 'public/css/fonts/'
       ace:
-        src: 'bower_components/ace-builds/src-min-noconflict/ace.js'
-        dest: 'public/js/ace.min.js'
+        expand: yes
+        cwd: 'bower_components/ace-builds/src-min-noconflict/'
+        src: ['ace.js', 'mode-html.js', 'worker-html.js']
+        dest: 'public/js/ace/'
 
     cssmin:
       app:
