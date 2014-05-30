@@ -1,6 +1,11 @@
 <form class="container-fluid" action="/{{adminSegment}}/login" method="POST">
   <div class="row">
     <div class="col-sm-4 col-sm-offset-4">
+
+      <header id="bkts-hdr">
+        <h1><a href="/{{adminSegment}}/"><span class="buckets-icon buckets-icon-bucket"></span></a> <span class="version-badge">pre-alpha</span></h1>
+      </header>
+      
       
       <h3>Please log in:</h3>
       {{input 'email' 'username' placeholder="Email"}}
