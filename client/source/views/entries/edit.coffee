@@ -9,6 +9,7 @@ module.exports = class EntryEditView extends PageView
 
   events:
     'submit form': 'submitForm'
+    'click [href="#delete"]': 'clickDelete'
 
   getTemplateData: ->
     _.extend super,
@@ -24,3 +25,7 @@ module.exports = class EntryEditView extends PageView
     e.preventDefault()
     data = @$el.formParams(no)
     @model.save(data)
+
+  clickDelete: (e) ->
+    if confirm 'Are you sure?'
+      @model.destroy(wait: yes)

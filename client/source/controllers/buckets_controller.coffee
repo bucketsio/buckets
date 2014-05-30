@@ -68,7 +68,7 @@ module.exports = class BucketsController extends Controller
 
   editEntry: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
-    console.log params, bucket
+
     if bucket and params.entryID
       @adjustTitle 'New ' + bucket.get('singular')
 
@@ -76,8 +76,12 @@ module.exports = class BucketsController extends Controller
 
       @entry.fetch().done =>
 
-        @listenToOnce @entry, 'sync', =>
-          toastr.success 'Entry saved'
+        @listenToOnce @entry, 'sync', (entry, newData) =>
+          if newData._id
+            toastr.success 'Entry saved'
+          else
+            toastr.success 'Entry deleted'
+            
           @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
 
         @view = new EntryEditView

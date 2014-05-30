@@ -42,7 +42,7 @@ app.route('/entries/:entryID')
     
   .delete (req, res) ->
     delete req.body._id
-    Entry.remove _id: req.params.userID, (err) ->
+    Entry.remove _id: req.params.entryID, (err) ->
       if err
         res.send e: err, 400
       else
