@@ -1,18 +1,18 @@
-User = require '../models/user'
 express = require 'express'
-module.exports = app = express()
+compress = require 'compression'
+hbs = require 'hbs'
 
 config = require '../config'
-
 passport = require '../lib/auth'
+User = require '../models/user'
 
-hbs = require 'hbs'
+module.exports = app = express()
 
 hbs.registerHelper 'json', (context) ->
   new hbs.handlebars.SafeString JSON.stringify(context)
 
 app.set 'views', "#{__dirname}/../views"
-
+app.use compress()
 app.use express.static '#{__dirname}/../public/'
 
 # Special case for install

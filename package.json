@@ -29,6 +29,7 @@
     "coffee-script": "~1.7.1",
     "coffeeify": "~0.6.0",
     "colors": "^0.6.2",
+    "compression": "^1.0.3",
     "cookie-parser": "~1.0.1",
     "datejs": "^1.0.0-beta",
     "express": "~4.2.0",
