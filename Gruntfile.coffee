@@ -70,6 +70,9 @@ module.exports = (grunt) ->
         cwd: 'client/assets/fontastic/fonts/'
         src: ['*']
         dest: 'public/css/fonts/'
+      ace:
+        src: 'bower_components/ace-builds/src-min-noconflict/ace.js'
+        dest: 'public/js/ace.min.js'
 
     cssmin:
       app:

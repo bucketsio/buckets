@@ -26,9 +26,6 @@
     "ace-builds": "~1.1.3"
   },
   "exportsOverride": {
-    "ace-builds": {
-      "js": "src-noconflict/ace.js"
-    },
     "jquery.formParams": {
       "js": "jquery.formParams.js"
     },
@@ -40,6 +37,6 @@
       "js": "dist/js/bootstrap.js",
       "fonts": "dist/fonts/**/*.*"
     },
-    "/(backbone|chaplin|underscore|jquery|modernizr|handlebars)/": {}
+    "/(backbone|chaplin|underscore|jquery|modernizr|handlebars|ace-builds)/": {}
   }
 }

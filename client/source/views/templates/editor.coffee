@@ -1,5 +1,6 @@
 PageView = require 'views/base/page'
 _ = require 'underscore'
+mediator = require('chaplin').mediator
 
 tpl = require 'templates/templates/editor'
 
@@ -26,12 +27,17 @@ module.exports = class TemplateEditor extends PageView
   render: ->
     super()
     @$code = @$('textarea.code')
+    Modernizr.load
+      load: ["/#{mediator.options.adminSegment}/js/ace.min.js"]
+      complete: @bindAceEditor
+
+  bindAceEditor: =>
     @editor = ace.edit(@$('.code.editor')[0])
     @editor.getSession().setValue(@$code.val())
 
   submitForm: (e) ->
     e.preventDefault()
-    @$code.val(@editor.getSession().getValue())
+    @$code.val(@editor.getSession().getValue()) if @editor?
     data = @$(e.currentTarget).formParams(no)
     @model.save(data).done =>
       toastr.success 'Saved Template'
