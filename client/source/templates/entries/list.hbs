@@ -8,7 +8,7 @@
 
 {{#each items}}
   <h3><a href="/{{adminSegment}}/buckets/{{../bucket.slug}}/{{id}}">{{title}}</a></h3>
-  <h4>from <a href="/{{adminSegment}}/users/{{author._id}}">{{author.name}}</a></h4>
+  <h4>{{gravatar author.email_hash}} <a href="/{{adminSegment}}/users/{{author._id}}">{{author.name}}</a> · {{timeAgo publishDate}}</h4>
 {{else}}
   <div class="center">
     <div class="info">

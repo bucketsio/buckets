@@ -64,6 +64,17 @@ Handlebars.registerHelper 'dumbBlankSlate', (itemName) ->
     "If I had a dime for every #{itemName}… I’d be broke."
   ]
 
+Handlebars.registerHelper 'timeAgo', (dateTime) ->
+  m = moment dateTime
+  expanded = m.format 'MMMM Do YYYY, h:mm:ss a'
+
+  o = []
+  o.push """<span title="#{expanded}">"""
+  o.push moment(dateTime).fromNow()
+  o.push "</span>"
+
+  new Handlebars.SafeString o.join ''
+
 
 Handlebars.registerHelper 'debug', ->
   console.log @, arguments

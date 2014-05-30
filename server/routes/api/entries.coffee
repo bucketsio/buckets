@@ -30,11 +30,16 @@ app.route('/entries/:entryID')
       else
         res.send 404
   .put (req, res) ->
-    Entry.findOneAndUpdate {_id: req.params.entryID}, req.body, (err, entry) ->
+    Entry.findOne {_id: req.params.entryID}, (err, entry) ->
       if err
         res.send 400, e: err
       else
-        res.send 200, entry
+        entry.set(req.body).save (err, entry) ->
+          if err
+            res.send 400, e: err
+          else
+            res.send 200, entry      
+    
   .delete (req, res) ->
     delete req.body._id
     Entry.remove _id: req.params.userID, (err) ->

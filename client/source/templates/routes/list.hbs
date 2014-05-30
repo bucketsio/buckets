@@ -1,14 +1,11 @@
-<h3>Routes</h3>
+<h1>Routes</h1>
 
 <a class="btn btn-default" href="#new">New Route</a>
 <div class="editRoute"></div>
 
 {{#each items}}
   <div class="route" data-route-id="{{id}}">
-    <h2>/{{highlightWildcards urlPattern}}</h2>
-    <p>
-      <a href="/{{adminSegment}}/templates/{{template}}">{{template}}</a>
-      <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
-    </p>
+    <a href="#delete" class="btn btn-link pull-right">{{icon 'trash'}}</a>
+    <h2>/{{highlightWildcards urlPattern}} » <a href="/{{adminSegment}}/templates/{{template}}">{{template}}</a></h2>
   </div>
 {{/each}}
