@@ -13,6 +13,7 @@ module.exports = (match) ->
   match 'buckets/:slug', 'buckets#listEntries'
   match 'buckets/:slug/add', 'buckets#addEntry'
   match 'buckets/:slug/settings', 'buckets#settings'
+  match 'buckets/:slug/members', 'buckets#listMembers'
   match 'buckets/:slug/:entryID', 'buckets#editEntry'
 
   match 'templates(/*filename)', 'templates#edit'

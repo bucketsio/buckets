@@ -19,7 +19,6 @@ app.route('/users')
       res.send users
 
 app.route('/users/:userID')
-
   .get (req, res) ->
     User.findOne _id: req.params.userID, (err, user) ->
     res.send user if user
@@ -30,6 +29,7 @@ app.route('/users/:userID')
         res.send e: err, 400
       else
         res.send {}, 200
+
   .put (req, res) ->
     delete req.body._id
     User.findOneAndUpdate {_id: req.params.userID}, req.body, (err, user) ->
@@ -37,3 +37,4 @@ app.route('/users/:userID')
         res.send e: err, 400
       else
         res.send user, 200
+

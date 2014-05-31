@@ -20,7 +20,6 @@ bucketSchema = new mongoose.Schema
   singular:
     type: String
     required: yes
-
   icon:
     type: String
     enum: ['photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'edit']
@@ -29,6 +28,7 @@ bucketSchema = new mongoose.Schema
   color:
     type: String
     enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange']
+    default: 'orange'
     required: yes
   publishToSite:
     type: Boolean
@@ -60,5 +60,14 @@ bucketSchema.path('urlPattern').validate (value) ->
 , 'requiresSlug'
 
 bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
+
+bucketSchema.methods.getMembers = (callback) ->
+  q =
+    roles:
+      $elemMatch:
+        resourceId: @id,
+        resourceType: @constructor.modelName
+
+  @model('User').find(q).exec(callback)
 
 module.exports = db.model 'Bucket', bucketSchema

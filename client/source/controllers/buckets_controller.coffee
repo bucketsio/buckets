@@ -5,11 +5,14 @@ MissingPageView = require 'views/missing'
 BucketEditView = require 'views/buckets/edit'
 EntriesList = require 'views/entries/list'
 EntryEditView = require 'views/entries/edit'
+MembersList = require 'views/members/list'
 
 Bucket = require 'models/bucket'
 Buckets = require 'models/buckets'
 Entry = require 'models/entry'
 Entries = require 'models/entries'
+Members = require 'models/members'
+Users = require 'models/users'
 
 mediator = require('chaplin').mediator
 
@@ -24,7 +27,7 @@ module.exports = class BucketsController extends Controller
       @view = null
       # @view = new BucketList
 
-  add: ->    
+  add: ->
     @adjustTitle 'New Bucket'
 
     newBucket = new Bucket
@@ -84,7 +87,7 @@ module.exports = class BucketsController extends Controller
             toastr.success "You saved “#{entry.get('title')}”"
           else
             toastr.success "You deleted “#{entry.get('title')}”"
-            
+
           @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
 
         @view = new EntryEditView
@@ -105,6 +108,25 @@ module.exports = class BucketsController extends Controller
 
       @view = new BucketEditView
         model: bucket
+
+  listMembers: (params) ->
+    bucket = mediator.buckets?.findWhere slug: params.slug
+
+    if bucket
+      @adjustTitle bucket.get('name') + ' members'
+
+      members = new Members(bucketId: bucket.get('id'))
+      users = new Users
+
+      p1 = members.fetch()
+      p2 = users.fetch()
+
+      p1.done =>
+        p2.done =>
+          @view = new MembersList
+            collection: members
+            bucket: bucket
+            users: users
 
   missing: ->
     console.log 'Page missing!', arguments
