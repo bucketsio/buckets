@@ -63,6 +63,7 @@
     "sinon": "~1.10.0",
     "supertest": "~0.12.1",
     "testem": "~0.6.15",
+    "underscore": "^1.6.0",
     "validator": "^3.12.0"
   }
 }
