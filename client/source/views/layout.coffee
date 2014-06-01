@@ -13,13 +13,13 @@ module.exports = class Layout extends Chaplin.Layout
 
     toastr.options =
       debug: false
-      positionClass: "toast-top-full-width"
+      positionClass: "toast-bottom-right"
       showDuration: 100
-      hideDuration: 300
+      hideDuration: 100
       timeOut: 2100
       extendedTimeOut: 1000
       showEasing: 'swing'
-      hideEasing: 'linear'
+      hideEasing: 'swing'
       showMethod: 'slideDown'
       hideMethod: 'slideUp'
 

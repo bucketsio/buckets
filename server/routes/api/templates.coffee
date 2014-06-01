@@ -35,6 +35,7 @@ app.route('/templates/:filename')
         res.send filename: req.params.filename, contents: contents
 
   .delete (req, res) ->
+    res.send 400, {error: 'Can’t mess with the index yet.'} if req.params.filename is 'index'
     Template.remove req.params.filename, (err) ->
       if err
         res.send err, 500

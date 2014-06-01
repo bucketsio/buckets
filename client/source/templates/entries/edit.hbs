@@ -14,14 +14,30 @@
       {{input 'text' 'title' placeholder="Title" value=title}}
       <div class="alert alert-warning">TBD: Custom fields</div>
 
-      {{submit text="Save"}}
+      <div class="pull-right">
+        <div class="btn-group">
+          {{submit text="Publish"}}
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+               <li><a href="#draft">Save as a draft</a></li>
+               <li><a href="#date">Publish on…</a></li>
+             </ul>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
     </div>
+
     <div class="col-md-4">
       <h4>Publish</h4>
-      {{input 'text' 'publishDate' placeholder="Now" value=publishDate}}
+      {{input 'text' 'publishDate' placeholder="Next tuesday" value=publishDate}}
       <h4>Meta</h4>
       {{input 'text' 'Keywords' placeholder="Keywords" label="Keywords" value=keywords}}
-      <textarea name="description" class="form-control" placeholder="Description">{{description}}</textarea>
+      <div class="form-group">
+        <textarea name="description" class="form-control" placeholder="Description">{{description}}</textarea>
+      </div>
+      
       <input type="hidden" name="author" value="{{user._id}}">
     </div>
   </div>

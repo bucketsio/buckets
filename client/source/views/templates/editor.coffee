@@ -58,6 +58,6 @@ module.exports = class TemplateEditor extends PageView
       index = @collection.indexOf @model
       nextTemplate = @collection.at if index+1 is @collection.length then index-1 else index+1
 
-    @model.destroy(wait: yes).done =>
-      @model = nextTemplate
-      @render()
+      @model.destroy(wait: yes).done =>
+        @model = nextTemplate
+        @render()

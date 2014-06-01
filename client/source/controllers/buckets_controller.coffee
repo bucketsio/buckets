@@ -1,3 +1,4 @@
+Handlebars = require 'hbsfy/runtime'
 Controller = require 'lib/controller'
 MissingPageView = require 'views/missing'
 
@@ -31,7 +32,7 @@ module.exports = class BucketsController extends Controller
     @listenToOnce newBucket, 'sync', =>
       toastr.success 'Bucket added'
       mediator.buckets.add newBucket
-      @redirectTo url: '/'
+      @redirectTo 'buckets#listEntries', slug: newBucket.get('slug')
 
     @view = new BucketEditView
       model: newBucket
@@ -76,11 +77,13 @@ module.exports = class BucketsController extends Controller
 
       @entry.fetch().done =>
 
+        @entry.set 'publishDate', Handlebars.helpers.simpleDateTime @entry.get('publishDate')
+
         @listenToOnce @entry, 'sync', (entry, newData) =>
           if newData._id
-            toastr.success 'Entry saved'
+            toastr.success "You saved “#{entry.get('title')}”"
           else
-            toastr.success 'Entry deleted'
+            toastr.success "You deleted “#{entry.get('title')}”"
             
           @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
 
@@ -95,7 +98,7 @@ module.exports = class BucketsController extends Controller
     if bucket
       @adjustTitle 'Edit ' + bucket.get('name')
 
-      bucket.once 'sync', =>
+      @listenToOnce bucket, 'sync', (bucket) =>
         toastr.success 'Bucket saved'
         mediator.buckets.fetch(reset: yes)
         @redirectTo url: '/'

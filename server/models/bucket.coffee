@@ -1,5 +1,6 @@
 lingo = require 'lingo'
 mongoose = require 'mongoose'
+uniqueValidator = require 'mongoose-unique-validator'
 
 Route = require '../models/route'
 db = require '../lib/database'
@@ -7,17 +8,19 @@ db = require '../lib/database'
 bucketSchema = new mongoose.Schema
   name:
     type: String
-    index:
-      unique: yes
+    unique: yes
     required: yes
   slug:
     type: String
-    index:
-      unique: yes
+    unique: yes
     required: yes
   titleLabel: 
     type: String
     default: 'Title'
+  singular:
+    type: String
+    required: yes
+
   icon:
     type: String
     enum: ['photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'edit']
@@ -41,13 +44,11 @@ bucketSchema = new mongoose.Schema
 ,
   autoIndex: no
 
-bucketSchema.virtual('singular').get ->
-  lingo.en.singularize @name
-
-bucketSchema.virtual('path').get ->
-  lingo.camelcase @name
-
 bucketSchema.set 'toJSON', virtuals: true
+
+bucketSchema.pre 'validate', (next) ->  
+  @singular ?= lingo.en.singularize @name
+  next()
 
 # Make sure it contains :slug
 bucketSchema.path('urlPattern').validate (value) ->
@@ -58,5 +59,6 @@ bucketSchema.path('urlPattern').validate (value) ->
   
 , 'requiresSlug'
 
+bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
 
 module.exports = db.model 'Bucket', bucketSchema

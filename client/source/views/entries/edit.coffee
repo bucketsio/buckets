@@ -23,8 +23,8 @@ module.exports = class EntryEditView extends PageView
 
   submitForm: (e) ->
     e.preventDefault()
-    data = @$el.formParams(no)
-    @model.save(data)
+    data = @$el.formParams no
+    @model.save(data).fail @renderServerErrors
 
   clickDelete: (e) ->
     if confirm 'Are you sure?'

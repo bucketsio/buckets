@@ -56,13 +56,16 @@
     "lingo": "0.0.5",
     "mocha": "~1.19.0",
     "mongoose": "^3.8.11",
+    "mongoose-unique-validator": "^0.3.0",
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
     "path-to-regexp": "^0.1.2",
     "serve-static": "~1.1.0",
     "sinon": "~1.10.0",
     "supertest": "~0.12.1",
+    "swag": "^0.7.0",
     "testem": "~0.6.15",
+    "underscore": "^1.6.0",
     "validator": "^3.12.0"
   }
 }

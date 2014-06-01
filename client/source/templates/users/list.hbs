@@ -1,11 +1,18 @@
 <h1>Users</h1>
 
-<a href="#add" class="btn btn-default">Add a user</a>
+<div class="row">
+  <div class="col-md-6">
+    <a href="#add" class="btn btn-default">Add a user</a>
 
-{{#if items}}
-  <ul class="nav nav-stacked nav-pills users">
-  {{#each items}}
-    <li><a href="#"><strong>{{gravatar email_hash}} {{name}}</strong> <span class="muted">{{email}}</span></a></li>
-  {{/each}}
-  </ul>
-{{/if}}
+    {{#if items}}
+      <ul class="nav nav-stacked nav-pills users">
+      {{#each items}}
+        <li><a href="#"><strong>{{gravatar email_hash}} {{name}}</strong></a></li>
+      {{/each}}
+      </ul>
+    {{/if}}
+  </div>  
+  <div class="col-md-6 detail">
+    
+  </div>
+</div>

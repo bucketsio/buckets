@@ -21,11 +21,12 @@ module.exports = class EditUserView extends View
     e.preventDefault()
     
     data = @$el.formParams(no)
-    @model.save(data).done =>
+    @model.save(data, wait: yes).fail(@renderServerErrors).done =>
       @dispose()
 
   clickRemove: (e) ->
     e.preventDefault()
-    @model.destroy(wait: yes).done ->
-      toastr.success 'User has been removed.'
-      @dispose()
+    if confirm 'Are you sure?'
+      @model.destroy(wait: yes).done =>
+        toastr.success 'User has been removed.'
+        @dispose()

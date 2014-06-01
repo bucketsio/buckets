@@ -77,16 +77,12 @@ h4
 
 .usernav
   text-size 12px
-  margin 12px 0
+  margin 12px 0 12px 40px
+  line-height 36px
 
-  .pull-left
-    vertical-align middle
   .avatar
-    transform scale(.7)
-
-.nav-primary
-  li.divider
-    border-bottom 1px solid lighten($primary, 25)
+    transform scale(.8)
+    transform-origin 0 50%
 
 .avatar
   vertical-align middle
@@ -126,6 +122,17 @@ h4
     top 0
     right 0
     padding-left 15px
+
+  li.divider
+    border-bottom 1px solid lighten($primary, 20)
+    margin-left 40px
+
+  li.active
+    .icon
+      color #fff
+
+    .bucket-add:hover
+      background-color rgba(#fff, .2) !important
 
 hr.tiny
   width 5%
@@ -187,28 +194,50 @@ pre.code
   &.color-teal 
     a, .icon
       color $teal
+
+    &.active
+      a
+        background-color $teal !important
   &.color-blue 
     a, .icon
       color $blue
+    &.active
+      a
+        background-color $blue !important
   &.color-orange 
     a, .icon
       color $orange
+    &.active
+      a
+        background-color $orange !important
   &.color-yellow 
     a, .icon
       color $yellow
+    &.active
+      a
+        background-color $yellow !important
   &.color-red 
     a, .icon
       color $red
+    &.active
+      a
+        background-color $red !important
   &.color-purple 
     a, .icon
       color $purple
+    &.active
+      a
+        background-color $purple !important
 
 .page
-
   h1
     margin-top 30px
     padding-bottom 10px
     border-bottom 1px solid rgba($primary, .3)
+
+.routeEdit
+  border-radius 2px
+  background-color $eee
 
 .bkts-wildcard
   border-radius 2px
@@ -218,5 +247,12 @@ pre.code
 .center
   text-align center
 
-label
+label, .label
   font-weight 500
+
+
+.loginView
+  h1
+    margin-top 80px
+  .buckets-icon
+    font-size 60px

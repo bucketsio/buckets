@@ -15,7 +15,7 @@ module.exports = class Controller extends Chaplin.Controller
       return @redirectTo url: 'install'
     
     if not mediator.user? and params.authRequired isnt no
-      return @redirectTo url: 'login'
+      return @redirectTo 'auth#login', next: route.path
 
     else if mediator.user?.get('id')
 
