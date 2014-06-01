@@ -1,6 +1,8 @@
-<form>
+<form class="well">
 
   {{input 'text' 'urlPattern' placeholder="/myroute/:param" value=urlPattern}}
+  <p class="help-block">Routes are simply URL patterns that map to templates. They can use tokens in the form of <code class="bkts-wildcard">:params</code>.</p>
+
   <input type="hidden" name="template" value="index">
 
   {{#if _id}}
@@ -11,5 +13,3 @@
   <a href="#cancel" class="btn btn-default">Cancel</a>
 
 </form>
-
-<p>Routes are simply URL patterns that map to templates. They can use tokens in the form of <code class="bkts-wildcard">:params</code>.
