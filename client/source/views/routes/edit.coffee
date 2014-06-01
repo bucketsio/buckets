@@ -1,3 +1,5 @@
+_ = require 'underscore'
+
 View = require 'lib/view'
 
 tpl = require 'templates/routes/edit'
@@ -5,6 +7,7 @@ tpl = require 'templates/routes/edit'
 module.exports = class EditRouteView extends View
   template: tpl
   autoRender: yes
+  className: 'routeEdit'
 
   events:
     'submit form': 'submitForm'
@@ -16,4 +19,6 @@ module.exports = class EditRouteView extends View
 
   render: ->
     super
-    @$('input').get(0).focus()
+
+    _.defer =>
+      @$('input').get(0).focus()
