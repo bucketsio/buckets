@@ -11,10 +11,29 @@
   <body>
     <h1>Buckets Pre-alpha</h1>
 
-    <p>Soon, this page will be served dynamically with all sorts of cool stuff, but for now, you’re probably looking for <a href="/{{adminSegment}}/">the admin.</a></p>
+    <p>Soon, this page will be served dynamically with all sorts of cool stuff,
+    but for now, you’re probably looking for <a href="/{{adminSegment}}/">the
+    admin.</a></p>
+    
+    {{#entries}}
+      <h3>{{title}}</h3>
+      {{description}}
+    {{else}}
+      <p>Add some entries into any Bucket and they’ll show up here :)</p>
+    {{/entries}}
+
+    {{#if req.query}}
+      <h2>This request had query params.</h2>
+      <ul>
+        {{#eachProperty req.query}}
+          <li><strong>{{key}}:</strong> {{value}}</li>
+        {{/eachProperty}}
+      </ul>
+    {{else}}
+      <p>This page did not pass any <a href="/?example=customKey">request params</a>.</h1>
+    {{/if}}
 
     <style>
-
       body {
         font-family: Alegreya, Georgia, serif;
         color: #555;
@@ -24,7 +43,8 @@
       p {
         max-width: 600px;
       }
-
     </style>
+
+    {{renderTime}}
   </body>
 </html>

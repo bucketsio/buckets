@@ -6,4 +6,5 @@ module.exports =
     port: process.env.PORT || 3000
     env: process.env.NODE_ENV or 'development'
     templatePath: "#{__dirname}/../user/templates/"
+    catchAll: yes
   db: "mongodb://localhost/buckets_#{process.env.NODE_ENV or 'development'}"
