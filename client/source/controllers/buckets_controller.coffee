@@ -98,7 +98,7 @@ module.exports = class BucketsController extends Controller
     if bucket
       @adjustTitle 'Edit ' + bucket.get('name')
 
-      bucket.once 'sync', =>
+      @listenToOnce bucket, 'sync', (bucket) =>
         toastr.success 'Bucket saved'
         mediator.buckets.fetch(reset: yes)
         @redirectTo url: '/'
