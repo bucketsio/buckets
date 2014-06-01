@@ -14,7 +14,19 @@
       {{input 'text' 'title' placeholder="Title" value=title}}
       <div class="alert alert-warning">TBD: Custom fields</div>
 
-      {{submit text="Save"}}
+      <div class="pull-right">
+        <div class="btn-group">
+          {{submit text="Publish"}}
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+               <li><a href="#draft">Save as a draft</a></li>
+               <li><a href="#date">Publish on…</a></li>
+             </ul>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
     </div>
 
     <div class="col-md-4">

@@ -13,6 +13,11 @@ module.exports = class BucketEditView extends PageView
     'click .swatches div': 'selectSwatch'
     'click [href="#delete"]': 'clickDelete'
 
+  render: ->
+    super
+    _.defer =>
+      @$('.form-control').eq(0).focus()
+
   submitForm: (e) ->
     e.preventDefault()
     data = @$(e.currentTarget).formParams(no)

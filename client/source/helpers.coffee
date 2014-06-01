@@ -47,7 +47,7 @@ Handlebars.registerHelper 'submit', (options) ->
 
 Handlebars.registerHelper 'gravatar', (email_hash) ->
   new Handlebars.SafeString """
-    <div class="avatar" style="background-image: url(http://www.gravatar.com/avatar/#{email_hash})"></div>
+    <div class="avatar" style="background-image: url(https://www.gravatar.com/avatar/#{email_hash})"></div>
   """
 
 Handlebars.registerHelper 'highlightWildcards', (path) ->

@@ -6,3 +6,4 @@ module.exports = class LoginView extends View
   template: tpl
   autoRender: yes
   container: '#bkts-content'
+  className: 'loginView'
