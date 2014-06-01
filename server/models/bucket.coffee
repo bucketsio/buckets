@@ -17,6 +17,11 @@ bucketSchema = new mongoose.Schema
   titleLabel: 
     type: String
     default: 'Title'
+  singular:
+    type: String
+    required: yes
+    set: ->
+      @singular ?= lingo.en.singularize @name
   icon:
     type: String
     enum: ['photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'edit']
@@ -39,12 +44,6 @@ bucketSchema = new mongoose.Schema
   ]
 ,
   autoIndex: no
-
-bucketSchema.virtual('singular').get ->
-  lingo.en.singularize @name
-
-bucketSchema.virtual('path').get ->
-  lingo.camelcase @name
 
 bucketSchema.set 'toJSON', virtuals: true
 

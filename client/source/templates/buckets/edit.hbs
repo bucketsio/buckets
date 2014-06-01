@@ -53,6 +53,12 @@
     </div>
 
     {{#if _id}}
+      <div class="form-group">
+        {{input 'text' 'singular' value=singular}}
+      </div>
+    {{/if}}
+
+    {{#if _id}}
       <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
     {{/if}}
     <div class="pull-right">
