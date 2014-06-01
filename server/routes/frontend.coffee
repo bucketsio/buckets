@@ -36,7 +36,6 @@ app.get '*', (req, res, next) ->
       params: {} # We fill this manually later
 
   renderError = ->
-    console.log config.buckets
     next() unless config.buckets.catchAll
 
     templateData.errorCode = 404
@@ -70,5 +69,7 @@ app.get '*', (req, res, next) ->
             renderError()
           else
             return res.send html
+    
+    return res.render 'index', templateData if req.path is '/'
 
     renderError()
