@@ -1,3 +1,4 @@
+Handlebars = require 'hbsfy/runtime'
 Controller = require 'lib/controller'
 MissingPageView = require 'views/missing'
 
@@ -75,6 +76,8 @@ module.exports = class BucketsController extends Controller
       @entry = new Entry _id: params.entryID
 
       @entry.fetch().done =>
+
+        @entry.set 'publishDate', Handlebars.helpers.simpleDateTime @entry.get('publishDate')
 
         @listenToOnce @entry, 'sync', (entry, newData) =>
           if newData._id

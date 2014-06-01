@@ -66,7 +66,7 @@ Handlebars.registerHelper 'dumbBlankSlate', (itemName) ->
 
 Handlebars.registerHelper 'timeAgo', (dateTime) ->
   m = moment dateTime
-  expanded = m.format 'MMMM Do YYYY, h:mm:ss a'
+  expanded = Handlebars.helpers.simpleDateTime dateTime
 
   o = []
   o.push """<span title="#{expanded}">"""
@@ -75,6 +75,9 @@ Handlebars.registerHelper 'timeAgo', (dateTime) ->
 
   new Handlebars.SafeString o.join ''
 
+Handlebars.registerHelper 'simpleDateTime', (dateTime) ->
+  m = moment dateTime
+  m.format 'MMMM Do YYYY, h:mma'
 
 Handlebars.registerHelper 'debug', ->
   console.log @, arguments
