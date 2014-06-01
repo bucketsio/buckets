@@ -32,7 +32,7 @@ module.exports = class BucketsController extends Controller
     @listenToOnce newBucket, 'sync', =>
       toastr.success 'Bucket added'
       mediator.buckets.add newBucket
-      @redirectTo url: '/'
+      @redirectTo 'buckets#listEntries', slug: newBucket.get('slug')
 
     @view = new BucketEditView
       model: newBucket
