@@ -1,5 +1,6 @@
 lingo = require 'lingo'
 mongoose = require 'mongoose'
+uniqueValidator = require 'mongoose-unique-validator'
 
 Route = require '../models/route'
 db = require '../lib/database'
@@ -7,13 +8,11 @@ db = require '../lib/database'
 bucketSchema = new mongoose.Schema
   name:
     type: String
-    index:
-      unique: yes
+    unique: yes
     required: yes
   slug:
     type: String
-    index:
-      unique: yes
+    unique: yes
     required: yes
   titleLabel: 
     type: String
@@ -58,5 +57,6 @@ bucketSchema.path('urlPattern').validate (value) ->
   
 , 'requiresSlug'
 
+bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is taken, and {PATH} must be unique.'
 
 module.exports = db.model 'Bucket', bucketSchema

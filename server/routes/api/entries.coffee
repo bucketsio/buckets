@@ -29,14 +29,15 @@ app.route('/entries/:entryID')
         res.send entry
       else
         res.send 404
+
   .put (req, res) ->
     Entry.findOne {_id: req.params.entryID}, (err, entry) ->
       if err
-        res.send 400, e: err
+        res.send 400, err
       else
         entry.set(req.body).save (err, entry) ->
           if err
-            res.send 400, e: err
+            res.send 400, err
           else
             res.send 200, entry      
     

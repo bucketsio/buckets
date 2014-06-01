@@ -21,7 +21,7 @@ module.exports = class UsersList extends PageView
 
     @subview 'editUser', new EditUserView
       model: newUser
-      container: @$el
+      container: @$('.detail')
 
     @listenToOnce newUser, 'sync', =>
       @collection.add newUser
@@ -37,4 +37,4 @@ module.exports = class UsersList extends PageView
 
     @subview 'editUser', new EditUserView
       model: user
-      container: @$el
+      container: @$('.detail')
