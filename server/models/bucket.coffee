@@ -46,7 +46,7 @@ bucketSchema = new mongoose.Schema
 
 bucketSchema.set 'toJSON', virtuals: true
 
-bucketSchema.pre 'save', (next) ->  
+bucketSchema.pre 'validate', (next) ->  
   @singular ?= lingo.en.singularize @name
   next()
 
@@ -59,6 +59,6 @@ bucketSchema.path('urlPattern').validate (value) ->
   
 , 'requiresSlug'
 
-bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is taken, and {PATH} must be unique.'
+bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
 
 module.exports = db.model 'Bucket', bucketSchema
