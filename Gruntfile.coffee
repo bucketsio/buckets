@@ -73,7 +73,12 @@ module.exports = (grunt) ->
       ace:
         expand: yes
         cwd: 'bower_components/ace-builds/src-min-noconflict/'
-        src: ['ace.js', 'mode-html.js', 'worker-html.js']
+        src: [
+          'ace.js'
+          'mode-handlebars.js'
+          'worker-handlebars.js'
+          'theme-*.js' # These are loaded on the fly anyway
+        ]
         dest: 'public/js/ace/'
 
     cssmin:

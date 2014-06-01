@@ -33,8 +33,13 @@ module.exports = class TemplateEditor extends PageView
 
   bindAceEditor: =>
     ace.config.set 'basePath', "/#{mediator.options.adminSegment}/js/ace/"
-    @editorSession = ace.edit(@$('.code.editor')[0]).getSession()
-    @editorSession.setMode 'ace/mode/html'
+    @editor = ace.edit(@$('.code.editor')[0])
+    @editor.setTheme 'ace/theme/tomorrow'
+    @editor.renderer.setShowGutter no
+
+    @editorSession = @editor.getSession()
+    @editorSession.setMode 'ace/mode/handlebars'
+
     @editorSession.setValue @$code.val()
 
   submitForm: (e) ->
@@ -61,3 +66,7 @@ module.exports = class TemplateEditor extends PageView
       @model.destroy(wait: yes).done =>
         @model = nextTemplate
         @render()
+
+  dispose: ->
+    @editor?.destroy()
+    super
