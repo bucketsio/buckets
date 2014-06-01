@@ -20,8 +20,7 @@ bucketSchema = new mongoose.Schema
   singular:
     type: String
     required: yes
-    set: ->
-      @singular ?= lingo.en.singularize @name
+
   icon:
     type: String
     enum: ['photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'edit']
@@ -46,6 +45,10 @@ bucketSchema = new mongoose.Schema
   autoIndex: no
 
 bucketSchema.set 'toJSON', virtuals: true
+
+bucketSchema.pre 'save', (next) ->  
+  @singular ?= lingo.en.singularize @name
+  next()
 
 # Make sure it contains :slug
 bucketSchema.path('urlPattern').validate (value) ->
