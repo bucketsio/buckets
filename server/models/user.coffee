@@ -1,6 +1,7 @@
 bcrypt = require 'bcrypt'
 crypto = require 'crypto'
 mongoose = require 'mongoose'
+uniqueValidator = require 'mongoose-unique-validator'
 db = require '../lib/database'
 
 Schema = mongoose.Schema
@@ -37,6 +38,12 @@ userSchema.methods.authenticate = (password, callback) ->
 
 userSchema.virtual('email_hash').get ->
   crypto.createHash('md5').update(@email).digest('hex') if @email
+
+userSchema.path('password').validate (value) ->
+  /^(?=[^\d_].*?\d)\w(\w|[!@#$%]){5,20}/.test value
+, 'Your password must be between 6–20 characters, start with a letter, and include a number.'
+
+userSchema.plugin uniqueValidator, message: '“{VALUE}” is already a user.'
 
 userSchema.set 'toJSON', virtuals: true
 
