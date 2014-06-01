@@ -81,9 +81,9 @@ module.exports = class BucketsController extends Controller
 
         @listenToOnce @entry, 'sync', (entry, newData) =>
           if newData._id
-            toastr.success 'Entry saved'
+            toastr.success "You saved “#{entry.get('title')}”"
           else
-            toastr.success 'Entry deleted'
+            toastr.success "You deleted “#{entry.get('title')}”"
             
           @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
 
