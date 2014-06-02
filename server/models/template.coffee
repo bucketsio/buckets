@@ -36,4 +36,5 @@ Template.pre 'save', (next) ->
 
 Template.statics.renameRoutes = (oldName, newName, callback) ->
   Route.update({ template: oldName }, { template: newName }, callback)
+
 module.exports = db.model('Template', Template)
