@@ -7,7 +7,7 @@ module.exports = app = express()
 app.route('/users')
   .post (req, res) ->
     newUser = new User req.body
-    
+
     newUser.save (err) ->
       if err
         res.send err, 400

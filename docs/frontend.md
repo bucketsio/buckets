@@ -19,7 +19,7 @@ The lifecycle of a general frontend request is fairly easy to follow. Simply fin
 
 ### Bootstrap 3
 
-For CSS, the app is currently being written in Styus, though most basic UI styles are provided by Bootstrap 3 (with custom variables) at `client/style/bootstrap.less`. 
+For CSS, the app is currently being written in Styus, though most basic UI styles are provided by Bootstrap 3 (with custom variables) at `client/style/bootstrap.less`.
 
 _Currently we are including all styles and JavaScript plugins, though we will be trimming out unused modules before beta._
 

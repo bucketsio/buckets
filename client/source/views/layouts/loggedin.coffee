@@ -13,7 +13,7 @@ module.exports = class LoggedInLayout extends View
   events:
     'click .nav-primary a': 'clickNav'
 
-  regions: 
+  regions:
     content: '.page'
 
   getTemplateData: ->

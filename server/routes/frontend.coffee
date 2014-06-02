@@ -29,9 +29,9 @@ app.get '*', (req, res, next) ->
     req:
       body: req.body
       path: req.path
-      query: unless _.isEmpty(req.query) 
-          req.query 
-        else 
+      query: unless _.isEmpty(req.query)
+          req.query
+        else
           false
       params: {} # We fill this manually later
 
@@ -69,7 +69,7 @@ app.get '*', (req, res, next) ->
             renderError()
           else
             return res.send html
-    
+
     return res.render 'index', templateData if req.path is '/'
 
     renderError()
