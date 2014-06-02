@@ -8,7 +8,7 @@ app.route('/entries')
   .post (req, res) ->
     req.body.keywords = req.body.keywords?.split(',')
     newEntry = new Entry req.body
-    
+
     newEntry.save (err, entry) ->
       if err
         res.send 400, err
@@ -39,8 +39,8 @@ app.route('/entries/:entryID')
           if err
             res.send 400, err
           else
-            res.send 200, entry      
-    
+            res.send 200, entry
+
   .delete (req, res) ->
     delete req.body._id
     Entry.remove _id: req.params.entryID, (err) ->

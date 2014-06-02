@@ -19,7 +19,7 @@ module.exports = class EditUserView extends View
 
   submitForm: (e) ->
     e.preventDefault()
-    
+
     data = @$el.formParams(no)
     @model.save(data, wait: yes).fail(@renderServerErrors).done =>
       @dispose()

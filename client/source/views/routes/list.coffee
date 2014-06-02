@@ -20,7 +20,7 @@ module.exports = class RoutesList extends PageView
   clickNew: (e) ->
     e.preventDefault()
     newRoute = new Route
-    
+
     @listenToOnce newRoute, 'sync', =>
       @collection.add(newRoute)
 
@@ -37,11 +37,11 @@ module.exports = class RoutesList extends PageView
       model = @collection.findWhere _id: @$(e.currentTarget).closest('.route').data('route-id')
       model.destroy(wait: yes).done ->
         toastr.success 'Route deleted'
-  
+
   clickEdit: (e) ->
     e.preventDefault()
     route = @collection.findWhere _id: @$(e.currentTarget).closest('.route').data('route-id')
-    
+
     @listenToOnce route, 'sync', =>
       @subview('editRoute').dispose()
       @render()

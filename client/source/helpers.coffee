@@ -11,7 +11,7 @@ Handlebars.registerHelper 'icon', (type) ->
   new Handlebars.SafeString """<span class="icon buckets-icon-#{type}"></span>"""
 
 Handlebars.registerHelper 'input', (type, name, options) ->
-  
+
   placeholder = if options.hash?.placeholder
     " placeholder=\"#{options.hash.placeholder}\""
   else

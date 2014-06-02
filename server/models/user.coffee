@@ -7,10 +7,10 @@ db = require '../lib/database'
 Schema = mongoose.Schema
 
 userSchema = new Schema
-  name: 
+  name:
     type: String
     required: true
-  email: 
+  email:
     type: String
     required: true
     lowercase: true
@@ -23,7 +23,7 @@ userSchema = new Schema
       return unless password
       salt = bcrypt.genSaltSync()
       bcrypt.hashSync password, salt
-  activated: 
+  activated:
     type: Boolean
     default: false
   last_active:

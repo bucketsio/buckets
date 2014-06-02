@@ -15,7 +15,7 @@ app.route('/templates')
         res.send files
 
   .post (req, res) ->
-    
+
     Template.write req.body.filename, req.body.contents, (err) ->
       console.log arguments
       if err

@@ -14,7 +14,7 @@ bucketSchema = new mongoose.Schema
     type: String
     unique: yes
     required: yes
-  titleLabel: 
+  titleLabel:
     type: String
     default: 'Title'
   singular:
@@ -46,17 +46,17 @@ bucketSchema = new mongoose.Schema
 
 bucketSchema.set 'toJSON', virtuals: true
 
-bucketSchema.pre 'validate', (next) ->  
+bucketSchema.pre 'validate', (next) ->
   @singular ?= lingo.en.singularize @name
   next()
 
 # Make sure it contains :slug
 bucketSchema.path('urlPattern').validate (value) ->
   if @publishToSite
-    /\/?:slug[\.\/]?/g.test value 
+    /\/?:slug[\.\/]?/g.test value
   else
     true
-  
+
 , 'requiresSlug'
 
 bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'

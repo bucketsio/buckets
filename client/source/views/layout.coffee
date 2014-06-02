@@ -25,7 +25,7 @@ module.exports = class Layout extends Chaplin.Layout
 
   keyUpSluggify: (e) ->
     $el = @$(e.currentTarget)
-    
+
     val = $el.val()
     $target = @$("input[name=\"#{$el.data('sluggify')}\"]")
 

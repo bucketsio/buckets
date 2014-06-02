@@ -7,7 +7,7 @@ passport.use new LocalStrategy (username, password, done) ->
     return done err if err
     return done null, false, message: "Incorrect username." unless user
     return done null, false, message: "Incorrect password." unless user.authenticate(password)
-    
+
     done null, user
 
 passport.serializeUser (user, done) -> done null, user.id

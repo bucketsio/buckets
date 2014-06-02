@@ -7,7 +7,7 @@ module.exports = app = express()
 app.route('/buckets')
   .post (req, res) ->
     newBucket = new Bucket req.body
-    
+
     newBucket.save (err, user) ->
       if err
         res.send err, 400
@@ -19,7 +19,7 @@ app.route('/buckets')
       res.send buckets
 
 app.route('/buckets/:bucketID')
-  .delete (req, res) ->    
+  .delete (req, res) ->
     Bucket.remove _id: req.params.bucketID, (err) ->
       if err
         res.send 400, err
