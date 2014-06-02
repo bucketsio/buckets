@@ -45,11 +45,12 @@ module.exports = (hbs) ->
     Entry.find()
       .populate('bucket')
       .populate('author')
-      .limit options.hash.limit
-      .skip options.hash.skip
+      .limit(options.hash.limit)
+      .skip(options.hash.skip)
       .exec (err, pages) ->
         console.log err if err
-        cb options.inverse @ if pages.length is 0 or err 
+
+        return cb options.inverse @ if pages.length is 0 or err
 
         ret = []
         for page in pages
@@ -59,5 +60,3 @@ module.exports = (hbs) ->
             console.log e.stack, arguments
 
         cb ret.join('')
-
-  

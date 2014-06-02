@@ -8,11 +8,11 @@ module.exports = class FirstUserView extends View
   template: tpl
   container: '#bkts-content'
   autoRender: yes
-  
+
   render: ->
     super
     @$btn = @$('button[type=submit]').ladda()
-    _.defer => 
+    _.defer =>
       @$('.form-control').eq(0).focus()
 
   events:
@@ -24,7 +24,7 @@ module.exports = class FirstUserView extends View
     data = @$(e.currentTarget).formParams false
 
     btn = @$btn.ladda 'start'
-    
+
     @model.save(data).always( ->
       btn.ladda 'stop'
     ).done ->
