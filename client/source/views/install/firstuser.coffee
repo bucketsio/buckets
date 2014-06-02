@@ -27,5 +27,5 @@ module.exports = class FirstUserView extends View
 
     @model.save(data).always( ->
       btn.ladda 'stop'
-    ).done ->
+    ).fail(@renderServerErrors).done ->
       toastr.success 'User created!'
