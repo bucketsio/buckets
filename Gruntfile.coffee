@@ -119,7 +119,7 @@ module.exports = (grunt) ->
       app:
         expand: yes
         cwd: 'client/style/'
-        src: ['**/*.styl']
+        src: ['**/*.styl', '!_*.styl']
         dest: 'public/css/'
         ext: '.css'
 

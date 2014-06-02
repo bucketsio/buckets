@@ -1,0 +1,85 @@
+#logo
+  .bkts-icon
+    display block
+    position relative
+    // top .1em
+    vertical-align middle
+
+  a
+    color #444
+
+    &:hover
+      transition all 100ms ease-out
+      color $primary
+      text-decoration none
+
+.version-badge
+  font-size 12px
+  border-radius 3px
+  border 2px solid #ccc
+  padding .15em .4em
+  margin-bottom 0 0 .4em
+  color #999
+  vertical-align top
+  font-weight 500
+  display inline-block
+  font-family $sans
+
+.nav-primary
+  > li > a
+    padding-left 40px
+
+  .icon
+    position absolute
+    left 8px
+    top 8px
+    font-size 24px
+    vertical-align middle
+    margin-right 4px
+    color #888
+
+  .bucket-add
+    position absolute
+    top 0
+    right 0
+    padding-left 15px
+
+  li.divider
+    border-bottom 1px solid lighten($primary, 20)
+    margin-left 40px
+
+  li.active
+    .icon
+      color #fff
+
+    .bucket-add:hover
+      background-color rgba(#fff, .2) !important
+
+addColor($name, $color)
+  .color-{$name}, .nav-primary > .bucket.color-{$name} > a, .bucket.color-{$name} .icon
+    color $color
+  .swatches.colors > .{$name}, .nav-primary > .color-{$name}.active > a
+    background-color $color
+  .nav-primary > .color-{$name}.active > a:hover
+      background-color lighten($color, 5)
+
+addColor('teal', $teal)
+addColor('blue', $blue)
+addColor('red', $red)
+addColor('orange', $orange)
+addColor('yellow', $yellow)
+addColor('purple', $purple)
+
+.nav-primary > .bucket.active > a
+  color #fff
+
+.usernav
+  font-size 12px
+  margin 16px 0 16px 40px
+
+  .avatar
+    transform scale(.8)
+    transform-origin 0 50%
+    float left
+    margin-bottom 10px
+    margin-top -8px
