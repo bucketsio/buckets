@@ -137,7 +137,6 @@ describe 'PUT /templates/:filename', ->
       .end (err, res) ->
         expect(err).not.to.exist;
         expect(res.status).to.equal(201)
-        expect(res.body.contents).to.equal('baz')
         done();
 
   it 'does not allow filename mismatches', (done) ->
