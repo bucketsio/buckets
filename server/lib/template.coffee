@@ -1,6 +1,7 @@
 glob = require 'glob'
 fs = require 'fs'
 path = require 'path'
+DbTemplate = require('../models/template')
 
 module.exports = (cwd) ->
 
@@ -65,14 +66,20 @@ module.exports = (cwd) ->
 
     write: (filename, contents, callback) ->
       filename = resolve(filename+'.hbs')
-      mkdirp path.dirname(filename), (err) ->
+      dir = path.dirname(filename)
+      mkdirp dir, (err) ->
         return callback(err) if err
-        fs.writeFile(filename, contents, callback)
+        new DbTemplate({ filename: filename, contents: contents, directory: dir }).save (err, template) ->
+          return callback(err) if err
+          fs.writeFile(filename, contents, callback)
 
     remove: (filename, callback) ->
-      filename = resolve(filename+'.hbs')
-      fs.unlink filename, (err) ->
+      filenameExt = resolve(filename+'.hbs')
+      dir = path.dirname(filename)
+      DbTemplate.remove { filename: filename, directory: dir }, (err) ->
         return callback(err) if err
-        cleanup path.dirname(filename), callback
+        fs.unlink filenameExt, (err) ->
+          return callback(err) if err
+          cleanup path.dirname(filenameExt), callback
 
   new Template
