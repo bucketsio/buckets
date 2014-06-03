@@ -37,6 +37,7 @@ app.route('/templates/:filename')
         res.send err, 500
       else
         res.send 204
+
   # not a valid PUT request
   .put (req, res) ->
     Template.write [req.params.filename, req.body.filename], req.body.contents, (err) ->
