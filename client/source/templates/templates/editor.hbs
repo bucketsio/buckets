@@ -12,14 +12,18 @@
       {{/each}}
       </ul>
 
-      {{#isnt filename 'index'}}
       <hr>
-      {{input 'text' 'filename' attrs='placeholder="Filename"' value=filename}}
-        <div class="pull-right">
+      <div class="notForIndex">
+        {{input 'text' 'filename' attrs='placeholder="Filename"' value=filename}}
+      </div>
+      <div class="pull-right">
+        <span class="notForIndex">
           <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
-          {{submit text='Save'}}
-        </div>
-      {{/isnt}}
+        </span>
+        {{submit text='Save'}}
+      </div>
+      <div class="clearfix"></div>
+
     </div>
     <div class="col-md-9">
       <textarea name="contents" rows="20" class="form-control code hidden">{{contents}}</textarea>

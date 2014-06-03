@@ -1,4 +1,5 @@
 PageView = require 'views/base/page'
+Template = require 'models/template'
 _ = require 'underscore'
 mediator = require('chaplin').mediator
 
@@ -19,14 +20,10 @@ module.exports = class TemplateEditor extends PageView
     _.extend super,
       items: @collection.toJSON()
 
-  initialize: (@options) ->
-    @model = @collection.findWhere filename: @options?.filename
-    @model ?= @options.newTemplate.clone()
-    super
-
   render: ->
-    super()
+    super
     @$code = @$('textarea.code')
+
     Modernizr.load
       load: ["/#{mediator.options.adminSegment}/js/ace/ace.js"]
       complete: @bindAceEditor
@@ -40,7 +37,24 @@ module.exports = class TemplateEditor extends PageView
     @editorSession = @editor.getSession()
     @editorSession.setMode 'ace/mode/handlebars'
 
-    @editorSession.setValue @$code.val()
+    @selectTemplate @model.get('filename')
+
+  selectTemplate: (filename) ->
+    if filename
+      @model = @collection.findWhere(filename: filename)
+      contents = @model.get 'contents'
+      idx = @collection.indexOf @model
+      @$('.nav li').eq(idx).addClass('active').siblings().removeClass('active')
+
+    else
+      @model = new Template
+      contents = ''
+      @$('.nav li').removeClass 'active'
+
+    @$code.val contents
+    @$('[name="filename"]').val filename
+    @editorSession.setValue contents
+    @$('.notForIndex').toggleClass 'hide', filename is 'index'
 
   submitForm: (e) ->
     e.preventDefault()
@@ -52,8 +66,7 @@ module.exports = class TemplateEditor extends PageView
 
   clickNew: (e) ->
     e.preventDefault()
-    @model = @options.newTemplate.clone()
-    @render()
+    @selectTemplate()
     @$('input').focus()
 
   clickDelete: (e) ->
