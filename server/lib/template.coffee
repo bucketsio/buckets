@@ -60,18 +60,34 @@ module.exports = (cwd) ->
                 check()
         check()
 
-
     read: (filename, callback) ->
       fs.readFile resolve(filename + '.hbs'), 'utf8', callback
 
     write: (filename, contents, callback) ->
       filename = resolve(filename+'.hbs')
       dir = path.dirname(filename)
+
+      save = (doc, cb) ->
+        DbTemplate.findOne { filename: filename }, (err, template) ->
+          return cb(err) if err
+          if not template
+            template = new DbTemplate(doc)
+          else
+            for k, v of doc
+              template[k] = v
+          template.save((err, template) ->
+            return cb(err) if err
+            cb()
+          )
+
       mkdirp dir, (err) ->
         return callback(err) if err
-        new DbTemplate({ filename: filename, contents: contents, directory: dir }).save (err, template) ->
+        doc = { filename: filename, contents: contents, directory: dir }
+        save(doc, (err) ->
           return callback(err) if err
           fs.writeFile(filename, contents, callback)
+        )
+
 
     remove: (filename, callback) ->
       filenameExt = resolve(filename+'.hbs')
