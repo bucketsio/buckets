@@ -8,6 +8,7 @@ mediator = require('chaplin').mediator
 module.exports = class EditUserView extends View
   template: tpl
   autoRender: yes
+  region: 'contactCard'
 
   events:
     'submit form': 'submitForm'
@@ -16,6 +17,11 @@ module.exports = class EditUserView extends View
   getTemplateData: ->
     _.extend super,
       currentUser: mediator.user?.toJSON()
+
+  render: ->
+    super
+    _.defer =>
+      @$('.form-control:visible').eq(0).focus()
 
   submitForm: (e) ->
     e.preventDefault()
