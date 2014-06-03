@@ -7,9 +7,8 @@
       </header>
 
       {{#if next}}
-      <input type="hidden" name="next" value="/{{adminSegment}}/{{next}}">
+        <input type="hidden" name="next" value="/{{adminSegment}}/{{next}}">
       {{/if}}
-
 
       <h3>Please log in{{#if next}} to continue{{/if}}:</h3>
       {{input 'email' 'username' placeholder="Email"}}
