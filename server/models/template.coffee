@@ -6,7 +6,7 @@ db = require '../lib/database'
 # http://docs.mongodb.org/manual/faq/developers/#how-does-mongodb-address-sql-or-query-injection
 
 Template = new mongoose.Schema
-  name:
+  filename:
     type: String
     required: true
   contents: String
