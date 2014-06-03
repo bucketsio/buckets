@@ -11,11 +11,22 @@ Template = new mongoose.Schema
     required: true
   contents: String
   date_created:
-    type: date
+    type: Date
     default: Date.now
   last_modified:
     type: Date
     default: Date.now
-  tags: [String]
+  primary:
+    type: Boolean
+    default: false
+  directory: String
+
+Template.pre 'save', (next) ->
+  @.last_modified = Date.now()
+  if @.primary
+    Template.update { primary: true }, { primary: false }, { multi: true }, (err) ->
+      next(err)
+  else
+    next()
 
 module.exports = db.model('Template', Template)
