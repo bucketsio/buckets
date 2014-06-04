@@ -33,6 +33,7 @@ module.exports = (cwd) ->
   class Template
 
     find: (callback) ->
+      self = @
       # Return all Handlebars paths
       glob '**/*.hbs', {cwd: cwd}, (err, files) ->
         return callback(err) if err
@@ -52,16 +53,32 @@ module.exports = (cwd) ->
 
         for filename, i in files
           do (filename, i) ->
-            fs.readFile cwd + filename, 'utf8', (err, contents) ->
+            f = filename.replace(/\.hbs$/,'')
+            self.read(f, (err, contents) ->
               if err
-                check err
-              else
-                items[i] = {filename: filename.replace(/\.hbs$/,''), contents: contents}
-                check()
+                return check(err)
+              items[i] = { filename: f, contents: contents }
+              check()
+            )
         check()
 
     read: (filename, callback) ->
-      fs.readFile resolve(filename + '.hbs'), 'utf8', callback
+      filename = resolve(filename)
+      fs.readFile(filename + '.hbs', 'utf8', (err, contents) ->
+        if err
+          if err.code == 'ENOENT'
+            DbTemplate.findOne({ filename: filename }, (dbErr, template) ->
+              if dbErr
+                return callback(dbErr)
+              if not template
+                return callback(err)
+              callback(null, template.contents)
+            )
+          else
+            callback(err)
+        else
+          callback(null, contents)
+      )
 
     write: (filename, contents, callback) ->
       filename = resolve(filename+'.hbs')
