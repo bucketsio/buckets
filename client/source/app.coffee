@@ -1,5 +1,9 @@
 Backbone = require 'backbone'
+Cocktail = require 'cocktail'
+
 Backbone.$ = $
+Cocktail.patch Backbone
+
 Chaplin = require 'chaplin'
 
 User = require 'models/user'

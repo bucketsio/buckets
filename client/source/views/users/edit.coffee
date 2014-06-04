@@ -2,10 +2,12 @@ _ = require 'underscore'
 
 View = require 'lib/view'
 tpl = require 'templates/users/edit'
+FormMixin = require 'views/base/mixins/form'
 
 mediator = require('chaplin').mediator
 
 module.exports = class EditUserView extends View
+  @mixin FormMixin
   template: tpl
   autoRender: yes
 
@@ -19,10 +21,7 @@ module.exports = class EditUserView extends View
 
   submitForm: (e) ->
     e.preventDefault()
-
-    data = @$el.formParams(no)
-    @model.save(data, wait: yes).fail(@renderServerErrors).done =>
-      @dispose()
+    @submit(@model.save(@formParams(), wait: yes))
 
   clickRemove: (e) ->
     e.preventDefault()
