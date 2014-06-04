@@ -4,7 +4,15 @@
   "description": "Manage content better.",
   "scripts": {
     "start": "grunt serve",
-    "test": "grunt test"
+    "test": "grunt test",
+    "test-cov": "node_modules/.bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html"
+  },
+  "config": {
+    "blanket": {
+      "loader": "./node-loaders/coffee-script",
+      "pattern": "server",
+      "data-cover-never": "node_modules"
+    }
   },
   "author": "",
   "bugs": {
