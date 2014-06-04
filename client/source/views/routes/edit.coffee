@@ -6,7 +6,6 @@ tpl = require 'templates/routes/edit'
 
 module.exports = class EditRouteView extends View
   template: tpl
-  autoRender: yes
   className: 'routeEdit'
 
   events:
@@ -15,14 +14,7 @@ module.exports = class EditRouteView extends View
 
   submitForm: (e) ->
     e.preventDefault()
-    data = @$el.formParams(no)
-    @model.save(data)
-
-  render: ->
-    super
-
-    _.defer =>
-      @$('input').get(0).focus()
+    @submit @model.save(@formParams(), wait: yes)
 
   clickCancel: (e) ->
     e.preventDefault()

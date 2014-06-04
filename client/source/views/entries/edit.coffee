@@ -1,9 +1,12 @@
 _ = require 'underscore'
 
 PageView = require 'views/base/page'
+FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/entries/edit'
 
 module.exports = class EntryEditView extends PageView
+  @mixin FormMixin
+
   template: tpl
   optionNames: PageView::optionNames.concat ['bucket', 'user']
 
@@ -16,15 +19,9 @@ module.exports = class EntryEditView extends PageView
       bucket: @bucket?.toJSON()
       user: @user?.toJSON()
 
-  render: ->
-    super
-    _.defer =>
-      @$('.form-control').get(0).focus()
-
   submitForm: (e) ->
     e.preventDefault()
-    data = @$el.formParams no
-    @model.save(data).fail @renderServerErrors
+    @submit @model.save(@formParams(), wait: yes)
 
   clickDelete: (e) ->
     if confirm 'Are you sure?'
