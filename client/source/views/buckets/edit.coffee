@@ -1,10 +1,12 @@
 _ = require 'underscore'
 
 PageView = require 'views/base/page'
-
+FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/buckets/edit'
 
 module.exports = class BucketEditView extends PageView
+  @mixin FormMixin
+
   template: tpl
   autoRender: yes
 
