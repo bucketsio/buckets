@@ -38,6 +38,7 @@ module.exports = (grunt) ->
 
     clean:
       app: ['public']
+      all: ['public', 'bower_components', 'tmp']
 
     testem:
       basic:
@@ -214,7 +215,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build-scripts', ['browserify:app']
 
   grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['clean', 'copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
   grunt.registerTask 'dev', ['checkDatabase', 'express:dev', 'build', 'watch']
@@ -223,4 +224,4 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
-  grunt.registerTask 'test', ['test:server', 'test:client']
+  grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
