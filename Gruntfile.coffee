@@ -35,6 +35,10 @@ module.exports = (grunt) ->
       tests:
         files:
           'tmp/tests.js': ['test/client/**/*.coffee']
+
+    clean:
+      app: ['public']
+
     testem:
       basic:
         options:
@@ -193,7 +197,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-coffeelint'
-  grunt.loadNpmTasks 'grunt-shell'
+  grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
@@ -204,12 +208,13 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
   grunt.loadNpmTasks 'grunt-modernizr'
+  grunt.loadNpmTasks 'grunt-shell'
 
   grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
   grunt.registerTask 'build-scripts', ['browserify:app']
 
   grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'build', ['clean', 'copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
   grunt.registerTask 'dev', ['checkDatabase', 'express:dev', 'build', 'watch']
