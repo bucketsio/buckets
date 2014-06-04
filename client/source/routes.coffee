@@ -19,7 +19,7 @@ module.exports = (match) ->
   match 'routes', 'routes#list'
 
   match 'settings', 'settings#basic'
-  match 'users(/:userID)', 'settings#users'
+  match 'users(/:email)', 'settings#users'
 
   match '', 'buckets#dashboard'
 
