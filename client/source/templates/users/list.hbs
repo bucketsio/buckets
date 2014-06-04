@@ -7,7 +7,7 @@
     {{#if items}}
       <ul class="nav nav-stacked nav-pills users">
       {{#each items}}
-        <li><a href="#"><strong>{{gravatar email_hash}} {{name}}</strong></a></li>
+        <li><a href="/{{adminSegment}}/users/{{email}}"><strong>{{gravatar email_hash}} {{name}}</strong></a></li>
       {{/each}}
       </ul>
     {{/if}}
