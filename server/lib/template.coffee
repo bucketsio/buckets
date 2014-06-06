@@ -81,35 +81,55 @@ module.exports = (cwd) ->
       )
 
     write: (filename, contents, callback) ->
-      filename = resolve(filename+'.hbs')
+      if filename instanceof Array
+        newName = resolve(filename[1] + '.hbs')
+        filename = filename[0]
+
+      filename = resolve(filename + '.hbs')
       dir = path.dirname(filename)
 
       save = (doc, cb) ->
         DbTemplate.findOne { filename: filename }, (err, template) ->
           return cb(err) if err
+
           if not template
             template = new DbTemplate(doc)
           else
             for k, v of doc
               template[k] = v
-          template.save((err, template) ->
+
+          template.save((err, t) ->
             return cb(err) if err
             cb()
           )
 
       mkdirp dir, (err) ->
         return callback(err) if err
-        doc = { filename: filename, contents: contents, directory: dir }
+        doc =
+          filename: filename,
+          contents: contents,
+          directory: dir
+
+        if newName
+          doc.filename = newName
+
         save(doc, (err) ->
           return callback(err) if err
-          fs.writeFile(filename, contents, callback)
-        )
+          fs.writeFile(filename, contents, (err) ->
+            return callback(err) if err
 
+            if newName
+              fs.rename(filename, newName, callback)
+            else
+              callback()
+          )
+        )
 
     remove: (filename, callback) ->
       filenameExt = resolve(filename+'.hbs')
-      dir = path.dirname(filename)
-      DbTemplate.remove { filename: filename, directory: dir }, (err) ->
+      dir = path.dirname(filenameExt)
+
+      DbTemplate.remove { filename: filenameExt }, (err) ->
         return callback(err) if err
         fs.unlink filenameExt, (err) ->
           return callback(err) if err
