@@ -37,10 +37,9 @@ app.route('/templates/:filename')
         res.send err, 500
       else
         res.send 204
-
+  # not a valid PUT request
   .put (req, res) ->
-    return res.send(400, {error: "filename mismatch"}) unless req.params.filename is req.body.filename
-    Template.write req.params.filename, req.body.contents, (err) ->
+    Template.write [req.params.filename, req.body.filename], req.body.contents, (err) ->
       if err
         res.send err, 500
       else

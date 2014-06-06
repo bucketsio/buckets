@@ -80,6 +80,7 @@
     "chai": "*",
     "grunt-contrib-testem": "*",
     "mocha": "*",
+    "rosie": "^0.3.1",
     "sinon": "*",
     "supertest": "*",
     "testem": "*"
