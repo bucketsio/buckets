@@ -8,6 +8,8 @@ tpl = require 'templates/routes/list'
 module.exports = class RoutesList extends PageView
   template: tpl
 
+  optionNames: PageView::optionNames.concat ['templates']
+
   listen:
     'destroy collection': 'render'
     'add collection': 'render'
@@ -30,6 +32,7 @@ module.exports = class RoutesList extends PageView
     @subview 'editRoute', new EditRouteView
       model: newRoute
       container: @$('.editRoute')
+      templates: @templates
 
   clickDelete: (e) ->
     e.preventDefault()
@@ -49,3 +52,4 @@ module.exports = class RoutesList extends PageView
     @subview 'editRoute', new EditRouteView
       model: route
       container: @$('.editRoute')
+      templates: @templates
