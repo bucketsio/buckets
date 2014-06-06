@@ -48,6 +48,8 @@ module.exports = (grunt) ->
     shell:
       mocha:
         command: './node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server'
+      cov:
+        command: './node_modules/.bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html'
 
     concat:
       style:
@@ -217,5 +219,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'serve', ['checkDatabase', 'minify', 'express:server']
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
+  grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
   grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
   grunt.registerTask 'test', ['test:server', 'test:client']
