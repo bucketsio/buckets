@@ -33,6 +33,7 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     placeholder: settings.placeholder
     tabindex: 0
     type: settings.type
+    autocomplete: 'off'
 
   if options.hash?.sluggify
     _.extend params,
