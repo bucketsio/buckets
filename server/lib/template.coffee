@@ -119,7 +119,10 @@ module.exports = (cwd) ->
             return callback(err) if err
 
             if newName
-              fs.rename(filename, newName, callback)
+              DbTemplate.renameRoutes(filename, newName, (err) ->
+                return callback(err) if err
+                fs.rename(filename, newName, callback)
+              )
             else
               callback()
           )
