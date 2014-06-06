@@ -8,14 +8,15 @@
       {{/if}}
     </h1>
 
-    {{input 'text' 'name' placeholder='ie. Articles, Songs, Products, etc.' sluggify='slug' value=name}}
+    {{input 'name' name placeholder='ie. Articles, Songs, Products, etc.' sluggify='slug'}}
 
-    {{input 'text' 'slug' placeholder="slug" value=slug}}
+    {{input 'slug' slug placeholder="slug"}}
 
     <h4>Icon</h4>
 
     <div class="swatches icons">
-      <input type="hidden" name="icon" value="">
+      {{hidden 'icon' icon}}
+
       <div data-value="edit" class="selected">
         {{icon 'edit'}}
       </div>
@@ -40,8 +41,7 @@
     </div>
 
     <h4>Color</h4>
-
-    <input type="hidden" name="color" value="">
+    {{hidden 'color' color}}
 
     <div class="swatches colors">
       <div data-value="teal" class="teal selected"></div>
@@ -53,16 +53,14 @@
     </div>
 
     {{#if _id}}
-      <div class="form-group">
-        {{input 'text' 'singular' value=singular}}
-      </div>
+      {{input 'singular' singular}}
     {{/if}}
 
     {{#if _id}}
       <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
     {{/if}}
     <div class="pull-right">
-      {{submit text='Next: Define Fields'}}
+      {{submit 'Next: Define Fields'}}
     </div>
   </div>
 </form>

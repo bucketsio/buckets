@@ -20,13 +20,13 @@
         <span class="notForIndex">
           <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
         </span>
-        {{submit text='Save'}}
+        {{submit 'Save'}}
       </div>
       <div class="clearfix"></div>
 
     </div>
     <div class="col-md-9">
-      <textarea name="contents" rows="20" class="form-control code hidden">{{contents}}</textarea>
+      {{textarea 'contents' contents className='form-control code hidden' rows=20}}
       <pre class="code editor"></pre>
     </div>
   </div>
