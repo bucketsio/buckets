@@ -12,11 +12,11 @@ DbRoute = require(path.resolve(serverPath, 'models/route'))
 Template = Factory('template', { filename: 'foo', contents: 'bar' })
 Route = Factory('route', { urlPattern: '/foo/bar', template: 'baz' })
 
-describe 'routes#api#template' ->
+describe 'routes#api#template', ->
   after (done) ->
     DbTemplate.remove {}, (err) ->
       DbRoute.remove {}, done
-      
+
   describe 'GET /templates', ->
     it 'gets templates', (done) ->
       request(app).get('/api/templates').end (err, res) ->
