@@ -69,6 +69,7 @@
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
     "path-to-regexp": "^0.1.2",
+    "rosie": "^0.3.1",
     "serve-static": "~1.1.0",
     "sinon": "~1.10.0",
     "supertest": "~0.12.1",
