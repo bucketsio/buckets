@@ -35,8 +35,5 @@ Template.pre 'save', (next) ->
   makePrimary(@primary, next)
 
 Template.statics.renameRoutes = (oldName, newName, callback) ->
-  Route.update({ template: oldName }, { template: newName }, (err, n) ->
-    callback(err)
-  )
-
+  Route.update({ template: oldName }, { template: newName }, callback)
 module.exports = db.model('Template', Template)
