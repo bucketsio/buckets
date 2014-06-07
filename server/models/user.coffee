@@ -19,10 +19,6 @@ userSchema = new Schema
   password:
     type: String
     required: true
-    set: (password) ->
-      return unless password
-      salt = bcrypt.genSaltSync()
-      bcrypt.hashSync password, salt
   activated:
     type: Boolean
     default: false
@@ -42,6 +38,9 @@ userSchema.virtual('email_hash').get ->
 userSchema.path('password').validate (value) ->
   /^(?=[^\d_].*?\d)\w(\w|[!@#$%]){5,20}/.test value
 , 'Your password must be between 6–20 characters, start with a letter, and include a number.'
+
+userSchema.post 'validate', ->
+  @password = bcrypt.hashSync @password, bcrypt.genSaltSync()
 
 userSchema.plugin uniqueValidator, message: '“{VALUE}” is already a user.'
 

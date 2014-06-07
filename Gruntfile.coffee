@@ -27,6 +27,7 @@ module.exports = (grunt) ->
           './bower_components/backbone/backbone.js:backbone'
           './bower_components/jquery/dist/jquery.js:jquery'
           './bower_components/chaplin/chaplin.js:chaplin'
+          './bower_components/cocktail/Cocktail.js:cocktail'
           './bower_components/underscore/underscore.js:underscore'
         ]
       app:
@@ -35,6 +36,11 @@ module.exports = (grunt) ->
       tests:
         files:
           'tmp/tests.js': ['test/client/**/*.coffee']
+
+    clean:
+      app: ['public']
+      all: ['public', 'bower_components', 'tmp']
+
     testem:
       basic:
         options:
@@ -121,7 +127,7 @@ module.exports = (grunt) ->
       app:
         expand: yes
         cwd: 'client/style/'
-        src: ['**/*.styl']
+        src: ['**/*.styl', '!_*.styl']
         dest: 'public/css/'
         ext: '.css'
 
@@ -195,7 +201,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-coffeelint'
-  grunt.loadNpmTasks 'grunt-shell'
+  grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
@@ -206,12 +212,13 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
   grunt.loadNpmTasks 'grunt-modernizr'
+  grunt.loadNpmTasks 'grunt-shell'
 
   grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
   grunt.registerTask 'build-scripts', ['browserify:app']
 
   grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['copy', 'bower', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
   grunt.registerTask 'dev', ['checkDatabase', 'express:dev', 'build', 'watch']
@@ -221,4 +228,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
   grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
-  grunt.registerTask 'test', ['test:server', 'test:client']
+  grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']

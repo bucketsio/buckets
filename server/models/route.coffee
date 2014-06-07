@@ -8,6 +8,7 @@ routeSchema = new mongoose.Schema
     required: yes
     index: yes
     trim: yes
+    unique: yes
   urlPatternRegex:
     type: String
     required: yes
@@ -30,17 +31,16 @@ routeSchema.path('urlPattern').validate (value) ->
 , 'characters'
 
 routeSchema.pre 'validate', (next) ->
-  # Nix the initial slash for consistency
+  # Force the initial slash for consistency
   # (trailing slash is up to user)
   # Also truncate any multiple slashes to one...
-  @urlPattern = @urlPattern.replace(/^\/+/, '').replace(/\/\/+/g, '/')
+  @urlPattern = "/#{@urlPattern}".replace(/\/\/+/g, '/').replace('?', '')
 
   # Generate the Express path regex
   @keys = []
   @urlPatternRegex = pathRegexp @urlPattern, @keys, yes, no
 
   next()
-
 
 routeSchema.set 'toJSON', virtuals: true
 

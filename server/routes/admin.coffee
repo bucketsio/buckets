@@ -16,13 +16,11 @@ app.use compress()
 app.use express.static '#{__dirname}/../public/', maxAge: 86400000 # One day
 
 # Special case for install
-app.post '/login', passport.authenticate('local'), (req, res) ->
+app.post '/login', passport.authenticate('local', failureRedirect: "/#{config.buckets.adminSegment}/login"), (req, res, next) ->
   res.redirect if req.user and req.body.next
-    "#{req.body.next}"
-  else if req.user
-    "/#{config.buckets.adminSegment}/"
+    req.body.next
   else
-    "/#{config.buckets.adminSegment}/login"
+    "/#{config.buckets.adminSegment}/"
 
 app.get '/logout', (req, res) ->
   req.logout()

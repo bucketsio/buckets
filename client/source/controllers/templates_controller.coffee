@@ -1,24 +1,29 @@
 Controller = require 'lib/controller'
-
-Template = require 'models/template'
 Templates = require 'models/templates'
-
 TemplateEditor = require 'views/templates/editor'
 
 module.exports = class TemplatesController extends Controller
 
   edit: (params) ->
-    @adjustTitle 'Templates'
-
     unless params.filename
       return @redirectTo 'templates#edit', filename: 'index'
-    
-    @templates = new Templates
-    @newTemplate = new Template
 
-    @templates.fetch().done =>
+    @adjustTitle 'Templates'
 
-      @view = new TemplateEditor
-        collection: @templates
+    @reuse 'Templates',
+      compose: ->
+        @templates = new Templates
+        @templates.fetch().done =>
+          @template = @templates.findWhere filename: params.filename
+
+          @view = new TemplateEditor
+            collection: @templates
+            model: @template
+
+      check: (options) ->
+        if options.filename isnt @view.model.get('filename')
+          @view.selectTemplate options.filename
+        @view? and @templates?
+
+      options:
         filename: params.filename
-        newTemplate: @newTemplate

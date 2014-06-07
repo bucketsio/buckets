@@ -1,10 +1,12 @@
 _ = require 'underscore'
 
 PageView = require 'views/base/page'
-
+FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/buckets/edit'
 
 module.exports = class BucketEditView extends PageView
+  @mixin FormMixin
+
   template: tpl
   autoRender: yes
 
@@ -13,19 +15,14 @@ module.exports = class BucketEditView extends PageView
     'click .swatches div': 'selectSwatch'
     'click [href="#delete"]': 'clickDelete'
 
-  render: ->
-    super
-    _.defer =>
-      @$('.form-control').eq(0).focus()
-
   submitForm: (e) ->
     e.preventDefault()
-    data = @$(e.currentTarget).formParams(no)
+    data = @formParams()
 
     data.color = @$('.colors div.selected').data('value')
     data.icon = @$('.icons div.selected').data('value')
 
-    @model.save(data).fail @renderServerErrors
+    @submit @model.save(data)
 
   selectSwatch: (e) ->
     e.preventDefault()
