@@ -19,17 +19,6 @@ Handlebars.registerHelper 'gravatar', (email_hash) ->
 Handlebars.registerHelper 'highlightWildcards', (path) ->
   new Handlebars.SafeString path.replace /\/:([a-zA-Z0-9-_]*)/g, '/<strong class="bkts-wildcard">:$1</strong>'
 
-Handlebars.registerHelper 'dumbBlankSlate', (itemName) ->
-  new Handlebars.SafeString _.sample [
-    "It’s 10 o’clock, do you know where your #{itemName} are?"
-  ,
-    "#{itemName} PLZ"
-  ,
-    "Now if only we had #{itemName}…"
-  ,
-    "If I had a dime for every #{itemName}… I’d be broke."
-  ]
-
 Handlebars.registerHelper 'timeAgo', (dateTime) ->
   m = moment dateTime
   expanded = Handlebars.helpers.simpleDateTime dateTime
