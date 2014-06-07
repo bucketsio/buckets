@@ -3,6 +3,8 @@ Controller = require 'lib/controller'
 MissingPageView = require 'views/missing'
 
 BucketEditView = require 'views/buckets/edit'
+BucketFieldsView = require 'views/buckets/fields'
+DashboardView = require 'views/buckets/dashboard'
 EntriesList = require 'views/entries/list'
 EntryEditView = require 'views/entries/edit'
 
@@ -16,15 +18,9 @@ mediator = require('chaplin').mediator
 module.exports = class BucketsController extends Controller
 
   dashboard: ->
-    @buckets = new Buckets
+    @view = new DashboardView
 
-    $.when(
-      @buckets.fetch()
-    ).done =>
-      @view = null
-      # @view = new BucketList
-
-  add: ->    
+  add: ->
     @adjustTitle 'New Bucket'
 
     newBucket = new Bucket
@@ -32,7 +28,7 @@ module.exports = class BucketsController extends Controller
     @listenToOnce newBucket, 'sync', =>
       toastr.success 'Bucket added'
       mediator.buckets.add newBucket
-      @redirectTo 'buckets#listEntries', slug: newBucket.get('slug')
+      @redirectTo 'buckets#editFields', slug: newBucket.get('slug')
 
     @view = new BucketEditView
       model: newBucket
@@ -84,7 +80,7 @@ module.exports = class BucketsController extends Controller
             toastr.success "You saved “#{entry.get('title')}”"
           else
             toastr.success "You deleted “#{entry.get('title')}”"
-            
+
           @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
 
         @view = new EntryEditView
@@ -104,6 +100,15 @@ module.exports = class BucketsController extends Controller
         @redirectTo url: '/'
 
       @view = new BucketEditView
+        model: bucket
+
+  editFields: (params) ->
+    bucket = mediator.buckets?.findWhere slug: params.slug
+
+    if bucket
+      @adjustTitle "Define Fields · #{bucket.get('name')}"
+
+      @view = new BucketFieldsView
         model: bucket
 
   missing: ->
