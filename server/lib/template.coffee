@@ -32,10 +32,9 @@ module.exports = (cwd) ->
 
   class Template
 
-    find: (callback) ->
-      self = @
+    find: (callback) =>
       # Return all Handlebars paths
-      glob '**/*.hbs', {cwd: cwd}, (err, files) ->
+      glob '**/*.hbs', {cwd: cwd}, (err, files) =>
         return callback(err) if err
         items = []
         left = files.length + 1
@@ -52,9 +51,9 @@ module.exports = (cwd) ->
           callback null, items
 
         for filename, i in files
-          do (filename, i) ->
+          do (filename, i) =>
             f = filename.replace(/\.hbs$/,'')
-            self.read(f, (err, contents) ->
+            @read(f, (err, contents) ->
               if err
                 return check(err)
               items[i] = { filename: f, contents: contents }
