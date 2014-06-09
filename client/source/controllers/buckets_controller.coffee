@@ -114,15 +114,14 @@ module.exports = class BucketsController extends Controller
       members = new Members(bucketId: bucket.get('id'))
       users = new Users
 
-      p1 = members.fetch()
-      p2 = users.fetch()
-
-      p1.done =>
-        p2.done =>
-          @view = new MembersList
-            collection: members
-            bucket: bucket
-            users: users
+      $.when(
+        members.fetch()
+        users.fetch()
+      ).done =>
+        @view = new MembersList
+          collection: members
+          bucket: bucket
+          users: users
 
   editFields: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
