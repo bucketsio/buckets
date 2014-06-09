@@ -1,6 +1,6 @@
 # Buckets Tests and Code Coverage
 
-**Buckets doesn't view tests and code coverage as silver bullets, but we think they're an important way to demonstrate the app's robustness and to on-board new contributors. We use [Mocha](http://visionmedia.github.io/mocha/) for testing across the stack, [Chai](http://chaijs.com) for assertions, [Sinon](http://sinonjs.org) for stubs and spies, [SuperTest](https://github.com/visionmedia/supertest) for requests, and [Rosie](https://github.com/bkeepers/rosie) for creating test objects.
+**Buckets doesn't view tests and code coverage as silver bullets, but we think they're an important way to demonstrate the app's robustness and to on-board new contributors. We use [Mocha](http://visionmedia.github.io/mocha/) for testing across the stack, [Chai](http://chaijs.com) for assertions, [Sinon](http://sinonjs.org) for stubs and spies, [SuperTest](https://github.com/visionmedia/supertest) for requests, and [Rosie](https://github.com/bkeepers/rosie) for creating test objects. NB: [Chrome](https://www.google.com/intl/en-US/chrome/browser/) is required for client-side testing.
 
 ### Run the Tests
 
