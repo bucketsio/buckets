@@ -13,12 +13,12 @@
       </ul>
 
       <hr>
-      <div class="notForIndex">
-        {{input 'text' 'filename' attrs='placeholder="Filename"' value=filename}}
+      <div class="notForIndex {{#is filename 'index'}}hide{{/is}}">
+        {{input 'filename' filename attrs='placeholder="Filename"'}}
       </div>
       <div class="pull-right">
-        <span class="notForIndex">
-          <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
+        <span class="notForIndex {{#is filename 'index'}}hide{{/is}}">
+          <a href="#delete" class="btn btn-icon btn-link">{{icon 'trash'}}</a>
         </span>
         {{submit 'Save'}}
       </div>

@@ -9,6 +9,8 @@
         {{#each buckets}}
           <li class="bucket color-{{color}}">
             <a href="/{{adminSegment}}/buckets/{{slug}}">
+              {{!-- <span class="badge pull-right">42</span> --}}
+
               {{icon icon}} {{name}}
             </a>
             <a class="bucket-add" href="/{{adminSegment}}/buckets/{{slug}}/add">+</a>
@@ -28,7 +30,7 @@
       <div class="usernav">
         {{gravatar email_hash}}
 
-        <a href="/{{adminSegment}}/users/{{id}}">{{name}}</a> · <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
+        <a href="/{{adminSegment}}/users/{{email}}">{{name}}</a> · <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
       </div>
     </nav>
     <div class="page col-sm-9">
