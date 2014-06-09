@@ -4,3 +4,4 @@ Route = require 'models/route'
 module.exports = class Routes extends Collection
   url: '/api/routes/'
   model: Route
+  comparator: 'urlPattern'

@@ -54,22 +54,16 @@ app.get '*', (req, res, next) ->
     throw err if err
 
     for route in routes
-      keys = []
-      pathRE = pathRegexp route.urlPattern, keys, yes, no
-
-      # Execute the regex on the path without an initial slash
-      matches = pathRE.exec req.path.replace(/^\//, '')
+      matches = route.urlPatternRegex?.exec(req.path)
 
       if matches
         # Add the URL wildcards
-        templateData.req.params[key.name] = matches[i+1] for key, i in keys
+        templateData.req.params[key.name] = matches[i+1] for key, i in route.keys
 
         return res.render route.template, templateData, (err, html) ->
           if err
             renderError()
           else
-            return res.send html
-
-    return res.render 'index', templateData if req.path is '/'
+            return res.send html if html
 
     renderError()

@@ -10,8 +10,10 @@ module.exports = (match) ->
   match 'login', 'auth#login', params: authRequired: no
 
   match 'buckets/add', 'buckets#add'
+  match 'buckets/add', 'buckets#add'
   match 'buckets/:slug', 'buckets#listEntries'
   match 'buckets/:slug/add', 'buckets#addEntry'
+  match 'buckets/:slug/fields', 'buckets#editFields'
   match 'buckets/:slug/settings', 'buckets#settings'
   match 'buckets/:slug/members', 'buckets#listMembers'
   match 'buckets/:slug/:entryID', 'buckets#editEntry'

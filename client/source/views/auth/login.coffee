@@ -1,16 +1,19 @@
 View = require 'lib/view'
 
 tpl = require 'templates/auth/login'
+FormMixin = require 'views/base/mixins/form'
 mediator = require('chaplin').mediator
 
 module.exports = class LoginView extends View
+  @mixin FormMixin
+
   template: tpl
   autoRender: yes
   container: '#bkts-content'
   className: 'loginView'
+
+  optionNames: View::optionNames.concat ['next']
+
   getTemplateData: ->
-    if @options?.next
-      _.extend super,
-        next: mediator.options.adminSegment + '/' + @options.next
-    else
-      super
+    if @next
+      next: "/#{mediator.options.adminSegment}/#{@next}"

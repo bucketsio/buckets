@@ -3,6 +3,8 @@ Controller = require 'lib/controller'
 MissingPageView = require 'views/missing'
 
 BucketEditView = require 'views/buckets/edit'
+BucketFieldsView = require 'views/buckets/fields'
+DashboardView = require 'views/buckets/dashboard'
 EntriesList = require 'views/entries/list'
 EntryEditView = require 'views/entries/edit'
 MembersList = require 'views/members/list'
@@ -19,13 +21,7 @@ mediator = require('chaplin').mediator
 module.exports = class BucketsController extends Controller
 
   dashboard: ->
-    @buckets = new Buckets
-
-    $.when(
-      @buckets.fetch()
-    ).done =>
-      @view = null
-      # @view = new BucketList
+    @view = new DashboardView
 
   add: ->
     @adjustTitle 'New Bucket'
@@ -35,7 +31,7 @@ module.exports = class BucketsController extends Controller
     @listenToOnce newBucket, 'sync', =>
       toastr.success 'Bucket added'
       mediator.buckets.add newBucket
-      @redirectTo 'buckets#listEntries', slug: newBucket.get('slug')
+      @redirectTo 'buckets#editFields', slug: newBucket.get('slug')
 
     @view = new BucketEditView
       model: newBucket
@@ -127,6 +123,15 @@ module.exports = class BucketsController extends Controller
             collection: members
             bucket: bucket
             users: users
+
+  editFields: (params) ->
+    bucket = mediator.buckets?.findWhere slug: params.slug
+
+    if bucket
+      @adjustTitle "Define Fields · #{bucket.get('name')}"
+
+      @view = new BucketFieldsView
+        model: bucket
 
   missing: ->
     console.log 'Page missing!', arguments

@@ -8,3 +8,6 @@ module.exports = class Entries extends Collection
   fetchByBucket: (bucketId) ->
     @url += "?#{$.param(bucketId: bucketId)}"
     @fetch()
+
+  comparator: (entry) ->
+    - new Date(entry.get('publishDate')).getTime()
