@@ -4,9 +4,11 @@ _ = require 'underscore'
 createLabel = (text, name) ->
   tag 'label',
     for: "input-#{name}"
+    className: 'control-label'
   , text
 
-wrap = (content) ->
+wrap = (content, label) ->
+  content = createLabel(label) + content if label
   tag 'div', class: 'form-group', content
 
 tag = (el, attrs={}, content='', options={}) ->
@@ -39,19 +41,21 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     _.extend params,
       'data-sluggify': options.hash.sluggify
 
-  wrap tag 'input', params, false, selfClosing: true
+  wrap tag('input', params, false, selfClosing: true), settings.label
 
 Handlebars.registerHelper 'textarea', (name, value, options) ->
   settings = options.hash
 
   textarea = tag 'textarea',
     name: name
-    className: settings.className
+    className: settings.className || 'form-control'
     id: "input-#{name}"
     placeholder: settings.placeholder
     tabindex: settings.tabindex
     rows: settings.rows
   , value
+
+  wrap textarea, settings.label if settings.label
 
 
 Handlebars.registerHelper 'submit', (text, options) ->
@@ -74,7 +78,6 @@ Handlebars.registerHelper 'hidden', (name, value) ->
 Handlebars.registerHelper 'checkbox', (name, value, options) ->
   settings = _.defaults options.hash,
     label: false
-    tabindex: ''
 
   checkedText = if value is true then ' checked' else ''
   labelText = if settings.label then settings.label else ''
@@ -90,26 +93,24 @@ Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
   return unless selectOptions?.length > 0
 
   settings = _.defaults options.hash,
-    placeholder: ''
-    className: ''
-    label: null
-    tabindex: ''
-    valueKey: 'value'
+    className: 'form-control'
+    valueKey: '_id'
     nameKey: 'name'
 
-  o = []
-  o.push createLabel settings.label, name if settings.label
-  o.push """<select name="#{name}">"""
+  settings.selected = 'selected' if value
+
+  optionEls = []
   for opt in selectOptions
-    isSelected = if opt[settings.valueKey] is value
-      "selected"
-    else
-      ""
-
-    o.push tag 'option',
+    optionEls.push tag 'option',
       value: opt[settings.valueKey]
-      selected: isSelected
+      selected: if opt[settings.valueKey] is value
+        "selected"
+      else
+        ""
     , opt[settings.nameKey]
-  o.push "</select>"
 
-  new Handlebars.SafeString o.join ''
+  wrap tag('select',
+    className: settings.className
+    tabindex: settings.tabindex
+    name: name
+  , optionEls.join ''), settings.label
