@@ -2,21 +2,22 @@ mongoose = require 'mongoose'
 db = require '../lib/database'
 pathRegexp = require('path-to-regexp')
 
+require('mongoose-regexp')(mongoose)
+
 routeSchema = new mongoose.Schema
   urlPattern:
     type: String
     required: yes
     index: yes
     trim: yes
-    unique: yes
   urlPatternRegex:
-    type: String
+    type: RegExp
     required: yes
   template:
     type: String
     required: yes
   sort: Number
-  keys: {}
+  keys: []
   createdDate:
     type: Date
     default: Date.now

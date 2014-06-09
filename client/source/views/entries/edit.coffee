@@ -24,5 +24,7 @@ module.exports = class EntryEditView extends PageView
     @submit @model.save(@formParams(), wait: yes)
 
   clickDelete: (e) ->
+    e.preventDefault()
+
     if confirm 'Are you sure?'
       @model.destroy(wait: yes)

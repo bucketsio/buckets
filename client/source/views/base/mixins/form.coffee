@@ -19,10 +19,10 @@ module.exports =
     promise.always(
       @$btn.ladda 'stop'
     ).fail(
-      @renderServerErrors
+      _.bind(@renderServerErrors, @)
     )
 
-  renderServerErrors: (res) =>
+  renderServerErrors: (res) ->
 
     # First let's get rid of the old ones
     @$('.help-block').remove()

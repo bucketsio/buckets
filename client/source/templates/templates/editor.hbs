@@ -13,20 +13,20 @@
       </ul>
 
       <hr>
-      <div class="notForIndex">
-        {{input 'text' 'filename' attrs='placeholder="Filename"' value=filename}}
+      <div class="notForIndex {{#is filename 'index'}}hide{{/is}}">
+        {{input 'filename' filename attrs='placeholder="Filename"'}}
       </div>
       <div class="pull-right">
-        <span class="notForIndex">
-          <a href="#delete" class="btn btn-link">{{icon 'trash'}}</a>
+        <span class="notForIndex {{#is filename 'index'}}hide{{/is}}">
+          <a href="#delete" class="btn btn-icon btn-link">{{icon 'trash'}}</a>
         </span>
-        {{submit text='Save'}}
+        {{submit 'Save'}}
       </div>
       <div class="clearfix"></div>
 
     </div>
     <div class="col-md-9">
-      <textarea name="contents" rows="20" class="form-control code hidden">{{contents}}</textarea>
+      {{textarea 'contents' contents className='form-control code hidden' rows=20}}
       <pre class="code editor"></pre>
     </div>
   </div>

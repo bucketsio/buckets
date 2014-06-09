@@ -5,7 +5,7 @@
 
 {{#each items}}
   <div class="route" data-route-id="{{id}}">
-    {{#isnt urlPattern '/'}}<a href="#delete" class="btn btn-link pull-right">{{icon 'trash'}}</a>{{/isnt}}
+    {{#isnt urlPattern '/'}}<a href="#delete" class="btn btn-link btn-icon pull-right">{{icon 'trash'}}</a>{{/isnt}}
     <h2>{{highlightWildcards urlPattern}} » <a href="/{{adminSegment}}/templates/{{template}}">{{template}}</a></h2>
   </div>
 {{/each}}

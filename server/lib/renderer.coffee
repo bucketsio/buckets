@@ -11,27 +11,11 @@ module.exports = (hbs) ->
   Swag.registerHelpers hbs.handlebars
   hbs.registerPartials config.buckets.templatePath
 
-  # Add block & extend helpers
-  blocks = {}
-
-  hbs.registerHelper 'block', (name) ->
-    val = (blocks[name] or []).join '\n'
-    blocks[name] = []
-    val
-
-  hbs.registerHelper 'extend', (name, context) ->
-    block = blocks[name]
-    block = blocks[name] = [] unless block
-    block.push context.fn @
-
-  hbs.registerHelper 'debug', ->
-    console.log 'wtf', arguments, @
-
   # Add the entries helper
   hbs.registerAsyncHelper 'entries', (options, cb) ->
     _.defaults options.hash,
       bucket: ''
-      until: ''
+      until: Date.now()
       since: ''
       limit: 10
       skip: 0
