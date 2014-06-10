@@ -7,4 +7,4 @@ module.exports =
     env: process.env.NODE_ENV or 'development'
     templatePath: "#{__dirname}/../user/templates/"
     catchAll: yes
-  db: "mongodb://localhost/buckets_#{process.env.NODE_ENV or 'development'}"
+  db: if process.env.NODE_ENV == "production" then process.env.MONGOHQ_URL else "mongodb://localhost/buckets_#{process.env.NODE_ENV or 'development'}"
