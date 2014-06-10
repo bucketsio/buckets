@@ -50,6 +50,11 @@ module.exports = (grunt) ->
           serve_files: ['tmp/tests.js']
           launch_in_dev: ['phantomjs', 'chrome']
           launch_in_ci: ['phantomjs', 'chrome']
+      html:
+        options:
+          framework: 'mocha',
+          serve_files: 'tmp/tests.js'
+          test_page: 'test/client/tests.mustache'
 
     shell:
       mocha:
@@ -228,4 +233,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
   grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']

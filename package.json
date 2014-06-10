@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "bcrypt": "^0.7.8",
-    "blanket": "~1.1.6",
+    "blanket": "^1.1.6",
     "body-parser": "~1.0.2",
     "chai": "~1.9.1",
     "chrono-node": "^0.1.8",

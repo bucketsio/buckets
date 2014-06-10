@@ -5,4 +5,3 @@ module.exports = class User extends Model
 
   hello: ->
     "Hello #{this.get('name')}"
-
