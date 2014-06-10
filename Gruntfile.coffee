@@ -97,6 +97,10 @@ module.exports = (grunt) ->
     express:
       dev:
         spawn: false
+      prod:
+        options:
+          background: false
+          livereload: false
       server:
         options:
           background: false
@@ -226,3 +230,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
+
+  grunt.registerTask 'heroku:production', ['minify']
