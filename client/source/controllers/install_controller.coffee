@@ -10,10 +10,11 @@ module.exports = class InstallController extends Controller
     @adjustTitle 'Install'
 
     newUser = new User
+      roles: [{name: 'administrator'}]
 
     @view = new FirstUserView
       model: newUser
 
-    newUser.on 'sync', => 
+    newUser.on 'sync', =>
       mediator.options.needsInstall = no
       @redirectTo url: '/'

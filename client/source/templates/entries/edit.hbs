@@ -3,7 +3,7 @@
   {{hidden 'bucket' bucket._id}}
 
   {{#if _id}}
-    <a href="#delete" class="btn btn-link pull-right">{{icon 'trash'}}</a>
+    <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
     <h1>Edit {{title}}</h1>
   {{else}}
     <h1>New {{bucket.singular}}</h1>
@@ -11,7 +11,7 @@
 
   <div class="row">
     <div class="col-md-8">
-      {{input 'title' title placeholder="Title"}}
+      {{input 'title' title placeholder='Title' sluggify='slug'}}
       <div class="alert alert-warning">TBD: Custom fields</div>
 
       <div class="pull-right">
@@ -33,10 +33,9 @@
       <h4>Publish</h4>
       {{input 'publishDate' publishDate placeholder="Next tuesday"}}
       <h4>Meta</h4>
-      {{input 'keywords' keywords placeholder="Keywords" label="Keywords"}}
-      <div class="form-group">
-        <textarea name="description" class="form-control" placeholder="Description">{{description}}</textarea>
-      </div>
+      {{input 'slug' slug label="Slug"}}
+      {{input 'keywords' keywords label="Keywords"}}
+      {{textarea 'description' description label="Description"}}
     </div>
   </div>
 </form>

@@ -8,6 +8,7 @@ mediator = require('chaplin').mediator
 
 module.exports = class EditUserView extends View
   @mixin FormMixin
+
   template: tpl
   autoRender: yes
   region: 'contactCard'
@@ -19,11 +20,6 @@ module.exports = class EditUserView extends View
   getTemplateData: ->
     _.extend super,
       currentUser: mediator.user?.toJSON()
-
-  render: ->
-    super
-    _.defer =>
-      @$('.form-control:visible').eq(0).focus()
 
   submitForm: (e) ->
     e.preventDefault()
