@@ -76,15 +76,18 @@ Handlebars.registerHelper 'hidden', (name, value) ->
     value: value
 
 Handlebars.registerHelper 'checkbox', (name, value, options) ->
-  settings = _.defaults options.hash,
-    label: false
+  label = options.hash.label
 
-  checkedText = if value is true then ' checked' else ''
-  labelText = if settings.label then settings.label else ''
-
-  tag 'label', {}, tag 'input',
+  params =
     type: 'checkbox'
     name: name
+
+  params.checked = 'checked' if value
+
+  cb = tag 'input', params
+  cb = tag 'label', {}, cb + " #{label}" if label
+
+  wrap cb
 
 Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
 

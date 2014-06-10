@@ -39,7 +39,7 @@ app.route('/buckets/:bucketID')
 
 app.route('/buckets/:bucketId/members')
   .get (req, res) ->
-    return res.send(401) if !req.user || !req.user.hasRole('administrator')
+    return res.send(401) unless req.user?.hasRole 'administrator'
 
     Bucket.findById req.params.bucketId, (err, bucket) ->
       return res.send(e: err, 400) if err
@@ -58,7 +58,7 @@ app.route('/buckets/:bucketId/members')
 
 app.route('/buckets/:bucketId/members/:userId')
   .put (req, res) ->
-    return res.send(401) if !req.user || !req.user.hasRole('administrator')
+    return res.send(401) unless req.user?.hasRole 'administrator'
 
     Bucket.findById req.params.bucketId, (err, bucket) ->
       return res.send(e: err, 400) if err
