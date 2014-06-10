@@ -43,6 +43,7 @@ After building, Buckets should then be accessible at the default address: [http:
 
 * [Frontend Architecture](docs/frontend.md)
 * [Database](docs/database.md)
+* [Deploying to Heroku](docs/heroku.md)
 
 ### Contributing
 
