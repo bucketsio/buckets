@@ -11,13 +11,14 @@ config =
       env: env
       templatePath: "#{__dirname}/../user/templates/"
       catchAll: yes
-    db: if env == "production" then process.env.MONGOHQ_URL else "mongodb://localhost/buckets_#{env}"
+    db: "mongodb://localhost/buckets_#{env}"
   production:
     smtp:
       service: 'Mandrill'
       auth:
         user: process.env.MANDRILL_APIKEY
         pass: process.env.MANDRILL_USERNAME
+    db: process.env.MONGOHQ_URL
   development:
     smtp:
       service: 'Gmail'
@@ -25,4 +26,7 @@ config =
         user: 'your.email@gmail.com'
         pass: 'PASSWORD'
 
-module.exports = _.defaults(config[env], config.default)
+module.exports = if config[env]?
+  _.defaults(config[env], config.default)
+else
+  config.default
