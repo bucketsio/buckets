@@ -59,6 +59,7 @@
     "mongoose": "^3.8.11",
     "mongoose-regexp": "0.0.1",
     "mongoose-unique-validator": "^0.3.0",
+    "nodemailer": "^0.6.5",
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
     "path-to-regexp": "^0.1.2",
