@@ -2,10 +2,10 @@
 
 coverage.html
 
-/bower_components/
+bower_components/
 
-/public/
+public/
 
-/node_modules/
+node_modules/
 
-/tmp
+tmp
