@@ -43,11 +43,14 @@ After building, Buckets should then be accessible at the default address: [http:
 
 * [Frontend Architecture](docs/frontend.md)
 * [Database](docs/database.md)
+* [Deploying to Heroku](docs/heroku.md)
 
 ### Contributing
 
 This is a product being built by the [Assembly](https://assemblymade.com) community. You can help push this idea forward by visiting [https://assemblymade.com/buckets](https://assemblymade.com/buckets). We welcome any contributions to product design/direction or code.
 
 Assembly products are like open-source and made with contributions from the community. Assembly handles the boring stuff like hosting, support, financing, legal, etc. Once the product launches we collect the revenue and split the profits amongst the contributors.
+
+One quick note on adding dependencies: First, you probably shouldn't have to add too many. But if you find yourself needing to `npm install awesome-sauce`, make sure you include either the `--save` flag (if the dependency will be needed in production) or `--save-dev` (if the dependency is only needed for testing/development).
 
 [Or support Buckets via gittip :)](https://www.gittip.com/DavidKaneda/)
