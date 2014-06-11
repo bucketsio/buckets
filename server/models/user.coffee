@@ -2,6 +2,7 @@ bcrypt = require 'bcrypt'
 crypto = require 'crypto'
 mongoose = require 'mongoose'
 uniqueValidator = require 'mongoose-unique-validator'
+_ = require 'underscore'
 db = require '../lib/database'
 
 Schema = mongoose.Schema
@@ -10,14 +11,12 @@ roleSchema = new Schema
   name:
     type: String
     required: true
-  resourceId:
-    type: Schema.Types.ObjectId
-  resourceType:
-    type: String
+  resourceType: String
+  resourceId: Schema.Types.ObjectId
 
 roleSchema.virtual('resource').set (resource) ->
-  @resourceType = resource.constructor.modelName
   @resourceId = resource.id
+  @resourceType = resource.constructor.modelName
 
 userSchema = new Schema
   name:
@@ -41,8 +40,7 @@ userSchema = new Schema
   date_created:
     type: Date
     default: Date.now
-  roles:
-    type: [roleSchema]
+  roles: [roleSchema]
 
 userSchema.methods.authenticate = (password, callback) ->
   bcrypt.compareSync password, @password
@@ -53,41 +51,54 @@ userSchema.methods.getBuckets = (callback) ->
 userSchema.methods.getResources = (type, callback) ->
   q = {}
   unless @hasRole('administrator')
-    ids = @roles.reduce (m, r) ->
-      m.push(r.resourceId) if r.resourceType == type
-      m
-    , []
-    q = { _id: { $in: ids } }
-
+    ids = _.map @roles, (role) -> role.resourceId if role.resourceType is type
+    q = _id: $in: ids
   @model(type).find(q).exec(callback)
 
 userSchema.methods.upsertRole = (roleName, resource, callback) ->
-  resourceRoles = @rolesFor(resource.id, resource.constructor.modelName)
+
+  resourceRoles = @getRolesForModel resource
+
   if resourceRoles.length
     r.name = roleName for r in resourceRoles
+    @roles = resourceRoles
   else
-    @roles.push({ name: roleName, resource: resource })
+    @roles.push name: roleName, resource: resource
 
-  @save(callback)
+  @save callback
 
 userSchema.methods.removeRole = (resource, callback) ->
-  r.remove() for r in @rolesFor(resource)
-  @save(callback)
+  r.remove() for r in @getRoles(resource)
+  @save callback
 
-userSchema.methods.hasRole = (roleName, resource) ->
-  for r in @roles
-    if r.name == roleName && (!resource || (r.resourceId.equals(resource.id) && r.resourceType == resource.constructor.modelName))
-      return true
+# roleNames can be a String or Array
+# Resource can be a String (just a resourceType) or document
 
-  false
+userSchema.methods.hasRole = (roleNames, resource) ->
+  return true if _.findWhere @roles, name: 'administrator'
 
-userSchema.methods.rolesFor = (id, type) ->
-  if arguments.length == 1
-    type = id.constructor.modelName
-    id = id.id
+  roles = @getRoles resource
 
-  @roles.filter (r) ->
-    r.resourceId && r.resourceType && r.resourceId.equals(id) && r.resourceType == type
+  if _.isString roleNames
+    _.findWhere roles, name: roleNames
+  else if _.isArray roleNames
+    _.where( roles, (role) ->
+        role.name in roleNames
+    ).length > 0
+
+userSchema.methods.getRoles = (resource) ->
+  if resource?._id
+    @getRolesForModel resource
+  else if _.isString resource
+    @getRolesForType resource
+
+userSchema.methods.getRolesForModel = (resource) ->
+  @roles.filter (role) ->
+    role.name if role.resourceId is resource._id or !role.resourceId
+
+userSchema.methods.getRolesForType = (resourceType) ->
+  @roles.filter (role) ->
+    role.resourceType is resourceType or !role.resourceType
 
 userSchema.virtual('email_hash').get ->
   crypto.createHash('md5').update(@email).digest('hex') if @email
@@ -104,4 +115,3 @@ userSchema.plugin uniqueValidator, message: '“{VALUE}” is already a user.'
 userSchema.set 'toJSON', virtuals: true
 
 module.exports = db.model 'User', userSchema
-

@@ -56,18 +56,16 @@ bucketSchema.path('urlPattern').validate (value) ->
     /\/?:slug[\.\/]?/g.test value
   else
     true
-
-, 'requiresSlug'
+, 'A :slug param is required.'
 
 bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
 
 bucketSchema.methods.getMembers = (callback) ->
-  q =
+  @model('User').find
     roles:
       $elemMatch:
-        resourceId: @id,
-        resourceType: @constructor.modelName
-
-  @model('User').find(q).exec(callback)
+        resourceId: @_id
+        resourceType: 'Bucket'
+  , callback
 
 module.exports = db.model 'Bucket', bucketSchema

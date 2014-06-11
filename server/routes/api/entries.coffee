@@ -11,8 +11,8 @@ app.route('/entries')
 
     Bucket.findById req.body.bucket, (e, bucket) ->
       return res.send(400, e) if e
-      return res.send(404) if !bucket
-      return res.send(401) if !req.user || !req.user.hasRole('editor', bucket) || !req.user.hasRole('contributor', bucket)
+      return res.send(404) unless bucket
+      return res.send(401) unless req.user?.hasRole(['editor', 'contributor'], bucket)
 
       newEntry = new Entry req.body
       newEntry.save (err, entry) ->

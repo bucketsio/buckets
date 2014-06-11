@@ -9,9 +9,17 @@
   {{else}}
     {{#unless _id}}
       {{input 'password' '' placeholder="Password" type="password"}}
-    {{else}}
-      <a class="btn btn-link" href="#remove">Remove this user</a>
     {{/unless}}
   {{/is}}
-  {{submit "Save User"}}
+  {{#hasRole 'administrator'}}
+    <h4>Permissions</h4>
+    {{checkbox 'admin' isAdmin label="User is an administrator"}}
+  {{/hasRole}}
+
+  <div class="pull-right">
+    {{#isnt _id currentUser._id}}
+      <a class="btn btn-danger" href="#remove">Remove this user</a>
+    {{/isnt}}
+    {{submit "Save User"}}
+  </div>
 </form>

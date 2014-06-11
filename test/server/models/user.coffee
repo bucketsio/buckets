@@ -14,7 +14,7 @@ describe 'User', ->
 
   describe '#getBuckets', ->
     it 'returns buckets', (done) ->
-      Bucket.create { name: 'Images', slug: 'images', singular: 'image' }, (e, bucket) ->
+      Bucket.create { name: 'Images', slug: 'images' }, (e, bucket) ->
         throw e if e
 
         user = new User({ name: 'Bucketer', email: 'hello@buckets.io', password: 'S3cr3ts' })
