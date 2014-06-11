@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Bucket Client-Side Tests</title>
+  <link rel="stylesheet" media="all" href="../../node_modules/mocha/mocha.css">
+</head>
+<body>
+  <div id="mocha"></div>
+  <script src="../../node_modules/mocha/mocha.js"></script>
+  <script src="../../node_modules/chai/chai.js"></script>
+  <script src="../../node_modules/blanket/src/blanket.js" data-cover-adapter="../../node_modules/blanket/src/adapters/mocha-blanket.js"></script>
+  <script>
+    assert = chai;
+    expect = chai.expect;
+    mocha.setup('bdd');
+  </script>
+  {{#serve_files}}
+    <script src="../../{{src}}"></script>
+  {{/serve_files}}
+  <script>mocha.run();</script>
+</body>
+</html>
