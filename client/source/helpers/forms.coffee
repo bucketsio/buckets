@@ -81,6 +81,7 @@ Handlebars.registerHelper 'checkbox', (name, value, options) ->
   params =
     type: 'checkbox'
     name: name
+    value: 1
 
   params.checked = 'checked' if value
 

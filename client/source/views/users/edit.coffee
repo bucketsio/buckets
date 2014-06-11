@@ -20,13 +20,19 @@ module.exports = class EditUserView extends View
   getTemplateData: ->
     _.extend super,
       currentUser: mediator.user?.toJSON()
-      isAdmin: _.findWhere(@model.get('roles'), name: 'administrator')
+      isAdmin: @model.hasRole('administrator')
 
   submitForm: (e) ->
     e.preventDefault()
     data = @formParams()
+
     data.roles = @model.get('roles')
-    data.roles = data.roles.push name: 'administrator' if data.admin and not _.findWhere(@model.get('roles'), name: 'administrator')
+    if data.admin
+      data.roles.push name: 'administrator' unless @model.hasRole('administrator')
+    else
+      data.roles = _.reject data.roles, (r)->
+        r.name =='administrator'
+
     @submit(@model.save(data, wait: yes))
 
   clickRemove: (e) ->
