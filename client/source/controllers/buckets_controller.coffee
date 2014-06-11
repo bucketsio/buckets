@@ -7,11 +7,14 @@ BucketFieldsView = require 'views/buckets/fields'
 DashboardView = require 'views/buckets/dashboard'
 EntriesList = require 'views/entries/list'
 EntryEditView = require 'views/entries/edit'
+MembersList = require 'views/members/list'
 
 Bucket = require 'models/bucket'
 Buckets = require 'models/buckets'
 Entry = require 'models/entry'
 Entries = require 'models/entries'
+Members = require 'models/members'
+Users = require 'models/users'
 
 mediator = require('chaplin').mediator
 
@@ -101,6 +104,24 @@ module.exports = class BucketsController extends Controller
 
       @view = new BucketEditView
         model: bucket
+
+  listMembers: (params) ->
+    bucket = mediator.buckets?.findWhere slug: params.slug
+
+    if bucket
+      @adjustTitle bucket.get('name') + ' members'
+
+      members = new Members(bucketId: bucket.get('id'))
+      users = new Users
+
+      $.when(
+        members.fetch()
+        users.fetch()
+      ).done =>
+        @view = new MembersList
+          collection: members
+          bucket: bucket
+          users: users
 
   editFields: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug

@@ -1,4 +1,16 @@
-<a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon pull-right">{{icon 'cog'}}</a>
+<div class="dropdown pull-right">
+  <button class="btn btn-link btn-icon dropdown-toggle" type="button" id="bucket-menu" data-toggle="dropdown">
+    {{icon 'cog'}}
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="bucket-menu">
+    <li role="presentation">
+      <a role="menuitem" tabindex="-1" href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="">Settings</a>
+    </li>
+    <li role="presentation">
+      <a role="menuitem" tabindex="-1" href="/{{adminSegment}}/buckets/{{bucket.slug}}/members" class="">Members</a>
+    </li>
+  </ul>
+</div>
 
 <h1>{{bucket.name}}</h1>
 

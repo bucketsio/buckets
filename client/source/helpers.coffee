@@ -36,3 +36,11 @@ Handlebars.registerHelper 'simpleDateTime', (dateTime) ->
 
 Handlebars.registerHelper 'debug', ->
   console.log @, arguments
+
+Handlebars.registerHelper 'hasRole', ->
+  a = Array::slice.call(arguments)
+  options = a.pop()
+
+  if !!mediator.user && mediator.user.hasRole.apply(mediator.user, a)
+    options.fn(@)
+
