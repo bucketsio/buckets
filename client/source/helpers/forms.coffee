@@ -55,8 +55,10 @@ Handlebars.registerHelper 'textarea', (name, value, options) ->
     rows: settings.rows
   , value
 
-  wrap textarea, settings.label if settings.label
-
+  if settings.label
+    wrap textarea, settings.label
+  else
+    textarea
 
 Handlebars.registerHelper 'submit', (text, options) ->
 

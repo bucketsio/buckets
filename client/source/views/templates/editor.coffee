@@ -2,10 +2,13 @@ PageView = require 'views/base/page'
 Template = require 'models/template'
 _ = require 'underscore'
 mediator = require('chaplin').mediator
+FormMixin = require 'views/base/mixins/form'
 
 tpl = require 'templates/templates/editor'
 
 module.exports = class TemplateEditor extends PageView
+  @mixin FormMixin
+
   template: tpl
 
   listen:
@@ -59,7 +62,9 @@ module.exports = class TemplateEditor extends PageView
   submitForm: (e) ->
     e.preventDefault()
     @$code.val(@editorSession.getValue()) if @editorSession?
-    data = @$(e.currentTarget).formParams(no)
+
+    data = @formParams()
+
     @model.save(data).done =>
       toastr.success 'Saved Template'
       @collection.add @model
