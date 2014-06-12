@@ -1,14 +1,14 @@
 <form class="well">
 
-  {{input 'text' 'urlPattern' placeholder="/myroute/:param" value=urlPattern}}
+  {{input 'urlPattern' urlPattern placeholder="/myroute/:param"}}
   <p class="help-block">Routes are simply URL patterns that map to templates. They can use tokens in the form of <code class="bkts-wildcard">:params</code>.</p>
 
-  <input type="hidden" name="template" value="index">
+  {{select 'template' template templates valueKey='filename' nameKey='filename'}}
 
   {{#if _id}}
-    {{submit text='Save route'}}
+    {{submit 'Save route'}}
   {{else}}
-    {{submit text='Add route'}}
+    {{submit 'Add route'}}
   {{/if}}
   <a href="#cancel" class="btn btn-default">Cancel</a>
 

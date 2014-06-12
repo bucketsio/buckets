@@ -1,7 +1,11 @@
-/bower_components/
+.DS_Store
 
-/public/
+coverage.html
 
-/node_modules/
+bower_components
 
-/tmp
+public
+
+node_modules
+
+tmp

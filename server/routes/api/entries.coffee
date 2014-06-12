@@ -1,5 +1,6 @@
 express = require 'express'
 
+Bucket = require '../../models/bucket'
 Entry = require '../../models/entry'
 
 module.exports = app = express()
@@ -7,19 +8,25 @@ module.exports = app = express()
 app.route('/entries')
   .post (req, res) ->
     req.body.keywords = req.body.keywords?.split(',')
-    newEntry = new Entry req.body
 
-    newEntry.save (err, entry) ->
-      if err
-        res.send 400, err
-      else
-        res.send 200, entry
+    Bucket.findById req.body.bucket, (e, bucket) ->
+      return res.send(400, e) if e
+      return res.send(404) unless bucket
+      return res.send(401) unless req.user?.hasRole(['editor', 'contributor'], bucket)
+
+      newEntry = new Entry req.body
+      newEntry.save (err, entry) ->
+        if err
+          res.send 400, err
+        else
+          res.send 200, entry
+
 
   .get (req, res) ->
     query = {}
     query.bucket = req.query.bucket if req.query.bucket
 
-    Entry.find(query).populate('author').exec (err, entries) ->
+    Entry.find(query).populate('author').sort('publishDate desc').exec (err, entries) ->
       res.send 200, entries
 
 app.route('/entries/:entryID')

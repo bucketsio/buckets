@@ -50,10 +50,17 @@ module.exports = (grunt) ->
           serve_files: ['tmp/tests.js']
           launch_in_dev: ['phantomjs', 'chrome']
           launch_in_ci: ['phantomjs', 'chrome']
+      html:
+        options:
+          framework: 'mocha',
+          serve_files: 'tmp/tests.js'
+          test_page: 'test/client/tests.mustache'
 
     shell:
       mocha:
-        command: './node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server'
+        command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server'
+      cov:
+        command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html'
 
     concat:
       style:
@@ -97,6 +104,10 @@ module.exports = (grunt) ->
     express:
       dev:
         spawn: false
+      prod:
+        options:
+          background: false
+          livereload: false
       server:
         options:
           background: false
@@ -224,5 +235,9 @@ module.exports = (grunt) ->
   grunt.registerTask 'serve', ['checkDatabase', 'minify', 'express:server']
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
+  grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
   grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
+
+  grunt.registerTask 'heroku:production', ['minify']

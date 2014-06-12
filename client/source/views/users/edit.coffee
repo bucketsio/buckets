@@ -8,6 +8,7 @@ mediator = require('chaplin').mediator
 
 module.exports = class EditUserView extends View
   @mixin FormMixin
+
   template: tpl
   autoRender: yes
   region: 'contactCard'
@@ -19,15 +20,20 @@ module.exports = class EditUserView extends View
   getTemplateData: ->
     _.extend super,
       currentUser: mediator.user?.toJSON()
-
-  render: ->
-    super
-    _.defer =>
-      @$('.form-control:visible').eq(0).focus()
+      isAdmin: @model.hasRole('administrator')
 
   submitForm: (e) ->
     e.preventDefault()
-    @submit(@model.save(@formParams(), wait: yes))
+    data = @formParams()
+
+    data.roles = @model.get('roles')
+    if data.admin
+      data.roles.push name: 'administrator' unless @model.hasRole('administrator')
+    else
+      data.roles = _.reject data.roles, (r)->
+        r.name =='administrator'
+
+    @submit(@model.save(data, wait: yes))
 
   clickRemove: (e) ->
     e.preventDefault()

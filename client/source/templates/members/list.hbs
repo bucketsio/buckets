@@ -1,0 +1,53 @@
+<h1>Members</h1>
+
+{{#hasRole 'administrator'}}
+  {{#if users}}
+    <form role="form" class="well add-member">
+      <div class="form-group">
+        <select name="user" class="form-control">
+          {{#each users}}
+            <option value="{{_id}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="radio-inline">
+          <input type="radio" name="role" id="role-contributor" value="contributor"> Contributor
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="role" id="role-editor" value="editor"> Editor
+        </label>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Add member</button>
+      </div>
+    </form>
+  {{else}}
+    <div class="center">
+      <div class="info">
+        All users are members of {{bucket.name}}...
+      </div>
+    </div>
+  {{/if}}
+
+  <hr />
+{{/hasRole}}
+
+<div class="row">
+  <div class="col-md-12">
+    {{#if items}}
+      <ul class="nav nav-stacked nav-pills members">
+      {{#each items}}
+        <li class="member clearfix" data-member-id="{{id}}">
+          <a href="#" class="btn btn-link delete-member pull-right">{{icon 'trash'}}</a>
+          <div>
+            <strong>{{gravatar email_hash}} {{name}}</strong>
+            <small>{{role}}</small>
+          </div>
+        </li>
+      {{/each}}
+      </ul>
+    {{/if}}
+  </div>
+</div>
+

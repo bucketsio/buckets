@@ -1,17 +1,25 @@
 <form>
-  {{input 'text' 'name' placeholder="Full name" value=name}}
-  {{input 'text' 'email' placeholder="Email" value=email}}
+  {{input 'name' name placeholder="Full name"}}
+  {{input 'email' email placeholder="Email"}}
   {{#is _id currentUser._id}}
     <h4>Change your password</h4>
-    {{input 'password' 'oldpassword' placeholder="Old password"}}
-    {{input 'password' 'newpassword1' placeholder="New password"}}
-    {{input 'password' 'newpassword2' placeholder="Confirm new password"}}
+    {{input 'oldpassword' '' placeholder="Old password" type="password"}}
+    {{input 'newpassword1' '' placeholder="New password" type="password"}}
+    {{input 'newpassword2' '' placeholder="Confirm new password" type="password"}}
   {{else}}
     {{#unless _id}}
-      {{input 'password' 'password' placeholder="Password"}}
-    {{else}}
-      <a class="btn btn-link" href="#remove">Remove this user</a>
+      {{input 'password' '' placeholder="Password" type="password"}}
     {{/unless}}
   {{/is}}
-  {{submit text="Save User"}}
+  {{#hasRole 'administrator'}}
+    <h4>Permissions</h4>
+    {{checkbox 'admin' isAdmin label="User is an administrator"}}
+  {{/hasRole}}
+
+  <div class="pull-right">
+    {{#isnt _id currentUser._id}}
+      <a class="btn btn-danger" href="#remove">Remove this user</a>
+    {{/isnt}}
+    {{submit "Save User"}}
+  </div>
 </form>

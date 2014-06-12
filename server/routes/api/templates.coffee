@@ -1,7 +1,5 @@
 express = require 'express'
-
 config = require '../../config'
-
 Template = require('../../lib/template')(config.buckets?.templatePath)
 
 module.exports = app = express()
@@ -15,9 +13,7 @@ app.route('/templates')
         res.send files
 
   .post (req, res) ->
-
     Template.write req.body.filename, req.body.contents, (err) ->
-      console.log arguments
       if err
         res.send err, 500
       else
@@ -35,16 +31,16 @@ app.route('/templates/:filename')
         res.send filename: req.params.filename, contents: contents
 
   .delete (req, res) ->
-    res.send 400, {error: 'Can’t mess with the index yet.'} if req.params.filename is 'index'
+    return res.send 400, {error: 'Can’t mess with the index yet.'} if req.params.filename is 'index'
     Template.remove req.params.filename, (err) ->
       if err
         res.send err, 500
       else
-        res.send {}, 201
+        res.send 204
 
+  # not a valid PUT request
   .put (req, res) ->
-    throw "filename mismatch" unless req.params.filename is req.body.filename
-    Template.write req.params.filename, req.body.contents, (err) ->
+    Template.write [req.params.filename, req.body.filename], req.body.contents, (err) ->
       if err
         res.send err, 500
       else

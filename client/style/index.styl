@@ -2,7 +2,7 @@
 
 @import 'nib'
 
-$primary = #87cdc2
+$primary = #4c989b
 
 $red = #df4949
 $blue = #395768
@@ -23,6 +23,9 @@ body
 #bkts-content
   flex 1
 
+.btn
+  font-size 16px
+
 .avatar
   vertical-align middle
   width 30px
@@ -35,13 +38,26 @@ body
   color #555
   padding 5px 0
 
+.form-control
+  border-width 2px
+  box-shadow none
+  // font-size 16px
+  padding 10px 12px
 .form-control:focus
   box-shadow none !important
 
-.btn .icon
-  font-size 24px
-  vertical-align middle
-  line-height .95em
+.btn-icon
+  .icon
+    font-size 24px
+    vertical-align middle
+    line-height .95em
+
+  &:hover
+    text-decoration none
+
+  &:active
+    position relative
+    top 1px
 
 hr.tiny
   width 5%
@@ -52,7 +68,7 @@ hr.tiny
   h1
     margin-top 30px
     padding-bottom 10px
-    border-bottom 1px solid rgba($primary, .3)
+    border-bottom 2px solid rgba($primary, .15)
 
 @import '_typography'
 @import '_nav'

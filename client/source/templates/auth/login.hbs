@@ -7,14 +7,14 @@
       </header>
 
       {{#if next}}
-        <input type="hidden" name="next" value="/{{adminSegment}}/{{next}}">
+        {{hidden 'next' next}}
       {{/if}}
 
       <h3>Please log in{{#if next}} to continue{{/if}}:</h3>
-      {{input 'email' 'username' placeholder="Email"}}
-      {{input 'password' 'password' placeholder="Password"}}
+      {{input 'username' '' placeholder="Email" type='email'}}
+      {{input 'password' '' placeholder="Password" type='password'}}
 
-      <button class="btn btn-primary ladda-button" data-style="zoom-in" value="Blah" type="submit">Log in</button>
+      {{submit 'Log in'}}
     </div>
   </div>
 

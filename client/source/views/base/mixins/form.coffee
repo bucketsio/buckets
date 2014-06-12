@@ -2,12 +2,12 @@ _ = require 'underscore'
 
 module.exports =
   render: ->
-    # Prepare any submit buttons for Ladda
-    @$btn = @$('.ladda-button').ladda()
-
     # Automatically focus the first visible input
     _.defer =>
       @$('.form-control:visible').eq(0).focus()
+
+      # Prepare any submit buttons for Ladda
+      @$btn = @$('.ladda-button').ladda()
 
   formParams: ->
     # Uses jQuery formParams, but don't try to convert number values to numbers, etc.
@@ -19,10 +19,10 @@ module.exports =
     promise.always(
       @$btn.ladda 'stop'
     ).fail(
-      @renderServerErrors
+      _.bind(@renderServerErrors, @)
     )
 
-  renderServerErrors: (res) =>
+  renderServerErrors: (res) ->
 
     # First let's get rid of the old ones
     @$('.help-block').remove()
