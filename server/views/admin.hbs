@@ -28,6 +28,7 @@
         <a href="/" class="noscript">‹ Return to website</a> · Made with ♥︎ on <a href="http://assemblymade.com/buckets" target="_blank">Assembly</a> · <a href="https://github.com/asm-products/buckets" target="_blank"><span class="icon buckets-icon-github"></span></a>
       </div>
     </footer>
+    <!-- Env: {{env}} -->
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
@@ -55,7 +56,8 @@
         }
       })
     </script>
-
-    <script src="//localhost:35729/livereload.js"></script>
+    {{#is env 'development'}}
+      <script src="//localhost:35729/livereload.js"></script>
+    {{/is}}
   </body>
 </html>
