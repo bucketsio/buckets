@@ -14,7 +14,7 @@ Buckets is a simple, open source, content management system for Node.js.
 
 
 ```
-npm install -g grunt-cli
+npm install -g  buckets grunt-cli
 ```
 
 Then install the local Node dependencies:
@@ -28,16 +28,16 @@ npm install
 At this point, you should be able to run:
 
 ```
-grunt serve
+buckets serve
 ```
 
 After building, Buckets should then be accessible at the default address: [http://localhost:3000/](http://localhost:3000/)
 
 ### Running tests
 
-- `grunt test:client`: To run client tests
-- `grunt test:server`: To run server tests
-- `grunt test`: To run both client and server tests
+- `buckets test:client`: To run client tests
+- `buckets test:server`: To run server tests
+- `buckets test`: To run both client and server tests
 
 #### Additional Documentation
 

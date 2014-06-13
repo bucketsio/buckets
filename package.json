@@ -32,6 +32,7 @@
   "engines": {
     "node": "0.10.x"
   },
+  "bin": "./bin/buckets",
   "dependencies": {
     "bcrypt": "^0.7.8",
     "body-parser": "^1.0.2",
@@ -84,6 +85,7 @@
     "rosie": "^0.3.1",
     "sinon": "*",
     "supertest": "*",
-    "testem": "*"
+    "testem": "*",
+    "minimist": "0.1.0"
   }
 }
