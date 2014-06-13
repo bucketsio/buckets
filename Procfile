@@ -1,1 +1,1 @@
-web: grunt express:prod
+web: ./node_modules/coffee-script/bin/coffee server/index.coffee
