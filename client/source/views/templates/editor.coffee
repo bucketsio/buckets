@@ -32,6 +32,8 @@ module.exports = class TemplateEditor extends PageView
       complete: @bindAceEditor
 
   bindAceEditor: =>
+    return if @disposed
+
     ace.config.set 'basePath', "/#{mediator.options.adminSegment}/js/ace/"
     @editor = ace.edit(@$('.code.editor')[0])
     @editor.setTheme 'ace/theme/tomorrow'
