@@ -33,5 +33,6 @@ app.all '*', (req, res) ->
 
     res.render 'admin',
       user: req.user
+      env: config.buckets.env
       adminSegment: config.buckets.adminSegment
       needsInstall: userCount is 0

@@ -14,6 +14,8 @@ require('../lib/renderer')(hbs)
 
 app.set 'views', tplPath
 
+app.set 'view cache', false
+
 app.get '*', (req, res, next) ->
 
   # dynamic renderTime helper
