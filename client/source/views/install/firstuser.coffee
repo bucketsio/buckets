@@ -6,7 +6,6 @@ FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/install/firstuser'
 
 module.exports = class FirstUserView extends View
-  @mixin FormMixin
 
   template: tpl
   container: '#bkts-content'
@@ -18,3 +17,5 @@ module.exports = class FirstUserView extends View
   submitForm: (e) ->
     e.preventDefault()
     @submit @model.save @formParams()
+
+  @mixin FormMixin

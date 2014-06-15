@@ -2,10 +2,12 @@ _ = require 'underscore'
 
 module.exports =
   render: ->
-    # Automatically focus the first visible input
+    # Defer to ensure view is fully rendered
     _.defer =>
-      @$('.form-control:visible').eq(0).focus()
+      return if @disposed
 
+      # Automatically focus the first visible input
+      @$('.form-control:visible').eq(0).focus()
       # Prepare any submit buttons for Ladda
       @$btn = @$('.ladda-button').ladda()
 
@@ -14,10 +16,10 @@ module.exports =
     @$el.formParams no
 
   submit: (promise) ->
-    @$btn.ladda 'start'
+    @$btn?.ladda 'start'
 
     promise.always(
-      @$btn.ladda 'stop'
+      @$btn?.ladda 'stop'
     ).fail(
       _.bind(@renderServerErrors, @)
     )

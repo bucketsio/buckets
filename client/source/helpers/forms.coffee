@@ -94,8 +94,6 @@ Handlebars.registerHelper 'checkbox', (name, value, options) ->
 
 Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
 
-  console.log 'select', selectOptions, options.hash
-
   return unless selectOptions?.length > 0
 
   settings = _.defaults options.hash,

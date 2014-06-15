@@ -61,6 +61,8 @@ module.exports = (grunt) ->
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server'
       cov:
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html'
+      npm_install:
+        command: 'npm install'
 
     concat:
       style:
@@ -230,9 +232,9 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
-  grunt.registerTask 'dev', ['checkDatabase', 'express:dev', 'build', 'watch']
+  grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'express:dev', 'build', 'watch']
   grunt.registerTask 'devserve', ['checkDatabase', 'express:dev', 'watch']
-  grunt.registerTask 'serve', ['checkDatabase', 'minify', 'express:server']
+  grunt.registerTask 'serve', ['shell:npm_install', 'checkDatabase', 'minify', 'express:server']
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
