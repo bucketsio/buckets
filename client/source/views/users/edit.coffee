@@ -27,13 +27,14 @@ module.exports = class EditUserView extends View
     data = @formParams()
 
     data.roles = @model.get('roles')
+
     if data.admin
       data.roles.push name: 'administrator' unless @model.hasRole('administrator')
     else
       data.roles = _.reject data.roles, (r)->
         r.name =='administrator'
 
-    @submit(@model.save(data, wait: yes))
+    @submit @model.save(data, wait: yes)
 
   clickRemove: (e) ->
     e.preventDefault()

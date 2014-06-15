@@ -44,7 +44,7 @@ app.get '*', (req, res, next) ->
     templateData.errorText = 'Page missing'
 
     res.render 'index', templateData, (err, html) ->
-      console.log 'err', err if err
+      console.log 'Buckets caught an error and it trying to render the index', err if err
       if err
         next()
       else
