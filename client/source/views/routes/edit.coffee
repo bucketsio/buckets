@@ -6,7 +6,6 @@ FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/routes/edit'
 
 module.exports = class EditRouteView extends View
-  @mixin FormMixin
   template: tpl
   className: 'routeEdit'
   optionNames: View::optionNames.concat ['templates']
@@ -26,3 +25,4 @@ module.exports = class EditRouteView extends View
   clickCancel: (e) ->
     e.preventDefault()
     @dispose()
+  @mixin FormMixin
