@@ -1,0 +1,21 @@
+<form>
+  <h3>Add a {{fieldType}} field</h3>
+
+  {{input 'name' name label='Field name' placeholder='New field' sluggify='fieldSlug'}}
+  {{input 'fieldSlug' slug placeholder='slug'}}
+
+  {{#isnt fieldType 'checkbox'}}
+    {{checkbox 'required' required label='This field is required.'}}
+  {{/isnt}}
+
+  {{textarea 'instructions' instructions label="User Instructions"}}
+
+  <div class="pull-right">
+    <a href="#cancel" class="btn btn-default">Cancel</a>
+    {{#if _id}}
+      {{submit 'Edit field'}}
+    {{else}}
+      {{submit 'Add field'}}
+    {{/if}}
+  </div>
+</form>

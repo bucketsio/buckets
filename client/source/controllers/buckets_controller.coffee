@@ -11,6 +11,7 @@ MembersList = require 'views/members/list'
 
 Bucket = require 'models/bucket'
 Buckets = require 'models/buckets'
+Fields = require 'models/fields'
 Entry = require 'models/entry'
 Entries = require 'models/entries'
 Members = require 'models/members'
@@ -26,7 +27,8 @@ module.exports = class BucketsController extends Controller
   add: ->
     @adjustTitle 'New Bucket'
 
-    newBucket = new Bucket
+    newBucket = new Bucket # We don't want to destroy bucket after this
+    @newFields = new Fields
 
     @listenToOnce newBucket, 'sync', =>
       toastr.success 'Bucket added'
@@ -35,6 +37,7 @@ module.exports = class BucketsController extends Controller
 
     @view = new BucketEditView
       model: newBucket
+      fields: @newFields
 
   listEntries: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
@@ -97,13 +100,16 @@ module.exports = class BucketsController extends Controller
     if bucket
       @adjustTitle 'Edit ' + bucket.get('name')
 
+      @fields = new Fields bucket.get('fields')
+
       @listenToOnce bucket, 'sync', (bucket) =>
         toastr.success 'Bucket saved'
         mediator.buckets.fetch(reset: yes)
-        @redirectTo url: '/'
+        @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
 
       @view = new BucketEditView
         model: bucket
+        fields: @fields
 
   listMembers: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug

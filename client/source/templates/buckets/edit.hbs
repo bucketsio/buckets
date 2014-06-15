@@ -1,5 +1,8 @@
 <form class="row">
   <div class="col-md-6">
+    {{#if _id}}
+      <a href="#delete" class="btn btn-link btn-icon pull-right">{{icon 'trash'}}</a>
+    {{/if}}
     <h1>
       {{#if _id}}
         Edit Bucket
@@ -8,59 +11,78 @@
       {{/if}}
     </h1>
 
-    {{input 'name' name placeholder='ie. Articles, Songs, Products, etc.' sluggify='slug'}}
 
-    {{input 'slug' slug placeholder="slug"}}
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#basic" data-toggle="tab">Basic</a></li>
+      <li><a href="#fields" data-toggle="tab">Fields</a></li>
+      <li><a href="#members" data-toggle="tab">Members</a></li>
+    </ul>
 
-    <h4>Icon</h4>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="basic">
 
-    <div class="swatches icons">
-      {{hidden 'icon' icon}}
+        {{input 'name' name placeholder='ie. Articles, Songs, Products, etc.' sluggify='slug' className="form-control input-lg" label="What does this bucket hold?"}}
 
-      <div data-value="edit" class="selected">
-        {{icon 'edit'}}
+        {{input 'slug' slug placeholder="slug"}}
+
+        <label>Icon</label>
+
+        <div class="swatches icons">
+          {{hidden 'icon' icon}}
+
+          <div data-value="edit" class="selected">
+            {{icon 'edit'}}
+          </div>
+          <div data-value="photos">
+            {{icon 'photos'}}
+          </div>
+          <div data-value="calendar">
+            {{icon 'calendar'}}
+          </div>
+          <div data-value="movie">
+            {{icon 'movie'}}
+          </div>
+          <div data-value="music-note">
+            {{icon 'music-note'}}
+          </div>
+          <div data-value="map-pin">
+            {{icon 'map-pin'}}
+          </div>
+          <div data-value="quote">
+            {{icon 'quote'}}
+          </div>
+        </div>
+
+        <label>Color</label>
+        {{hidden 'color' color}}
+
+        <div class="swatches colors">
+          <div data-value="teal" class="teal selected"></div>
+          <div data-value="purple" class="purple"></div>
+          <div data-value="red" class="red"></div>
+          <div data-value="yellow" class="yellow"></div>
+          <div data-value="blue" class="blue"></div>
+          <div data-value="orange" class="orange"></div>
+        </div>
+
+        {{#if _id}}
+          {{input 'singular' singular label="What’s the singular version?" placeholder="Thing"}}
+        {{/if}}
+
+        <div class="pull-right">
+          {{submit 'Save'}}
+        </div>
       </div>
-      <div data-value="photos">
-        {{icon 'photos'}}
+      <div class="tab-pane" id="fields">
+
       </div>
-      <div data-value="calendar">
-        {{icon 'calendar'}}
-      </div>
-      <div data-value="movie">
-        {{icon 'movie'}}
-      </div>
-      <div data-value="music-note">
-        {{icon 'music-note'}}
-      </div>
-      <div data-value="map-pin">
-        {{icon 'map-pin'}}
-      </div>
-      <div data-value="quote">
-        {{icon 'quote'}}
+      <div class="tab-pane" id="members">
+
       </div>
     </div>
 
-    <h4>Color</h4>
-    {{hidden 'color' color}}
 
-    <div class="swatches colors">
-      <div data-value="teal" class="teal selected"></div>
-      <div data-value="purple" class="purple"></div>
-      <div data-value="red" class="red"></div>
-      <div data-value="yellow" class="yellow"></div>
-      <div data-value="blue" class="blue"></div>
-      <div data-value="orange" class="orange"></div>
-    </div>
-
-    {{#if _id}}
-      {{input 'singular' singular}}
-    {{/if}}
-
-    {{#if _id}}
-      <a href="#delete" class="btn btn-link btn-icon">{{icon 'trash'}}</a>
-    {{/if}}
-    <div class="pull-right">
-      {{submit 'Next: Define Fields'}}
-    </div>
   </div>
 </form>

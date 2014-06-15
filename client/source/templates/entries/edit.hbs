@@ -4,15 +4,26 @@
 
   {{#if _id}}
     <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
-    <h1>Edit {{title}}</h1>
+    <h1>{{title}}</h1>
   {{else}}
-    <h1>New {{bucket.singular}}</h1>
+    <h1>{{bucket.singular}}</h1>
   {{/if}}
+
 
   <div class="row">
     <div class="col-md-8">
-      {{input 'title' title placeholder='Title' sluggify='slug'}}
-      <div class="alert alert-warning">TBD: Custom fields</div>
+
+      {{input 'title' title placeholder=newTitle sluggify='slug' className="input-lg form-control"}}
+
+      {{!-- Probably have to use subviews soon --}}
+      {{#each bucket.fields}}
+        {{#is fieldType 'checkbox'}}
+          {{checkbox slug value label=name}}
+        {{else}}
+          {{input slug value label=name type=fieldType}}
+        {{/is}}
+        {{debug}}
+      {{/each}}
 
       <div class="pull-right">
         <div class="btn-group">
