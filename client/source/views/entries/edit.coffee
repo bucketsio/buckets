@@ -14,9 +14,15 @@ module.exports = class EntryEditView extends PageView
     'click [href="#delete"]': 'clickDelete'
 
   getTemplateData: ->
+    fields = @bucket.get('fields')
+    _.map fields, (field) =>
+      field.value = @model.get(field.slug)
+      field
+
     _.extend super,
       bucket: @bucket?.toJSON()
       user: @user?.toJSON()
+      fields: fields
       newTitle: "New #{@bucket.get('singular')}"
 
   submitForm: (e) ->

@@ -1,7 +1,7 @@
 <form>
   <h3>Add a {{fieldType}} field</h3>
 
-  {{input 'name' name label='Field name' placeholder='New field' sluggify='fieldSlug'}}
+  {{input 'name' name label='Field label' placeholder='New field' sluggify='fieldSlug'}}
   {{input 'fieldSlug' slug placeholder='slug'}}
 
   {{#isnt fieldType 'checkbox'}}

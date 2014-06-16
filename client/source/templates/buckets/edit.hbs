@@ -1,8 +1,5 @@
 <form class="row">
-  <div class="col-md-6">
-    {{#if _id}}
-      <a href="#delete" class="btn btn-link btn-icon pull-right">{{icon 'trash'}}</a>
-    {{/if}}
+  <div class="col-md-9">
     <h1>
       {{#if _id}}
         Edit Bucket
@@ -22,10 +19,18 @@
     <!-- Tab panes -->
     <div class="tab-content">
       <div class="tab-pane active" id="basic">
+        <div class="row">
+          <div class="col-sm-9">
+            {{input 'name' name placeholder='ie. Articles, Songs, Products, etc.' sluggify='slug' className="form-control input-lg" label="What does this bucket hold?"}}
 
-        {{input 'name' name placeholder='ie. Articles, Songs, Products, etc.' sluggify='slug' className="form-control input-lg" label="What does this bucket hold?"}}
+            {{input 'slug' slug placeholder="slug"}}
+          </div>
+          <div class="col-sm-3">
+            <div class="well center">(icon)</div>
+          </div>
+        </div>
 
-        {{input 'slug' slug placeholder="slug"}}
+
 
         <label>Icon</label>
 
@@ -74,6 +79,9 @@
         <div class="pull-right">
           {{submit 'Save'}}
         </div>
+        {{#if _id}}
+          <a href="#delete" class="btn btn-link btn-icon">{{icon 'trash'}}</a>
+        {{/if}}
       </div>
       <div class="tab-pane" id="fields">
 

@@ -6,6 +6,7 @@ FormMixin = require 'views/base/mixins/form'
 
 module.exports = class FieldEditView extends View
   template: tpl
+  containerMethod: 'prepend'
 
   events:
     'submit form': 'submitForm'

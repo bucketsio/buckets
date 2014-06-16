@@ -2,13 +2,26 @@
   <h4>Add your first custom field</h4>
 {{/unless}}
 
-{{select 'fieldType' '' fieldTypes valueKey="value"}}
+<p>Add custom fields to define what your Bucket holds.</p>
+
+<div class="editForm"></div>
+
+<div class="row">
+  <div class="col-sm-6">
+    {{select 'fieldType' '' fieldTypes valueKey="value"}}
+  </div>
+</div>
+
+
 {{debug}}
 
 <ul>
 {{#each items}}
   <li>
-    {{name}} <small>{{fieldType}}</small> <a href="#edit" class="btn btn-default btn-sm">Edit</a>
+    {{name}} <small>{{fieldType}}</small> <a href="#edit" class="btn btn-default btn-xs">Edit</a>
   </li>
 {{/each}}
 </ul>
+
+{{checkbox 'titleRequired' titleRequired label="Require a title for each entry"}}
+{{checkbox 'includeMeta' titleRequired label="Include keywords and description by default"}}
