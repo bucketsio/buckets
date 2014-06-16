@@ -46,7 +46,7 @@ app.get '*', (req, res, next) ->
     res.render 'index', templateData, (err, html) ->
       console.log 'Buckets caught an error and it trying to render the index', err if err
       if err
-        next()
+        res.send 404, err
       else
         res.send 404, html
 
