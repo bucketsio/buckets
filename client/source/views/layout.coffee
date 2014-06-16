@@ -1,4 +1,5 @@
 Chaplin = require 'chaplin'
+_ = require 'underscore'
 
 module.exports = class Layout extends Chaplin.Layout
 
@@ -7,6 +8,19 @@ module.exports = class Layout extends Chaplin.Layout
 
   events:
     'keyup input[data-sluggify]': 'keyUpSluggify'
+    'click [href="#menu"]': 'clickMenu'
+    'click .nav-primary a': 'clickMenuNav'
+    'click .logout a': 'fadeAwayFadeAway'
+
+  clickMenu: (e) ->
+    e.preventDefault()
+    @$('.nav-primary').toggleClass('hidden-xs').toggle().slideToggle 200
+
+  clickMenuNav: ->
+    if @$('.hidden-xs:visible').length is 0
+      _.delay =>
+        @$('.nav-primary').css(display: 'block').slideToggle 150
+      , 100
 
   initialize: ->
     super
@@ -31,3 +45,7 @@ module.exports = class Layout extends Chaplin.Layout
 
     slug = val.toLowerCase().replace(/\ /g, '-').replace(/[^a-zA-Z0-9-_]/g, '')
     $target.val slug
+
+  fadeAwayFadeAway: ->
+
+    $('body').css opacity: .85
