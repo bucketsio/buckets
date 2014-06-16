@@ -38,6 +38,10 @@ module.exports = class Layout extends Chaplin.Layout
       showMethod: 'slideDown'
       hideMethod: 'slideUp'
 
+    # Add delegated tooltip for all help icons
+    @$el.tooltip
+      selector: '.show-tooltip'
+
   keyUpSluggify: (e) ->
     $el = @$(e.currentTarget)
 
