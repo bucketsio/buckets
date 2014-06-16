@@ -17,7 +17,7 @@ module.exports = class RoutesList extends PageView
   events:
     'click [href="#new"]': 'clickNew'
     'click [href="#delete"]': 'clickDelete'
-    'click .route h2': 'clickEdit'
+    'click [href="#edit"]': 'clickEdit'
 
   clickNew: (e) ->
     e.preventDefault()

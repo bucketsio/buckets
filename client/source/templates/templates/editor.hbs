@@ -1,33 +1,39 @@
 <form>
+  <div class="pull-right">
+    <a href="#new" class="btn btn-default">New</a>
+  </div>
   <h1>Templates</h1>
-  <div class="row">
-    <div class="col-md-3">
-      <a href="#new" class="btn btn-default btn-block">New Template</a>
-      <br>
-      <ul class="nav nav-stacked nav-pills">
-      {{#each items}}
-        <li{{#is filename ../filename}} class="active"{{/is}}>
-          <a href="/{{adminSegment}}/templates/{{filename}}">{{filename}}</a>
-        </li>
-      {{/each}}
-      </ul>
-
-      <hr>
-      <div class="notForIndex {{#is filename 'index'}}hide{{/is}}">
-        {{input 'filename' filename attrs='placeholder="Filename"'}}
+  <div class="toolbar">
+    <div class="row">
+      <div class="col-sm-9">
+        <div class="input-group">
+          <input name="filename" value="{{filename}}" placeholder="Filename" class="form-control">
+          <div class="dropdown input-group-btn">
+            <a data-toggle="dropdown" href="#" class="btn"><span class="caret"></span></a>
+            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
+              {{#each items}}
+                <li{{#is filename ../filename}} class="active"{{/is}}>
+                  <a href="/{{adminSegment}}/templates/{{filename}}">{{filename}}</a>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="pull-right">
+      <div class="col-sm-3" align="right">
         <span class="notForIndex {{#is filename 'index'}}hide{{/is}}">
-          <a href="#delete" class="btn btn-icon btn-link">{{icon 'trash'}}</a>
+        <a href="#delete" class="btn btn-icon btn-link">{{icon 'trash'}}</a>
         </span>
         {{submit 'Save'}}
       </div>
-      <div class="clearfix"></div>
-
-    </div>
-    <div class="col-md-9">
-      {{textarea 'contents' contents className='form-control code hidden' rows=20}}
-      <pre class="code editor"></pre>
     </div>
   </div>
+
+
+  <div class="clearfix"></div>
+
+  {{textarea 'contents' contents className='form-control code hidden' rows=20}}
+
+  <pre class="code editor"></pre>
+
 </form>

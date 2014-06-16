@@ -7,8 +7,12 @@ createLabel = (text, name) ->
     className: 'control-label'
   , text
 
-wrap = (content, label) ->
-  content = createLabel(label) + content if label
+wrap = (content, options={}) ->
+  _.defaults options,
+    label: null
+    help: null
+  content = createLabel(options.label) + content if options.label
+  content += tag 'p', {className: 'help-block'}, options.help if options.help
   tag 'div', class: 'form-group', content
 
 tag = (el, attrs={}, content='', options={}) ->
@@ -41,7 +45,9 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     _.extend params,
       'data-sluggify': options.hash.sluggify
 
-  wrap tag('input', params, false, selfClosing: true), settings.label
+  wrap tag('input', params, false, selfClosing: true),
+    label: settings.label
+    help: settings.help
 
 Handlebars.registerHelper 'textarea', (name, value, options) ->
   settings = options.hash
@@ -56,7 +62,7 @@ Handlebars.registerHelper 'textarea', (name, value, options) ->
   , value
 
   if settings.label
-    wrap textarea, settings.label
+    wrap textarea, label: settings.label
   else
     textarea
 
@@ -90,7 +96,7 @@ Handlebars.registerHelper 'checkbox', (name, value, options) ->
   cb = tag 'input', params
   cb = tag 'label', {}, cb + " #{label}" if label
 
-  wrap cb
+  wrap cb, options.hash.help
 
 Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
 
@@ -117,4 +123,6 @@ Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
     className: settings.className
     tabindex: settings.tabindex
     name: name
-  , optionEls.join ''), settings.label
+  , optionEls.join ''),
+    label: settings.label
+    help: settings.help

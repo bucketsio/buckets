@@ -2,18 +2,19 @@
 
 @import 'nib'
 
-$primary = #4c989b
+$primary = #edb91d
 
-$red = #df4949
-$blue = #395768
-$orange = #e27a3f
+$red = #dc5244
+$blue = #39a0a4
+$orange = #f3b54e
 $yellow = #deb342
-$teal = #45b29d
+$teal = #5aa97f
 $purple = #825a7b
 
 $sans = 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, 'Segoe UI', Segoe, Roboto, sans-serif
 
 body
+  background-color #fcfcfc
   display table
   width 100%
   display flex
@@ -22,9 +23,6 @@ body
 
 #bkts-content
   flex 1
-
-.btn
-  font-size 16px
 
 .avatar
   vertical-align middle
@@ -50,7 +48,7 @@ body
   .icon
     font-size 24px
     vertical-align middle
-    line-height .95em
+    line-height inherit
 
   &:hover
     text-decoration none
@@ -68,9 +66,28 @@ hr.tiny
   h1
     margin-top 30px
     padding-bottom 10px
-    border-bottom 2px solid rgba($primary, .15)
+    border-bottom 3px solid rgba($primary, .5)
 
 @import '_typography'
 @import '_nav'
 @import '_footer'
 @import '_views'
+
+.tab-pane
+  padding-top 20px
+
+
+.toolbar
+  padding 8px
+  background-color #f6f6f6
+  border-bottom 1px solid #eee
+  margin-bottom 4px
+
+h4[data-toggle]
+  cursor pointer
+
+  .caret
+    transition 200ms easei-out
+
+  &.collapsed .caret
+    transform rotate(-90deg)

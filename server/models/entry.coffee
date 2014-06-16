@@ -14,7 +14,7 @@ entrySchema = new Schema
     type: String
   status:
     type: String
-    enum: ['hidden', 'draft', 'live']
+    enum: ['hidden', 'draft', 'live', 'pending']
     required: yes
     default: 'draft'
   lastModified:
