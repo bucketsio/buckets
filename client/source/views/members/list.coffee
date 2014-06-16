@@ -1,13 +1,13 @@
 _ = require 'underscore'
 
-PageView = require 'views/base/page'
-
+View = require 'lib/view'
+FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/members/list'
 
-module.exports = class MembersList extends PageView
+module.exports = class MembersList extends View
   template: tpl
 
-  optionNames: PageView::optionNames.concat ['bucket', 'users']
+  optionNames: View::optionNames.concat ['bucket', 'users']
 
   listen:
     'destroy collection': 'render'
@@ -21,7 +21,7 @@ module.exports = class MembersList extends PageView
     e.preventDefault()
 
     data = @$el.formParams(false)
-    u = _.clone(@users.get(data.user).attributes)
+    u = @users.get(data.user).clone()
     u.bucketId = @bucket.id
     u.role = data.role
 
@@ -38,4 +38,8 @@ module.exports = class MembersList extends PageView
   getTemplateData: ->
     _.extend super,
       bucket: @bucket.toJSON()
-      users: _.reject @users.toJSON(), (u) => !!@collection.get(u._id)
+      # Remove users which are already members
+      users: _.compact @users.map (user) =>
+        user.toJSON() unless @collection.get(user.get('_id'))? or user.hasRole('administrator')
+
+  @mixin FormMixin

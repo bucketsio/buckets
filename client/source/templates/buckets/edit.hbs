@@ -11,9 +11,17 @@
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#basic" data-toggle="tab">Basic</a></li>
-      <li><a href="#fields" data-toggle="tab">Fields</a></li>
-      <li><a href="#members" data-toggle="tab">Members</a></li>
+      <li class="active">
+        <a href="{{#if _id}}/{{adminSegment}}/buckets/{{slug}}/settings{{else}}#{{/if}}" data-target="#basic" data-toggle="tab">Basic</a>
+      </li>
+      <li>
+        <a href="{{#if _id}}/{{adminSegment}}/buckets/{{slug}}/settings/fields{{else}}#{{/if}}" data-target="#fields" data-toggle="tab">Fields</a>
+      </li>
+      {{#if _id}}
+      <li>
+        <a href="/{{adminSegment}}/buckets/{{slug}}/settings/members" data-target="#members" data-toggle="tab">Members</a>
+      </li>
+      {{/if}}
     </ul>
 
     <!-- Tab panes -->

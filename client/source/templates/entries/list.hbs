@@ -1,8 +1,8 @@
-<div class="dropdown pull-right">
-  <a role="menuitem" href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon">{{icon 'cog'}}</a>
-</div>
+<h1>
+  {{bucket.name}}
 
-<h1>{{bucket.name}}</h1>
+  <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon">{{icon 'cog'}}</a>
+</h1>
 
 {{#any items}}
   <a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add {{bucket.singular}}</a>

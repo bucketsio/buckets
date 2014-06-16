@@ -3,11 +3,9 @@ Controller = require 'lib/controller'
 MissingPageView = require 'views/missing'
 
 BucketEditView = require 'views/buckets/edit'
-BucketFieldsView = require 'views/buckets/fields'
 DashboardView = require 'views/buckets/dashboard'
 EntriesList = require 'views/entries/list'
 EntryEditView = require 'views/entries/edit'
-MembersList = require 'views/members/list'
 
 Bucket = require 'models/bucket'
 Buckets = require 'models/buckets'
@@ -33,7 +31,7 @@ module.exports = class BucketsController extends Controller
     @listenToOnce newBucket, 'sync', =>
       toastr.success 'Bucket added'
       mediator.buckets.add newBucket
-      @redirectTo 'buckets#editFields', slug: newBucket.get('slug')
+      @redirectTo 'buckets#listEntries', slug: newBucket.get('slug')
 
     @view = new BucketEditView
       model: newBucket
@@ -97,46 +95,45 @@ module.exports = class BucketsController extends Controller
   settings: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
 
+    @listenToOnce bucket, 'sync', (bucket, data) =>
+      mediator.buckets.fetch(reset: yes)
+
+      if data.slug
+        toastr.success 'Bucket saved'
+        @redirectTo 'buckets#listEntries', slug: data.slug
+      else
+        toastr.success 'Bucket deleted'
+        @redirectTo 'buckets#dashboard'
+
     if bucket
       @adjustTitle 'Edit ' + bucket.get('name')
 
-      @fields = new Fields bucket.get('fields')
+      @reuse 'BucketSettings',
+        compose: (options) ->
+          console.log 'composing', arguments
+          @members = new Members bucketId: bucket.get('id')
+          @users = new Users
+          @fields = new Fields bucket.get('fields')
 
-      @listenToOnce bucket, 'sync', (bucket) =>
-        toastr.success 'Bucket saved'
-        mediator.buckets.fetch(reset: yes)
-        @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+          $.when(
+            @members.fetch()
+            @users.fetch()
+          ).done =>
 
-      @view = new BucketEditView
-        model: bucket
-        fields: @fields
+            @view = new BucketEditView
+              model: bucket
+              fields: @fields
+              members: @members
+              users: @users
 
-  listMembers: (params) ->
-    bucket = mediator.buckets?.findWhere slug: params.slug
+            @view?.setActiveTab options.activeTab if options.activeTab
 
-    if bucket
-      @adjustTitle bucket.get('name') + ' members'
+        check: (options) ->
+          @view?.setActiveTab options.activeTab if options.activeTab
+          @view?
 
-      members = new Members(bucketId: bucket.get('id'))
-      users = new Users
-
-      $.when(
-        members.fetch()
-        users.fetch()
-      ).done =>
-        @view = new MembersList
-          collection: members
-          bucket: bucket
-          users: users
-
-  editFields: (params) ->
-    bucket = mediator.buckets?.findWhere slug: params.slug
-
-    if bucket
-      @adjustTitle "Define Fields · #{bucket.get('name')}"
-
-      @view = new BucketFieldsView
-        model: bucket
+        options:
+          activeTab: params.activeTab
 
   missing: ->
     console.log 'Page missing!', arguments
