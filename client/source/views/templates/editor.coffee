@@ -47,14 +47,19 @@ module.exports = class TemplateEditor extends PageView
   selectTemplate: (filename) ->
     if filename
       @model = @collection.findWhere(filename: filename)
-      contents = @model.get 'contents'
-      idx = @collection.indexOf @model
-      @$('.nav li').eq(idx).addClass('active').siblings().removeClass('active')
+
+      if @model
+        contents = @model.get 'contents'
+        idx = @collection.indexOf @model
+        @$('.input-group li').eq(idx).addClass('active').siblings().removeClass('active')
+      else
+        @model = new Template
+          filename: filename
 
     else
       @model = new Template
       contents = ''
-      @$('.nav li').removeClass 'active'
+      @$('.input-group li').removeClass 'active'
 
     @$code.val contents
     @$('[name="filename"]').val filename
