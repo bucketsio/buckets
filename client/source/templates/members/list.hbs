@@ -1,5 +1,3 @@
-<h1>Members</h1>
-
 {{#hasRole 'administrator'}}
   {{#if users}}
     <form role="form" class="well add-member">
@@ -25,12 +23,12 @@
   {{else}}
     <div class="center">
       <div class="info">
-        All users are members of {{bucket.name}}...
+        All users are members of {{bucket.name}}…
       </div>
     </div>
   {{/if}}
 
-  <hr />
+  <hr>
 {{/hasRole}}
 
 <div class="row">

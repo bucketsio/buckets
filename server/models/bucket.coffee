@@ -38,8 +38,23 @@ bucketSchema = new mongoose.Schema
     type: mongoose.Schema.Types.ObjectId
     ref: 'Route'
   fields: [
-    type: mongoose.Schema.Types.ObjectId
-    ref: 'Field'
+    name:
+      type: String
+      unique: no
+      required: yes
+    slug:
+      type: String
+      unique: yes
+      required: yes
+    required: Boolean
+    instructions: String
+    fieldType:
+      type: String
+      required: yes
+    settings: mongoose.Schema.Types.Mixed
+    dateCreated:
+      type: Date
+      default: new Date
   ]
 ,
   autoIndex: no
@@ -47,6 +62,7 @@ bucketSchema = new mongoose.Schema
 bucketSchema.set 'toJSON', virtuals: true
 
 bucketSchema.pre 'validate', (next) ->
+  # Auto add singular if not provided
   @singular ?= lingo.en.singularize @name
   next()
 

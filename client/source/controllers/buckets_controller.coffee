@@ -3,14 +3,13 @@ Controller = require 'lib/controller'
 MissingPageView = require 'views/missing'
 
 BucketEditView = require 'views/buckets/edit'
-BucketFieldsView = require 'views/buckets/fields'
 DashboardView = require 'views/buckets/dashboard'
 EntriesList = require 'views/entries/list'
 EntryEditView = require 'views/entries/edit'
-MembersList = require 'views/members/list'
 
 Bucket = require 'models/bucket'
 Buckets = require 'models/buckets'
+Fields = require 'models/fields'
 Entry = require 'models/entry'
 Entries = require 'models/entries'
 Members = require 'models/members'
@@ -26,15 +25,17 @@ module.exports = class BucketsController extends Controller
   add: ->
     @adjustTitle 'New Bucket'
 
-    newBucket = new Bucket
+    newBucket = new Bucket # We don't want to destroy bucket after this
+    @newFields = new Fields
 
     @listenToOnce newBucket, 'sync', =>
       toastr.success 'Bucket added'
       mediator.buckets.add newBucket
-      @redirectTo 'buckets#editFields', slug: newBucket.get('slug')
+      @redirectTo 'buckets#listEntries', slug: newBucket.get('slug')
 
     @view = new BucketEditView
       model: newBucket
+      fields: @newFields
 
   listEntries: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
@@ -94,43 +95,45 @@ module.exports = class BucketsController extends Controller
   settings: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
 
+    @listenToOnce bucket, 'sync', (bucket, data) =>
+      mediator.buckets.fetch(reset: yes)
+
+      if data.slug
+        toastr.success 'Bucket saved'
+        @redirectTo 'buckets#listEntries', slug: data.slug
+      else
+        toastr.success 'Bucket deleted'
+        @redirectTo 'buckets#dashboard'
+
     if bucket
       @adjustTitle 'Edit ' + bucket.get('name')
 
-      @listenToOnce bucket, 'sync', (bucket) =>
-        toastr.success 'Bucket saved'
-        mediator.buckets.fetch(reset: yes)
-        @redirectTo url: '/'
+      @reuse 'BucketSettings',
+        compose: (options) ->
+          console.log 'composing', arguments
+          @members = new Members bucketId: bucket.get('id')
+          @users = new Users
+          @fields = new Fields bucket.get('fields')
 
-      @view = new BucketEditView
-        model: bucket
+          $.when(
+            @members.fetch()
+            @users.fetch()
+          ).done =>
 
-  listMembers: (params) ->
-    bucket = mediator.buckets?.findWhere slug: params.slug
+            @view = new BucketEditView
+              model: bucket
+              fields: @fields
+              members: @members
+              users: @users
 
-    if bucket
-      @adjustTitle bucket.get('name') + ' members'
+            @view?.setActiveTab options.activeTab if options.activeTab
 
-      members = new Members(bucketId: bucket.get('id'))
-      users = new Users
+        check: (options) ->
+          @view?.setActiveTab options.activeTab if options.activeTab
+          @view?
 
-      $.when(
-        members.fetch()
-        users.fetch()
-      ).done =>
-        @view = new MembersList
-          collection: members
-          bucket: bucket
-          users: users
-
-  editFields: (params) ->
-    bucket = mediator.buckets?.findWhere slug: params.slug
-
-    if bucket
-      @adjustTitle "Define Fields · #{bucket.get('name')}"
-
-      @view = new BucketFieldsView
-        model: bucket
+        options:
+          activeTab: params.activeTab
 
   missing: ->
     console.log 'Page missing!', arguments

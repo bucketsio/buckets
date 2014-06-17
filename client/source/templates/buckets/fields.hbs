@@ -1,11 +1,27 @@
-<h1>Define fields on {{name}}</h1>
+{{#unless length}}
+  <h4>Add your first custom field</h4>
+{{/unless}}
 
-<h4>Add a field</h4>
-{{select 'fieldType' '' fieldTypes}}
-<a href="#" class="btn btn-default btn-sm">Add field</a>
+<p>Add custom fields to define what your Bucket holds.</p>
 
-<br><br>
+<div class="editForm"></div>
 
-<div>
-  <a href="/{{adminSegment}}/buckets/{{slug}}" class="btn btn-primary">Start adding content</a>
+<div class="row">
+  <div class="col-sm-6">
+    {{select 'fieldType' '' fieldTypes valueKey="value"}}
+  </div>
 </div>
+
+
+{{debug}}
+
+<ul>
+{{#each items}}
+  <li>
+    {{name}} <small>{{fieldType}}</small> <a href="#edit" class="btn btn-default btn-xs">Edit</a>
+  </li>
+{{/each}}
+</ul>
+
+{{checkbox 'titleRequired' titleRequired label="Require a title for each entry"}}
+{{checkbox 'includeMeta' titleRequired label="Include keywords and description by default"}}

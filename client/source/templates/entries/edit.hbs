@@ -4,38 +4,65 @@
 
   {{#if _id}}
     <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
-    <h1>Edit {{title}}</h1>
+    <h1>Edit {{bucket.singular}}</h1>
   {{else}}
     <h1>New {{bucket.singular}}</h1>
   {{/if}}
 
   <div class="row">
     <div class="col-md-8">
-      {{input 'title' title placeholder='Title' sluggify='slug'}}
-      <div class="alert alert-warning">TBD: Custom fields</div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          {{input 'title' title placeholder=newTitle sluggify='slug' className="input-lg form-control"}}
 
-      <div class="pull-right">
-        <div class="btn-group">
-          {{submit "Publish"}}
-          <div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-            <ul class="dropdown-menu">
-               <li><a href="#draft">Save as a draft</a></li>
-               <li><a href="#date">Publish on…</a></li>
-             </ul>
+          {{!-- Probably have to use subviews soon --}}
+          {{#each fields}}
+            {{#is fieldType 'color'}}
+              <label>
+                <input type="color" name="{{slug}}" value="{{value}}"> {{name}}
+              </label>
+            {{/is}}
+            {{#is fieldType 'checkbox'}}
+              {{checkbox slug value label=name}}
+            {{/is}}
+            {{#is fieldType 'text'}}
+              {{input slug value label=name type=fieldType help=instructions}}
+            {{/is}}
+            {{debug}}
+          {{/each}}
+          <div class="clearfix"></div>
+
+          <div class="row entry-publish">
+            <div class="col-sm-6">
+              {{input 'publishDate' publishDate placeholder="ie. Next tuesday or now" label="Schedule Publish Date"}}
+            </div>
+            <div class="col-sm-6">
+              <br>
+
+              <div class="btn-group pull-right">
+                {{submit "Publish"}}
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                  <ul class="dropdown-menu pull-right">
+                     <li><a href="#draft">Save as a draft</a></li>
+                     <li><a href="#date">Publish on…</a></li>
+                   </ul>
+                </div>
+              </div>
+            </div>
           </div>
+          <div class="clearfix"></div>
         </div>
       </div>
-      <div class="clearfix"></div>
     </div>
 
     <div class="col-md-4">
-      <h4>Publish</h4>
-      {{input 'publishDate' publishDate placeholder="Next tuesday"}}
-      <h4>Meta</h4>
-      {{input 'slug' slug label="Slug"}}
-      {{input 'keywords' keywords label="Keywords"}}
-      {{textarea 'description' description label="Description"}}
+      <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
+      <div id="meta" class="collapse">
+        {{input 'slug' slug label="Slug"}}
+        {{input 'keywords' keywords label="Keywords"}}
+        {{textarea 'description' description label="Description"}}
+      </div>
     </div>
   </div>
 </form>
