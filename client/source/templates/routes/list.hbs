@@ -5,10 +5,7 @@
 
 {{#each items}}
   <div class="route" data-route-id="{{id}}">
-    <a href="#edit" class="btn btn-default pull-right">Edit</a>
-    <a href="#delete" class="btn btn-link btn-icon pull-right">{{icon 'trash'}}</a>
-    <h2>{{highlightWildcards urlPattern}}</h2>
+    <h2><a href="#edit">{{highlightWildcards urlPattern}}</a> <a href="#delete" class="btn btn-link btn-icon">{{icon 'trash'}}</a></h2>
     <p class="text-muted">↳ <code><a href="/{{adminSegment}}/templates/{{template}}">{{template}}</a></code></p>
-    {{debug}}
   </div>
 {{/each}}

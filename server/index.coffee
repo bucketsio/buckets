@@ -1,7 +1,7 @@
 express = require 'express'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
-expressSession = require 'express-session'
+session = require 'cookie-session'
 colors = require 'colors'
 
 passport = require './lib/auth'
@@ -16,7 +16,7 @@ app.set 'view engine', 'hbs'
 # Handle cookies and sessions and stuff
 app.use cookieParser config.buckets.salt
 app.use bodyParser()
-app.use expressSession secret: config.buckets.salt
+app.use session secret: config.buckets.salt, name: 'buckets'
 
 # Passport deals with any possible auth
 app.use passport.initialize()

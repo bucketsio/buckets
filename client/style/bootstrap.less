@@ -2,6 +2,7 @@
 
 /* Override bootstrap variables after import:
 http://stackoverflow.com/q/13809895/2345415 */
+@yellow: #edb91d;
 
 @brand-primary: #327b91;
 @gray-lighter: #f6f6f6;
@@ -26,3 +27,14 @@ http://stackoverflow.com/q/13809895/2345415 */
 @input-border-focus: @brand-primary;
 
 @border-radius-large: 4px;
+
+
+@tooltip-color: #333;
+@tooltip-bg: fade(@yellow, 70%);
+@tooltip-opacity: .9;
+@tooltip-arrow-width: 4px;
+
+.tooltip {
+  font-family: @font-family-sans-serif;
+  font-weight: 600;
+}
