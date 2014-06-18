@@ -70,8 +70,10 @@ module.exports = (grunt) ->
           'public/css/buckets.css': [
             'public/fontastic/styles.css'
             'public/vendor/**/*.css'
+            '!public/vendor/toastr/*.css'
             'public/css/bootstrap.css'
             'public/css/index.css'
+            'public/css/toastr.css'
           ]
 
     copy:
