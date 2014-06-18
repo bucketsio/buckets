@@ -19,9 +19,8 @@ module.exports = class Layout extends Chaplin.Layout
 
   clickMenuNav: ->
     if @$('.hidden-xs:visible').length is 0
-      _.delay =>
-        @$('.nav-primary').css(display: 'block').slideToggle 150
-      , 100
+      @$('.nav-primary').css(display: 'block').slideToggle 150, =>
+        @$('.nav-primary').toggleClass('hidden-xs').toggle()
 
   initialize: ->
     super
