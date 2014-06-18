@@ -39,6 +39,9 @@
       "js": "dist/js/bootstrap.js",
       "fonts": "dist/fonts/**/*.*"
     },
+    "toastr": {
+      "js": "toastr.js"
+    },
     "/(backbone|chaplin|underscore|jquery|modernizr|handlebars|ace-builds|cocktail)/": {}
   }
 }

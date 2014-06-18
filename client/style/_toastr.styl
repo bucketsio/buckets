@@ -1,21 +1,17 @@
-/* Toastr stylus */
-
-@import "nib"
-
 $toastr-black = black
 $toastr-grey = #999999
 $toastr-light-grey = #CCCCCC
 $toastr-white = white
 $toastr-near-black = #030303
-$toastr-green = #5aa97f
-$toastr-red = #dc5244
-$toastr-blue = #39a0a4
-$toastr-orange = #f3b54e
+$toastr-green = darken($teal, 10)
+$toastr-red = darken($red, 10)
+$toastr-blue = darken($blue, 10)
+$toastr-orange = darken($orange, 10)
 
 wordWrap($wordWrap = break-word)
   -ms-word-wrap $wordWrap
   word-wrap $wordWrap
-  
+
 .toast-title
   font-weight bold
 
@@ -41,7 +37,7 @@ wordWrap($wordWrap = break-word)
   text-shadow 0 1px 0 rgba(255, 255, 255, 1)
   opacity(0.8)
 
-  &:hover 
+  &:hover
   &:focus
     color $toastr-black
     text-decoration none
