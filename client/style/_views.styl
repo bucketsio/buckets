@@ -49,10 +49,37 @@
 
 .bkts-wildcard, code
   border-radius 2px
-  background-color rgba($primary, .3)
   padding 0 6px
   font-weight 600
-  color darken($primary, 30)
+
+.bkts-wildcard-optional
+  @extend .bkts-wildcard
+  background-color rgba($primary, .15)
+  darken($primary, 10)
+  color #999
+
+.bkts-wildcard-param
+  @extend .bkts-wildcard
+  background-color rgba($primary, .3)
+  darken($primary, 30)
+
+.bkts-wildcard-catchall
+  @extend .bkts-wildcard
+  color $primary
+
+.route
+  h2 a:hover
+    text-decoration none
+  .btn-icon
+    opacity 0
+    transition all 200ms ease-in-out
+    transform scale(.8)
+  &:hover .btn-icon
+    opacity 1
+
+
+
+// Entries
 
 .entry-publish
   padding-top 15px
