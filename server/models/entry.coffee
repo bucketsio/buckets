@@ -44,6 +44,7 @@ entrySchema.pre 'save', (next) ->
 
 entrySchema.pre 'validate', (next) ->
   @slug ?= getSlug @title
+  next()
 
 entrySchema.path('publishDate').set (val) ->
   parsed = chrono.parse(val)
