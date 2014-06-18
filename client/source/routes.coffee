@@ -14,8 +14,10 @@ module.exports = (match) ->
   match 'buckets/:slug', 'buckets#listEntries'
   match 'buckets/:slug/add', 'buckets#addEntry'
   match 'buckets/:slug/fields', 'buckets#editFields'
-  match 'buckets/:slug/settings', 'buckets#settings'
-  match 'buckets/:slug/members', 'buckets#listMembers'
+  match 'buckets/:slug/settings/members', 'buckets#settings', params: activeTab: 3
+  match 'buckets/:slug/settings/fields', 'buckets#settings', params: activeTab: 2
+  match 'buckets/:slug/settings', 'buckets#settings', params: activeTab: 1
+
   match 'buckets/:slug/:entryID', 'buckets#editEntry'
 
   match 'templates(/*filename)', 'templates#edit'
