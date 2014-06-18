@@ -43,13 +43,22 @@ module.exports = class RoutesList extends PageView
 
   clickEdit: (e) ->
     e.preventDefault()
-    route = @collection.findWhere _id: @$(e.currentTarget).closest('.route').data('route-id')
 
-    @listenToOnce route, 'sync', =>
-      @subview('editRoute').dispose()
-      @render()
+    $route = @$(e.currentTarget).closest('.route')
+    route = @collection.findWhere _id: $route.data('route-id')
 
-    @subview 'editRoute', new EditRouteView
-      model: route
-      container: @$('.editRoute')
-      templates: @templates
+    if route
+      @listenToOnce route, 'sync', =>
+        @subview('editRoute').dispose()
+        @render()
+
+      subview = @subview 'editRoute', new EditRouteView
+        model: route
+        container: $route
+        containerMethod: 'after'
+        templates: @templates
+
+      $route.hide()
+
+      @listenTo subview, 'dispose', ->
+        $route.show()

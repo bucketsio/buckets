@@ -18,9 +18,9 @@ Handlebars.registerHelper 'gravatar', (email_hash) ->
 
 Handlebars.registerHelper 'highlightWildcards', (path) ->
   new Handlebars.SafeString( path
-    .replace(/(\/?):([a-zA-Z0-9-_]*)\?/g, '<strong class="bkts-wildcard-optional" title="Optional parameter">$1$2</strong>')
-    .replace(/\/:([a-zA-Z0-9-_]*)/g, '/<strong class="bkts-wildcard-param" title="Required parameter">$1</strong>')
-    .replace('*', '<strong class="bkts-wildcard-catchall" title="Catch-all">…</strong>')
+    .replace(/(\/?):([a-zA-Z0-9-_]*)\?/g, '<strong class="bkts-wildcard-optional show-tooltip" title="Optional parameter">$1$2</strong>')
+    .replace(/\/:([a-zA-Z0-9-_]*)/g, '/<strong class="bkts-wildcard-param show-tooltip" title="Required parameter">$1</strong>')
+    .replace('*', '<strong class="bkts-wildcard-catchall show-tooltip" title="Catch-all">…</strong>')
   )
 
 Handlebars.registerHelper 'timeAgo', (dateTime) ->

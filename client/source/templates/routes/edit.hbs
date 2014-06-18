@@ -1,6 +1,6 @@
 <form class="well">
 
-  {{input 'urlPattern' urlPattern placeholder="/myroute/:param"}}
+  {{input 'urlPattern' urlPattern placeholder="/myroute/:param" className="form-control input-lg"}}
   <p class="help-block">Routes are simply URL patterns that map to templates. They can use tokens in the form of <code class="bkts-wildcard">:params</code>.</p>
 
   {{select 'template' template templates valueKey='filename' nameKey='filename'}}
