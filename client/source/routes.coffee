@@ -1,3 +1,4 @@
+ErrorController = require 'controllers/error_controller'
 SettingsController = require 'controllers/settings_controller'
 TemplatesController = require 'controllers/templates_controller'
 BucketsController = require 'controllers/buckets_controller'
