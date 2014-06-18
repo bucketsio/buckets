@@ -27,9 +27,13 @@ module.exports = class TemplateEditor extends PageView
     super
     @$code = @$('textarea.code')
 
-    Modernizr.load
-      load: ["/#{mediator.options.adminSegment}/js/ace/ace.js"]
-      complete: @bindAceEditor
+    unless Modernizr.touch
+      @$code.addClass 'loading'
+      Modernizr.load
+        load: ["/#{mediator.options.adminSegment}/js/ace/ace.js"]
+        complete: @bindAceEditor
+    else
+      @selectTemplate @model.get('filename')
 
   bindAceEditor: =>
     return if @disposed
@@ -41,6 +45,8 @@ module.exports = class TemplateEditor extends PageView
 
     @editorSession = @editor.getSession()
     @editorSession.setMode 'ace/mode/handlebars'
+
+    @$('pre.code, textarea.code').toggleClass 'hidden'
 
     @selectTemplate @model.get('filename')
 
@@ -63,7 +69,7 @@ module.exports = class TemplateEditor extends PageView
 
     @$code.val contents
     @$('[name="filename"]').val filename
-    @editorSession.setValue contents
+    @editorSession?.setValue contents
     @$('.notForIndex').toggleClass 'hide', filename is 'index'
 
   submitForm: (e) ->
