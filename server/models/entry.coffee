@@ -1,5 +1,6 @@
 mongoose = require 'mongoose'
 chrono = require 'chrono-node'
+getSlug = require 'speakingurl'
 
 db = require '../lib/database'
 
@@ -40,6 +41,9 @@ entrySchema = new Schema
 entrySchema.pre 'save', (next) ->
   @lastModified = Date.now()
   next()
+
+entrySchema.pre 'validate', (next) ->
+  @slug ?= getSlug @title
 
 entrySchema.path('publishDate').set (val) ->
   parsed = chrono.parse(val)

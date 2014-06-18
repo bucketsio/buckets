@@ -1,4 +1,5 @@
 Chaplin = require 'chaplin'
+getSlug = require 'speakingurl'
 _ = require 'underscore'
 
 module.exports = class Layout extends Chaplin.Layout
@@ -42,10 +43,9 @@ module.exports = class Layout extends Chaplin.Layout
 
     val = $el.val()
     $target = @$("input[name=\"#{$el.data('sluggify')}\"]")
+    slug = getSlug val
 
-    slug = val.toLowerCase().replace(/\ /g, '-').replace(/[^a-zA-Z0-9-_]/g, '')
     $target.val slug
 
   fadeAwayFadeAway: ->
-
     $('body').css opacity: .85

@@ -72,6 +72,7 @@
     "passport-local": "^1.0.0",
     "path-to-regexp": "^0.1.2",
     "serve-static": "^1.1.0",
+    "speakingurl": "^0.9.1",
     "swag": "^0.7.0",
     "underscore": "^1.6.0",
     "validator": "^3.12.0"
