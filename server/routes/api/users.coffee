@@ -12,7 +12,15 @@ app.route('/users')
       if err
         res.send err, 400
       else
-        res.send newUser, 200
+        # Eventually, this all will move to new "install" API route
+        User.count (err, count) ->
+          res.send err, 400 if err
+
+          if count is 1
+            req.login newUser, ->
+              res.send newUser, 200
+          else
+            res.send newUser, 200
 
   .get (req, res) ->
     User.find {}, (err, users) ->
