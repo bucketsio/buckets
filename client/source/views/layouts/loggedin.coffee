@@ -27,13 +27,14 @@ module.exports = class LoggedInLayout extends View
     @$navLinks = @$('.nav-primary a')
 
   checkNav: (controller, params, route) ->
+    @$('.nav-primary li').removeClass 'active'
+
     return unless route?.path
 
     for link in @$navLinks
       $link = $(link)
       href = $link.attr('href')
       newURL = "/#{mediator.options.adminSegment}/#{route.path}"
-
-      if newURL.substr(0, href.length + 1) is href
-        $link.parent().addClass('active').siblings().removeClass('active')
+      if newURL.substr(0, href.length) is href
+        $link.parent().addClass('active')
         break
