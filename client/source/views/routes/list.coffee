@@ -36,8 +36,9 @@ module.exports = class RoutesList extends PageView
 
   clickDelete: (e) ->
     e.preventDefault()
-    if confirm 'Are you sure?'
-      model = @collection.findWhere _id: @$(e.currentTarget).closest('.route').data('route-id')
+    model = @collection.findWhere _id: @$(e.currentTarget).closest('.route').data('route-id')
+    if model and confirm "Are you sure you want to delete “#{model.get('urlPattern')}”?"
+
       model.destroy(wait: yes).done ->
         toastr.success 'Route deleted'
 
