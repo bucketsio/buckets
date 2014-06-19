@@ -10,9 +10,6 @@ module.exports = class LoggedInLayout extends View
   autoRender: yes
   container: '#bkts-content'
 
-  events:
-    'click .nav-primary a': 'clickNav'
-
   regions:
     content: '.page'
 
@@ -22,8 +19,21 @@ module.exports = class LoggedInLayout extends View
 
   initialize: ->
     super
+    @subscribeEvent 'dispatcher:dispatch', @checkNav
     @listenTo mediator.buckets, 'sync add', => @render()
 
-  clickNav: (e) ->
-    $el = @$(e.currentTarget)
-    $el.closest('li').addClass('active').siblings().removeClass('active')
+  render: ->
+    super
+    @$navLinks = @$('.nav-primary a')
+
+  checkNav: (controller, params, route) ->
+    return unless route?.path
+
+    for link in @$navLinks
+      $link = $(link)
+      href = $link.attr('href')
+      newURL = "/#{mediator.options.adminSegment}/#{route.path}"
+
+      if newURL.substr(0, href.length + 1) is href
+        $link.parent().addClass('active').siblings().removeClass('active')
+        break
