@@ -34,7 +34,8 @@ module.exports = class EditUserView extends View
       data.roles = _.reject data.roles, (r)->
         r.name =='administrator'
 
-    @submit @model.save(data, wait: yes)
+    @submit(@model.save(data, wait: yes)).done ->
+      toastr.success "Saved #{@model.get('name')}"
 
   clickRemove: (e) ->
     e.preventDefault()
