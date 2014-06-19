@@ -28,7 +28,7 @@ userSchema = new Schema
     lowercase: true
     trim: true
     unique: true
-  password:
+  passwordDigest:
     type: String
     required: true
   activated:
@@ -42,8 +42,8 @@ userSchema = new Schema
     default: Date.now
   roles: [roleSchema]
 
-userSchema.methods.authenticate = (password, callback) ->
-  bcrypt.compareSync password, @password
+userSchema.methods.authenticate = (password) ->
+  bcrypt.compareSync password, @passwordDigest
 
 userSchema.methods.getBuckets = (callback) ->
   @getResources('Bucket', callback)
@@ -55,17 +55,28 @@ userSchema.methods.getResources = (type, callback) ->
     q = _id: $in: ids
   @model(type).find(q).exec(callback)
 
-userSchema.methods.upsertRole = (roleName, resource, callback) ->
+userSchema.methods.addRole = (roleName, resource, callback) ->
+  if (!resource? || _.isFunction(resource))
+    return resource?(null, @) if @hasRole(roleName)
 
-  resourceRoles = @getRolesForModel resource
+    @roles.push({ name: roleName })
+    @save(resource)
+  else
+    return callback?(null, @) if @hasRole(roleName, resource)
+
+    @roles.push({ name: roleName, resource: resource })
+    @save(callback)
+
+userSchema.methods.upsertRole = (roleName, resource, callback) ->
+  resourceRoles = @getRolesForResource(resource)
 
   if resourceRoles.length
     r.name = roleName for r in resourceRoles
     @roles = resourceRoles
   else
-    @roles.push name: roleName, resource: resource
+    @roles.push({ name: roleName, resource: resource })
 
-  @save callback
+  @save(callback)
 
 userSchema.methods.removeRole = (resource, callback) ->
   r.remove() for r in @getRoles(resource)
@@ -73,28 +84,24 @@ userSchema.methods.removeRole = (resource, callback) ->
 
 # roleNames can be a String or Array
 # Resource can be a String (just a resourceType) or document
-
 userSchema.methods.hasRole = (roleNames, resource) ->
-  return true if _.findWhere @roles, name: 'administrator'
+  return true if _.findWhere(@roles, name: 'administrator')
 
-  roles = @getRoles resource
+  roles = @getRoles(resource)
+  roleNames = if _.isString(roleNames) then [roleNames] else roleNames
 
-  if _.isString roleNames
-    _.findWhere roles, name: roleNames
-  else if _.isArray roleNames
-    _.where( roles, (role) ->
-        role.name in roleNames
-    ).length > 0
+  _.any roles, (role) ->
+    _.contains(roleNames, role.name)
 
 userSchema.methods.getRoles = (resource) ->
   if resource?._id
-    @getRolesForModel resource
+    @getRolesForResource resource
   else if _.isString resource
     @getRolesForType resource
 
-userSchema.methods.getRolesForModel = (resource) ->
+userSchema.methods.getRolesForResource = (resource) ->
   @roles.filter (role) ->
-    role.name if role.resourceId is resource._id or !role.resourceId
+    resource._id.equals(role.resourceId)
 
 userSchema.methods.getRolesForType = (resourceType) ->
   @roles.filter (role) ->
@@ -103,12 +110,25 @@ userSchema.methods.getRolesForType = (resourceType) ->
 userSchema.virtual('email_hash').get ->
   crypto.createHash('md5').update(@email).digest('hex') if @email
 
-userSchema.path('password').validate (value) ->
-  /^(?=[^\d_].*?\d)\w(\w|[!@#$%]){5,20}/.test value
-, 'Your password must be between 6–20 characters, start with a letter, and include a number.'
+passwordVirtual = userSchema.virtual('password')
 
-userSchema.post 'validate', ->
-  @password = bcrypt.hashSync @password, bcrypt.genSaltSync()
+passwordVirtual.get ->
+  @_password
+
+passwordVirtual.set (password) ->
+  @_password = password
+  @passwordDigest = bcrypt.hashSync(password, bcrypt.genSaltSync())
+
+userSchema.path('passwordDigest').validate (value) ->
+  if (@isNew && !@password?)
+    @invalidate('password', 'required')
+
+  if @password? && !/^(?=[^\d_].*?\d)\w(\w|[!@#$%]){5,20}/.test(@password)
+    @invalidate('password', 'must be between 6–20 characters, start with a letter, and include a number')
+, null
+
+userSchema.post 'save', ->
+  @_password = null
 
 userSchema.plugin uniqueValidator, message: '“{VALUE}” is already a user.'
 
