@@ -32,9 +32,7 @@
         {{/hasRole}}
         <li class="divider"></li>
         <li class="usernav">
-          {{gravatar email_hash}}
-
-          <a href="/{{adminSegment}}/users/{{email}}">{{name}}</a>
+          <a href="/{{adminSegment}}/users/{{email}}">{{gravatar email_hash}} {{name}}</a>
         </li>
         <li class="logout">
           <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
