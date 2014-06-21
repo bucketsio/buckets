@@ -32,17 +32,27 @@
   > li > a
     padding-left 40px
 
-  a:first-child:active
+  li:active
     position relative
     top 1px
+
+
+  a:first-child
+    padding-right 40px
+    white-space nowrap
+    overflow hidden
+    text-overflow ellipsis
+
 
   a:first-child .icon
     position absolute
     left 8px
     top 8px
     font-size 24px
-    vertical-align middle
     margin-right 4px
+    vertical-align middle
+
+  .icon
     color #888
 
   .bucket-add
@@ -54,6 +64,7 @@
     .icon
       top 2px
       position relative
+      font-size 13px
 
   li.divider
     border-bottom 1px solid rgba($primary, .15)
