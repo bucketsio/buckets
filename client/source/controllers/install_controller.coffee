@@ -16,5 +16,7 @@ module.exports = class InstallController extends Controller
       model: newUser
 
     newUser.on 'sync', =>
+      mediator.user = newUser
       mediator.options.needsInstall = no
+
       @redirectTo url: '/'

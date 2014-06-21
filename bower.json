@@ -13,7 +13,6 @@
     "test",
     "tests"
   ],
-  "dependencies": {},
   "devDependencies": {
     "bootstrap": "~3.1.1",
     "chaplin": "~1.0.0",
@@ -25,7 +24,8 @@
     "underscore": "~1.6.0",
     "moment": "~2.6.0",
     "ace-builds": "~1.1.3",
-    "cocktail": "~0.5.7"
+    "cocktail": "~0.5.7",
+    "fastclick": "~1.0.2"
   },
   "exportsOverride": {
     "jquery.formParams": {

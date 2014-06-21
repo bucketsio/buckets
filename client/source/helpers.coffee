@@ -41,9 +41,16 @@ Handlebars.registerHelper 'simpleDateTime', (dateTime) ->
 Handlebars.registerHelper 'debug', ->
   console.log @, arguments
 
+Handlebars.registerHelper 'logo', ->
+  new Handlebars.SafeString """
+    <h1 id="logo">
+      <a href="/#{mediator.options.adminSegment}/"><img src="/#{mediator.options.adminSegment}/img/buckets.svg"></a>
+      <span class="version-badge">pre-alpha</span>
+    </h1>
+  """
+
 Handlebars.registerHelper 'hasRole', (role..., options) ->
   if mediator.user?.hasRole role...
     options.fn @
   else
     options.inverse @
-

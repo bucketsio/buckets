@@ -63,7 +63,7 @@
     "handlebars": "^1.3.0",
     "hbs": "^2.6.0",
     "hbsfy": "^1.3.2",
-    "lingo": "0.0.5",
+    "inflection": "^1.3.6",
     "mongoose": "^3.8.11",
     "mongoose-regexp": "0.0.1",
     "mongoose-unique-validator": "^0.3.0",

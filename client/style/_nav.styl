@@ -25,17 +25,34 @@
   display inline-block
   font-family $sans
 
+.btn-menu
+  margin-top 22px
+
 .nav-primary
   > li > a
     padding-left 40px
 
-  .icon
+  li:active
+    position relative
+    top 1px
+
+
+  a:first-child
+    padding-right 40px
+    white-space nowrap
+    overflow hidden
+    text-overflow ellipsis
+
+
+  a:first-child .icon
     position absolute
     left 8px
     top 8px
     font-size 24px
-    vertical-align middle
     margin-right 4px
+    vertical-align middle
+
+  .icon
     color #888
 
   .bucket-add
@@ -43,6 +60,11 @@
     top 0
     right 0
     padding-left 15px
+
+    .icon
+      top 2px
+      position relative
+      font-size 13px
 
   li.divider
     border-bottom 1px solid rgba($primary, .15)
@@ -76,6 +98,6 @@ addColor('purple', $purple)
 .usernav .avatar
   transform scale(.8)
   transform-origin 0 50%
-  @extend .nav-primary .icon
+  @extend .nav-primary a:first-child .icon
   top 4px
   z-index 10

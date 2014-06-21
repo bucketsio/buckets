@@ -1,4 +1,4 @@
-lingo = require 'lingo'
+inflection = require 'inflection'
 mongoose = require 'mongoose'
 uniqueValidator = require 'mongoose-unique-validator'
 
@@ -63,7 +63,7 @@ bucketSchema.set 'toJSON', virtuals: true
 
 bucketSchema.pre 'validate', (next) ->
   # Auto add singular if not provided
-  @singular ?= lingo.en.singularize @name
+  @singular ?= inflection.singularize @name
   next()
 
 # Make sure it contains :slug
