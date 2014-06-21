@@ -30,7 +30,8 @@ module.exports = class TemplateEditor extends PageView
     unless Modernizr.touch
       @$code.addClass 'loading'
       Modernizr.load
-        load: ["/#{mediator.options.adminSegment}/js/ace/ace.js"]
+        test: ace?
+        nope: "/#{mediator.options.adminSegment}/js/ace/ace.js"
         complete: @bindAceEditor
     else
       @selectTemplate @model.get('filename')
