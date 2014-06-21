@@ -2,6 +2,8 @@ Chaplin = require 'chaplin'
 getSlug = require 'speakingurl'
 _ = require 'underscore'
 
+mediator = Chaplin.mediator
+
 module.exports = class Layout extends Chaplin.Layout
 
   regions:
@@ -40,6 +42,13 @@ module.exports = class Layout extends Chaplin.Layout
     # Add delegated tooltip for all help icons
     @$el.tooltip
       selector: '.show-tooltip'
+
+    # Add Fastclick for touch devices
+    Modernizr.load
+      test: Modernizr.touch
+      yep: "/#{mediator.options.adminSegment}/vendor/fastclick/fastclick.js"
+      complete: ->
+        FastClick?.attach document.body
 
   keyUpSluggify: (e) ->
     $el = @$(e.currentTarget)

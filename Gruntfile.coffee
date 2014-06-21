@@ -150,10 +150,15 @@ module.exports = (grunt) ->
       vendor:
         dest: 'public/js/vendor.js'
         src: [
+          # Order matters for some
           'public/vendor/spin.js/spin.js'
           'public/vendor/ladda/js/ladda.js'
           'public/vendor/ladda/js/ladda.jquery.js'
+
           'public/vendor/**/*.js'
+
+          # Remove some which we’ll load on the fly
+          '!public/vendor/fastclick/fastclick.js'
         ]
         filter: 'isFile'
 
