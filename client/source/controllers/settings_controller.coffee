@@ -21,7 +21,7 @@ module.exports = class SettingsController extends Controller
           if params.email
             @user = @users.findWhere email: params.email
           else
-            @user = @users?.at(0) unless @user
+            @user = null
 
           @view = new UsersList
             collection: @users

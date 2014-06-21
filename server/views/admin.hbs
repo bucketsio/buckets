@@ -42,6 +42,7 @@
           window.bkts = new App({
 
             adminSegment: '{{adminSegment}}'
+            ,apiSegment: '{{apiSegment}}'
 
             {{#if needsInstall}}
               ,needsInstall: {{needsInstall}}
@@ -53,6 +54,7 @@
           });
         } catch (e) {
           if (e && e.message && window.jQuery) {
+            console.error(e);
             $('#bkts-content').append("<div class=\"container\"><div class=\"alert center alert-danger\"><strong>There was an error loading the Buckets JavaScript.</strong> <br>If you’re the site developer, have you run <code>grunt build</code> or <code>grunt dev</code>?</div></div>")
           }
         }

@@ -31,8 +31,8 @@ module.exports = class EditUserView extends View
     if data.admin
       data.roles.push name: 'administrator' unless @model.hasRole('administrator')
     else
-      data.roles = _.reject data.roles, (r)->
-        r.name =='administrator'
+      data.roles = _.reject data.roles, (r) ->
+        r.name is 'administrator'
 
     @submit(@model.save(data, wait: yes)).done ->
       toastr.success "Saved #{@model.get('name')}"
