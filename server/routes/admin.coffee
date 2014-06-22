@@ -13,7 +13,7 @@ hbs.registerHelper 'json', (context) ->
 
 app.set 'views', "#{__dirname}/../views"
 app.use compress()
-app.use express.static '#{__dirname}/../public/', maxAge: 86400000 # One day
+app.use express.static '#{__dirname}/../public/', maxAge: 86400000 * 7 # One week
 
 # Special case for install
 app.post '/login', passport.authenticate('local', failureRedirect: "/#{config.buckets.adminSegment}/login"), (req, res, next) ->
