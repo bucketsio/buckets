@@ -27,11 +27,11 @@ module.exports = class LoggedInLayout extends View
     @$navLinks = @$('.nav-primary a')
 
     @navTimeline ?= new TimelineLite
-    @navTimeline.staggerFrom @$('.nav-primary li'), .2,
+    @navTimeline.staggerFrom @$('.nav-primary li'), .15,
       y: '30px'
       opacity: 0
       ease: Back.easeOut
-    , .05
+    , .02
 
     @navTimeline.play()
 
