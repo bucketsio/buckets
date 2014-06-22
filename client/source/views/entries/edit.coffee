@@ -11,6 +11,7 @@ module.exports = class EntryEditView extends PageView
   events:
     'submit form': 'submitForm'
     'click [href="#delete"]': 'clickDelete'
+    'click [href="#draft"]': 'clickDraft'
 
   getTemplateData: ->
     fields = @bucket.get('fields')
@@ -34,6 +35,11 @@ module.exports = class EntryEditView extends PageView
 
   submitForm: (e) ->
     e.preventDefault()
+    status = @model.get('status')
+    @model.set status: 'draft' if status is 'draft'
+    @model.set status: 'live' unless @model.get('_id')
+
+    @model.set('status', 'live')
     @submit @model.save(@formParams(), wait: yes)
 
   clickDelete: (e) ->
@@ -55,5 +61,10 @@ module.exports = class EntryEditView extends PageView
           $el.remove()
 
     super
+
+  clickDraft: (e) ->
+    e.preventDefault()
+    @model.set('status', 'draft')
+    @submit @model.save(@formParams(), wait: yes)
 
   @mixin FormMixin

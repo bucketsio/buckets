@@ -23,11 +23,15 @@ app.route('/buckets')
 
 app.route('/buckets/:bucketID')
   .delete (req, res) ->
-    Bucket.remove _id: req.params.bucketID, (err) ->
+    Bucket.findOne _id: req.params.bucketID, (err, bkt) ->
       if err
         res.send 400, err
       else
-        res.send 200, {}
+        bkt.remove (err, count) ->
+          if err
+            res.send 400, err
+          else
+            res.send 200, {}
 
   .put (req, res) ->
     delete req.body._id

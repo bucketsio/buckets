@@ -10,7 +10,7 @@
 {{#each items}}
   <div class="entry">
     <h3><a href="/{{adminSegment}}/buckets/{{../bucket.slug}}/{{id}}">{{title}}</a></h3>
-    <h4>{{gravatar author.email_hash}} <a href="/{{adminSegment}}/users/{{author.email}}">{{author.name}}</a> · {{timeAgo publishDate}}</h4>
+    <h4>{{gravatar author.email_hash}} &nbsp;<a href="/{{adminSegment}}/users/{{author.email}}">{{author.name}}</a> · {{#is status 'draft'}}<span class="label label-default">{{status}}</span>{{/is}} {{timeAgo publishDate}}</h4>
   </div>
 {{else}}
   <div class="center">
