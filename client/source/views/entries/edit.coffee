@@ -29,8 +29,8 @@ module.exports = class EntryEditView extends PageView
     TweenLite.from @$('.panel'), .5,
       scale: .7
       opacity: 0
-      ease: Elastic.easeOut
-      easeParams: [.5, 1.2]
+      ease: Elastic.easeInOut
+      easeParams: [.4, 1.1]
 
   submitForm: (e) ->
     e.preventDefault()
@@ -46,11 +46,11 @@ module.exports = class EntryEditView extends PageView
   dispose: ->
     if @keepElement and @$el
       $el = @$el.css position: 'absolute', width: '100%'
-      TweenLite.to $el, .25,
-        scale: .8
+      TweenLite.to $el, .4,
+        scale: .98
         opacity: 0
-        y: '+300px'
-        rotate: '3deg'
+        y: '+200px'
+        rotate: 1
         onComplete: ->
           $el.remove()
 
