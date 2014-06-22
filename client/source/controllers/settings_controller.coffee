@@ -28,7 +28,7 @@ module.exports = class SettingsController extends Controller
             model: @user
 
       check: (options) ->
-        if options.email isnt @view.model.get('id')
+        if options.email isnt @view.model?.get('id')
           @view.selectUser @users.findWhere(email: options.email)
         @view?
       options:
