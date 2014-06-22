@@ -44,7 +44,7 @@ Handlebars.registerHelper 'debug', ->
 Handlebars.registerHelper 'logo', ->
   new Handlebars.SafeString """
     <h1 id="logo">
-      <a href="/#{mediator.options.adminSegment}/"><img src="/#{mediator.options.adminSegment}/img/buckets.svg"></a>
+      <a href="/#{mediator.options.adminSegment}/"><img src="/#{mediator.options.adminSegment}/img/buckets.svg" width="46" height="41"></a>
       <span class="version-badge">pre-alpha</span>
     </h1>
   """

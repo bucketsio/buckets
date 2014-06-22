@@ -2,18 +2,16 @@
   {{hidden 'author' user._id}}
   {{hidden 'bucket' bucket._id}}
 
-  {{#if _id}}
-    <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
-    <h1>Edit {{bucket.singular}}</h1>
-  {{else}}
-    <h1>New {{bucket.singular}}</h1>
-  {{/if}}
-
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
+      {{#if _id}}
+        <h1>Edit {{bucket.singular}}</h1>
+      {{else}}
+        <h1>New {{bucket.singular}}</h1>
+      {{/if}}
       <div class="panel panel-default">
         <div class="panel-body">
-          {{input 'title' title placeholder=newTitle sluggify='slug' className="input-lg form-control"}}
+          {{input 'title' title placeholder=newTitle sluggify='slug' className="input-lg form-control" label="Title"}}
 
           {{!-- Probably have to use subviews soon --}}
           {{#each fields}}
@@ -34,7 +32,9 @@
 
           <div class="row entry-publish">
             <div class="col-sm-6">
-              {{input 'publishDate' publishDate placeholder="ie. Next tuesday or now" label="Schedule Publish Date"}}
+              <div class="dateInput hidden">
+                {{input 'publishDate' publishDate placeholder="ie. Next tuesday or now" label="Schedule Publish Date"}}
+              </div>
             </div>
             <div class="col-sm-6">
               <br>
@@ -49,19 +49,21 @@
                    </ul>
                 </div>
               </div>
+              <div class="pull-right">
+                {{#if _id}}
+                  <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
+                {{/if}}
+              </div>
             </div>
           </div>
-          <div class="clearfix"></div>
+          <hr class="clearfix">
+          <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
+          <div id="meta" class="collapse">
+            {{input 'slug' slug label="Slug"}}
+            {{input 'keywords' keywords label="Keywords"}}
+            {{textarea 'description' description label="Description"}}
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
-      <div id="meta" class="collapse">
-        {{input 'slug' slug label="Slug"}}
-        {{input 'keywords' keywords label="Keywords"}}
-        {{textarea 'description' description label="Description"}}
       </div>
     </div>
   </div>
