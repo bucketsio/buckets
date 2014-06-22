@@ -20,9 +20,16 @@ module.exports = (grunt) ->
         browserifyOptions:
           fullPaths: true
           basedir: './client/source/'
-          commondir: './client/source/'
+          commondir: "#{__dirname}/client/source/"
           extensions: ['.coffee', '.hbs']
           paths: ['./client/source', 'node_modules']
+          detectGlobals: no # Disable "detect-globals" for faster build
+          noParse: [
+            './bower_components/backbone/backbone.js'
+            './bower_components/chaplin/chaplin.js'
+            './bower_components/cocktail/Cocktail.js'
+            './bower_components/underscore/underscore.js'
+          ]
         alias: [
           './bower_components/backbone/backbone.js:backbone'
           './bower_components/chaplin/chaplin.js:chaplin'
