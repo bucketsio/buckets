@@ -80,7 +80,7 @@ module.exports = class TemplateEditor extends PageView
     data = @formParams()
 
     @model.save(data).done =>
-      toastr.success 'Saved Template'
+      toastr.success "Saved Template “#{@model.get('filename')}”"
       @collection.add @model
 
   clickNew: (e) ->
