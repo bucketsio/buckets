@@ -76,6 +76,9 @@ bucketSchema.path('urlPattern').validate (value) ->
 
 bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
 
+bucketSchema.post 'remove', ->
+  @model('Entry').remove({bucket: @_id}).exec()
+
 bucketSchema.methods.getMembers = (callback) ->
   @model('User').find
     roles:
