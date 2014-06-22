@@ -25,7 +25,6 @@ module.exports = (grunt) ->
           paths: ['./client/source', 'node_modules']
         alias: [
           './bower_components/backbone/backbone.js:backbone'
-          './bower_components/jquery/dist/jquery.js:jquery'
           './bower_components/chaplin/chaplin.js:chaplin'
           './bower_components/cocktail/Cocktail.js:cocktail'
           './bower_components/underscore/underscore.js:underscore'
