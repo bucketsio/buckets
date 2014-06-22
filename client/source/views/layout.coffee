@@ -12,6 +12,7 @@ module.exports = class Layout extends Chaplin.Layout
   events:
     'keyup input[data-sluggify]': 'keyUpSluggify'
     'click [href="#menu"]': 'clickMenu'
+    'mouseup #logo a': 'clickLogo'
     'click .nav-primary a': 'clickMenuNav'
     'click .logout a': 'fadeAwayFadeAway'
 
@@ -61,3 +62,19 @@ module.exports = class Layout extends Chaplin.Layout
 
   fadeAwayFadeAway: ->
     $('body').css opacity: .85
+
+  clickLogo: (e) ->
+    e.preventDefault()
+
+    @$logoImg ?= $('#logo img')
+
+    TweenLite.killTweensOf @$logoImg
+
+    TweenLite.from @$logoImg, .5,
+      scaleX: .65
+      ease: Elastic.easeOut
+    TweenLite.from @$logoImg, .5,
+      scaleY: .65
+      delay: .05
+      ease: Elastic.easeOut
+      immediateRender: yes
