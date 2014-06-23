@@ -6,8 +6,8 @@ module.exports =
     _.defer =>
       return if @disposed
 
-      # Automatically focus the first visible input
-      @$('.form-control:visible').eq(0).focus()
+      # Automatically focus the first visible input (on non-touch devices)
+      @$('.form-control:visible').eq(0).focus() unless Modernizr.touch
 
   formParams: ->
     # Uses jQuery formParams, but don't try to convert number values to numbers, etc.
