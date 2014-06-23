@@ -6,8 +6,9 @@ module.exports =
     _.defer =>
       return if @disposed
 
-      # Automatically focus the first visible input
-      @$('.form-control:visible').eq(0).focus()
+      # Automatically focus the first visible input (on non-touch devices)
+      @$('.form-control:visible').eq(0).focus() unless Modernizr.touch
+
       # Prepare any submit buttons for Ladda
       @$btn = @$('.ladda-button').ladda()
 
