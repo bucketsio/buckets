@@ -40,32 +40,33 @@ module.exports = class BucketsController extends Controller
   listEntries: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
 
-    if bucket
-      @adjustTitle bucket.get('name')
+    return @bucketNotFound() unless bucket
+    @adjustTitle bucket.get('name')
 
-      @entries = new Entries
+    @entries = new Entries
 
-      @entries.fetch( data: {bucket: bucket.get('id')}, processData: yes ).done =>
-        @view = new EntriesList
-          collection: @entries
-          bucket: bucket
+    @entries.fetch( data: {bucket: bucket.get('id')}, processData: yes ).done =>
+      @view = new EntriesList
+        collection: @entries
+        bucket: bucket
 
   addEntry: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
 
-    if bucket
-      @adjustTitle 'New ' + bucket.get('singular')
+    return @bucketNotFound() unless bucket
 
-      @entry = new Entry
+    @adjustTitle 'New ' + bucket.get('singular')
 
-      @listenToOnce @entry, 'sync', =>
-        toastr.success 'Entry added'
-        @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+    @entry = new Entry
 
-      @view = new EntryEditView
-        model: @entry
-        bucket: bucket
-        user: mediator.user
+    @listenToOnce @entry, 'sync', =>
+      toastr.success 'Entry added'
+      @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+
+    @view = new EntryEditView
+      model: @entry
+      bucket: bucket
+      user: mediator.user
 
   editEntry: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
@@ -95,6 +96,8 @@ module.exports = class BucketsController extends Controller
   settings: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
 
+    return @bucketNotFound unless bucket
+
     @listenToOnce bucket, 'sync', (bucket, data) =>
       mediator.buckets.fetch(reset: yes)
 
@@ -105,35 +108,37 @@ module.exports = class BucketsController extends Controller
         toastr.success 'Bucket deleted'
         @redirectTo 'buckets#dashboard'
 
-    if bucket
-      @adjustTitle 'Edit ' + bucket.get('name')
+    @adjustTitle 'Edit ' + bucket.get('name')
 
-      @reuse 'BucketSettings',
-        compose: (options) ->
-          console.log 'composing', arguments
-          @members = new Members bucketId: bucket.get('id')
-          @users = new Users
-          @fields = new Fields bucket.get('fields')
+    @reuse 'BucketSettings',
+      compose: (options) ->
+        @members = new Members bucketId: bucket.get('id')
+        @users = new Users
+        @fields = new Fields bucket.get('fields')
 
-          $.when(
-            @members.fetch()
-            @users.fetch()
-          ).done =>
+        $.when(
+          @members.fetch()
+          @users.fetch()
+        ).done =>
 
-            @view = new BucketEditView
-              model: bucket
-              fields: @fields
-              members: @members
-              users: @users
+          @view = new BucketEditView
+            model: bucket
+            fields: @fields
+            members: @members
+            users: @users
 
-            @view?.setActiveTab options.activeTab if options.activeTab
-
-        check: (options) ->
           @view?.setActiveTab options.activeTab if options.activeTab
-          @view?
 
-        options:
-          activeTab: params.activeTab
+      check: (options) ->
+        @view?.setActiveTab options.activeTab if options.activeTab
+        @view?
+
+      options:
+        activeTab: params.activeTab
+
+  bucketNotFound: ->
+    toastr.error 'Could not find that bucket.'
+    @redirectTo 'buckets#dashboard'
 
   missing: ->
     console.log 'Page missing!', arguments
