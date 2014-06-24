@@ -42,42 +42,33 @@ describe 'User', ->
           assert.equal(e.errors.password.message, 'Your password must be between 6–20 characters, start with a letter, and include a number')
           done()
 
-  describe '#addRole', ->
+  describe '#upsertRole', ->
     describe 'when a role is passed', ->
-      it 'adds the global role', (done) ->
-        user.addRole 'administrator', ->
-          assert.lengthOf(user.roles, 1)
-          user.addRole 'administrator', ->
+      describe 'when user does not have the role', ->
+        it 'adds the global role', (done) ->
+          user.upsertRole 'administrator', ->
             assert.lengthOf(user.roles, 1)
-            done()
-
-    describe 'when a role and a resource are passed', ->
-      it 'adds the scoped role', (done) ->
-        user.addRole 'editor', bucket, ->
-          assert.lengthOf(user.roles, 1)
-          user.addRole 'ninja', bucket, ->
-            assert.lengthOf(user.roles, 2)
-            user.addRole 'editor', bucket, ->
-              assert.lengthOf(user.roles, 2)
+            user.upsertRole 'administrator', ->
+              assert.lengthOf(user.roles, 1)
               done()
 
-  describe '#upsertRole', ->
-    describe 'when user does not have a role for a resource', ->
-      it 'adds a role for the given resource', (done) ->
-        user.upsertRole 'editor', bucket, ->
-          assert.lengthOf(user.roles, 1)
-          assert.equal(user.roles[0].name, 'editor')
-          done()
+    describe 'when a role and a resource are passed', ->
+      describe 'when user does not have a role for a resource', ->
+        it 'adds a role for the given resource', (done) ->
+          user.upsertRole 'editor', bucket, ->
+            assert.lengthOf(user.roles, 1)
+            assert.equal(user.roles[0].name, 'editor')
+            done()
 
-    describe 'when user has a role for a resource', ->
-      beforeEach (done) ->
-        user.upsertRole('editor', bucket, done)
+      describe 'when user has a role for a resource', ->
+        beforeEach (done) ->
+          user.upsertRole('editor', bucket, done)
 
-      it 'updates the role for a given resource', (done) ->
-        user.upsertRole 'contributor', bucket, (e, u) ->
-          assert.lengthOf(user.roles, 1)
-          assert.equal(user.roles[0].name, 'contributor')
-          done()
+        it 'updates the role for a given resource', (done) ->
+          user.upsertRole 'contributor', bucket, (e, u) ->
+            assert.lengthOf(user.roles, 1)
+            assert.equal(user.roles[0].name, 'contributor')
+            done()
 
   describe '#removeRole', ->
     beforeEach (done) ->
@@ -104,7 +95,7 @@ describe 'User', ->
 
     describe 'when user is administrator', ->
       beforeEach (done) ->
-        user.addRole('administrator', done)
+        user.upsertRole('administrator', done)
 
       it 'returns true', ->
         assert.isTrue(user.hasRole('administrator'))
@@ -131,7 +122,7 @@ describe 'User', ->
   describe '#getResources', ->
     describe 'when user is administrator', ->
       beforeEach (done) ->
-        user.addRole('administrator', done)
+        user.upsertRole('administrator', done)
 
       it 'returns all buckets', (done) ->
         user.getBuckets (e, buckets) ->

@@ -55,19 +55,19 @@ userSchema.methods.getResources = (type, callback) ->
     q = _id: $in: ids
   @model(type).find(q).exec(callback)
 
-userSchema.methods.addRole = (roleName, resource, callback) ->
-  if (!resource? || _.isFunction(resource))
-    return resource?(null, @) if @hasRole(roleName)
-
-    @roles.push({ name: roleName })
-    @save(resource)
-  else
-    return callback?(null, @) if @hasRole(roleName, resource)
-
-    @roles.push({ name: roleName, resource: resource })
-    @save(callback)
-
 userSchema.methods.upsertRole = (roleName, resource, callback) ->
+  if (!resource? || _.isFunction(resource))
+    @upsertGlobalRole(roleName, resource)
+  else
+    @upsertScopedRole(roleName, resource, callback)
+
+userSchema.methods.upsertGlobalRole = (roleName, callback) ->
+  return callback?(null, @) if @hasRole(roleName)
+
+  @roles.push({ name: roleName })
+  @save(callback)
+
+userSchema.methods.upsertScopedRole = (roleName, resource, callback) ->
   resourceRoles = @getRolesForResource(resource)
 
   if resourceRoles.length
