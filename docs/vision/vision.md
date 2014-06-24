@@ -7,7 +7,7 @@ Buckets primary mission is to help people manage content better. It serves many 
 ## General Philosophies
 
 * Content management should be de-coupled from web publishing
-* Managing content should not feel like administering a database
+* Managing content should not feel like administrating a database
 * Open Source software can have the same level of polish and detail as world-class social services
 * Delight plays a critical role in the user experience. Speed, animations, and intuitive interfaces are all major priorities.
 * Leverage and expose portions of the technical stack with a simple interface to keep the architecture light, but consumer-usable.
