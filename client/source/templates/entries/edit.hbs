@@ -11,7 +11,7 @@
       {{/if}}
       <div class="panel panel-default">
         <div class="panel-body">
-          {{input 'title' title placeholder=newTitle sluggify='slug' className="input-lg form-control" label="Title"}}
+          {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug className="input-lg form-control" label="Title"}}
 
           {{!-- Probably have to use subviews soon --}}
           {{#each fields}}

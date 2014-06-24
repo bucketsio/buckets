@@ -106,3 +106,20 @@ h4[data-toggle]
 p.intro
   font-size 18px
   color #666
+
+.input-slug
+  background-color lighten($primary, 45)
+  font-family Menlo, 'Courier New', monospace
+  margin-top -2px
+  border-radius top 0, bottom 6px
+  color rgba(darken($primary, 40), .4)
+
+  &:focus
+    color darken($primary, 20)
+
+.has-slug
+  border-radius bottom 0
+
+  &:focus
+    position relative
+    z-index 10
