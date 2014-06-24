@@ -77,7 +77,7 @@ Handlebars.registerHelper 'textarea', (name, value, options) ->
   , value
 
   if settings.label
-    wrap textarea, label: settings.label
+    wrap textarea, label: settings.label, help: settings.help
   else
     textarea
 

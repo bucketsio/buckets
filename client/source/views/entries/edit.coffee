@@ -5,7 +5,7 @@ FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/entries/edit'
 
 module.exports = class EntryEditView extends PageView
-
+  className: 'EntryEditView'
   template: tpl
   optionNames: PageView::optionNames.concat ['bucket', 'user']
 

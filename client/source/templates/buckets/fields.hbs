@@ -1,27 +1,32 @@
-{{#unless length}}
-  <h4>Add your first custom field</h4>
-{{/unless}}
+<p class="intro">Custom fields define what your bucket holds.</p>
 
-<p>Add custom fields to define what your Bucket holds.</p>
-
-<div class="editForm"></div>
 
 <div class="row">
   <div class="col-sm-6">
-    {{select 'fieldType' '' fieldTypes valueKey="value"}}
+    {{select 'fieldType' '' fieldTypes valueKey="value" className="form-control input-lg"}}
   </div>
 </div>
 
+<div class="editField"></div>
 
-{{debug}}
+{{#if length}}
+  <table class="table">
+  <tr>
+    <th colspan="2">Name</th>
+    <th>Type</th>
+    <th></th>
+  {{#each items}}
+    <tr>
+      <td><code>\{{{{slug}}<span></span>}}</code></td>
+      <td>{{name}}</td>
+      <td class="text-muted">{{fieldType}}</td>
+      <td valign="middle">
+        <a href="#edit" class="btn btn-default btn-xs">Edit</a>
+        <a href="#remove" class="btn btn-link btn-sm">{{icon 'trash'}}</a>
+      </td>
+    </tr>
+  {{/each}}
+  </table>
+{{/if}}
 
-<ul>
-{{#each items}}
-  <li>
-    {{name}} <small>{{fieldType}}</small> <a href="#edit" class="btn btn-default btn-xs">Edit</a>
-  </li>
-{{/each}}
-</ul>
-
-{{checkbox 'titleRequired' titleRequired label="Require a title for each entry"}}
-{{checkbox 'includeMeta' titleRequired label="Include keywords and description by default"}}
+{{submit 'Save'}}
