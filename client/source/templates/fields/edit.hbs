@@ -1,21 +1,22 @@
 <form>
-  <h3>Add a {{fieldType}} field</h3>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {{input 'name' name label='Field label' placeholder='New field' slugName='fieldSlug' slugValue=slug className="form-control input-lg"}}
 
-  {{input 'name' name label='Field label' placeholder='New field' sluggify='fieldSlug'}}
-  {{input 'fieldSlug' slug placeholder='slug'}}
+      {{textarea 'instructions' instructions label="User Instructions"}}
 
-  {{#isnt fieldType 'checkbox'}}
-    {{checkbox 'required' required label='This field is required.'}}
-  {{/isnt}}
+      {{#isnt fieldType 'checkbox'}}
+        {{checkbox 'required' required label='This field is required.'}}
+      {{/isnt}}
 
-  {{textarea 'instructions' instructions label="User Instructions"}}
-
-  <div class="pull-right">
-    <a href="#cancel" class="btn btn-default">Cancel</a>
-    {{#if _id}}
-      {{submit 'Edit field'}}
-    {{else}}
-      {{submit 'Add field'}}
-    {{/if}}
+      <div class="pull-right">
+        <a href="#cancel" class="btn btn-default">Cancel</a>
+        {{#if _id}}
+          {{submit 'Save field'}}
+        {{else}}
+          {{submit 'Add field'}}
+        {{/if}}
+      </div>
+    </div>
   </div>
 </form>

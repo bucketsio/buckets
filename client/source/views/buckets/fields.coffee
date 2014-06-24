@@ -1,7 +1,6 @@
 _ = require 'underscore'
 
 View = require 'lib/view'
-FormMixin = require 'views/base/mixins/form'
 FieldEditView = require 'views/fields/edit'
 Field = require 'models/field'
 
@@ -14,9 +13,11 @@ module.exports = class BucketFieldsView extends View
   events:
     'change select': 'addField'
     'click [href="#edit"]': 'clickEdit'
+    'click [href="#remove"]': 'clickRemove'
 
   listen:
     'add collection': 'render'
+    'remove collection': 'render'
 
   getTemplateData: ->
     _.extend super,
@@ -32,6 +33,8 @@ module.exports = class BucketFieldsView extends View
         name: 'Color', value: 'color'
       ,
         name: 'File', value: 'file'
+      ,
+        name: 'Textarea', value: 'textarea'
       # ,
       #   name: 'Date/time', value: 'datetime'
       # ,
@@ -47,7 +50,7 @@ module.exports = class BucketFieldsView extends View
       ]
 
   addField: (e) ->
-    $el = @$(e.currentTarget).hide()
+    $el = @$(e.currentTarget)
 
     fieldType = $el.val()
 
@@ -55,23 +58,31 @@ module.exports = class BucketFieldsView extends View
       fieldType: fieldType
 
     editField = @subview 'editField', new FieldEditView
-      container: @$el
+      container: @$('.editField')
       model: @field
 
-    @listenTo @field, 'change', (field) ->
-      @collection.add field
+    @listenToOnce @field, 'change', (field) ->
+      @subview('editField').dispose()
+      @collection.add field, at: 0
 
-  clickEdit: (e)->
+  clickEdit: (e) ->
     e.preventDefault()
 
-    idx = $(e.currentTarget).closest('li').index()
+    idx = $(e.currentTarget).closest('tr').index() - 1
     @field = @collection.at idx
 
     editField = @subview 'editField', new FieldEditView
-      container: @$el
+      container: @$('.editField')
       model: @field
 
-    @listenTo @field, 'change', (field) ->
+    @listenToOnce @field, 'change', (field) ->
+      @subview('editField').dispose()
       @render()
 
-  @mixin FormMixin
+  clickRemove: (e) ->
+    e.preventDefault()
+
+    idx = $(e.currentTarget).closest('tr').index() - 1
+    field = @collection.at idx
+
+    @collection.remove field if field and confirm "Are you sure you want to remove the “#{field.get('name')}” #{field.get('fieldType')} field?"

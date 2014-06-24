@@ -41,11 +41,26 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     type: settings.type
     autocomplete: 'off'
 
-  if options.hash?.sluggify
-    _.extend params,
-      'data-sluggify': options.hash.sluggify
 
-  wrap tag('input', params, false, selfClosing: true),
+  params.className += ' has-slug'
+
+  if settings.slugName
+    _.extend params,
+      'data-sluggify': settings.slugName
+
+  input = tag('input', params, false, selfClosing: true)
+
+  if settings.slugName
+    slug = tag('input', {
+      className: 'form-control input-slug input-sm'
+      name: settings.slugName
+      value: settings.slugValue
+      placeholder: 'slug'
+      tabindex: '-1'
+    })
+    input += slug
+
+  wrap input,
     label: settings.label
     help: settings.help
 
@@ -62,7 +77,7 @@ Handlebars.registerHelper 'textarea', (name, value, options) ->
   , value
 
   if settings.label
-    wrap textarea, label: settings.label
+    wrap textarea, label: settings.label, help: settings.help
   else
     textarea
 

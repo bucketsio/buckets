@@ -89,11 +89,10 @@ h4[data-toggle]
   cursor pointer
 
   .caret
-    transition 200ms easei-out
+    transition 200ms ease-out
 
   &.collapsed .caret
     transform rotate(-90deg)
-
 
 .tooltip
   font-weight 500
@@ -106,3 +105,26 @@ h4[data-toggle]
 p.intro
   font-size 18px
   color #666
+
+.userFields textarea.form-control
+  height 400px
+
+th
+  font-weight 500
+
+.input-slug
+  background-color lighten($primary, 45)
+  font-family Menlo, 'Courier New', monospace
+  margin-top -2px
+  border-radius top 0, bottom 6px
+  color rgba(darken($primary, 40), .4)
+
+  &:focus
+    color darken($primary, 20)
+
+.has-slug
+  border-radius bottom 0
+
+  &:focus
+    position relative
+    z-index 10

@@ -5,63 +5,63 @@
   <div class="row">
     <div class="col-md-6">
       {{#if _id}}
-        <h1>Edit {{bucket.singular}}</h1>
+        <h1>{{bucket.singular}}</h1>
       {{else}}
-        <h1>New {{bucket.singular}}</h1>
+        <h1>{{bucket.singular}}</h1>
       {{/if}}
       <div class="panel panel-default">
         <div class="panel-body">
-          {{input 'title' title placeholder=newTitle sluggify='slug' className="input-lg form-control" label="Title"}}
+          {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug className="input-lg form-control" label="Title"}}
 
           {{!-- Probably have to use subviews soon --}}
-          {{#each fields}}
-            {{#is fieldType 'color'}}
-              <label>
-                <input type="color" name="{{slug}}" value="{{value}}"> {{name}}
-              </label>
-            {{/is}}
-            {{#is fieldType 'checkbox'}}
-              {{checkbox slug value label=name}}
-            {{/is}}
-            {{#is fieldType 'text'}}
-              {{input slug value label=name type=fieldType help=instructions}}
-            {{/is}}
-            {{debug}}
-          {{/each}}
+          <div class="userFields">
+            {{#each fields}}
+              {{#is fieldType 'textarea'}}
+                {{textarea slug value label=name help=instructions}}
+              {{/is}}
+              {{#is fieldType 'color'}}
+                <label>
+                  <input type="color" name="{{slug}}" value="{{value}}"> {{name}}
+                </label>
+              {{/is}}
+              {{#is fieldType 'checkbox'}}
+                {{checkbox slug value label=name}}
+              {{/is}}
+              {{#is fieldType 'text'}}
+                {{input slug value label=name type=fieldType help=instructions}}
+              {{/is}}
+              {{debug}}
+            {{/each}}
+          </div>
+
           <div class="clearfix"></div>
 
-          <div class="row entry-publish">
-            <div class="col-sm-6">
-              <div class="dateInput hidden">
-                {{input 'publishDate' publishDate placeholder="ie. Next tuesday or now" label="Schedule Publish Date"}}
-              </div>
+          <div class="entry-publish">
+            <div class="dateInput hidden">
+              {{input 'publishDate' publishDate placeholder="ie. Next tuesday or now" label="Schedule Publish Date"}}
             </div>
-            <div class="col-sm-6">
-              <br>
 
-              <div class="btn-group pull-right">
-                {{submit "Publish"}}
-                <div class="btn-group">
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                  <ul class="dropdown-menu pull-right">
-                     <li><a href="#draft">Save as a draft</a></li>
-                     <li><a href="#date">Publish on…</a></li>
-                   </ul>
-                </div>
-              </div>
-              <div class="pull-right">
-                {{#if _id}}
-                  <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
-                {{/if}}
+            <br>
+
+            <div class="btn-group">
+              {{submit "Publish"}}
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                   <li><a href="#draft">Save as a draft</a></li>
+                   <li><a href="#date">Publish on…</a></li>
+                 </ul>
               </div>
             </div>
+            {{#if _id}}
+              <a href="#delete" class="btn btn-icon btn-link">{{icon 'trash'}}</a>
+            {{/if}}
           </div>
-          <hr class="clearfix">
+
           <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
           <div id="meta" class="collapse">
-            {{input 'slug' slug label="Slug"}}
-            {{input 'keywords' keywords label="Keywords"}}
-            {{textarea 'description' description label="Description"}}
+            {{input 'keywords' keywords label="Keywords" className="form-control input-sm"}}
+            {{textarea 'description' description label="Description" className="form-control input-sm"}}
           </div>
         </div>
       </div>

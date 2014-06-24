@@ -9,14 +9,12 @@ module.exports =
       # Automatically focus the first visible input (on non-touch devices)
       @$('.form-control:visible').eq(0).focus() unless Modernizr.touch
 
-      # Prepare any submit buttons for Ladda
-      @$btn = @$('.ladda-button').ladda()
-
   formParams: ->
     # Uses jQuery formParams, but don't try to convert number values to numbers, etc.
     @$el.formParams no
 
   submit: (promise) ->
+    @$btn = @$('.ladda-button').ladda()
     @$btn?.ladda 'start'
 
     promise.always(
