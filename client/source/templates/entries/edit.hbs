@@ -30,7 +30,6 @@
               {{#is fieldType 'text'}}
                 {{input slug value label=name type=fieldType help=instructions}}
               {{/is}}
-              {{debug}}
             {{/each}}
           </div>
 
@@ -53,8 +52,9 @@
                  </ul>
               </div>
             </div>
+            <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/" class="btn btn-icon btn-link">Cancel</a>
             {{#if _id}}
-              <a href="#delete" class="btn btn-icon btn-link">{{icon 'trash'}}</a>
+              <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
             {{/if}}
           </div>
 
