@@ -21,6 +21,12 @@ module.exports = class BucketEditView extends PageView
     'click .swatches div': 'selectSwatch'
     'click [href="#delete"]': 'clickDelete'
 
+  getTemplateData: ->
+    _.extend super,
+      randomBucketPlaceholder: _.sample ['Articles','Songs','Videos','Events']
+      colors: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange']
+      icons: ['edit', 'photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'artboard', 'contacts-1']
+
   render: ->
     super
     @subview 'bucketFields', new BucketFieldsView
@@ -48,6 +54,11 @@ module.exports = class BucketEditView extends PageView
     e.preventDefault()
     $el = @$(e.currentTarget)
     $el.addClass('selected').siblings().removeClass 'selected'
+    @updateIconPreview()
+
+  updateIconPreview: ->
+    $color = @$('.icon-preview > div').removeClass().addClass 'color-' + @$('.colors div.selected').data('value')
+    $color.find('> span').removeClass().addClass 'icon buckets-icon-' + @$('.icons div.selected').data('value')
 
   clickDelete: (e) ->
     e.preventDefault()

@@ -29,64 +29,48 @@
     <div class="tab-content">
       <div class="tab-pane active" id="basic">
         <div class="row">
-          <div class="col-sm-9">
-            {{input 'name' name placeholder='ie. Articles, Songs, Products, etc.' slugName='slug' slugValue=slug className="form-control input-lg" label="What does this bucket hold?"}}
-          </div>
           <div class="col-sm-3">
-            <div class="well center">(icon)</div>
+            <div class="icon-preview pull-right center">
+              <div class="color-{{color}}">
+                {{icon icon}}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-9">
+            {{input 'name' name placeholder=randomBucketPlaceholder slugName='slug' slugValue=slug className="form-control input-lg" label="What does this bucket hold?"}}
+
+            <label>Icon</label>
+
+            <div class="swatches icons">
+              {{hidden 'icon' icon}}
+              {{#each icons}}
+                <div data-value={{.}} {{#is . ../icon}}class="selected"{{/is}}>
+                  {{icon .}}
+                </div>
+              {{/each}}
+            </div>
+
+            <label>Color</label>
+            {{hidden 'color' color}}
+
+            <div class="swatches colors">
+              {{#each colors}}
+                <div data-value="{{.}}" class="{{.}}{{#is . ../color}} selected{{/is}}"></div>
+              {{/each}}
+            </div>
+
+            <br>
+
+            {{#if _id}}
+              {{input 'singular' singular label="What’s the singular version?" placeholder="Thing"}}
+            {{/if}}
+
+            {{submit 'Save Bucket' size='lg'}}
+            {{#if _id}}
+              <a href="#delete" class="btn btn-link btn-icon">{{icon 'trash'}}</a>
+            {{/if}}
           </div>
         </div>
-
-        <label>Icon</label>
-
-        <div class="swatches icons">
-          {{hidden 'icon' icon}}
-
-          <div data-value="edit" class="selected">
-            {{icon 'edit'}}
-          </div>
-          <div data-value="photos">
-            {{icon 'photos'}}
-          </div>
-          <div data-value="calendar">
-            {{icon 'calendar'}}
-          </div>
-          <div data-value="movie">
-            {{icon 'movie'}}
-          </div>
-          <div data-value="music-note">
-            {{icon 'music-note'}}
-          </div>
-          <div data-value="map-pin">
-            {{icon 'map-pin'}}
-          </div>
-          <div data-value="quote">
-            {{icon 'quote'}}
-          </div>
-        </div>
-
-        <label>Color</label>
-        {{hidden 'color' color}}
-
-        <div class="swatches colors">
-          <div data-value="teal" class="teal selected"></div>
-          <div data-value="purple" class="purple"></div>
-          <div data-value="red" class="red"></div>
-          <div data-value="yellow" class="yellow"></div>
-          <div data-value="blue" class="blue"></div>
-          <div data-value="orange" class="orange"></div>
-        </div>
-
-        {{#if _id}}
-          {{input 'singular' singular label="What’s the singular version?" placeholder="Thing"}}
-        {{/if}}
-
-        <div class="pull-right">
-          {{submit 'Save'}}
-        </div>
-        {{#if _id}}
-          <a href="#delete" class="btn btn-link btn-icon">{{icon 'trash'}}</a>
-        {{/if}}
       </div>
       <div class="tab-pane" id="fields"></div>
       <div class="tab-pane" id="members"></div>
