@@ -1,19 +1,20 @@
 Handlebars = require 'hbsfy/runtime'
 _ = require 'underscore'
 
-createLabel = (text, name) ->
+createLabel = (text, name, className="control-label") ->
   tag 'label',
     for: "input-#{name}"
-    className: 'control-label'
+    className: className
   , text
 
 wrap = (content, options={}) ->
   _.defaults options,
     label: null
     help: null
+    className: 'form-group'
   content = createLabel(options.label) + content if options.label
   content += tag 'p', {className: 'help-block'}, options.help if options.help
-  tag 'div', class: 'form-group', content
+  tag 'div', class: options.className, content
 
 tag = (el, attrs={}, content='', options={}) ->
   html = "<#{el}"
@@ -40,7 +41,6 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     tabindex: 0
     type: settings.type
     autocomplete: 'off'
-
 
   params.className += ' has-slug'
 
@@ -110,8 +110,9 @@ Handlebars.registerHelper 'checkbox', (name, value, options) ->
 
   cb = tag 'input', params
   cb = tag 'label', {}, cb + " #{label}" if label
-
-  wrap cb, options.hash.help
+  wrap cb,
+    help: options.hash.help
+    className: 'checkbox'
 
 Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
 
