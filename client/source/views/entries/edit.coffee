@@ -26,6 +26,14 @@ module.exports = class EntryEditView extends PageView
       fields: fields
       newTitle: "New #{@bucket.get('singular')}"
 
+  render: ->
+    super
+    TweenLite.from @$('.panel'), .5,
+      scale: .7
+      opacity: 0
+      ease: Elastic.easeInOut
+      easeParams: [.4, 1.1]
+
   submitForm: (e) ->
     e.preventDefault()
     status = @model.get('status')
@@ -39,7 +47,21 @@ module.exports = class EntryEditView extends PageView
     e.preventDefault()
 
     if confirm 'Are you sure?'
-      @model.destroy(wait: yes)
+      @model.destroy(wait: yes).done =>
+        @keepElement = yes
+
+  dispose: ->
+    if @keepElement and @$el
+      $el = @$el.css position: 'absolute', width: '100%'
+      TweenLite.to $el, .4,
+        scale: .98
+        opacity: 0
+        y: '+200px'
+        rotate: 1
+        onComplete: ->
+          $el.remove()
+
+    super
 
   clickDraft: (e) ->
     e.preventDefault()

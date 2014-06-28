@@ -26,6 +26,15 @@ module.exports = class LoggedInLayout extends View
     super
     @$navLinks = @$('.nav-primary a')
 
+    @navTimeline ?= new TimelineLite
+    @navTimeline.staggerFrom @$('.nav-primary li'), .15,
+      y: '30px'
+      opacity: 0
+      ease: Back.easeOut
+    , .02
+
+    @navTimeline.play()
+
   checkNav: (controller, params, route) ->
     @$('.nav-primary li').removeClass 'active'
 
