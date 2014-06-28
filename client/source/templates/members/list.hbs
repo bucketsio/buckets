@@ -9,12 +9,17 @@
         </select>
       </div>
       <div class="form-group">
-        <label class="radio-inline">
-          <input type="radio" name="role" id="role-contributor" value="contributor"> Contributor
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="role" id="role-editor" value="editor"> Editor
-        </label>
+        <div class="radio">
+          <label>
+            <input type="radio" name="role" id="role-contributor" value="contributor" checked> <strong>Contributor</strong><br> Can add items to this Bucket, but can not publish them directly or edit entry slugs.
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="role" id="role-editor" value="editor"> <strong>Editor</strong><br> Can publish directly and edit slugs.
+          </label>
+        </div>
+
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Add member</button>

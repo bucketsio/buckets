@@ -22,13 +22,13 @@ bucketSchema = new mongoose.Schema
     required: yes
   icon:
     type: String
-    enum: ['photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'edit']
+    enum: ['edit', 'photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'artboard', 'contacts-1']
     default: 'edit'
     required: yes
   color:
     type: String
-    enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange']
-    default: 'orange'
+    enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange', 'green']
+    default: 'teal'
     required: yes
   publishToSite:
     type: Boolean

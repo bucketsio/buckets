@@ -4,14 +4,14 @@
 
 $primary = #edb91d
 
-$red = #dc5244
+$red = #dc2d2e
 $blue = #39a0a4
-$orange = #f3b54e
-$yellow = #deb342
+$orange = #e45906
+$yellow = #edb91d
 $teal = #5aa97f
 $purple = #825a7b
 
-$sans = 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, 'Segoe UI', Segoe, Roboto, sans-serif
+$sans = Lato, 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, 'Segoe UI', Segoe, Roboto, sans-serif
 
 body
   background-color #fcfcfc
@@ -107,24 +107,28 @@ p.intro
   color #666
 
 .userFields textarea.form-control
-  height 400px
+  height 320px
+  font-size 14px
 
 th
   font-weight 500
 
 .input-slug
-  background-color lighten($primary, 45)
+  background-color #fcfcfc
   font-family Menlo, 'Courier New', monospace
   margin-top -2px
   border-radius top 0, bottom 6px
   color rgba(darken($primary, 40), .4)
+  position relative
+  z-index 5
 
   &:focus
     color darken($primary, 20)
 
 .has-slug
   border-radius bottom 0
+  position relative
+  z-index 2
 
   &:focus
-    position relative
     z-index 10
