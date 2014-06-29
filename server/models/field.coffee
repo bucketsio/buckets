@@ -17,6 +17,7 @@ fieldSchema = new mongoose.Schema
   dateCreated:
     type: Date
     default: new Date
+  config: {}
 ,
   autoIndex: no
 

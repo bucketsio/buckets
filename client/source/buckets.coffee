@@ -8,9 +8,11 @@ Chaplin = require 'chaplin'
 
 User = require 'models/user'
 Layout = require 'views/layout'
+Handlebars = require 'hbsfy/runtime'
 routes = require 'routes'
 
-module.exports = class App extends Chaplin.Application
+
+module.exports = class BucketsApp extends Chaplin.Application
   title: 'Buckets'
   initialize: (@options = {}) ->
     @initRouter routes, {root: '/admin/'}
@@ -21,6 +23,7 @@ module.exports = class App extends Chaplin.Application
     @mediator = Chaplin.mediator
     @mediator.options = @options
     @mediator.user = new User @options.user if @options.user
+    @mediator.plugins = {}
 
     Chaplin.mediator.layout = new Layout
       title: 'Buckets'
@@ -34,4 +37,9 @@ module.exports = class App extends Chaplin.Application
     @start()
     Object.freeze? @
 
-window.App = App
+  plugin: (key, plugin) ->
+    plugin.handlebars = Handlebars
+    @mediator.plugins[key] = plugin
+
+  @View = require 'lib/view'
+  @_ = require 'underscore'

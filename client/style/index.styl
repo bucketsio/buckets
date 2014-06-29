@@ -113,6 +113,11 @@ p.intro
 th
   font-weight 500
 
+.has-slug
+  border-radius bottom 0
+  position relative
+  z-index 5
+
 .input-slug
   background-color #fcfcfc
   font-family Menlo, 'Courier New', monospace
@@ -120,15 +125,8 @@ th
   border-radius top 0, bottom 6px
   color rgba(darken($primary, 40), .4)
   position relative
-  z-index 5
-
-  &:focus
-    color darken($primary, 20)
-
-.has-slug
-  border-radius bottom 0
-  position relative
   z-index 2
 
   &:focus
+    color darken($primary, 20)
     z-index 10

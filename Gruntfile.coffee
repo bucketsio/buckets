@@ -15,33 +15,53 @@ module.exports = (grunt) ->
     browserify:
       options:
         transform: ['coffeeify', 'hbsfy']
-        bundleOptions:
-          debug: yes
+        # bundleOptions:
+        #   debug: yes
         browserifyOptions:
           fullPaths: true
-          basedir: './client/source/'
-          commondir: "#{__dirname}/client/source/"
           extensions: ['.coffee', '.hbs']
           paths: ['./client/source', 'node_modules']
           detectGlobals: no # Disable "detect-globals" for faster build
           noParse: [
-            './bower_components/backbone/backbone.js'
-            './bower_components/chaplin/chaplin.js'
-            './bower_components/cocktail/Cocktail.js'
-            './bower_components/underscore/underscore.js'
+            'bower_components/backbone/backbone.js'
+            'bower_components/chaplin/chaplin.js'
+            'bower_components/cocktail/Cocktail.js'
+            'bower_components/underscore/underscore.js'
           ]
         alias: [
-          './bower_components/backbone/backbone.js:backbone'
-          './bower_components/chaplin/chaplin.js:chaplin'
-          './bower_components/cocktail/Cocktail.js:cocktail'
-          './bower_components/underscore/underscore.js:underscore'
+          'bower_components/backbone/backbone.js:backbone'
+          'bower_components/chaplin/chaplin.js:chaplin'
+          'bower_components/cocktail/Cocktail.js:cocktail'
+          'bower_components/underscore/underscore.js:underscore'
+          'hbsfy/runtime:hbsfy/runtime'
+          'client/source/buckets.coffee:buckets'
         ]
       app:
         files:
-          'public/js/buckets.js': ['client/source/**/*.{coffee,hbs}']
+          'public/js/buckets.js': [
+            'client/source/**/*.{coffee,hbs}'
+          ]
+
       tests:
         files:
           'tmp/tests.js': ['test/client/**/*.coffee']
+
+      plugins:
+        options:
+          external: ['buckets', 'hbsfy/runtime']
+          alias: []
+        files: [
+          expand: yes
+          cwd: 'node_modules/'
+          src: ['buckets-*/client.coffee']
+          dest: 'public/plugins/'
+
+          # We compress all plugins down to one file
+          # This file can be loaded/re-loaded on demand
+          rename: (dest, path, options) ->
+            pluginName = path.split('/')[0]?.replace('buckets-', '')
+            dest + pluginName + '.js' if pluginName
+        ]
 
     clean:
       app: ['public']
@@ -176,10 +196,12 @@ module.exports = (grunt) ->
     watch:
       bower:
         files: ['bower.json']
-        tasks: ['bower']
+        tasks: ['bower', 'uglify:vendor', 'browserify']
 
       clientjs:
-        files: ['client/**/*.{coffee,hbs}']
+        files: [
+          'client/**/*.{coffee,hbs}'
+        ]
         tasks: ['browserify:app']
 
       clientTest:
@@ -189,10 +211,6 @@ module.exports = (grunt) ->
       serverTest:
         files: ['test/server/**/*.coffee']
         tasks: ['shell:mocha']
-
-      vendor:
-        files: ['bower_components/**/*.{js,css}']
-        tasks: ['bower', 'uglify:vendor', 'browserify']
 
       assets:
         files: ['client/assets/**/*.*']
@@ -209,6 +227,10 @@ module.exports = (grunt) ->
           spawn: false
           livereload: true
 
+      plugins:
+        files: ['node_modules/buckets-*/**/{models,controllers,helpers,templates,views}/**/*.{coffee,hbs}']
+        tasks: ['browserify:plugins']
+
       livereload:
         options:
           livereload: true
@@ -220,16 +242,17 @@ module.exports = (grunt) ->
         throw "\nBuckets could not connect to MongoDB :/\n".magenta + "See the " + 'README.md'.bold + " for more info on installing MongoDB and check your settings at " + 'server/config.coffee'.bold + "."
         exit
 
+  grunt.registerTask 'loadTestTasks', ->
+    grunt.loadNpmTasks 'grunt-contrib-testem'
+
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
-  grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
-  grunt.loadNpmTasks 'grunt-contrib-testem'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
@@ -240,7 +263,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build-scripts', ['browserify:app']
 
   grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'browserify:plugins', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
   grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'express:dev', 'build', 'watch']
@@ -249,8 +272,8 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
-  grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
-  grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
+  grunt.registerTask 'test:client', ['loadTestTasks', 'browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test:client:html', ['loadTestTasks', 'browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
 
   grunt.registerTask 'heroku:production', ['minify']

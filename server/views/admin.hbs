@@ -36,8 +36,11 @@
     <script src="/{{adminSegment}}/js/buckets.js"></script>
     <script>
       $(function(){
+
         try {
-          window.bkts = new App({
+          BucketsApp = require('buckets');
+
+          window.bkts = new BucketsApp({
 
             adminSegment: '{{adminSegment}}'
             ,apiSegment: '{{apiSegment}}'

@@ -35,6 +35,9 @@ module.exports = class BucketFieldsView extends View
         name: 'File', value: 'file'
       ,
         name: 'Textarea', value: 'textarea'
+      ,
+        name: 'Location', value: 'location'
+
       # ,
       #   name: 'Date/time', value: 'datetime'
       # ,
@@ -46,7 +49,6 @@ module.exports = class BucketFieldsView extends View
       # ,
       #   name: 'Relationship', value: 'relationship'
       # ,
-      #   name: 'Location', value: 'location'
       ]
 
   addField: (e) ->

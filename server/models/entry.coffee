@@ -35,8 +35,7 @@ entrySchema = new Schema
   keywords: [
     type: String
   ]
-,
-  strict: no
+  content: {}
 
 entrySchema.pre 'save', (next) ->
   @lastModified = Date.now()
