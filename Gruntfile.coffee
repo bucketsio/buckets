@@ -242,9 +242,6 @@ module.exports = (grunt) ->
         throw "\nBuckets could not connect to MongoDB :/\n".magenta + "See the " + 'README.md'.bold + " for more info on installing MongoDB and check your settings at " + 'server/config.coffee'.bold + "."
         exit
 
-  grunt.registerTask 'loadTestTasks', ->
-    grunt.loadNpmTasks 'grunt-contrib-testem'
-
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-contrib-clean'
@@ -253,6 +250,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
+  grunt.loadNpmTasks 'grunt-contrib-testem'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
@@ -272,8 +270,8 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
-  grunt.registerTask 'test:client', ['loadTestTasks', 'browserify:tests', 'testem:ci:basic']
-  grunt.registerTask 'test:client:html', ['loadTestTasks', 'browserify:tests', 'testem:ci:html']
+  grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
 
   grunt.registerTask 'heroku:production', ['minify']
