@@ -12,8 +12,8 @@ wrap = (content, options={}) ->
     label: null
     help: null
     className: 'form-group'
+  content = tag('p', {className: 'help-block'}, options.help) + content if options.help
   content = createLabel(options.label) + content if options.label
-  content += tag 'p', {className: 'help-block'}, options.help if options.help
   tag 'div', class: options.className, content
 
 tag = (el, attrs={}, content='', options={}) ->
@@ -38,7 +38,7 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     className: settings.className
     id: settings.id
     placeholder: settings.placeholder
-    tabindex: 0
+    tabindex: 1
     type: settings.type
     autocomplete: 'off'
 
@@ -56,7 +56,7 @@ Handlebars.registerHelper 'input', (name, value, options) ->
       name: settings.slugName
       value: settings.slugValue
       placeholder: 'slug'
-      tabindex: '-1'
+      tabindex: 0
     })
     input += slug
 
@@ -65,11 +65,14 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     help: settings.help
 
 Handlebars.registerHelper 'textarea', (name, value, options) ->
-  settings = options.hash
+
+  settings = _.extend options.hash,
+    tabindex: 1
+    className: 'form-control'
 
   textarea = tag 'textarea',
     name: name
-    className: settings.className || 'form-control'
+    className: settings.className
     id: "input-#{name}"
     placeholder: settings.placeholder
     tabindex: settings.tabindex
@@ -85,11 +88,13 @@ Handlebars.registerHelper 'submit', (text, options) ->
 
   settings = _.defaults options.hash,
     className: 'btn btn-primary ladda-button'
+    tabindex: 1
 
   tag 'button',
     className: settings.className
     'data-style': 'zoom-in'
     type: 'submit'
+    tabindex: settings.tabindex
   , text
 
 Handlebars.registerHelper 'hidden', (name, value) ->
@@ -122,6 +127,7 @@ Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
     className: 'form-control'
     valueKey: '_id'
     nameKey: 'name'
+    tabIndex: 1
 
   settings.selected = 'selected' if value
 
