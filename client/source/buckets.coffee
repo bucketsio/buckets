@@ -10,7 +10,9 @@ User = require 'models/user'
 Layout = require 'views/layout'
 Handlebars = require 'hbsfy/runtime'
 routes = require 'routes'
+mediator = require 'mediator'
 
+_ = require 'underscore'
 
 module.exports = class BucketsApp extends Chaplin.Application
   title: 'Buckets'
@@ -20,12 +22,14 @@ module.exports = class BucketsApp extends Chaplin.Application
       controllerPath: 'client/source/controllers/'
       controllerSuffix: '_controller.coffee'
 
-    @mediator = Chaplin.mediator
-    @mediator.options = @options
-    @mediator.user = new User @options.user if @options.user
-    @mediator.plugins = {}
+    @mediator = mediator
+    mediator.options = @options
+    mediator.user = new User @options.user if @options.user
+    mediator.plugins = {}
 
-    Chaplin.mediator.layout = new Layout
+    _.each @options.bootPlugins, (plugin) -> mediator.loadPlugin plugin
+
+    mediator.layout = new Layout
       title: 'Buckets'
       titleTemplate: (data) ->
         str = ''
@@ -39,7 +43,7 @@ module.exports = class BucketsApp extends Chaplin.Application
 
   plugin: (key, plugin) ->
     plugin.handlebars = Handlebars
-    @mediator.plugins[key] = plugin
+    mediator.plugins[key] = plugin
 
   @View = require 'lib/view'
-  @_ = require 'underscore'
+  @_ = _

@@ -48,7 +48,9 @@
             {{#if needsInstall}}
               ,needsInstall: {{needsInstall}}
             {{/if}}
-
+            {{#if plugins}}
+              ,bootPlugins: {{json plugins}}
+            {{/if}}
             {{#if user}}
               ,user: {{json user}}
             {{/if}}

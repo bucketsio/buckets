@@ -3,6 +3,7 @@ compress = require 'compression'
 hbs = require 'hbs'
 
 config = require '../config'
+plugins = require '../lib/plugins'
 passport = require '../lib/auth'
 User = require '../models/user'
 
@@ -31,9 +32,12 @@ app.all '*', (req, res) ->
   User.count({}).exec (err, userCount) ->
     res.send 500 if err
 
+    localPlugins = plugins.load()
+
     res.render 'admin',
       user: req.user
       env: config.buckets.env
+      plugins: localPlugins
       adminSegment: config.buckets.adminSegment
       apiSegment: config.buckets.apiSegment
       needsInstall: userCount is 0

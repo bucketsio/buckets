@@ -5,7 +5,7 @@ FieldEditView = require 'views/fields/edit'
 Field = require 'models/field'
 
 tpl = require 'templates/buckets/fields'
-mediator = require('chaplin').mediator
+mediator = require 'mediator'
 
 module.exports = class BucketFieldsView extends View
   template: tpl
@@ -20,8 +20,7 @@ module.exports = class BucketFieldsView extends View
     'remove collection': 'render'
 
   getTemplateData: ->
-    _.extend super,
-      fieldTypes: [
+    fieldTypes = [
         name: 'Add a field…'
       ,
         name: 'Text', value: 'text'
@@ -32,24 +31,16 @@ module.exports = class BucketFieldsView extends View
       ,
         name: 'Color', value: 'color'
       ,
-        name: 'File', value: 'file'
-      ,
         name: 'Textarea', value: 'textarea'
-      ,
-        name: 'Location', value: 'location'
-
-      # ,
-      #   name: 'Date/time', value: 'datetime'
-      # ,
-      #   name: 'Markdown', value: 'markdown'
-      # ,
-      #   name: 'Email', value: 'email'
-      # ,
-      #   name: 'HTML Editor', value: 'html'
-      # ,
-      #   name: 'Relationship', value: 'relationship'
-      # ,
       ]
+
+    # FIXME: This currently assumes all plugins are FieldTypes...
+    # plugins = _.findWhere mediator.plugins, type: 'FieldType'
+
+    for pluginSlug, plugin of mediator.plugins
+      fieldTypes.push name: plugin.name, value: pluginSlug if plugin?.name
+
+    _.extend super, {fieldTypes: fieldTypes}
 
   addField: (e) ->
     $el = @$(e.currentTarget)
