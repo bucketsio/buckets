@@ -37,29 +37,41 @@ module.exports = class EntryEditView extends PageView
   render: ->
     super
     content = @model.get('content')
-    for field in @bucket.get('fields')
+
+    _.each @bucket.get('fields'), (field) =>
       fieldValue = content[field.slug]
-      fieldModel = new Model _.extend field,
-        value: fieldValue
+      fieldModel = new Model _.extend field, value: fieldValue
 
-      if field.fieldType in ['text', 'textarea', 'color', 'checkbox', 'number']
-        @subview 'field_'+field.slug, new FieldTypeInputView
-          model: fieldModel
-        continue
+      @subview 'field_'+field.slug, new FieldTypeInputView
+        model: fieldModel
 
+      return if field.fieldType in ['text', 'textarea', 'color', 'checkbox', 'number']
+
+      # Otherwise ensure the plugin is loaded and see if one exists
       mediator.loadPlugin(field.fieldType).done =>
         plugin = mediator.plugins[field.fieldType]
 
         if plugin?
           if _.isFunction plugin.input
-            @subview 'field_'+field.slug, new plugin.input
+            return @subview 'field_'+field.slug, new plugin.input
               model: fieldModel
               region: 'user-fields'
 
           else if _.isString plugin.input
-            @subview 'field_'+field.slug, new FieldTypeInputView
+            return @subview 'field_'+field.slug, new FieldTypeInputView
               template: plugin.input
               model: fieldModel
+        else
+          @subview('field_'+field.slug).$el.html """
+            <label class="text-danger">#{field.name}</label>
+            <div class="alert alert-danger">
+              <p>
+                <strong>Warning:</strong>
+                There was an error loading the <code>#{field.fieldType}</code> plugin.<br>
+                Saving this entry could destroy data from the database.
+              </p>
+            </div>
+          """
 
     TweenLite.from @$('.panel'), .5,
       scale: .7
