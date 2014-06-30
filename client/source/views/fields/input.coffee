@@ -8,7 +8,8 @@ module.exports = class FieldTypeInputView extends View
   # getTemplateFunction: -> @template
   getValue: ->
     data = @$el.formParams no
-    if simpleValue = data[@model.get('slug')]
+    simpleValue = data[@model.get('slug')]
+    if simpleValue?
       simpleValue
     else
       data
