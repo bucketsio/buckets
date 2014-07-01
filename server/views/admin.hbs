@@ -35,34 +35,35 @@
     <script src="/{{adminSegment}}/js/vendor.js"></script>
     <script src="/{{adminSegment}}/js/buckets.js"></script>
     <script>
-      $(function(){
 
-        try {
-          BucketsApp = require('buckets');
+      try {
+        BucketsApp = require('buckets');
 
-          window.bkts = new BucketsApp({
+        window.bkts = new BucketsApp({
 
-            adminSegment: '{{adminSegment}}'
-            ,apiSegment: '{{apiSegment}}'
+          adminSegment: '{{adminSegment}}'
+          ,apiSegment: '{{apiSegment}}'
 
-            {{#if needsInstall}}
-              ,needsInstall: {{needsInstall}}
-            {{/if}}
-            {{#if plugins}}
-              ,bootPlugins: {{json plugins}}
-            {{/if}}
-            {{#if user}}
-              ,user: {{json user}}
-            {{/if}}
-          });
-        } catch (e) {
-          if (e && e.message && window.jQuery) {
-            console.error(e);
-            $('#bkts-content').append("<div class=\"container\"><div class=\"alert center alert-danger\"><strong>There was an error loading the Buckets JavaScript.</strong> <br>If you’re the site developer, have you run <code>grunt build</code> or <code>grunt dev</code>?</div></div>")
-          }
+          {{#if needsInstall}}
+            ,needsInstall: {{needsInstall}}
+          {{/if}}
+          {{#if plugins}}
+            ,bootPlugins: {{json plugins}}
+          {{/if}}
+          {{#if user}}
+            ,user: {{json user}}
+          {{/if}}
+        });
+      } catch (e) {
+        if (e && e.message && window.jQuery) {
+          console.error(e);
+          $('#bkts-content').append("<div class=\"container\"><div class=\"alert center alert-danger\"><strong>There was an error loading the Buckets JavaScript.</strong> <br>If you’re the site developer, have you run <code>grunt build</code> or <code>grunt dev</code>?</div></div>")
         }
-      })
+      }
     </script>
+    {{#each plugins}}
+      <script src="/{{../adminSegment}}/plugins/{{.}}.js"></script>
+    {{/each}}
     {{#is env 'development'}}
       <script src="//localhost:35729/livereload.js"></script>
     {{/is}}
