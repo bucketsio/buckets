@@ -31,10 +31,9 @@ describe 'Entry', ->
         done()
 
     it 'parses dates from strings', (done) ->
-      Entry.create {title: 'New Entry', publishDate: 'tomorrow at 2pm', bucket: bucketId}, (e, entry) ->
+      Entry.create {title: 'New Entry', publishDate: 'tonight at 9pm', bucket: bucketId}, (e, entry) ->
         expected = new Date
-        expected.setDate(expected.getDate()+1)
-        expected.setHours(14, 0, 0, 0)
+        expected.setHours(21, 0, 0, 0)
 
         expect(expected.toISOString()).equal(entry.publishDate.toISOString())
         done()
