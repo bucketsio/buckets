@@ -10,11 +10,15 @@
         {{hidden 'next' next}}
       {{/if}}
 
-      <h3>Please log in{{#if next}} to continue{{/if}}:</h3>
-      {{input 'username' '' placeholder="Email" type='email'}}
-      {{input 'password' '' placeholder="Password" type='password'}}
+      <fieldset>
 
-      {{submit 'Log in'}}
+      <h3>Please log in{{#if next}} to continue{{/if}}:</h3>
+      {{input 'username' '' placeholder="Email" type='email' size='lg'}}
+      {{input 'password' '' placeholder="Password" type='password' size='lg'}}
+
+      {{submit 'Log in' className='btn btn-lg btn-block btn-primary ladda-button'}}
+      </fieldset>
+
     </div>
   </div>
 
