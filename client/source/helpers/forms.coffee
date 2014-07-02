@@ -65,11 +65,14 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     help: settings.help
 
 Handlebars.registerHelper 'textarea', (name, value, options) ->
-  settings = options.hash
+
+  settings = _.defaults options.hash,
+    tabindex: 1
+    className: 'form-control'
 
   textarea = tag 'textarea',
     name: name
-    className: settings.className || 'form-control'
+    className: settings.className
     id: "input-#{name}"
     placeholder: settings.placeholder
     tabindex: settings.tabindex
