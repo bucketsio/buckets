@@ -1,0 +1,9 @@
+[{
+  "name": "Articles",
+  "slug": "articles",
+  "fields": [{
+    "name": "Body",
+    "slug": "body",
+    "fieldType": "textarea"
+  }]
+}]

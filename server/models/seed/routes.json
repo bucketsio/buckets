@@ -1,0 +1,7 @@
+[{
+  "urlPattern": "",
+  "template": "index"
+},{
+  "urlPattern": "entry/:id",
+  "template": "index"
+}]
