@@ -32,6 +32,7 @@ entrySchema = new Schema
   bucket:
     type: Schema.Types.ObjectId
     ref: 'Bucket'
+    required: yes
   keywords: [
     type: String
   ]
