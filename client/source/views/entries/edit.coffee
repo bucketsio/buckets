@@ -24,6 +24,7 @@ module.exports = class EntryEditView extends PageView
 
   getTemplateData: ->
     fields = @bucket.get('fields')
+
     _.map fields, (field) =>
       field.value = @model.get(field.slug)
       field
@@ -73,12 +74,9 @@ module.exports = class EntryEditView extends PageView
             </div>
           """
 
-    TweenLite.from @$('.panel'), .5,
-      scale: .7
-      opacity: 0
-      y: 100
-      ease: Elastic.easeInOut
-      easeParams: [.4, 1.1]
+    TweenLite.from @$('.panel'), .3,
+      scale: .8
+      ease: Back.easeOut
 
   submitForm: (e) ->
     e.preventDefault()
