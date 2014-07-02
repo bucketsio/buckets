@@ -43,7 +43,7 @@ userSchema = new Schema
   roles: [roleSchema]
 
 userSchema.methods.authenticate = (password) ->
-  bcrypt.compareSync password, @passwordDigest
+  bcrypt.compareSync password, @passwordDigest if @passwordDigest
 
 userSchema.methods.getBuckets = (callback) ->
   @getResources('Bucket', callback)

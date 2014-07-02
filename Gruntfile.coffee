@@ -133,6 +133,10 @@ module.exports = (grunt) ->
         dest: 'public/css/'
         ext: '.css'
 
+    migrations:
+      path: "#{__dirname}/migrations"
+      mongo: config.db
+
     modernizr:
       app:
         devFile: 'bower_components/modernizr/modernizr.js'
@@ -234,6 +238,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
   grunt.loadNpmTasks 'grunt-modernizr'
+  grunt.loadNpmTasks 'grunt-mongo-migrations'
   grunt.loadNpmTasks 'grunt-shell'
 
   grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
@@ -243,9 +248,9 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
-  grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'express:dev', 'build', 'watch']
-  grunt.registerTask 'devserve', ['checkDatabase', 'express:dev', 'watch']
-  grunt.registerTask 'serve', ['shell:npm_install', 'checkDatabase', 'minify', 'express:server']
+  grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'express:dev', 'build', 'watch']
+  grunt.registerTask 'devserve', ['checkDatabase', 'migrate:all', 'express:dev', 'watch']
+  grunt.registerTask 'serve', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'minify', 'express:server']
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
