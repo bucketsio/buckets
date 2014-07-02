@@ -12,8 +12,15 @@ Handlebars.registerHelper 'icon', (type) ->
   new Handlebars.SafeString """<span class="icon buckets-icon-#{type}"></span>"""
 
 Handlebars.registerHelper 'gravatar', (email_hash) ->
+
+  randomize = new Math.seedrandom email_hash or 'mrbucket'
+
+  defaultColors = ['blue', 'red', 'green', 'yellow']
+  color = defaultColors[Math.floor(defaultColors.length * randomize())]
+
   new Handlebars.SafeString """
-    <div class="avatar" style="background-image: url(https://www.gravatar.com/avatar/#{email_hash})"></div>
+    <div class="avatar avatar-#{color}"
+      style="background-image: url(https://www.gravatar.com/avatar/#{email_hash}?d=404), url(/#{mediator.options.adminSegment}/img/avatars/#{color}.png)"></div>
   """
 
 Handlebars.registerHelper 'highlightWildcards', (path) ->
