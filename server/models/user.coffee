@@ -41,6 +41,8 @@ userSchema = new Schema
     type: Date
     default: Date.now
   roles: [roleSchema]
+  resetPasswordToken: String
+  resetPasswordExpires: Date
 
 userSchema.methods.authenticate = (password) ->
   bcrypt.compareSync password, @passwordDigest if @passwordDigest

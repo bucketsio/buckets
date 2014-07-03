@@ -12,6 +12,8 @@ module.exports = class LoginView extends View
 
   events:
     'submit form': 'submitForm'
+    'click [href="#forgot"]': 'clickForgot'
+    'click [href="#cancel"]': 'clickCancel'
 
   render: ->
     super
@@ -33,6 +35,35 @@ module.exports = class LoginView extends View
   submitForm: (e) ->
     @$btn = @$('.ladda-button').ladda()
     @$btn.ladda('start')
+
+    if @$('form').hasClass 'forgot'
+      e.preventDefault()
+
+      email = @formParams()?.username
+
+      @submit($.post('/api/forgot', email: email))
+        .error =>
+          @$('input:visible').eq(0).focus()
+          toastr.error 'Could not find a user with that email address.'
+        .done =>
+          toastr.success "A password reset email has been sent to #{email}."
+          @render()
+    else
+      @$btn = @$('.ladda-button').ladda()
+      @$btn.ladda('start')
+
+  clickCancel: (e) ->
+    e.preventDefault()
+    @render()
+
+  clickForgot: (e) ->
+    e.preventDefault()
+    @$('input[name="password"]').slideUp 100
+    @$('h3').text 'Enter your account email:'
+    @$('.btn-primary').text 'Reset your password'
+    @$('input:visible').eq(0).focus()
+    @$('form').addClass('forgot')
+    @$(e.currentTarget).attr('href', '#cancel')
 
   getTemplateData: ->
     if @next
