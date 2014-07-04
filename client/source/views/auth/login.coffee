@@ -63,7 +63,7 @@ module.exports = class LoginView extends View
     @$('.btn-primary').text 'Reset your password'
     @$('input:visible').eq(0).focus()
     @$('form').addClass('forgot')
-    @$(e.currentTarget).attr('href', '#cancel')
+    @$(e.currentTarget).attr('href', '#cancel').text 'Cancel'
 
   getTemplateData: ->
     if @next
