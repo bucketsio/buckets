@@ -15,6 +15,8 @@ config =
   production:
     smtp:
       service: 'Mandrill'
+      port: 587
+      host: 'smtp.mandrillapp.com'
       auth:
         user: process.env.MANDRILL_APIKEY
         pass: process.env.MANDRILL_USERNAME
