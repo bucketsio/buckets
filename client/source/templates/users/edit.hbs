@@ -21,9 +21,11 @@
     {{/hasRole}}
 
     <div class="pull-right">
-      {{#isnt _id currentUser._id}}
-        <a class="btn btn-danger" href="#remove">Remove this user</a>
-      {{/isnt}}
+      {{#if _id}}
+        {{#isnt _id currentUser._id}}
+          <a class="btn btn-danger" href="#remove">Remove this user</a>
+        {{/isnt}}
+      {{/if}}
       {{submit "Save"}}
     </div>
   </div>

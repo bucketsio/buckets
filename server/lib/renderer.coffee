@@ -4,6 +4,7 @@ _ = require 'underscore'
 config = require '../config'
 
 Entry = require '../models/entry'
+Bucket = require '../models/bucket'
 
 module.exports = (hbs) ->
 
@@ -11,36 +12,50 @@ module.exports = (hbs) ->
   Swag.registerHelpers hbs.handlebars
   hbs.registerPartials config.buckets.templatePath
 
-  # Add the entries helper
-  hbs.registerAsyncHelper 'entries', (options, cb) ->
-    _.defaults options.hash,
-      bucket: ''
-      until: Date.now()
-      since: ''
-      limit: 10
-      skip: 0
-      sort_by: 'date_posted'
-      sort_dir: 'desc'
-      status: 'live'
+  Bucket.find {}, (err, buckets) ->
 
-    searchQuery = {}
-    searchQuery['bucket.slug'] = options.hash.bucket if options.hash.bucket
+    # Add the entries helper
+    hbs.registerAsyncHelper 'entries', (options, cb) ->
+      settings = _.defaults options.hash,
+        bucket: ''
+        until: Date.now()
+        since: ''
+        limit: 10
+        skip: 0
+        sort: '-publishDate'
+        status: 'live'
+        find: ''
+        slug: null
 
-    Entry.find()
-      .populate('bucket')
-      .populate('author')
-      .limit(options.hash.limit)
-      .skip(options.hash.skip)
-      .exec (err, pages) ->
-        console.log err if err
+      searchQuery = {}
+      bucketPath = path: 'bucket'
 
-        return cb options.inverse @ if pages.length is 0 or err
+      if settings.bucket
+        bucket = _.findWhere(buckets, slug: settings.bucket)
+        searchQuery['bucket'] = bucket._id if bucket
 
-        ret = []
-        for page in pages
-          try
-            ret.push options.fn page.toJSON()
-          catch e
-            console.log e.stack, arguments
+      if settings.slug
+        searchQuery.slug = settings.slug
 
-        cb ret.join('')
+      if settings.where
+        searchQuery.$where = settings.where
+
+      Entry.find(searchQuery)
+        .populate('bucket')
+        .populate('author')
+        .sort(settings.sort)
+        .limit(settings.limit)
+        .skip(settings.skip)
+        .exec (err, pages) ->
+          console.log err if err
+
+          return cb options.inverse @ if pages?.length is 0 or err
+
+          ret = []
+          for page in pages
+            try
+              ret.push options.fn page.toJSON()
+            catch e
+              console.log e.stack, arguments
+
+          cb ret.join('')

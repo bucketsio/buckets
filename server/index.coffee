@@ -15,7 +15,9 @@ app.set 'view engine', 'hbs'
 
 # Handle cookies and sessions and stuff
 app.use cookieParser config.buckets.salt
-app.use bodyParser()
+app.use bodyParser.json()
+app.use bodyParser.urlencoded extended: true
+
 app.use session secret: config.buckets.salt, name: 'buckets'
 
 # Passport deals with any possible auth
