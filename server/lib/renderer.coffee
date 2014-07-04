@@ -16,33 +16,36 @@ module.exports = (hbs) ->
 
     # Add the entries helper
     hbs.registerAsyncHelper 'entries', (options, cb) ->
-      _.defaults options.hash,
+      settings = _.defaults options.hash,
         bucket: ''
         until: Date.now()
         since: ''
         limit: 10
         skip: 0
-        sort: ''
-        sort_by: 'date_posted'
-        sort_dir: 'desc'
+        sort: '-publishDate'
         status: 'live'
         find: ''
+        slug: null
 
       searchQuery = {}
       bucketPath = path: 'bucket'
 
-      if options.hash.bucket
-        bucket = _.findWhere(buckets, slug: options.hash.bucket)
+      if settings.bucket
+        bucket = _.findWhere(buckets, slug: settings.bucket)
         searchQuery['bucket'] = bucket._id if bucket
 
-      if options.hash.where
-        searchQuery.$where = options.hash.where
+      if settings.slug
+        searchQuery.slug = settings.slug
+
+      if settings.where
+        searchQuery.$where = settings.where
 
       Entry.find(searchQuery)
         .populate('bucket')
         .populate('author')
-        .limit(options.hash.limit)
-        .skip(options.hash.skip)
+        .sort(settings.sort)
+        .limit(settings.limit)
+        .skip(settings.skip)
         .exec (err, pages) ->
           console.log err if err
 
