@@ -60,8 +60,8 @@ app.post '/forgot', (req, res) ->
   ,
     (token, user, done) ->
       mailOptions =
-        to: user.email
-        from: 'noreply@buckets.io'
+        to: "#{user.name} <#{user.email}>"
+        from: 'Buckets <noreply@buckets.io>'
         subject: 'Buckets Password Reset'
         text: """
           You are receiving this because you (or someone else) have requested the reset of the password for your account.\n
