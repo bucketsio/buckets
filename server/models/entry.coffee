@@ -47,7 +47,7 @@ entrySchema.pre 'validate', (next) ->
 
   @model('Bucket').findOne _id: @bucket, (err, bkt) =>
 
-    return @invalidate 'bucket', 'Must belong to a bucket' unless bkt
+    @invalidate 'bucket', 'Must belong to a bucket' unless bkt
 
     for field in bkt.fields
       @invalidate field.slug, 'required' if field.required and !@content[field.slug]
