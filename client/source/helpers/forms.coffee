@@ -42,9 +42,10 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     type: settings.type
     autocomplete: 'off'
 
-  params.className += ' has-slug'
+  params.className += " input-#{settings.size}" if settings.size
 
   if settings.slugName
+    params.className += ' has-slug'
     _.extend params,
       'data-sluggify': settings.slugName
 
@@ -53,6 +54,7 @@ Handlebars.registerHelper 'input', (name, value, options) ->
   if settings.slugName
     slug = tag('input', {
       className: 'form-control input-slug input-sm'
+      type: 'text'
       name: settings.slugName
       value: settings.slugValue
       placeholder: 'slug'
@@ -66,7 +68,7 @@ Handlebars.registerHelper 'input', (name, value, options) ->
 
 Handlebars.registerHelper 'textarea', (name, value, options) ->
 
-  settings = _.extend options.hash,
+  settings = _.defaults options.hash,
     tabindex: 1
     className: 'form-control'
 

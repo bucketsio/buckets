@@ -1,0 +1,13 @@
+<form>
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+    <div class="center">
+      {{logo}}
+      <h3>Enter a new password for {{email}}</h3>
+      {{input 'password' '' type="password"}}
+      {{hidden 'token' token}}
+      {{submit 'Save new password'}}
+    </div>
+  </div>
+  </div>
+</form>

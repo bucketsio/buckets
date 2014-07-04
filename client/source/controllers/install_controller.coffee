@@ -1,4 +1,5 @@
 Controller = require 'lib/controller'
+Install = require 'models/install'
 User = require 'models/user'
 FirstUserView = require 'views/install/firstuser'
 
@@ -9,14 +10,13 @@ module.exports = class InstallController extends Controller
   firstuser: ->
     @adjustTitle 'Install'
 
-    newUser = new User
-      roles: [{name: 'administrator'}]
+    newInstall = new Install
 
     @view = new FirstUserView
-      model: newUser
+      model: newInstall
 
-    newUser.on 'sync', =>
-      mediator.user = newUser
+    newInstall.on 'sync', (model, user) =>
+      mediator.user = new User user
       mediator.options.needsInstall = no
 
       @redirectTo url: '/'

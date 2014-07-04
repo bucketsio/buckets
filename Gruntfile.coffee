@@ -131,7 +131,8 @@ module.exports = (grunt) ->
 
     express:
       dev:
-        spawn: false
+        options:
+          spawn: false
       prod:
         options:
           background: false
@@ -152,6 +153,10 @@ module.exports = (grunt) ->
         src: ['**/*.less']
         dest: 'public/css/'
         ext: '.css'
+
+    migrations:
+      path: "#{__dirname}/migrations"
+      mongo: config.db
 
     modernizr:
       app:
@@ -255,6 +260,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
   grunt.loadNpmTasks 'grunt-modernizr'
+  grunt.loadNpmTasks 'grunt-mongo-migrations'
   grunt.loadNpmTasks 'grunt-shell'
 
   grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
@@ -264,9 +270,9 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'browserify:plugins', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
-  grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'express:dev', 'build', 'watch']
-  grunt.registerTask 'devserve', ['checkDatabase', 'express:dev', 'watch']
-  grunt.registerTask 'serve', ['shell:npm_install', 'checkDatabase', 'minify', 'express:server']
+  grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'express:dev', 'build', 'watch']
+  grunt.registerTask 'devserve', ['checkDatabase', 'migrate:all', 'express:dev', 'watch']
+  grunt.registerTask 'serve', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'minify', 'express:server']
 
   grunt.registerTask 'test:server', ['build', 'shell:mocha']
   grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
@@ -274,4 +280,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
 
-  grunt.registerTask 'heroku:production', ['minify']
+  grunt.registerTask 'heroku:production', ['minify', 'migrate:all']
