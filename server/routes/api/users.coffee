@@ -72,7 +72,8 @@ app.post '/forgot', (req, res) ->
       mailer.sendMail mailOptions, (err) ->
         done(err, 'done');
   ], (err) ->
-    res.send 200, {}
+    return res.send err, 400 if err
+    res.send {}, 200
 
 app.get '/reset/:token', (req, res) ->
   User.findOne resetPasswordToken: req.params.token, resetPasswordExpires: $gt: Date.now(), (err, user) ->
