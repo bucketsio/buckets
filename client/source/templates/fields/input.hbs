@@ -1,6 +1,5 @@
 {{#is fieldType 'textarea'}}
-  {{debug}}
-  {{textarea slug value label=name help=instructions}}
+  {{textarea slug value label=name help=instructions required=required}}
 {{/is}}
 {{#is fieldType 'color'}}
   <label>
@@ -11,8 +10,8 @@
   {{checkbox slug value label=name}}
 {{/is}}
 {{#is fieldType 'text'}}
-  {{input slug value label=name type=fieldType help=instructions}}
+  {{input slug value label=name type=fieldType help=instructions required=required}}
 {{/is}}
 {{#is fieldType 'number'}}
-  {{input slug value label=name type=fieldType help=instructions}}
+  {{input slug value label=name type=fieldType help=instructions required=required}}
 {{/is}}

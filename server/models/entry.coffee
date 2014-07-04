@@ -44,7 +44,15 @@ entrySchema.pre 'save', (next) ->
 
 entrySchema.pre 'validate', (next) ->
   @slug ?= getSlug @title
-  next()
+
+  @model('Bucket').findOne _id: @bucket, (err, bkt) =>
+
+    return @invalidate 'bucket', 'Must belong to a bucket' unless bkt
+
+    for field in bkt.fields
+      @invalidate field.slug, 'required' if field.required and !@content[field.slug]
+
+    next()
 
 entrySchema.path('publishDate').set (val) ->
   parsed = chrono.parse(val)

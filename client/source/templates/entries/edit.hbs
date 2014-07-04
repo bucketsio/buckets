@@ -11,7 +11,7 @@
       {{/if}}
       <div class="panel panel-default">
         <div class="panel-body">
-          {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug className="input-lg form-control" label="Title"}}
+          {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug size='lg' label="Title" required=true}}
 
           <div class="userFields"></div>
           <div class="clearfix"></div>
@@ -41,8 +41,8 @@
 
           <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
           <div id="meta" class="collapse">
-            {{input 'keywords' keywords label="Keywords" className="form-control input-sm"}}
-            {{textarea 'description' description label="Description" className="form-control input-sm"}}
+            {{input 'keywords' keywords label="Keywords" size='sm'}}
+            {{textarea 'description' description label="Description" size='sm'}}
           </div>
         </div>
       </div>

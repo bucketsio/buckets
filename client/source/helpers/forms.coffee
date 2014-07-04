@@ -1,10 +1,17 @@
 Handlebars = require 'hbsfy/runtime'
 _ = require 'underscore'
 
-createLabel = (text, name, className="control-label") ->
+createLabel = (text, name, options={}) ->
+
+  _.defaults options,
+    className: 'control-label'
+    required: no
+
+  text += "<span class=\"text-danger\">*</span>" if options.required
+
   tag 'label',
     for: "input-#{name}"
-    className: className
+    className: options.className
   , text
 
 wrap = (content, options={}) ->
@@ -12,8 +19,12 @@ wrap = (content, options={}) ->
     label: null
     help: null
     className: 'form-group'
-  content = tag('p', {className: 'help-block'}, options.help) + content if options.help
-  content = createLabel(options.label) + content if options.label
+    name: ''
+    required: no
+
+  content = createLabel(options.label, options.name, required: options.required) + content if options.label
+  content += tag 'p', {className: 'help-block'}, options.help if options.help
+
   tag 'div', class: options.className, content
 
 tag = (el, attrs={}, content='', options={}) ->
@@ -31,6 +42,7 @@ Handlebars.registerHelper 'input', (name, value, options) ->
   settings = _.defaults options.hash,
     className: 'form-control'
     type: 'text'
+    required: no
 
   params =
     name: name
@@ -65,6 +77,8 @@ Handlebars.registerHelper 'input', (name, value, options) ->
   wrap input,
     label: settings.label
     help: settings.help
+    required: settings.required
+    name: params.name
 
 Handlebars.registerHelper 'textarea', (name, value, options) ->
 
@@ -82,7 +96,10 @@ Handlebars.registerHelper 'textarea', (name, value, options) ->
   , value
 
   if settings.label
-    wrap textarea, label: settings.label, help: settings.help
+    wrap textarea,
+      label: settings.label
+      help: settings.help
+      required: settings.required
   else
     textarea
 

@@ -31,7 +31,7 @@ module.exports =
 
     if errors = res?.responseJSON?.errors
       _.each errors, (error) =>
-        if error.type is 'required'
+        if error.type is 'required' or error.message is 'required'
           message = '<span class="label label-danger">Required</span>'
         else
           message = error.message
