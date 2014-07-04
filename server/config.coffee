@@ -16,8 +16,8 @@ config =
     smtp:
       service: 'Mandrill'
       auth:
-        user: process.env.MANDRILL_APIKEY
-        pass: process.env.MANDRILL_USERNAME
+        user: process.env.MANDRILL_USERNAME
+        pass: process.env.MANDRILL_APIKEY
     db: process.env.MONGOHQ_URL
   development:
     smtp:
