@@ -1,4 +1,9 @@
 express = require 'express'
+async = require 'async'
+crypto = require 'crypto'
+
+mailer = require '../../lib/mailer'
+config = require '../../config'
 
 User = require '../../models/user'
 
@@ -38,3 +43,62 @@ app.route('/users/:userID')
       else
         res.send user, 200
 
+app.post '/forgot', (req, res) ->
+  async.waterfall [
+    (done) ->
+      crypto.randomBytes 20, (err, buf) ->
+        done err, buf?.toString('hex')
+  ,
+    (token, done) ->
+      User.findOne email: req.body.email, (err, user) ->
+        return res.send {error: 'No user with that email.'}, 404 unless user
+
+        user.resetPasswordToken = token
+        user.resetPasswordExpires = Date.now() + 3600000 # 1 hour
+
+        user.save (err) -> done err, token, user
+  ,
+    (token, user, done) ->
+      mailOptions =
+        to: "#{user.name} <#{user.email}>"
+        from: 'Buckets <noreply@buckets.io>'
+        subject: 'Buckets Password Reset'
+        text: """
+          You are receiving this because you (or someone else) has requested the reset of the password for your account.\n
+          Please click on the following link, or paste this into your browser to complete the process:\n
+          http://#{req.headers.host}/#{config.buckets.adminSegment}/reset/#{token}\n\n
+          If you did not request this, please ignore this email and your password will remain unchanged.\n
+        """
+      mailer.sendMail mailOptions, (err) ->
+        done(err, 'done');
+  ], (err) ->
+    return res.send err, 400 if err
+    res.send {}, 200
+
+app.get '/reset/:token', (req, res) ->
+  User.findOne resetPasswordToken: req.params.token, resetPasswordExpires: $gt: Date.now(), (err, user) ->
+    return res.send 404 unless user
+
+    res.send email: user.email, token: req.params.token
+
+app.put '/reset/:token', (req, res) ->
+
+  User.findOne resetPasswordToken: req.params.token, resetPasswordExpires: $gt: Date.now(), (err, user) ->
+    return res.send 404 unless user
+
+    console.log 'password', req.body.password
+
+    user.password = req.body.password
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpires = undefined
+
+    user.validate (err) ->
+      return res.send err, 400 if err
+
+      user.save (err) ->
+        return res.send err, 400 if err
+
+        req.login user, (err) ->
+          return res.send err, 400 if err
+
+          res.send user, 200
