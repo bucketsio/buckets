@@ -44,4 +44,4 @@ module.exports =
             <span class="help-block">#{message}</span>
           """
 
-      @$('.has-error').eq(0).find('[name]').focus()
+      @$('.has-error').eq(0).find('[name]').eq(0).focus()
