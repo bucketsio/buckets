@@ -11,6 +11,7 @@
     <p class="lead">Buckets are containers for any type of content.</p>
 
     <!-- Nav tabs -->
+    {{#if _id}}
     <ul class="nav nav-tabs">
       <li class="active">
         <a href="{{#if _id}}/{{adminSegment}}/buckets/{{slug}}/settings{{else}}#{{/if}}" data-target="#basic" data-toggle="tab">Basic</a>
@@ -18,12 +19,12 @@
       <li>
         <a href="{{#if _id}}/{{adminSegment}}/buckets/{{slug}}/settings/fields{{else}}#{{/if}}" data-target="#fields" data-toggle="tab">Fields</a>
       </li>
-      {{#if _id}}
+
       <li>
         <a href="/{{adminSegment}}/buckets/{{slug}}/settings/members" data-target="#members" data-toggle="tab">Members</a>
       </li>
-      {{/if}}
     </ul>
+    {{/if}}
 
     <!-- Tab panes -->
     <div class="tab-content">
@@ -65,9 +66,12 @@
               {{input 'singular' singular label="What’s the singular version?" placeholder="Thing"}}
             {{/if}}
 
-            {{submit 'Save Bucket' size='lg'}}
+
             {{#if _id}}
+              {{submit 'Save Bucket' size='lg'}}
               <a href="#delete" class="btn btn-link btn-icon">{{icon 'trash'}}</a>
+            {{else}}
+              {{submit 'Next: Define fields' size='lg'}}
             {{/if}}
           </div>
         </div>
