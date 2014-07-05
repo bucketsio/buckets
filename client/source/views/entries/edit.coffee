@@ -46,33 +46,32 @@ module.exports = class EntryEditView extends PageView
       @subview 'field_'+field.slug, new FieldTypeInputView
         model: fieldModel
 
-      return if field.fieldType in ['text', 'textarea', 'color', 'checkbox', 'number']
+      return if field.fieldType in ['text', 'textarea', 'checkbox', 'number']
 
       # Otherwise ensure the plugin is loaded and see if one exists
       mediator.loadPlugin(field.fieldType).done =>
         plugin = mediator.plugins[field.fieldType]
 
         if plugin?
-          if _.isFunction plugin.input
-            return @subview 'field_'+field.slug, new plugin.input
+          if _.isFunction plugin.inputView
+            return @subview 'field_'+field.slug, new plugin.inputView
               model: fieldModel
               region: 'user-fields'
 
-          else if _.isString plugin.input
+          else if _.isString plugin.inputView
             return @subview 'field_'+field.slug, new FieldTypeInputView
-              template: plugin.input
+              template: plugin.inputView
               model: fieldModel
-        else
-          @subview('field_'+field.slug).$el.html """
-            <label class="text-danger">#{field.name}</label>
-            <div class="alert alert-danger">
-              <p>
-                <strong>Warning:</strong>
-                There was an error loading the <code>#{field.fieldType}</code> plugin.<br>
-                Saving this entry could destroy data from the database.
-              </p>
-            </div>
-          """
+
+        @subview('field_'+field.slug).$el.html """
+          <label class="text-danger">#{field.name}</label>
+          <div class="alert alert-danger">
+            <p>
+              <strong>Warning:</strong>
+              There was an error loading the input code for the <code>#{field.fieldType}</code> FieldType.<br>
+            </p>
+          </div>
+        """
 
     TweenLite.from @$('.panel'), .3,
       scale: .8
@@ -83,7 +82,13 @@ module.exports = class EntryEditView extends PageView
 
     content = {}
     for field in @bucket.get('fields')
-      content[field.slug] = @subview("field_#{field.slug}").getValue()
+      content[field.slug] = @subview("field_#{field.slug}").getValue?()
+      continue if content[field.slug]
+
+      data = @subview("field_#{field.slug}").$el.formParams no
+      simpleValue = data[field.slug]
+
+      content[field.slug] = if simpleValue? then simpleValue else data
 
     @model.set content: content
 
@@ -98,21 +103,7 @@ module.exports = class EntryEditView extends PageView
     e.preventDefault()
 
     if confirm "Are you sure you want to delete #{@model.get('title')}?"
-      @model.destroy(wait: yes).done =>
-        @keepElement = yes
-
-  dispose: ->
-    if @keepElement and @$el
-      $el = @$el.css position: 'absolute', width: '100%'
-      TweenLite.to $el, .4,
-        scale: .98
-        opacity: 0
-        y: '+200px'
-        rotate: 1
-        onComplete: ->
-          $el.remove()
-
-    super
+      @model.destroy(wait: yes)
 
   clickDraft: (e) ->
     e.preventDefault()
