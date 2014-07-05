@@ -217,7 +217,11 @@ module.exports = (grunt) ->
       livereload:
         options:
           livereload: true
-        files: ['public/**/*']
+        files: [
+          'public/css/buckets.css'
+          'public/js/{buckets,vendor}.css'
+          'public/plugins/**/*.{css,js}'
+        ]
 
   grunt.registerTask 'checkDatabase', (next, stuff...)->
     connection = mongoose.createConnection config.db, (err) ->
