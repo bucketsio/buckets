@@ -27,7 +27,8 @@ module.exports = class BucketsApp extends Chaplin.Application
     mediator.user = new User @options.user if @options.user
     mediator.plugins = {}
 
-    _.each @options.bootPlugins, (plugin) -> mediator.loadPlugin plugin
+    _.each @options.bootPlugins, (plugin) ->
+      mediator.loadPlugin plugin.slug if plugin.slug
 
     mediator.layout = new Layout
       title: 'Buckets'

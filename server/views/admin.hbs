@@ -62,7 +62,7 @@
       }
     </script>
     {{#each plugins}}
-      <script src="/{{../adminSegment}}/plugins/{{.}}.js"></script>
+      <script src="/{{../adminSegment}}/plugins/{{slug}}.js"></script>
     {{/each}}
     {{#is env 'development'}}
       <script src="//localhost:35729/livereload.js"></script>
