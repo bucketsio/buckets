@@ -5,6 +5,30 @@ uniqueValidator = require 'mongoose-unique-validator'
 Route = require '../models/route'
 db = require '../lib/database'
 
+fieldSchema = new mongoose.Schema
+  name:
+    type: String
+    unique: no
+    required: yes
+  slug:
+    type: String
+    unique: yes
+    required: yes
+  required: Boolean
+  instructions: String
+  fieldType:
+    type: String
+    required: yes
+  settings: mongoose.Schema.Types.Mixed
+  dateCreated:
+    type: Date
+    default: new Date
+
+fieldSchema.path('slug').validate (val) ->
+  console.log 'validating...', val
+  val not in ['title', 'description', 'slug', 'status', 'lastModified', 'publishDate', 'createdAt', 'author', 'bucket', 'keywords', 'content']
+, 'Sorry, that’s a reserved field slug.'
+
 bucketSchema = new mongoose.Schema
   name:
     type: String
@@ -37,25 +61,7 @@ bucketSchema = new mongoose.Schema
   route:
     type: mongoose.Schema.Types.ObjectId
     ref: 'Route'
-  fields: [
-    name:
-      type: String
-      unique: no
-      required: yes
-    slug:
-      type: String
-      unique: yes
-      required: yes
-    required: Boolean
-    instructions: String
-    fieldType:
-      type: String
-      required: yes
-    settings: mongoose.Schema.Types.Mixed
-    dateCreated:
-      type: Date
-      default: new Date
-  ]
+  fields: [fieldSchema]
 ,
   autoIndex: no
 

@@ -21,4 +21,8 @@ fieldSchema = new mongoose.Schema
 ,
   autoIndex: no
 
+fieldSchema.path('slug').validate (val) ->
+  val not in ['title', 'description', 'slug', 'status', 'lastModified', 'publishDate', 'createdAt', 'author', 'bucket', 'keywords', 'content']
+, 'Sorry, that’s a reserved field slug.'
+
 module.exports = db.model 'Field', fieldSchema
