@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+
+var argv     = require('minimist')(process.argv.slice(2)),
+    child    = require('child_process'),
+    spawn    = child.spawn
+
+//If you want to test and see how your commands are being parsed
+//console.log("entry:", argv)
+
+if(argv._.length > 0) {
+
+  var proc = spawn("grunt", ["serve"])
+
+  proc.stdout.on('data', function(stream) {
+    console.log(stream.toString())
+  })
+
+  /*
+  -d Debug
+  Not sure what to do with this guy
+  */
+
+  /*
+  if(argv.d) {
+    proc.stdout.on('data', function(stream) {
+      console.log(stream.toString())
+    })
+  }
+  */
+
+  proc.on('close', function() {
+    // do something else if you want
+  })
+}
+
+/*
+Standalone commands
+*/
+
+else {
+
+  /*
+  -h Help
+  */
+  if(argv.h) {
+    var msgContents = [
+      '-h Help',
+      '-v Version'
+    ]
+
+    console.log("\nBuckets help:\n")
+
+    msgContents.forEach(function(msg) {
+      console.log(msg)
+    })
+
+    console.log("\n")
+  }
+
+  /*
+  -v Version
+  */
+  if(argv.v) {
+    var pkg = require('../package.json'),
+    version = pkg.version
+
+    console.log("Buckets version:", version)
+  }
+
+}
