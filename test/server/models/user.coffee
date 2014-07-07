@@ -39,7 +39,7 @@ describe 'User', ->
     describe 'when password is invalid', ->
       it 'returns an error', (done) ->
         User.create { name: 'Bucketer', email: 'hello@buckets.io', password: 'abc12' }, (e, u) ->
-          assert.equal(e.errors.password.message, 'Your password must be between 6–20 characters, start with a letter, and include a number')
+          assert.equal(e.errors.password.message, 'Your password must be between 6–20 characters and include a number')
           done()
 
   describe '#upsertRole', ->
