@@ -23,7 +23,7 @@ describe 'User', ->
   describe 'password virtual', ->
     describe 'updating password', ->
       it 'updates password', (done) ->
-        p = 'abc123'
+        p = '1337abc123'
         user.password = p
         user.save ->
           assert.isTrue(user.authenticate(p))
@@ -141,4 +141,3 @@ describe 'User', ->
           assert.lengthOf(buckets, 1)
           assert.equal(buckets[0].id, bucket.id)
           done()
-
