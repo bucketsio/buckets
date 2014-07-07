@@ -125,8 +125,8 @@ userSchema.path('passwordDigest').validate (value) ->
   if (@isNew && !@password?)
     @invalidate('password', 'Password is required')
 
-  if @password? && !/^(?=[^\d_].*?\d)\w(\w|[!@#$%]){5,20}/.test(@password)
-    @invalidate('password', 'Your password must be between 6–20 characters, start with a letter, and include a number')
+  if @password? && !/^(?=.*?\d)\w(\w|[!@#$%]){5,20}/.test(@password)
+    @invalidate('password', 'Your password must be between 6–20 characters and include a number')
 , null
 
 userSchema.post 'save', ->
