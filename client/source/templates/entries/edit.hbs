@@ -4,11 +4,16 @@
 
   <div class="row">
     <div class="col-md-6">
-      {{#if _id}}
-        <h1>{{bucket.singular}}</h1>
-      {{else}}
-        <h1>{{bucket.singular}}</h1>
-      {{/if}}
+
+      <h1>
+        <a href="/{{adminSegment}}/buckets/{{bucket.slug}}">{{bucket.name}}</a> /
+        {{#if _id}}
+          Edit {{bucket.singular}}
+        {{else}}
+          New {{bucket.singular}}
+        {{/if}}
+      </h1>
+
       <div class="panel panel-default">
         <div class="panel-body">
           {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug size='lg' label="Title" required=true}}
