@@ -48,9 +48,9 @@ module.exports = class TemplateEditor extends PageView
     @autosaving = true
 
   autosave: =>
-    return if @editorSession.getValue() == @model.get('contents')
+    return if (sessionValue = @editorSession.getValue()) == @model.get('contents')
 
-    @$code.val(@editorSession.getValue())
+    @$code.val(sessionValue)
     data = @formParams()
     @model.save(data).done =>
       @collection.add(@model)
