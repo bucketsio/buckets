@@ -1,13 +1,11 @@
 <form>
   <div class="panel panel-default">
     <div class="panel-body">
-      {{input 'name' name label='What should the field name be?' placeholder='My field' slugName='fieldSlug' slugValue=slug size="lg"}}
+      {{input 'name' name label='Field Label' placeholder='My field' slugName='fieldSlug' slugValue=slug size="lg"}}
 
       {{textarea 'instructions' instructions label="User Instructions"}}
 
-      {{#isnt fieldType 'checkbox'}}
-        {{checkbox 'required' required label='This field is required.'}}
-      {{/isnt}}
+      <div class="settings"></div>
 
       <div class="pull-right">
         <a href="#cancel" class="btn btn-default">Cancel</a>

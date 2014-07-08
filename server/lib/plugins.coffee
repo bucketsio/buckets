@@ -21,9 +21,8 @@ module.exports =
       try
         Plugin = require "../../#{dir}server"
 
-      unless _.isFunction(Plugin)
-        console.log "Could not find a server-side plugin for #{pluginSlug}".grey
-        return slug: pluginSlug
+      # Plugin can be frontend-only
+      return slug: pluginSlug unless _.isFunction(Plugin)
 
       # Initiate it with a copy of Handlebars
       plugin = new Plugin

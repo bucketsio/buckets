@@ -7,7 +7,7 @@ createLabel = (text, name, options={}) ->
     className: 'control-label'
     required: no
 
-  text += "<span class=\"text-danger\">*</span>" if options.required
+  text += "<span title=\"This field is required.\" class=\"show-tooltip text-danger\">*</span>" if options.required
 
   tag 'label',
     for: "input-#{name}"
@@ -52,6 +52,7 @@ Handlebars.registerHelper 'input', (name, value, options) ->
     placeholder: settings.placeholder
     tabindex: 1
     type: settings.type
+    id: "input-#{name}"
     autocomplete: 'off'
 
   params.className += " input-#{settings.size}" if settings.size
@@ -85,6 +86,10 @@ Handlebars.registerHelper 'textarea', (name, value, options) ->
   settings = _.defaults options.hash,
     tabindex: 1
     className: 'form-control'
+    size: null
+
+  settings.rows = 20 if settings.size is 'lg'
+  settings.rows = 5 if settings.size is 'sm'
 
   textarea = tag 'textarea',
     name: name
@@ -99,6 +104,7 @@ Handlebars.registerHelper 'textarea', (name, value, options) ->
     wrap textarea,
       label: settings.label
       help: settings.help
+      name: name
       required: settings.required
   else
     textarea
@@ -129,11 +135,12 @@ Handlebars.registerHelper 'checkbox', (name, value, options) ->
     type: 'checkbox'
     name: name
     value: 1
+    tabIndex: 1
 
   params.checked = 'checked' if value
 
   cb = tag 'input', params
-  cb = tag 'label', {}, cb + " #{label}" if label
+  cb = tag 'label', {className: 'control-label'}, cb + " #{label}" if label
   wrap cb,
     help: options.hash.help
     className: 'checkbox'

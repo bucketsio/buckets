@@ -1,17 +1,12 @@
 {{#is fieldType 'textarea'}}
-  {{textarea slug value label=name help=instructions required=required}}
-{{/is}}
-{{#is fieldType 'color'}}
-  <label>
-    <input type="color" name="{{slug}}" value="{{value}}"> {{name}}
-  </label>
+  {{textarea slug value label=name help=instructions required=required size=settings.size}}
 {{/is}}
 {{#is fieldType 'checkbox'}}
-  {{checkbox slug value label=name}}
+  {{checkbox slug value label=name size=settings.size}}
 {{/is}}
 {{#is fieldType 'text'}}
-  {{input slug value label=name type=fieldType help=instructions required=required}}
+  {{input slug value label=name type=fieldType help=instructions required=required size=settings.size}}
 {{/is}}
 {{#is fieldType 'number'}}
-  {{input slug value label=name type=fieldType help=instructions required=required}}
+  {{input slug value label=name type=fieldType help=instructions required=required size=settings.size}}
 {{/is}}

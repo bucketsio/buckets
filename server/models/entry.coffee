@@ -50,7 +50,8 @@ entrySchema.pre 'validate', (next) ->
     @invalidate 'bucket', 'Must belong to a bucket' unless bkt
 
     for field in bkt?.fields or []
-      @invalidate field.slug, 'required' if field.required and !@content[field.slug]
+      if field.settings?.required and !@content[field.slug]
+        @invalidate field.slug, 'required'
 
     next()
 
