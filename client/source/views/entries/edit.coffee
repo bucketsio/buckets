@@ -2,6 +2,7 @@ _ = require 'underscore'
 
 PageView = require 'views/base/page'
 FormMixin = require 'views/base/mixins/form'
+AutosaveMixin = require 'views/base/mixins/autosave'
 tpl = require 'templates/entries/edit'
 
 module.exports = class EntryEditView extends PageView
@@ -11,6 +12,7 @@ module.exports = class EntryEditView extends PageView
 
   events:
     'submit form': 'submitForm'
+    'keydown [name="body"]': 'startAutosave'
     'click [href="#delete"]': 'clickDelete'
     'click [href="#draft"]': 'clickDraft'
 
@@ -69,3 +71,4 @@ module.exports = class EntryEditView extends PageView
     @submit @model.save(@formParams(), wait: yes)
 
   @mixin FormMixin
+  @mixin AutosaveMixin

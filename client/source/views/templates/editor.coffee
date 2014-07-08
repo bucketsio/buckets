@@ -17,6 +17,7 @@ module.exports = class TemplateEditor extends PageView
   events:
     'click [href="#new"]': 'clickNew'
     'click [href="#delete"]': 'clickDelete'
+    'keydown textarea': 'startAutosave'
     'submit form': 'submitForm'
 
   getTemplateData: ->
@@ -24,7 +25,9 @@ module.exports = class TemplateEditor extends PageView
       items: @collection.toJSON()
 
   render: ->
+    return if @autosaving
     super
+
     @$code = @$('textarea.code')
 
     unless Modernizr.touch
@@ -35,6 +38,22 @@ module.exports = class TemplateEditor extends PageView
         complete: @bindAceEditor
     else
       @selectTemplate @model.get('filename')
+
+  startAutosave: (e) =>
+    return unless e.type == 'keydown' || e.data?.action == 'removeText'
+    return if e.keyCode? in [16, 17, 18, 91, 93] # shift, ctrl, alt, l-command, r-command
+
+    (_.debounce @autosave, 2 * 1000)()
+
+    @autosaving = true
+
+  autosave: =>
+    return if (sessionValue = @editorSession.getValue()) == @model.get('contents')
+
+    @$code.val(sessionValue)
+    data = @formParams()
+    @model.save(data).done =>
+      @collection.add(@model)
 
   bindAceEditor: =>
     return if @disposed
