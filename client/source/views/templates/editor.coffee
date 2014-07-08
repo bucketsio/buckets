@@ -66,7 +66,6 @@ module.exports = class TemplateEditor extends PageView
     @editorSession = @editor.getSession()
     @editorSession.setMode 'ace/mode/handlebars'
     @editorSession.setTabSize 2
-    @editorSession.on 'change', @startAutosave
 
     @$('pre.code, textarea.code').toggleClass 'hidden'
 

@@ -59,9 +59,10 @@ module.exports = class BucketsController extends Controller
 
     @entry = new Entry
 
-    @listenToOnce @entry, 'sync', =>
-      toastr.success 'Entry added'
-      @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+    @listenTo @entry, 'sync', =>
+      unless @entry.get('autosave') == true
+        toastr.success 'Entry added'
+        @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
 
     @view = new EntryEditView
       model: @entry
@@ -80,13 +81,14 @@ module.exports = class BucketsController extends Controller
 
         @entry.set 'publishDate', Handlebars.helpers.simpleDateTime @entry.get('publishDate')
 
-        @listenToOnce @entry, 'sync', (entry, newData) =>
-          if newData._id
-            toastr.success "You saved “#{entry.get('title')}”"
-          else
-            toastr.success "You deleted “#{entry.get('title')}”"
+        @listenTo @entry, 'sync', (entry, newData) =>
+          unless @entry.get('autosave') == true
+            if newData._id
+              toastr.success "You saved “#{entry.get('title')}”"
+            else
+              toastr.success "You deleted “#{entry.get('title')}”"
 
-          @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+            @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
 
         @view = new EntryEditView
           model: @entry
