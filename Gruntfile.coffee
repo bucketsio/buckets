@@ -145,7 +145,6 @@ module.exports = (grunt) ->
         script: 'server/index.coffee'
         opts: ['node_modules/coffee-script/bin/coffee']
 
-
     less:
       app:
         expand: true,
@@ -173,6 +172,18 @@ module.exports = (grunt) ->
         dest: 'public/css/'
         ext: '.css'
 
+      plugins:
+        expand: yes
+        cwd: 'node_modules/'
+        src: ['buckets-*/**/*.styl', '!_*.styl']
+        dest: 'public/plugins/'
+
+        # We compress all plugins down to one file
+        # This file can be loaded/re-loaded on demand
+        rename: (dest, path, options) ->
+          pluginName = path.split('/')[0]?.replace('buckets-', '')
+          dest + pluginName + '.css' if pluginName
+
     uglify:
       app:
         files:
@@ -194,7 +205,7 @@ module.exports = (grunt) ->
         filter: 'isFile'
 
       options:
-        sourceMap: true
+        sourceMap: yes
         screwIe8: yes
         mangle: yes
 
@@ -208,6 +219,8 @@ module.exports = (grunt) ->
           'client/**/*.{coffee,hbs}'
         ]
         tasks: ['browserify:app']
+        options:
+          interrupt: yes
 
       clientTest:
         files: ['test/client/**/*.coffee']
@@ -232,9 +245,13 @@ module.exports = (grunt) ->
           spawn: false
           livereload: true
 
-      plugins:
-        files: ['node_modules/buckets-*/**/{models,controllers,helpers,templates,views}/**/*.{coffee,hbs}']
+      pluginScripts:
+        files: ['node_modules/buckets-*/**/{models,controllers,helpers,templates,views}/**/*.{coffee,hbs}', 'node_modules/buckets-*/*.{coffee,hbs}']
         tasks: ['browserify:plugins']
+
+      pluginStyles:
+        files: ['node_modules/buckets-*/**/*.styl']
+        tasks: ['stylus:plugins']
 
       livereload:
         options:

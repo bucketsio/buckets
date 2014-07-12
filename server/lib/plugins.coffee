@@ -1,7 +1,9 @@
+fs = require 'fs'
+
 glob = require 'glob'
 mongoose = require 'mongoose'
 _ = require 'underscore'
-Handlebars = require 'hbsfy/runtime'
+hbs = require 'hbs'
 
 db = require '../lib/database'
 config = require '../config'
@@ -16,30 +18,38 @@ module.exports =
     dirs = glob.sync "#{cwd}buckets-*/", cwd: cwd
 
     _.map dirs, (dir) ->
-      pluginSlug = dir.match(/\/buckets\-(.*)\//)?[1]
+
+      plugin = slug: dir.match(/\/buckets\-(.*)\//)?[1]
 
       try
-        Plugin = require "../../#{dir}server"
+        Plugin = require dir
+      catch e
+        console.log e
 
-      # Plugin can be frontend-only
-      return slug: pluginSlug unless _.isFunction(Plugin)
+      if _.isFunction Plugin
 
-      # Initiate it with a copy of Handlebars
-      plugin = new Plugin
-        Handlebars: Handlebars
+        # Pass rando powerful stuff to the plugin constructor
+        plugin.server = new Plugin
+          hbs: hbs
+          db: db
+          mongoose: mongoose
 
-      # Find the schema if there is one
-      if plugin.schema instanceof mongoose.Schema
-        dbModel = db.model pluginSlug, mongoose.schema
-      else if _.isObject plugin.schema
-        try
-          schema = new mongoose.Schema plugin.schema
-          dbModel = db.model pluginSlug, schema
-        catch e
-          console.log 'Error', e
-          # continue
+        # Find the schema if there is one
+        if plugin.server.schema instanceof mongoose.Schema
+          dbModel = db.model plugin.slug, mongoose.schema
+        else if _.isObject plugin.server.schema
+          try
+            schema = new mongoose.Schema plugin.server.schema
+            model = db.model plugin.slug, schema
+            plugin.model = model
+          catch e
+            console.log 'Error', e
 
-      #
-      slug: pluginSlug
-      server: plugin
-      model: dbModel
+      # Check for client & style
+      if glob.sync('client.{coffee,js}', cwd: dir)?.length
+        plugin.client = true
+
+      if glob.sync('index.styl', cwd: dir)?.length
+        plugin.clientStyle = true
+
+      plugin
