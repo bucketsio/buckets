@@ -22,7 +22,6 @@ module.exports = class BucketsApp extends Chaplin.Application
       controllerPath: 'client/source/controllers/'
       controllerSuffix: '_controller.coffee'
 
-    @mediator = mediator
     mediator.options = @options
     mediator.user = new User @options.user if @options.user
     mediator.plugins = {}
@@ -48,3 +47,4 @@ module.exports = class BucketsApp extends Chaplin.Application
 
   @View = require 'lib/view'
   @_ = _
+  @mediator = mediator
