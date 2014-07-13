@@ -39,11 +39,6 @@
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
     <script src="/{{adminSegment}}/js/vendor.js"></script>
     <script src="/{{adminSegment}}/js/buckets.js"></script>
-    {{#each plugins}}
-      {{#if client}}
-        <script src="/{{../../adminSegment}}/plugins/{{slug}}.js"></script>
-      {{/if}}
-    {{/each}}
     <script>
 
       try {
@@ -71,6 +66,11 @@
         }
       }
     </script>
+    {{#each plugins}}
+      {{#if client}}
+        <script src="/{{../../adminSegment}}/plugins/{{slug}}.js"></script>
+      {{/if}}
+    {{/each}}
     {{#is env 'development'}}
       <script src="//localhost:35729/livereload.js"></script>
     {{/is}}

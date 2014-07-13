@@ -36,7 +36,6 @@ app.all '*', (req, res) ->
     res.send 500 if err
 
     localPlugins = _.filter app.get('plugins'), (plugin) ->
-      console.log plugin
       plugin.client or plugin.clientStyle
 
     res.render 'admin',

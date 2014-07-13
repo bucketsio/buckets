@@ -17,10 +17,8 @@ app.set 'view engine', 'hbs'
 app.use cookieParser config.buckets.salt
 app.use bodyParser.json()
 app.use bodyParser.urlencoded extended: true
-
 app.use session secret: config.buckets.salt, name: 'buckets'
 
-# Passport deals with any possible auth
 app.use passport.initialize()
 app.use passport.session()
 
@@ -31,8 +29,10 @@ try
 catch e
   console.log e
   throw 'Missing API Class'.red
+
 app.use "/#{config.buckets.adminSegment}", require('./routes/admin')
-app.use require('./routes/frontend')
+
+app.use require './routes/frontend'
 
 app.listen config.buckets.port
 

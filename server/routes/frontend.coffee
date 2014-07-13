@@ -17,16 +17,23 @@ hbs.registerHelper 'inspect', (thing, options) ->
 require('../lib/renderer')(hbs)
 
 app.set 'views', tplPath
+app.set 'view cache', off
 
-app.set 'view cache', false
+app.use express.static config.buckets.publicPath, maxAge: 86400000 * 7 # One week
+
+plugins = app.get 'plugins'
 
 app.get '*', (req, res, next) ->
 
   # dynamic renderTime helper
   startTime = new Date
+
+  getTime = ->
+    now = new Date
+    (now.getTime() - startTime.getTime()) + 'ms'
+
   hbs.registerHelper 'renderTime', ->
-    endTime = new Date
-    renderTimeMS = (endTime.getTime() - startTime.getTime()) + 'ms'
+    renderTimeMS = getTime()
     "#{req.path} rendered in #{renderTimeMS}."
 
   templateData =
@@ -48,7 +55,7 @@ app.get '*', (req, res, next) ->
     templateData.errorText = 'Page missing'
 
     res.render 'index', templateData, (err, html) ->
-      console.log 'Buckets caught an error and it trying to render the index', err if err
+      console.log 'Buckets caught an error trying to render the index', err if err
       if err
         res.send 404, err
       else
