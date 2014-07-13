@@ -19,7 +19,7 @@ app.route('/buckets')
     return res.send(401) unless req.user
 
     req.user.getBuckets (e, buckets) ->
-      res.send buckets
+      res.send 200, buckets
 
 app.route('/buckets/:bucketID')
   .delete (req, res) ->
@@ -36,10 +36,10 @@ app.route('/buckets/:bucketID')
   .put (req, res) ->
     delete req.body._id
     Bucket.findOne {_id: req.params.bucketID}, (err, bucket) ->
-      return res.send e: err, 400 if err
+      return res.send 400, e: err if err
       bucket.set(req.body).save (err, bucket) ->
-        return res.send err, 400 if err
-        res.send bucket, 200
+        return res.send 400, err if err
+        res.send 200, bucket
 
 app.route('/buckets/:bucketId/members')
   .get (req, res) ->

@@ -15,7 +15,7 @@ app.post '/install', (req, res) ->
   User.count (err, count) ->
 
     return res.send err if err
-    return res.send error: 'This deployment has already been installed.' unless count is 0
+    return res.send 400, error: 'This deployment has already been installed.' unless count is 0
 
     newUser = new User req.body
     newUser.roles = [name: 'administrator']
@@ -23,17 +23,17 @@ app.post '/install', (req, res) ->
     renderError = (err) ->
       res.send 400, err
 
-    newUser.save (err, user) ->
-      return res.send err, 400 if err
-      console.log 'user saved', user
+    newUser.save (err, newUser) ->
+
+      return renderError err if err
 
       Route.create(routeSeed).then( ->
-        console.log 'bucket created', arguments
         Bucket.create bucketSeed
       ).then( (bucket) ->
-        entry.bucket = bucket._id for entry in entrySeed
+        for entry in entrySeed
+          entry.bucket = bucket._id
+          entry.author = newUser._id
         Entry.create entrySeed
       , renderError).then ->
-        console.log 'route created', arguments
         req.login newUser, ->
-          res.send newUser, 201
+          res.send 201, newUser
