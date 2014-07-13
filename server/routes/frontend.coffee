@@ -42,11 +42,9 @@ app.get '*', (req, res, next) ->
     req:
       body: req.body
       path: req.path
-      query: unless _.isEmpty(req.query)
-          req.query
-        else
-          false
+      query: req.query unless _.isEmpty(req.query)
       params: {} # We fill this manually later
+    user: req.user
 
   renderError = ->
     next() unless config.buckets.catchAll
@@ -71,6 +69,8 @@ app.get '*', (req, res, next) ->
 
       if matches
         # Add the URL wildcards
+
+        templateData.template = route.template
         templateData.req.params[key.name] = matches[i+1] for key, i in route.keys
 
         return res.render route.template, templateData, (err, html) ->
