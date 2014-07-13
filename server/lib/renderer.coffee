@@ -32,7 +32,8 @@ module.exports = (hbs) ->
 
       if settings.bucket
         bucket = _.findWhere(buckets, slug: settings.bucket)
-        searchQuery['bucket'] = bucket._id if bucket
+
+        searchQuery['bucket'] = bucket?._id
 
       if settings.slug
         searchQuery.slug = settings.slug
