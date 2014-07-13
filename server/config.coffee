@@ -10,6 +10,7 @@ config =
       port: process.env.PORT || 3000
       env: env
       templatePath: "#{__dirname}/../user/templates/"
+      pluginsPath: "#{__dirname}/../node_modules/"
       catchAll: yes
     db: "mongodb://localhost/buckets_#{env}"
   production:

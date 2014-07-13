@@ -4,35 +4,21 @@
 
   <div class="row">
     <div class="col-md-6">
-      {{#if _id}}
-        <h1>{{bucket.singular}}</h1>
-      {{else}}
-        <h1>{{bucket.singular}}</h1>
-      {{/if}}
+
+      <h1>
+        <a href="/{{adminSegment}}/buckets/{{bucket.slug}}">{{bucket.name}}</a> /
+        {{#if _id}}
+          Edit {{bucket.singular}}
+        {{else}}
+          New {{bucket.singular}}
+        {{/if}}
+      </h1>
+
       <div class="panel panel-default">
         <div class="panel-body">
-          {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug className="input-lg form-control" label="Title"}}
+          {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug size='lg' label="Title" required=true}}
 
-          {{!-- Probably have to use subviews soon --}}
-          <div class="userFields">
-            {{#each fields}}
-              {{#is fieldType 'textarea'}}
-                {{textarea slug value label=name help=instructions}}
-              {{/is}}
-              {{#is fieldType 'color'}}
-                <label>
-                  <input type="color" name="{{slug}}" value="{{value}}"> {{name}}
-                </label>
-              {{/is}}
-              {{#is fieldType 'checkbox'}}
-                {{checkbox slug value label=name}}
-              {{/is}}
-              {{#is fieldType 'text'}}
-                {{input slug value label=name type=fieldType help=instructions}}
-              {{/is}}
-            {{/each}}
-          </div>
-
+          <div class="userFields"></div>
           <div class="clearfix"></div>
 
           <div class="entry-publish">
@@ -60,8 +46,8 @@
 
           <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
           <div id="meta" class="collapse">
-            {{input 'keywords' keywords label="Keywords" className="form-control input-sm"}}
-            {{textarea 'description' description label="Description" className="form-control input-sm"}}
+            {{input 'keywords' keywords label="Keywords" size='sm'}}
+            {{textarea 'description' description label="Description" size='sm'}}
           </div>
         </div>
       </div>

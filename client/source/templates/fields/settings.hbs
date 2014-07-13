@@ -1,0 +1,9 @@
+{{#isnt fieldType 'checkbox'}}
+  {{checkbox 'required' settings.required label='This field is required'}}
+  {{input 'placeholder' settings.placeholder label='Placeholder Text'}}
+  <select name="size" class="form-control">
+    <option value="">Default</option>
+    <option value="lg"{{#is settings.size 'lg'}} selected{{/is}}>Large</option>
+    <option value="sm"{{#is settings.size 'sm'}} selected{{/is}}>Small</option>
+  </select>
+{{/isnt}}

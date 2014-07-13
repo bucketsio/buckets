@@ -1,8 +1,10 @@
 express = require 'express'
 compress = require 'compression'
 hbs = require 'hbs'
+_ = require 'underscore'
 
 config = require '../config'
+plugins = require '../lib/plugins'
 passport = require '../lib/auth'
 User = require '../models/user'
 
@@ -14,6 +16,8 @@ hbs.registerHelper 'json', (context) ->
 app.set 'views', "#{__dirname}/../views"
 app.use compress()
 app.use express.static '#{__dirname}/../public/', maxAge: 86400000 * 7 # One week
+
+app.set 'plugins', plugins.load()
 
 # Special case for install
 app.post '/login', passport.authenticate('local', failureRedirect: "/#{config.buckets.adminSegment}/login"), (req, res, next) ->
@@ -31,9 +35,14 @@ app.all '*', (req, res) ->
   User.count({}).exec (err, userCount) ->
     res.send 500 if err
 
+    localPlugins = _.filter app.get('plugins'), (plugin) ->
+      console.log plugin
+      plugin.client or plugin.clientStyle
+
     res.render 'admin',
       user: req.user
       env: config.buckets.env
+      plugins: localPlugins
       adminSegment: config.buckets.adminSegment
       apiSegment: config.buckets.apiSegment
       needsInstall: userCount is 0

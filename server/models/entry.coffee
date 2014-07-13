@@ -36,8 +36,7 @@ entrySchema = new Schema
   keywords: [
     type: String
   ]
-,
-  strict: no
+  content: {}
 
 entrySchema.pre 'save', (next) ->
   @lastModified = Date.now()
@@ -45,7 +44,16 @@ entrySchema.pre 'save', (next) ->
 
 entrySchema.pre 'validate', (next) ->
   @slug ?= getSlug @title
-  next()
+
+  @model('Bucket').findOne _id: @bucket, (err, bkt) =>
+
+    @invalidate 'bucket', 'Must belong to a bucket' unless bkt
+
+    for field in bkt?.fields or []
+      if field.settings?.required and !@content[field.slug]
+        @invalidate field.slug, 'required'
+
+    next()
 
 entrySchema.path('publishDate').set (val) ->
   parsed = chrono.parse(val)

@@ -5,5 +5,6 @@ module.exports = class Field extends Model
     name: ''
     instructions: ''
     slug: ''
+    settings: {}
 
   urlRoot: '/api/fields'

@@ -3,30 +3,26 @@
 
 <div class="row">
   <div class="col-sm-6">
-    {{select 'fieldType' '' fieldTypes valueKey="value" className="form-control input-lg"}}
+    {{select 'fieldType' '' fieldTypes valueKey="value"}}
   </div>
 </div>
 
 <div class="editField"></div>
 
 {{#if length}}
-  <table class="table">
-  <tr>
-    <th colspan="2">Name</th>
-    <th>Type</th>
-    <th></th>
+
+  <ul class="fieldsList sortable list-group">
   {{#each items}}
-    <tr>
-      <td><code>\{{{{slug}}<span></span>}}</code></td>
-      <td>{{name}}</td>
-      <td class="text-muted">{{fieldType}}</td>
-      <td valign="middle">
-        <a href="#edit" class="btn btn-default btn-xs">Edit</a>
-        <a href="#remove" class="btn btn-link btn-sm">{{icon 'trash'}}</a>
-      </td>
-    </tr>
+    <li class="list-group-item">
+      <h3 class="list-group-item-heading"><a href="#edit">{{name}}</a></h2>
+      <p class="list-group-item-text">
+        <span class="label label-default">{{fieldType}}</span>
+        <code>\{{{{slug}}<span></span>}}</code>
+        <a class="btn btn-link btn-icon" href="#remove">{{icon 'trash'}}</a>
+      </p>
+    </li>
   {{/each}}
-  </table>
+  </ul>
 {{/if}}
 
 {{submit 'Save'}}
