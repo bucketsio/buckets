@@ -2,7 +2,6 @@ Swag = require 'swag'
 _ = require 'underscore'
 
 config = require '../config'
-
 Entry = require '../models/entry'
 Bucket = require '../models/bucket'
 
@@ -17,11 +16,12 @@ module.exports = (hbs) ->
     # Add the entries helper
     hbs.registerAsyncHelper 'entries', (options, cb) ->
       settings = _.defaults options.hash,
-        bucket: ''
+        bucket: null
         until: Date.now()
-        since: ''
+        since: null
         limit: 10
         skip: 0
+        status: 'live'
         sort: '-publishDate'
         status: 'live'
         find: ''
@@ -31,9 +31,9 @@ module.exports = (hbs) ->
       bucketPath = path: 'bucket'
 
       if settings.bucket
-        bucket = _.findWhere(buckets, slug: settings.bucket)
-
-        searchQuery['bucket'] = bucket?._id
+        filteredBuckets = settings.bucket.split '|'
+        filteredBucketIDs = _.pluck _.filter(buckets, (bkt) -> bkt.slug in filteredBuckets), '_id'
+        searchQuery['bucket'] = $in: filteredBucketIDs
 
       if settings.slug
         searchQuery.slug = settings.slug
@@ -41,22 +41,30 @@ module.exports = (hbs) ->
       if settings.where
         searchQuery.$where = settings.where
 
-      Entry.find(searchQuery)
-        .populate('bucket')
-        .populate('author')
-        .sort(settings.sort)
-        .limit(settings.limit)
-        .skip(settings.skip)
-        .exec (err, pages) ->
-          console.log err if err
+      if settings.status
+        searchQuery.status = settings.status
 
-          return cb options.inverse @ if pages?.length is 0 or err
+      Entry.find searchQuery
+        .populate 'bucket'
+        .populate
+          path: 'author'
+          select: '-passwordDigest -resetPasswordToken -resetPasswordExpires'
+        .sort settings.sort
+        .limit settings.limit
+        .skip settings.skip
+        .exec (err, entries) ->
+          console.log err if err
+          return cb options.inverse @ if entries?.length is 0 or err
 
           ret = []
-          for page in pages
+          for entry in entries
+
+            # Make content attributes first-level tags, ie. `{{body}}` instead of `{{content.body}}`
+            entryJSON = _.extend entry.toJSON(), entry.content
+
             try
-              ret.push options.fn page.toJSON()
+              ret.push options.fn entryJSON
             catch e
-              console.log e.stack, arguments
+              console.log e
 
           cb ret.join('')

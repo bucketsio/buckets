@@ -1,6 +1,6 @@
 # User Templates
 
-**Alpha Notice** Please note that Buckets is in Alpha stage and some features listed below may not be functional.
+**Alpha Notice** Please note that Buckets is in Alpha stage and some features listed below may not be implemented yet. [Help decide how templates shape up](https://assembly.com/buckets/projects/54).
 
 This document describes the functionality available in the user-facing templates in Buckets.
 
@@ -33,10 +33,11 @@ Parameters can be added to the tag like so:
 
 * **bucket:** Pass the slug of a Bucket to filter entries. Pass multiple Buckets with a pipeline separator, eg. `bucket="products|articles"`.
 * **limit:** Limit the number of entries returned.
-* **where:** Pass a string like, `where="year > 2013 && (price < 10 || onSale)"` using the custom attributes of your Bucket. Note: This has negative performance implications, though it provides a very powerful search mechanism.
+* **skip:** Combine this with the limit parameter to create pagination.
+* **where:** Pass a string like, `where="year > 2013 && (price < 10 || onSale)"` using the custom attributes of your Bucket. **Note:** This has negative performance implications, though it provides a very powerful search mechanism. This is not implemented yet, though you can use it with a wacky format like, `where="this.content.year > 2013"`
 * **since:** Only show entries that were published after the date provided.
 * **until:** Only show entries that were published before the date provided.
-* **skip:** Combine this with the limit parameter to create pagination.
+* **sort:** Use a mongoose-style sort string, eg. `sort="-publishDate"`, `sort="lastName firstName"`
 
 ```
 {{#entries limit=10 skip=req.query.next}}

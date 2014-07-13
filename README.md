@@ -10,8 +10,7 @@ Buckets is a simple, open source, content management system for Node.js.
 
 ### Pre-requirements
 
-[MongoDB](http://www.mongodb.org), [Node.js](http://nodejs.org) and the following globals:
-
+[MongoDB](http://www.mongodb.org), [Node.js](http://nodejs.org) and the following global:
 
 ```
 npm install -g grunt-cli
@@ -33,13 +32,15 @@ grunt serve
 
 After building, Buckets should then be accessible at the default address: [http://localhost:3000/](http://localhost:3000/)
 
-### Running tests
+[More Grunt tasks »](docs/frontend.md#grunt-tasks)
+
+### Test tasks
 
 - `grunt test:client`: To run client tests
 - `grunt test:server`: To run server tests
 - `grunt test`: To run both client and server tests
 
-#### Additional Documentation
+### Documentation
 
 * [Frontend Architecture](docs/frontend.md)
 * [Database](docs/database.md)
