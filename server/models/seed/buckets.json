@@ -4,6 +4,9 @@
   "fields": [{
     "name": "Body",
     "slug": "body",
-    "fieldType": "textarea"
+    "fieldType": "markdown",
+    "settings": {
+      "size": "lg"
+    }
   }]
 }]

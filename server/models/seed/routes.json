@@ -2,6 +2,6 @@
   "urlPattern": "",
   "template": "index"
 },{
-  "urlPattern": "entry/:id",
+  "urlPattern": "/:slug",
   "template": "index"
 }]

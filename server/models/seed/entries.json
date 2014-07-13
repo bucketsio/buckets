@@ -1,6 +1,15 @@
 [{
   "title": "Welcome to Buckets",
+  "slug": "welcome",
+  "status": "live",
   "content": {
-    "body": "Lorem ipsum."
+    "body": "Congrats, you’ve successfully installed Buckets!"
+  }
+}, {
+  "title": "Open Source & Community Built",
+  "slug": "community",
+  "status": "live",
+  "content": {
+    "body": "Buckets is open source and managed by a community of makers on Assembly. By contributing to Buckets development, designers and developers also earn a portion of its profit. [Learn more »](https://assembly.com/buckets) \n\n## Contributing\n\nThis is a product being built by the Assembly community. You can help push this idea forward by visiting https://assemblymade.com/buckets. We welcome any contributions to product design/direction or code."
   }
 }]
