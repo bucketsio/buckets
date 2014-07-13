@@ -35,10 +35,10 @@ app.route('/buckets/:bucketID')
 
   .put (req, res) ->
     delete req.body._id
-    Bucket.findOneAndUpdate {_id: req.params.bucketID}, req.body, (err, bucket) ->
-      if err
-        res.send e: err, 400
-      else
+    Bucket.findOne {_id: req.params.bucketID}, (err, bucket) ->
+      return res.send e: err, 400 if err
+      bucket.set(req.body).save (err, bucket) ->
+        return res.send err, 400 if err
         res.send bucket, 200
 
 app.route('/buckets/:bucketId/members')

@@ -10,6 +10,10 @@ Route = require '../models/route'
 module.exports = app = express()
 tplPath = config.buckets?.templatePath
 
+hbs.registerHelper 'inspect', (thing, options) ->
+  thing = thing or @
+  new hbs.handlebars.SafeString "<pre>#{JSON.stringify(thing, null, 2)}</pre>"
+
 require('../lib/renderer')(hbs)
 
 app.set 'views', tplPath

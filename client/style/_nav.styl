@@ -35,7 +35,7 @@
 
   li:active
     position relative
-    top 1px
+    top -1px
 
 
   a:first-child
@@ -44,11 +44,10 @@
     overflow hidden
     text-overflow ellipsis
 
-
   a:first-child .icon
     position absolute
     left 8px
-    top 8px
+    top 6px
     font-size 24px
     margin-right 4px
     vertical-align middle
@@ -61,6 +60,7 @@
     top 0
     right 0
     padding-left 15px
+    background-color transparent
 
     .icon
       top 2px
@@ -87,11 +87,13 @@ addColor($name, $color)
       background-color lighten($color, 5)
 
 addColor('teal', $teal)
+addColor('green', $green)
 addColor('blue', $blue)
 addColor('red', $red)
 addColor('orange', $orange)
 addColor('yellow', $yellow)
 addColor('purple', $purple)
+addColor('gray', $gray)
 
 .nav-primary > .bucket.active > a
   color #fff

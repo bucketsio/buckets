@@ -31,7 +31,9 @@ module.exports = class BucketsController extends Controller
     @listenToOnce newBucket, 'sync', =>
       toastr.success 'Bucket added'
       mediator.buckets.add newBucket
-      @redirectTo 'buckets#listEntries', slug: newBucket.get('slug')
+
+      @redirectTo
+        url: "/#{mediator.options.adminSegment}/buckets/#{newBucket.get('slug')}/settings/fields"
 
     @view = new BucketEditView
       model: newBucket

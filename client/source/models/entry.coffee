@@ -9,5 +9,6 @@ module.exports = class Entry extends Model
     description: ''
     status: 'draft'
     slug: ''
+    content: {}
   idAttribute: '_id'
   urlRoot: '/api/entries'

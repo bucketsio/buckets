@@ -4,12 +4,45 @@
 
 $primary = #edb91d
 
-$red = #dc2d2e
-$blue = #39a0a4
-$orange = #e45906
-$yellow = #edb91d
-$teal = #5aa97f
-$purple = #825a7b
+// $red = #dc2d2e
+// $blue = #39a0a4
+// $orange = #e45906
+// $yellow = #edb91d
+// $teal = #5aa97f
+// $purple = #825a7b
+
+
+// Flat UI Colors
+// $red = #c0392b
+// $green = #27ae60
+// $blue = #2980b9
+// $orange = #d35400
+// $yellow = #f39c12
+// $teal = #16a085
+// $purple = #8e44ad
+// $gray = #7f8c8d
+
+
+// Material Design Colors
+// $red = #e51c23
+// $green = #8bc34a
+// $blue = #03a9f4
+// $orange = #ff5722
+// $yellow = #f39c12
+// $teal = #009688
+// $purple = #8e44ad
+// $gray = #9e9e9e
+
+
+// Material Design 700
+$red = #d01716
+$green = #689f38
+$blue = #0288d1
+$orange = #f57c00
+$yellow = #fbc02d
+$teal = #009688
+$purple = #7b1fa2
+$gray = #9e9e9e
 
 $sans = Lato, 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, 'Segoe UI', Segoe, Roboto, sans-serif
 
@@ -39,10 +72,9 @@ body
 .form-control
   border-width 2px
   box-shadow none
-  // font-size 16px
-  padding 10px 12px
-.form-control:focus
-  box-shadow none !important
+
+  &:focus
+    box-shadow none !important
 
 .btn-icon
   .icon
@@ -103,11 +135,21 @@ h4[data-toggle]
   background-color rgba($primary, .8)
 
 .userFields textarea.form-control
-  height 320px
   font-size 14px
+
+  @media (min-width: 400px)
+    &
+      // padding-top 12px
+      font-size 16px
+      line-height 20px
 
 th
   font-weight 500
+
+.has-slug
+  border-radius bottom 0
+  position relative
+  z-index 5
 
 .input-slug
   background-color #fcfcfc
@@ -116,18 +158,20 @@ th
   border-radius top 0, bottom 6px
   color rgba(darken($primary, 40), .4)
   position relative
-  z-index 5
-
-  &:focus
-    color darken($primary, 20)
-
-.has-slug
-  border-radius bottom 0
-  position relative
   z-index 2
 
   &:focus
+    color darken($primary, 20)
     z-index 10
 
 input[type="text"].form-control, textarea.form-control
   -webkit-appearance none
+
+.nav-primary a:active, a.btn:not(.btn-link):active
+  box-shadow rgba(#000, .2) 0 1px 4px
+  transition box-shadow .15s ease-out
+
+
+.input-sm, .input-lg
+  padding-left 10px
+  padding-right 10px

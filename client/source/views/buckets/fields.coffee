@@ -1,17 +1,19 @@
 _ = require 'underscore'
 
 View = require 'lib/view'
+Model = require 'lib/model'
+
 FieldEditView = require 'views/fields/edit'
 Field = require 'models/field'
 
 tpl = require 'templates/buckets/fields'
-mediator = require('chaplin').mediator
+mediator = require 'mediator'
 
 module.exports = class BucketFieldsView extends View
   template: tpl
 
   events:
-    'change select': 'addField'
+    'change [name="fieldType"]': 'addField'
     'click [href="#edit"]': 'clickEdit'
     'click [href="#remove"]': 'clickRemove'
 
@@ -20,8 +22,7 @@ module.exports = class BucketFieldsView extends View
     'remove collection': 'render'
 
   getTemplateData: ->
-    _.extend super,
-      fieldTypes: [
+    fieldTypes = [
         name: 'Add a field…'
       ,
         name: 'Text', value: 'text'
@@ -30,59 +31,52 @@ module.exports = class BucketFieldsView extends View
       ,
         name: 'Checkbox', value: 'checkbox'
       ,
-        name: 'Color', value: 'color'
-      ,
-        name: 'File', value: 'file'
-      ,
         name: 'Textarea', value: 'textarea'
-      # ,
-      #   name: 'Date/time', value: 'datetime'
-      # ,
-      #   name: 'Markdown', value: 'markdown'
-      # ,
-      #   name: 'Email', value: 'email'
-      # ,
-      #   name: 'HTML Editor', value: 'html'
-      # ,
-      #   name: 'Relationship', value: 'relationship'
-      # ,
-      #   name: 'Location', value: 'location'
       ]
+
+    # FIXME: This currently assumes all plugins are FieldTypes...
+    # plugins = _.findWhere mediator.plugins, type: 'FieldType'
+
+    for pluginSlug, plugin of mediator.plugins
+      fieldTypes.push name: plugin.name, value: pluginSlug if plugin?.name
+
+    _.extend super, {fieldTypes: fieldTypes}
 
   addField: (e) ->
     $el = @$(e.currentTarget)
 
     fieldType = $el.val()
 
-    @field = new Field
+    field = new Field
       fieldType: fieldType
 
-    editField = @subview 'editField', new FieldEditView
-      container: @$('.editField')
-      model: @field
-
-    @listenToOnce @field, 'change', (field) ->
-      @subview('editField').dispose()
-      @collection.add field, at: 0
+    @renderEditField field
 
   clickEdit: (e) ->
     e.preventDefault()
 
-    idx = $(e.currentTarget).closest('tr').index() - 1
-    @field = @collection.at idx
+    idx = $(e.currentTarget).closest('li').index()
+    field = @collection.at idx
 
+    @renderEditField field
+
+  renderEditField: (field) ->
     editField = @subview 'editField', new FieldEditView
       container: @$('.editField')
-      model: @field
+      model: field
 
-    @listenToOnce @field, 'change', (field) ->
+    @listenToOnce field, 'change', (field) ->
       @subview('editField').dispose()
+      @collection.add field, at: 0
       @render()
 
   clickRemove: (e) ->
     e.preventDefault()
 
-    idx = $(e.currentTarget).closest('tr').index() - 1
+    idx = $(e.currentTarget).closest('li').index()
     field = @collection.at idx
 
-    @collection.remove field if field and confirm "Are you sure you want to remove the “#{field.get('name')}” #{field.get('fieldType')} field?"
+    {name, fieldType} = field.toJSON()
+
+    if field and confirm "Are you sure you want to remove the “#{name}” #{fieldType} field?"
+      @collection.remove field

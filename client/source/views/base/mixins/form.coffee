@@ -31,7 +31,7 @@ module.exports =
 
     if errors = res?.responseJSON?.errors
       _.each errors, (error) =>
-        if error.type is 'required'
+        if error.type is 'required' or error.message is 'required'
           message = '<span class="label label-danger">Required</span>'
         else
           message = error.message
@@ -44,4 +44,4 @@ module.exports =
             <span class="help-block">#{message}</span>
           """
 
-      @$('.has-error').eq(0).find('[name]').focus()
+      @$('.has-error').eq(0).find('[name]').eq(0).focus()

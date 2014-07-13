@@ -14,6 +14,11 @@
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="/{{adminSegment}}/css/buckets.css">
+    {{#each plugins}}
+      {{#if clientStyle}}
+        <link rel="stylesheet" href="/{{../../adminSegment}}/plugins/{{slug}}.css">
+      {{/if}}
+    {{/each}}
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -34,29 +39,37 @@
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
     <script src="/{{adminSegment}}/js/vendor.js"></script>
     <script src="/{{adminSegment}}/js/buckets.js"></script>
+    {{#each plugins}}
+      {{#if client}}
+        <script src="/{{../../adminSegment}}/plugins/{{slug}}.js"></script>
+      {{/if}}
+    {{/each}}
     <script>
-      $(function(){
-        try {
-          window.bkts = new App({
 
-            adminSegment: '{{adminSegment}}'
-            ,apiSegment: '{{apiSegment}}'
+      try {
+        BucketsApp = require('buckets');
 
-            {{#if needsInstall}}
-              ,needsInstall: {{needsInstall}}
-            {{/if}}
+        window.bkts = new BucketsApp({
 
-            {{#if user}}
-              ,user: {{json user}}
-            {{/if}}
-          });
-        } catch (e) {
-          if (e && e.message && window.jQuery) {
-            console.error(e);
-            $('#bkts-content').append("<div class=\"container\"><div class=\"alert center alert-danger\"><strong>There was an error loading the Buckets JavaScript.</strong> <br>If you’re the site developer, have you run <code>grunt build</code> or <code>grunt dev</code>?</div></div>")
-          }
+          adminSegment: '{{adminSegment}}'
+          ,apiSegment: '{{apiSegment}}'
+
+          {{#if needsInstall}}
+            ,needsInstall: {{needsInstall}}
+          {{/if}}
+          {{#if plugins}}
+            ,bootPlugins: {{json plugins}}
+          {{/if}}
+          {{#if user}}
+            ,user: {{json user}}
+          {{/if}}
+        });
+      } catch (e) {
+        if (e && e.message && window.jQuery) {
+          console.error(e);
+          $('#bkts-content').append("<div class=\"container\"><div class=\"alert center alert-danger\"><strong>There was an error loading the Buckets JavaScript.</strong> <br>If you’re the site developer, have you run <code>grunt build</code> or <code>grunt dev</code>?</div></div>")
         }
-      })
+      }
     </script>
     {{#is env 'development'}}
       <script src="//localhost:35729/livereload.js"></script>
