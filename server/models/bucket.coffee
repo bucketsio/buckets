@@ -40,6 +40,8 @@ bucketSchema = new mongoose.Schema
   titleLabel:
     type: String
     default: 'Title'
+  titlePlaceholder:
+    type: String
   singular:
     type: String
     required: yes
