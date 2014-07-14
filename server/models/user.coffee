@@ -122,7 +122,8 @@ passwordVirtual.set (password) ->
   @passwordDigest = bcrypt.hashSync(password, bcrypt.genSaltSync())
 
 userSchema.path('passwordDigest').validate (value) ->
-  if (@isNew && !@password?)
+
+  if @isNew and !@password?
     @invalidate('password', 'Password is required')
 
   if @password? && !/^(?=.*?\d)\w(\w|[!@#$%]){5,20}/.test(@password)
