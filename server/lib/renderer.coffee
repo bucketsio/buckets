@@ -4,12 +4,20 @@ _ = require 'underscore'
 config = require '../config'
 Entry = require '../models/entry'
 Bucket = require '../models/bucket'
+moment = require 'moment'
 
 module.exports = (hbs) ->
 
   # Add Swag helpers
   Swag.registerHelpers hbs.handlebars
   hbs.registerPartials config.buckets.templatePath
+
+  # formatTime helper
+  hbs.registerHelper 'formatTime', (value, options) ->
+    settings = _.defaults options.hash,
+      format: 'MMM D, YYYY h:mma'
+
+    moment(value).format(settings.format)
 
   Bucket.find {}, (err, buckets) ->
 
