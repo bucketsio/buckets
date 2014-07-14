@@ -19,6 +19,10 @@ module.exports = (hbs) ->
 
     moment(value).format(settings.format)
 
+  # timeAgo helper
+  hbs.registerHelper 'timeAgo', (value, options) ->
+    moment(value).fromNow()
+
   Bucket.find {}, (err, buckets) ->
 
     # Add the entries helper

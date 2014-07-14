@@ -71,6 +71,22 @@ Renders the time (in ms) the page has taken to render (best to place near the fo
 {{renderTime}}
 ```
 
+### formatTime
+
+Shows a formatted time using Moment.js. Check out [the docs](http://momentjs.com/docs/#/displaying/format/) to see what formats are available.
+
+```
+{{formatTime publishDate format="MMM D, YYYY h:mma"}}
+```
+
+### timeAgo
+
+Shows the difference between the date given and now.
+
+```
+{{timeAgo "2014-01-01 00:00:00"}}
+```
+
 ### next
 
 Passes through to the next Route/Template combination after the current one. Best used in conjunction with entries tag like so:
