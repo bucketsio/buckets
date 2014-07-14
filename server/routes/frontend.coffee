@@ -5,6 +5,7 @@ hbs = require 'hbs'
 pathRegexp = require 'path-to-regexp'
 express = require 'express'
 _ = require 'underscore'
+moment = require 'moment'
 
 config = require '../config'
 Route = require '../models/route'
@@ -45,6 +46,10 @@ app.get '*', (req, res, next) ->
     (now.getTime() - startTime.getTime()) + 'ms'
 
   hbs.registerHelper 'renderTime', -> getTime()
+
+  # formatTime helper
+  hbs.registerHelper 'formatTime', (value, options) ->
+    moment(value).format(options.hash.format)
 
   globalNext = null
   hbs.registerHelper 'next', ->

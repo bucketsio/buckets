@@ -68,6 +68,7 @@
     "hbs": "^2.6.0",
     "hbsfy": "^1.3.2",
     "inflection": "^1.3.6",
+    "moment": "^2.7.0",
     "mongoose": "^3.8.11",
     "mongoose-regexp": "0.0.1",
     "mongoose-unique-validator": "^0.3.0",
