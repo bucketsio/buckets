@@ -33,7 +33,7 @@ module.exports = class EntryEditView extends PageView
       bucket: @bucket.toJSON()
       user: @user?.toJSON()
       fields: fields
-      newTitle: "New #{@bucket.get('singular')}"
+      newTitle: if @bucket.get('titlePlaceholder') then _.sample @bucket.get('titlePlaceholder').split('|') else "New #{@bucket.get('singular')}"
 
   render: ->
     super
