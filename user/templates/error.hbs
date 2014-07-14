@@ -1,0 +1,14 @@
+<header>
+  <h1><a href="/">{{errorText}}</a></h1>
+</header>
+
+<div id="content">
+  <p>Maybe you should <a href="/{{adminSegment}}/">log in</a> and try to fix it</p>
+
+  {{#is settings.env 'development'}}
+    {{#if user}}
+      <pre>{{errorDebug}}</pre>
+    {{/if}}
+  {{/is}}
+
+</div>

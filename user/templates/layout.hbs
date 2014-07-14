@@ -1,0 +1,42 @@
+{{!--
+  layout.hbs is a special template:
+  All other templates will inherit is as a wrapper
+  and place their contents in {{{body}}}
+--}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Buckets</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/index.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    {{{body}}}
+
+    <footer>
+      {{#if user}}
+        <a href="{{req.path}}{{#unless req.query.debugPage}}?debugPage=1#debugPanel{{/unless}}">Toggle Debug</a> ·
+        <a href="/{{adminSegment}}/">Buckets Admin</a>
+         · {{user.name}} <a href="/{{adminSegment}}/logout">Log out</a>
+      {{else}}
+        <a href="/{{adminSegment}}/">Log in</a>
+      {{/if}}
+    </footer>
+
+    {{#if req.query.debugPage}}
+      <div class="debug" id="debugPanel">
+        <h4>Template Data</h4>
+        <p align="center"><strong>{{req.path}}</strong> rendered in {{renderTime}}.</p>
+        {{inspect .}}
+      </div>
+    {{/if}}
+
+    {{#is settings.env 'development'}}
+      <script src="//localhost:35729/livereload.js"></script>
+    {{/is}}
+  </body>
+</html>

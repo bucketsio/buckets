@@ -1,4 +1,6 @@
 # Middleware to control the rest of the requests.
+
+async = require 'async'
 hbs = require 'hbs'
 pathRegexp = require 'path-to-regexp'
 express = require 'express'
@@ -11,8 +13,18 @@ module.exports = app = express()
 tplPath = config.buckets?.templatePath
 
 hbs.registerHelper 'inspect', (thing, options) ->
-  thing = thing or @
-  new hbs.handlebars.SafeString "<pre>#{JSON.stringify(thing, null, 2)}</pre>"
+  thing = @ unless thing? and options?
+
+  entities =
+    '<': '&lt;'
+    '>': '&gt;'
+    '&': '&amp;'
+
+  json = JSON
+    .stringify thing, null, 2
+    .replace /[&<>]/g, (key) -> entities[key]
+
+  new hbs.handlebars.SafeString "<pre>#{json}</pre>"
 
 require('../lib/renderer')(hbs)
 
@@ -32,9 +44,13 @@ app.get '*', (req, res, next) ->
     now = new Date
     (now.getTime() - startTime.getTime()) + 'ms'
 
-  hbs.registerHelper 'renderTime', ->
-    renderTimeMS = getTime()
-    "#{req.path} rendered in #{renderTimeMS}."
+  hbs.registerHelper 'renderTime', -> getTime()
+
+  globalNext = null
+  hbs.registerHelper 'next', ->
+    if globalNext?
+      globalNext false
+      throw new Error '{{next}} called'
 
   templateData =
     adminSegment: config.buckets.adminSegment
@@ -46,37 +62,44 @@ app.get '*', (req, res, next) ->
       params: {} # We fill this manually later
     user: req.user
 
-  renderError = ->
-    next() unless config.buckets.catchAll
-
-    templateData.errorCode = 404
-    templateData.errorText = 'Page missing'
-
-    res.render 'index', templateData, (err, html) ->
-      console.log 'Buckets caught an error trying to render the index', err if err
-      if err
-        res.send 404, err
-      else
-        res.send 404, html
-
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
-  Route.find().exec (err, routes) ->
+  Route.find {}, (err, routes) ->
     throw err if err
+
+    matchingRoutes = []
 
     for route in routes
       matches = route.urlPatternRegex?.exec(req.path)
 
       if matches
-        # Add the URL wildcards
+        localTemplateData = _.clone templateData
+        localTemplateData.template = route.template
+        localTemplateData.req.params[key.name] = matches[i+1] for key, i in route.keys
 
-        templateData.template = route.template
-        templateData.req.params[key.name] = matches[i+1] for key, i in route.keys
+        matchingRoutes.push localTemplateData
 
-        return res.render route.template, templateData, (err, html) ->
-          if err
-            renderError()
-          else
-            return res.send html if html
+    async.detectSeries matchingRoutes, (templateData, callback) ->
+      globalNext = callback
+      res.render templateData.template, templateData, (err, html) ->
+        if err
+          console.log 'Render error', err
+          callback err
+        else if html
+          res.send 200, html
+          callback true
+        else
+          callback 'The rendered page was blank.'
+    , (rendered) ->
+      return if rendered
 
-    renderError()
+      templateData.errorCode = 404
+      templateData.errorText = 'Page missing'
+
+      res.render 'error', templateData, (err, html) ->
+        console.log 'Buckets caught an error trying to render the error page.', err if err
+
+        if err
+          res.send 404, err
+        else
+          res.send 404, html

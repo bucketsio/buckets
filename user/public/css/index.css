@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Lato, Helvetica, sans-serif;
+  color: #555;
+}
+
+#content {
+  margin: 0 auto;
+  max-width: 600px;
+  color: #222;
+}
+
+a {
+  color: #111;
+}
+
+pre {
+  overflow: auto;
+}
+
+header {
+  padding: 50px;
+  background: url(../img/orange.png);
+  background-size: cover;
+  background-position: bottom center;
+  color: #fff;
+  text-align: center;
+}
+
+header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header h1 {
+  font-weight: 300;
+  font-size: 48pt;
+  margin: 60px 0;
+}
+
+footer {
+  font-size: 14px;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.debug {
+  background-color: #444;
+  color: #eee;
+  padding: 20px;
+}
+
+.debug h4 {
+  text-align: center;
+  font-size: 24px;
+}
+
+.debug pre {
+  font-family: Menlo, monospace;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: auto;
+  font-weight: 500;
+}

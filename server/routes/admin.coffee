@@ -10,6 +10,8 @@ User = require '../models/user'
 
 module.exports = app = express()
 
+{adminSegment} = config.buckets
+
 hbs.registerHelper 'json', (context) ->
   new hbs.handlebars.SafeString JSON.stringify(context)
 
@@ -20,15 +22,15 @@ app.use express.static '#{__dirname}/../public/', maxAge: 86400000 * 7 # One wee
 app.set 'plugins', plugins.load()
 
 # Special case for install
-app.post '/login', passport.authenticate('local', failureRedirect: "/#{config.buckets.adminSegment}/login"), (req, res, next) ->
+app.post '/login', passport.authenticate('local', failureRedirect: "/#{adminSegment}/login"), (req, res, next) ->
   res.redirect if req.user and req.body.next
     req.body.next
   else
-    "/#{config.buckets.adminSegment}/"
+    "/#{adminSegment}/"
 
 app.get '/logout', (req, res) ->
   req.logout()
-  res.redirect "/#{config.buckets.adminSegment}/"
+  res.redirect "/#{adminSegment}/"
 
 app.all '*', (req, res) ->
   # This is kinda dumb, but whatever
@@ -42,6 +44,6 @@ app.all '*', (req, res) ->
       user: req.user
       env: config.buckets.env
       plugins: localPlugins
-      adminSegment: config.buckets.adminSegment
+      adminSegment: adminSegment
       apiSegment: config.buckets.apiSegment
       needsInstall: userCount is 0

@@ -61,6 +61,7 @@ module.exports = (hbs) ->
 
             # Make content attributes first-level tags, ie. `{{body}}` instead of `{{content.body}}`
             entryJSON = _.extend entry.toJSON(), entry.content
+            delete entryJSON.content
 
             try
               ret.push options.fn entryJSON
