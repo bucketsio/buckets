@@ -6,15 +6,33 @@ This document describes the functionality available in the user-facing templates
 
 ## Basic
 
-Buckets uses [Handlebars](http://handlebarsjs.com) as its template engine. Additionally, we load [Swag](https://github.com/elving/swag) which provides a lot of nice Helpers.
+Buckets uses [hbs](https://github.com/donpark/hbs) (a version of [Handlebars](http://handlebarsjs.com) optimized for Express) as it’s template engine. Additionally, we load [Swag](https://github.com/elving/swag) which provides a lot of convenient Helpers like `{{#is}}` (used below).
+
+## Special Templates
+
+* **layout**.hbs: Will automatically wrap any other template that’s served. Useful for adding global header and footer elements to the page.
+* **error**.hbs: Buckets will automatically attempt to render the error page if it encounters either a missing Route (404) or encounters an error (500). It’s recommended to not use the `entries` tag within the error template.
+
+Both of these templates are included by default.
+
+## Partials
+
+TODO
 
 ## Helpers
 
 ### Entries
 
+Basic syntax:
+
 ```
 {{#entries}}
   <h1>{{title}}</h1>
+  {{#is author.email ‘dk@morfunk.com’}}
+     By Dave
+  {{else}}
+     Guest Author
+  {{/is}}
   {{description}}
 {{else}}
   <div class="warn">Sorry, no entries available yet.</div>
@@ -47,8 +65,21 @@ Parameters can be added to the tag like so:
 
 ### renderTime
 
+Renders the time (in ms) the page has taken to render (best to place near the footer).
+
 ```
 {{renderTime}}
 ```
 
-Simply renders the time (in ms) the page has taken to load.
+### next
+
+Passes through to the next Route/Template combination after the current one. Best used in conjunction with entries tag like so:
+
+```
+{{#entries}}
+  <h1>{{title}}</h1>
+  …
+{{else}}
+  {{next}}
+{{/entries}}
+```

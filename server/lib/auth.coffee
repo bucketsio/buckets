@@ -13,6 +13,7 @@ passport.use new LocalStrategy (username, password, done) ->
 passport.serializeUser (user, done) -> done null, user.id
 
 passport.deserializeUser (id, done) ->
-  User.findOne {_id: id}, (err, user) -> done err, user
+  User.findOne {_id: id}, '-passwordDigest -resetPasswordToken -passwordDigest', (err, user) ->
+    done err, user
 
 module.exports = passport

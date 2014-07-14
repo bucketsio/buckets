@@ -1,51 +1,34 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Buckets</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href='//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,
-        900italic,400,700,900' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
-    <h1>Buckets Pre-alpha</h1>
+<header>
+  <h1><a href="/">Buckets Alpha</a></h1>
+</header>
 
-    <p>Soon, this page will be served dynamically with all sorts of cool stuff,
-    but for now, you’re probably looking for <a href="/{{adminSegment}}/">the
-    admin.</a></p>
+<div id="content">
+  {{#entries bucket="articles" slug=req.params.slug}}
+    <h3>
+      <a href="/{{slug}}">{{title}}</a>
+      {{#if author}}
+        <em>by <strong>{{author.name}}</strong></em>
+      {{/if}}
+    </h3>
+    {{description}}
+    {{markdown body}}
+    {{inspect .}}
+  {{else}}
+    <p>Add some entries into any Bucket and they’ll show up here :)</p>
+  {{/entries}}
 
-    {{#entries}}
-      <h3>{{title}}</h3>
-      {{description}}
-    {{else}}
-      <p>Add some entries into any Bucket and they’ll show up here :)</p>
-    {{/entries}}
+  {{!-- Show meetups if we’re on the homepage --}}
+  {{#is req.path '/'}}
+    <div class="sidebar">
+      <h4>Meetups</h4>
 
-    {{#if req.query}}
-      <h2>This request had query params.</h2>
       <ul>
-        {{#eachProperty req.query}}
-          <li><strong>{{key}}:</strong> {{value}}</li>
-        {{/eachProperty}}
+        {{#entries bucket="meetups" slug=req.params.slug}}
+          <li><a href="/meetups/{{slug}}">{{map location}}</a></li>
+        {{else}}
+          <li>No meetups found.</li>
+        {{/entries}}
       </ul>
-    {{else}}
-      <p>This page did not pass any <a href="/?example=customKey">request params</a>.</h1>
-    {{/if}}
-
-    <style>
-      body {
-        font-family: Alegreya, Georgia, serif;
-        color: #555;
-        padding: 20px;
-      }
-
-      p {
-        max-width: 600px;
-      }
-    </style>
-
-    {{renderTime}}
-  </body>
-</html>
+    </div>
+  {{/is}}
+</div>
