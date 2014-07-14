@@ -12,7 +12,17 @@ tplPath = config.buckets?.templatePath
 
 hbs.registerHelper 'inspect', (thing, options) ->
   thing = thing or @
-  new hbs.handlebars.SafeString "<pre>#{JSON.stringify(thing, null, 2)}</pre>"
+
+  entities =
+    '<': '&lt;'
+    '>': '&gt;'
+    '&': '&amp;'
+
+  json = JSON
+    .stringify thing, null, 2
+    .replace /[&<>]/g, (key) -> entities[key]
+
+  new hbs.handlebars.SafeString "<pre>#{json}</pre>"
 
 require('../lib/renderer')(hbs)
 
@@ -32,9 +42,7 @@ app.get '*', (req, res, next) ->
     now = new Date
     (now.getTime() - startTime.getTime()) + 'ms'
 
-  hbs.registerHelper 'renderTime', ->
-    renderTimeMS = getTime()
-    "#{req.path} rendered in #{renderTimeMS}."
+  hbs.registerHelper 'renderTime', -> getTime()
 
   templateData =
     adminSegment: config.buckets.adminSegment
