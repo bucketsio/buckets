@@ -5,8 +5,8 @@ User = require '../models/user'
 passport.use new LocalStrategy (username, password, done) ->
   User.findOne {email: username}, (err, user) ->
     return done err if err
-    return done null, false, message: "Incorrect username." unless user
-    return done null, false, message: "Incorrect password." unless user.authenticate(password)
+    return done null, false, path: 'username', message: "Incorrect username." unless user
+    return done null, false, path: 'password', message: "Incorrect password." unless user.authenticate(password)
 
     done null, user
 

@@ -17,11 +17,13 @@ module.exports = class LoginView extends View
 
   render: ->
     super
-    TweenLite.from @$('#logo'), .4,
+
+    @$logo = @$ '#logo'
+    TweenLite.from @$logo, .4,
       scale: .3
       ease: Back.easeOut
 
-    TweenLite.from @$('#logo'), .4,
+    TweenLite.from @$logo, .4,
       y: '150px'
       ease: Back.easeOut
       delay: .2
@@ -33,12 +35,13 @@ module.exports = class LoginView extends View
       delay: .3
 
   submitForm: (e) ->
-    @$btn = @$('.ladda-button').ladda()
-    @$btn.ladda('start')
 
-    if @$('form').hasClass 'forgot'
-      e.preventDefault()
+    return unless e.originalEvent
 
+    e.preventDefault()
+    $form = $(e.currentTarget)
+
+    if $form.hasClass 'forgot'
       email = @formParams()?.username
 
       @submit($.post('/api/forgot', email: email))
@@ -49,13 +52,33 @@ module.exports = class LoginView extends View
           toastr.success "A password reset email has been sent to #{email}."
           @render()
     else
-      @$btn = @$('.ladda-button').ladda()
-      @$btn.ladda('start')
+      @submit($.post("/#{mediator.options.adminSegment}/checkLogin", @formParams()))
+        .done -> $form.submit()
+        .error =>
 
-  clickCancel: (e) ->
-    e.preventDefault()
-    @render()
+          # smh
+          TweenLite.to @$logo, 0.15,
+            transformOrigin: 'middle bottom 25' # 25 is the z-depth
+            rotationY: 20
+            ease: Expo.easeInOut
 
+          TweenLite.to @$logo, 0.15,
+            delay: .1
+            rotationY: -20
+            ease: Expo.easeInOut
+
+          TweenLite.to @$logo, 0.15,
+            delay: .25
+            rotationY: 20
+            ease: Expo.easeInOut
+
+          TweenLite.to @$logo, .8,
+            delay: .4
+            rotationY: 0
+            ease: Elastic.easeOut
+
+  # Kinda gross but whatevs
+  # We just re-render to nix for now
   clickForgot: (e) ->
     e.preventDefault()
     @$('input[name="password"]').slideUp 100
@@ -64,6 +87,10 @@ module.exports = class LoginView extends View
     @$('input:visible').eq(0).focus()
     @$('form').addClass('forgot')
     @$(e.currentTarget).attr('href', '#cancel').text 'Cancel'
+
+  clickCancel: (e) ->
+    e.preventDefault()
+    @render()
 
   getTemplateData: ->
     if @next

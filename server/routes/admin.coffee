@@ -28,6 +28,16 @@ app.post '/login', passport.authenticate('local', failureRedirect: "/#{adminSegm
   else
     "/#{adminSegment}/"
 
+app.post '/checkLogin', (req, res) ->
+  passport.authenticate('local', (err, user, authErr) ->
+    if authErr
+      res.send 401, errors: [authErr]
+    else if user
+      res.send 200
+    else
+      res.send 500, err
+  )(req, res)
+
 app.get '/logout', (req, res) ->
   req.logout()
   res.redirect "/#{adminSegment}/"
