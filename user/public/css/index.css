@@ -12,34 +12,52 @@ body {
 }
 
 a {
-  color: #111;
+  color: #418497;
+  text-decoration: none;
 }
 
 pre {
   overflow: auto;
 }
 
-header {
-  padding: 50px;
-  background: url(../img/orange.png);
+#page-header {
+  padding: 80px 40px;
+  background: url(../img/beach.jpg);
   background-size: cover;
-  background-position: bottom center;
+  background-position: center center;
   color: #fff;
   text-align: center;
+  margin-bottom: 40px;
 }
 
-header a {
+#page-header a {
   color: #fff;
   text-decoration: none;
 }
 
-header h1 {
-  font-weight: 300;
-  font-size: 48pt;
+#page-header h1 {
+  font-weight: 100;
+  font-size: 36pt;
   margin: 60px 0;
+  letter-spacing: -1px;
 }
 
-footer {
+
+.sidebar {
+  width: 150px;
+  float: right;
+}
+
+.sidebar img {
+  max-width: 100%;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#page-footer {
   font-size: 14px;
   padding: 20px 0;
   text-align: center;
