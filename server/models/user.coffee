@@ -2,6 +2,7 @@ bcrypt = require 'bcrypt'
 crypto = require 'crypto'
 mongoose = require 'mongoose'
 uniqueValidator = require 'mongoose-unique-validator'
+validator = require 'validator'
 _ = require 'underscore'
 db = require '../lib/database'
 
@@ -128,6 +129,11 @@ userSchema.path('passwordDigest').validate (value) ->
 
   if @password? && !/^(?=.*?\d)\w(\w|[!@#$%]){5,20}/.test(@password)
     @invalidate('password', 'Your password must be between 6–20 characters and include a number')
+, null
+
+userSchema.path('email').validate (value) ->
+  if !validator.isEmail(value)
+    @invalidate('email', 'Not a valid email adress')
 , null
 
 userSchema.post 'save', ->
