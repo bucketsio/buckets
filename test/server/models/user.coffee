@@ -20,6 +20,21 @@ describe 'User', ->
   afterEach (done) ->
     db.connection.db.dropDatabase(done)
 
+  describe 'email attribute', ->
+    describe 'when email is valid', ->
+      it 'validates', (done) ->
+        user.email = 'hello@buckets.io'
+        user.save (e, u) ->
+          assert.isNull(e)
+          done()
+
+    describe 'when email is valid', ->
+      it 'returns an error', (done) ->
+        user.email = 'invalid'
+        user.save (e, u) ->
+          assert.equal(e.errors.email.message, 'Not a valid email adress')
+          done()
+
   describe 'password virtual', ->
     describe 'updating password', ->
       it 'updates password', (done) ->
