@@ -28,7 +28,7 @@ describe 'User', ->
           assert.isNull(e)
           done()
 
-    describe 'when email is valid', ->
+    describe 'when email is invalid', ->
       it 'returns an error', (done) ->
         user.email = 'invalid'
         user.save (e, u) ->
