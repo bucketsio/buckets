@@ -1,8 +1,24 @@
+@media (min-width: 768px)
+  #bkts-sidebar
+    width 240px
+    border-right 1px solid #ddd
+    float left
+    min-height 100%
+    position fixed
+    left 0
+    top 0
+    bottom 0
+    overflow auto
+
+  .loggedInView
+    margin-left 240px
+
 #logo
+  position relative
+
   .bkts-icon
     display block
     position relative
-    // top .1em
     vertical-align middle
 
   a
@@ -17,26 +33,32 @@
 .version-badge
   font-size 12px
   border-radius 3px
-  border 2px solid #ccc
+  border 2px solid #969696
   padding .15em .4em
   margin-bottom 0 0 .4em
-  color #999
+  color #666
   vertical-align top
   font-weight 500
   display inline-block
   font-family $sans
+  position absolute
+  top 37px
+  left 15px
+  transform scale(.8) rotate(-3deg)
+  background #fff
+  pointer-events none
 
 .btn-menu
   margin-top 22px
 
 .nav-primary
+
   > li > a
     padding-left 40px
 
   li:active
     position relative
     top -1px
-
 
   a:first-child
     padding-right 40px
@@ -59,32 +81,61 @@
     position absolute
     top 0
     right 0
-    padding-left 15px
+    width 40px
+    height 40px
+    padding-left 13px
     background-color transparent
+
+    .no-touch &
+      opacity 0
+
+    // padding-right 10px
+    border-radius 50px
 
     .icon
       top 2px
       position relative
       font-size 13px
 
+  li:hover .bucket-add
+    opacity 1
+
   li.divider
-    border-bottom 1px solid rgba($primary, .15)
+    border-bottom 1px solid rgba(#ddd, .4)
     margin-left 40px
 
+  > li > a:hover, > li > a:active
+    background-color transparent
+    color #555
+
   li.active
-    .icon
-      color #fff
+    font-weight bold
 
     .bucket-add:hover
       background-color rgba(#fff, .2) !important
 
+    a
+      background-color inherit
+      color #444
+
+    a:hover
+      background-color inherit
+      color #444
+
+  li a
+    color #999
+
 addColor($name, $color)
-  .color-{$name}, .nav-primary > .bucket.color-{$name} > a, .bucket.color-{$name} .icon
+  .color-{$name},
+  .nav-primary > .bucket.color-{$name} > a,
+  .nav-primary > .bucket.color-{$name} > a:hover,
+  // .nav-primary > .bucket.color-{$name}.active .icon,
+  .nav-primary > .bucket.color-{$name} .icon
     color $color
-  .swatches.colors > .{$name}, .nav-primary > .color-{$name}.active > a
+  .nav-primary > .bucket.color-{$name}:not(.active) > a:hover:not(:active)
+    color darken($color, 15)
+  .swatches.colors > .{$name}
     background-color $color
-  .nav-primary > .color-{$name}.active > a:hover
-      background-color lighten($color, 5)
 
 addColor('teal', $teal)
 addColor('green', $green)
@@ -94,9 +145,6 @@ addColor('orange', $orange)
 addColor('yellow', $yellow)
 addColor('purple', $purple)
 addColor('gray', $gray)
-
-.nav-primary > .bucket.active > a
-  color #fff
 
 .usernav .avatar
   transform scale(.8)

@@ -4,15 +4,16 @@
 
   <div class="row">
     <div class="col-md-6">
-
-      <h1>
-        <a href="/{{adminSegment}}/buckets/{{bucket.slug}}">{{bucket.name}}</a> /
-        {{#if _id}}
-          Edit {{bucket.singular}}
-        {{else}}
-          New {{bucket.singular}}
-        {{/if}}
-      </h1>
+      <ol class="breadcrumb pageBreadcrumb">
+        <li><a href="/{{adminSegment}}/buckets/{{bucket.slug}}">{{bucket.name}}</a></li>
+        <li class="active">
+          {{#if _id}}
+            Edit {{bucket.singular}}
+          {{else}}
+            New {{bucket.singular}}
+          {{/if}}
+        </li>
+      </ol>
 
       <div class="panel panel-default">
         <div class="panel-body">
@@ -22,26 +23,50 @@
           <div class="clearfix"></div>
 
           <div class="entry-publish">
-            <div class="dateInput hidden">
-              {{input 'publishDate' publishDate placeholder="ie. Next tuesday or now" label="Schedule Publish Date"}}
-            </div>
-
-            <br>
-
+            {{#if _id}}
+              <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
+            {{/if}}
             <div class="btn-group">
-              {{submit "Publish"}}
+              {{#if _id}}
+                {{#is status 'live'}}
+                  {{submit "Save"}}
+                {{else}}
+                  {{submit "Save draft"}}
+                {{/is}}
+              {{else}}
+                {{submit "Publish"}}
+              {{/if}}
               <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                   <li><a href="#draft">Save as a draft</a></li>
-                   <li><a href="#date">Publish on…</a></li>
+
+                  {{!-- SRY --}}
+                  {{#isnt status 'live'}}
+                    {{#is status 'draft'}}
+                      {{#if _id}}
+                        <li><a href="#publish">Publish now</a></li>
+                      {{else}}
+                        <li><a href="#draft">Save as a draft</a></li>
+                      {{/if}}
+                    {{else}}
+                      <li><a href="#draft">Save as a draft</a></li>
+                    {{/is}}
+                    <li><a href="#date">Publish on…</a></li>
+                  {{/isnt}}
+                  {{#if _id}}
+                    <li><a href="#copy">Copy as a new draft</a></li>
+                  {{/if}}
                  </ul>
               </div>
             </div>
             <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/" class="btn btn-icon btn-link">Cancel</a>
-            {{#if _id}}
-              <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
-            {{/if}}
+
+          </div>
+
+          <div class="dateInput {{#isnt status 'live'}}hidden{{/isnt}}">
+            <div class="form-group">
+              {{input 'publishDate' publishDate placeholder="Tomorrow at 9am" label="Publish Date"}}
+            </div>
           </div>
 
           <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>

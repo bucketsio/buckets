@@ -12,12 +12,12 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/index.css">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   </head>
   <body>
     {{{body}}}
 
-    <footer>
+    <footer id="page-footer">
       {{#if user}}
         <a href="{{req.path}}{{#unless req.query.debugPage}}?debugPage=1#debugPanel{{/unless}}">Toggle Debug</a> ·
         <a href="/{{adminSegment}}/">Buckets Admin</a>

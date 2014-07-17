@@ -1,22 +1,8 @@
-<header>
-  <h1><a href="/">Buckets Alpha</a></h1>
+<header id="page-header">
+  <h1><a href="/">Welcome to Buckets</a></h1>
 </header>
 
 <div id="content">
-  {{#entries bucket="articles" slug=req.params.slug}}
-    <h3>
-      <a href="/{{slug}}">{{title}}</a>
-      {{#if author}}
-        <em>by <strong>{{author.name}}</strong></em>
-      {{/if}}
-    </h3>
-    {{description}}
-    {{markdown body}}
-    <em>Published on {{formatTime publishDate format="MMM D, YYYY h:mma"}}</em>
-    {{!-- {{inspect .}} --}}
-  {{else}}
-    <p>Add some entries into any Bucket and they’ll show up here :)</p>
-  {{/entries}}
 
   {{!-- Show meetups if we’re on the homepage --}}
   {{#is req.path '/'}}
@@ -25,11 +11,34 @@
 
       <ul>
         {{#entries bucket="meetups" slug=req.params.slug}}
-          <li><a href="/meetups/{{slug}}">{{map location}}</a></li>
+          <li>
+            <a href="/meetups/{{slug}}">
+              {{title}}
+              {{map location}}
+            </a>
+          </li>
         {{else}}
           <li>No meetups found.</li>
         {{/entries}}
       </ul>
     </div>
   {{/is}}
+
+  {{#entries bucket="articles" slug=req.params.slug}}
+    <h2>
+      <a href="/{{slug}}">{{title}}</a>
+      {{#if author}}
+        <em></em>
+      {{/if}}
+    </h2>
+    {{markdown body}}
+    <footer>
+      <em>Published on {{formatTime publishDate format="MMM D, YYYY h:mma"}} by <strong>{{author.name}}</strong></em>
+    </footer>
+    {{!-- {{inspect .}} --}}
+  {{else}}
+    <p>Add some entries into any Bucket and they’ll show up here :)</p>
+  {{/entries}}
+
+
 </div>

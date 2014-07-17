@@ -16,15 +16,6 @@ module.exports = class Layout extends Chaplin.Layout
     'click .nav-primary a': 'clickMenuNav'
     'click .logout a': 'fadeAwayFadeAway'
 
-  clickMenu: (e) ->
-    e.preventDefault()
-    @$('.nav-primary').toggleClass('hidden-xs').toggle().slideToggle 200
-
-  clickMenuNav: ->
-    if @$('.hidden-xs:visible').length is 0
-      @$('.nav-primary').css(display: 'block').slideToggle 150, =>
-        @$('.nav-primary').toggleClass('hidden-xs').toggle()
-
   initialize: ->
     super
 
@@ -50,6 +41,15 @@ module.exports = class Layout extends Chaplin.Layout
       yep: "/#{mediator.options.adminSegment}/vendor/fastclick/fastclick.js"
       complete: ->
         FastClick?.attach document.body
+
+  clickMenu: (e) ->
+    e.preventDefault()
+    @$('.nav-primary').toggleClass('hidden-xs').toggle().slideToggle 200
+
+  clickMenuNav: ->
+    if @$('.hidden-xs:visible').length is 0
+      @$('.nav-primary').css(display: 'block').slideToggle 150, =>
+        @$('.nav-primary').toggleClass('hidden-xs').toggle()
 
   keyUpSluggify: (e) ->
     $el = @$(e.currentTarget)

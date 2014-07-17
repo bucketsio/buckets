@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html class="no-js">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
     <link rel="shortcut icon" href="/{{adminSegment}}/favicon.ico?v1">
     <link rel="apple-touch-icon-precomposed" href="/{{adminSegment}}/apple-touch-icon-precomposed.png">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,700italic' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="/{{adminSegment}}/css/buckets.css">
     {{#each plugins}}
@@ -27,13 +24,7 @@
 
     <div id="bkts-content"></div>
 
-    <footer id="bkts-ftr">
-      <div class="container-fluid">
-        <hr class="tiny">
-        <a href="/" class="noscript">‹ Return to website</a> · Made with ♥︎ on <a href="http://assemblymade.com/buckets" target="_blank">Assembly</a> · <a href="https://github.com/asm-products/buckets" target="_blank"><span class="icon buckets-icon-github"></span></a>
-      </div>
-    </footer>
-    <!-- Env: {{env}} -->
+    <!-- env: {{env}} -->
     <script src="/{{adminSegment}}/js/modernizr.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
@@ -71,8 +62,8 @@
         <script src="/{{../../adminSegment}}/plugins/{{slug}}.js"></script>
       {{/if}}
     {{/each}}
-    {{#is env 'development'}}
+    {{#isnt env 'production'}}
       <script src="//localhost:35729/livereload.js"></script>
-    {{/is}}
+    {{/isnt}}
   </body>
 </html>

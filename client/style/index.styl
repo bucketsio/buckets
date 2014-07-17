@@ -69,6 +69,10 @@ body
   color #555
   padding 5px 0
 
+  .pull-right a
+    position relative
+    z-index 20
+
 .form-control
   border-width 2px
   box-shadow none
@@ -96,11 +100,13 @@ hr.tiny
 
 .page
   h1
+    font-weight 300
     letter-spacing -1px
     margin-top 30px
     padding-bottom 10px
     border-bottom 3px solid rgba($primary, .5)
     color #888
+    font-size 40px
 
 @import '_typography'
 @import '_nav'
@@ -171,7 +177,19 @@ input[type="text"].form-control, textarea.form-control
   box-shadow rgba(#000, .2) 0 1px 4px
   transition box-shadow .15s ease-out
 
-
 .input-sm, .input-lg
   padding-left 10px
   padding-right 10px
+
+.nav-tabs
+  font-weight 900
+
+.btn-default
+  background-color rgba(#fff, .5)
+
+  &:hover
+    background-color rgba(#fff, .9)
+
+.pageBreadcrumb
+  margin 10px 0
+  background-color #f1f1f1

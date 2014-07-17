@@ -55,7 +55,7 @@ entrySchema.pre 'validate', (next) ->
 
     next()
 
-entrySchema.path('publishDate').set (val) ->
+entrySchema.path('publishDate').set (val='') ->
   parsed = chrono.parse(val)
   if parsed?[0]?.startDate
     parsed[0].startDate
