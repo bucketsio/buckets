@@ -21,6 +21,9 @@ module.exports = class EntryEditView extends PageView
     'submit form': 'submitForm'
     'click [href="#delete"]': 'clickDelete'
     'click [href="#draft"]': 'clickDraft'
+    'click [href="#date"]': 'clickDate'
+    'click [href="#publish"]': 'clickPublish'
+    'click [href="#copy"]': 'clickCopy'
 
   getTemplateData: ->
     fields = @bucket.get('fields')
@@ -93,10 +96,8 @@ module.exports = class EntryEditView extends PageView
     @model.set content: content
 
     status = @model.get('status')
-    @model.set status: 'draft' if status is 'draft'
+    # @model.set status: 'draft' if status is 'draft' LOL
     @model.set status: 'live' unless @model.get('_id')
-
-    @model.set('status', 'live')
     @submit @model.save(@formParams(), wait: yes)
 
   clickDelete: (e) ->
@@ -107,7 +108,29 @@ module.exports = class EntryEditView extends PageView
 
   clickDraft: (e) ->
     e.preventDefault()
-    @model.set('status', 'draft')
+    @model.set status: 'draft'
     @submit @model.save(@formParams(), wait: yes)
+
+  clickDate: (e) ->
+    e.preventDefault()
+    @$('.dateInput').removeClass 'hidden'
+    $(e.currentTarget).parent().remove()
+    @$('button.btn-primary').text 'Schedule'
+    @$('.dateInput input').focus()
+
+  clickPublish: (e) ->
+    e.preventDefault()
+    @model.set _.extend @formParams(), publishDate: 'Now', status: 'live'
+    @submit @model.save @model.toJSON(), wait: yes
+
+  clickCopy: (e) ->
+    e.preventDefault()
+
+    @model.set _.extend @formParams(),
+      _id: null
+      publishDate: null
+      status: 'draft'
+
+    @submit @model.save @model.toJSON(), wait: yes
 
   @mixin FormMixin
