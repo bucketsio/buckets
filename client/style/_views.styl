@@ -7,7 +7,6 @@
 
   #logo
     margin 60px auto 0px
-    position relative
 
   #logo img
     display block
@@ -89,6 +88,7 @@
 
   h2 a:hover
     text-decoration none
+
   .btn-icon
     opacity 0
     transition all 200ms ease-in-out
@@ -96,12 +96,22 @@
     position absolute
     top 0em
     left -10px
+
   &:hover .btn-icon
     opacity 1
 
 // Entries
 
 .entry-publish
-  padding-top 15px
-  border-top 1px solid #eee
-  margin-top 10px
+  padding 10px 15px
+  margin 15px -15px 0
+  border-top 1px solid #ddd
+
+.entry
+  padding 20px 0
+  border-bottom 1px solid #eee
+
+  h3
+    font-size 18px
+    margin-top 0
+    font-weight 700

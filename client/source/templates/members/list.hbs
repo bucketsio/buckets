@@ -19,20 +19,16 @@
             <input type="radio" name="role" id="role-editor" value="editor"> <strong>Editor</strong><br> Can publish directly and edit slugs.
           </label>
         </div>
-
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Add member</button>
       </div>
     </form>
   {{else}}
-    <div class="center">
-      <div class="info">
-        All users are members of {{bucket.name}}…
-      </div>
+    <div class="lead">
+      All users are members of {{bucket.name}}.
     </div>
   {{/if}}
-
   <hr>
 {{/hasRole}}
 
@@ -53,4 +49,3 @@
     {{/if}}
   </div>
 </div>
-
