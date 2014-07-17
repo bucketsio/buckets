@@ -239,7 +239,7 @@ module.exports = (grunt) ->
         tasks: ['build-style']
 
       express:
-        files: ['server/**/*.coffee']
+        files: ['server/**/*.coffee', 'node_modules/buckets-*/*.{coffee,hbs}']
         tasks: ['express:dev']
         options:
           spawn: false
