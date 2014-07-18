@@ -17,7 +17,9 @@
             <a class="bucket-add" href="/{{adminSegment}}/buckets/{{slug}}/add">{{icon 'add'}}</a>
           </li>
         {{/each}}
-        <li><a href="/{{adminSegment}}/buckets/add">{{icon 'add'}} New Bucket</a></li>
+        {{#hasRole 'administrator'}}
+          <li><a href="/{{adminSegment}}/buckets/add">{{icon 'add'}} New Bucket</a></li>
+        {{/hasRole}}
 
         {{#hasRole 'administrator'}}
           <li class="divider"></li>

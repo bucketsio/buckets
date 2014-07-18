@@ -24,6 +24,7 @@ module.exports = class EntryEditView extends PageView
     'click [href="#date"]': 'clickDate'
     'click [href="#publish"]': 'clickPublish'
     'click [href="#copy"]': 'clickCopy'
+    'click [href="#reject"]': 'clickReject'
 
   getTemplateData: ->
     fields = @bucket.get('fields')
@@ -34,7 +35,7 @@ module.exports = class EntryEditView extends PageView
 
     _.extend super,
       bucket: @bucket.toJSON()
-      user: @user?.toJSON()
+      user: @user
       fields: fields
       newTitle: if @bucket.get('titlePlaceholder') then _.sample @bucket.get('titlePlaceholder').split('|') else "New #{@bucket.get('singular')}"
 
@@ -121,6 +122,11 @@ module.exports = class EntryEditView extends PageView
   clickPublish: (e) ->
     e.preventDefault()
     @model.set _.extend @formParams(), publishDate: 'Now', status: 'live'
+    @submit @model.save @model.toJSON(), wait: yes
+
+  clickReject: (e) ->
+    e.preventDefault()
+    @model.set _.extend @formParams(), publishDate: 'Now', status: 'rejected'
     @submit @model.save @model.toJSON(), wait: yes
 
   clickCopy: (e) ->

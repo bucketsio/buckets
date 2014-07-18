@@ -68,7 +68,7 @@ module.exports = class BucketsController extends Controller
     @view = new EntryEditView
       model: @entry
       bucket: bucket
-      user: mediator.user
+      user: mediator.user.toJSON()
 
   editEntry: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
@@ -93,7 +93,7 @@ module.exports = class BucketsController extends Controller
         @view = new EntryEditView
           model: @entry
           bucket: bucket
-          user: mediator.user
+          user: @entry.get('author') or mediator.user.toJSON()
 
   settings: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug

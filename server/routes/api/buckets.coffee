@@ -54,7 +54,7 @@ app.route('/buckets/:bucketId/members')
 
         users = users.map (user) ->
           u = user.toJSON()
-          u.role = user.rolesFor(bucket)[0].name
+          u.role = user.getRolesForResource(bucket)[0].name
           u.bucketId = req.params.bucketId
           u
 
