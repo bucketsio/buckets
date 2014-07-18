@@ -23,6 +23,11 @@
           <div class="clearfix"></div>
 
           <div class="entry-publish">
+            {{#is status 'pending'}}
+              {{#hasRole 'editor'}}
+                <p>Submitted by {{gravatar user.email_hash}} {{user.name}}</p>
+              {{/hasRole}}
+            {{/is}}
             {{#if _id}}
               <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
             {{/if}}
@@ -31,15 +36,26 @@
                 {{#is status 'live'}}
                   {{submit "Save"}}
                 {{else}}
-                  {{submit "Save draft"}}
+                  {{#is status 'pending'}}
+                    {{#hasRole 'editor'}}
+                      <a class="btn btn-primary" href="#publish">Approve &amp; publish</a>
+                    {{else}}
+                      {{submit "Save"}}
+                    {{/hasRole}}
+                  {{else}}
+                    {{submit "Save"}}
+                  {{/is}}
                 {{/is}}
               {{else}}
-                {{submit "Publish"}}
+                {{#hasRole 'editor'}}
+                  {{submit "Publish"}}
+                {{else}}
+                  {{submit 'Submit to publish'}}
+                {{/hasRole}}
               {{/if}}
               <div class="btn-group">
                 <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
-
                   {{!-- SRY --}}
                   {{#isnt status 'live'}}
                     {{#is status 'draft'}}
@@ -56,11 +72,15 @@
                   {{#if _id}}
                     <li><a href="#copy">Copy as a new draft</a></li>
                   {{/if}}
+                  {{#is status 'pending'}}
+                    {{#hasRole 'editor'}}
+                      <li><a href="#reject">Reject</a></li>
+                    {{/hasRole}}
+                  {{/is}}
                  </ul>
               </div>
             </div>
             <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/" class="btn btn-icon btn-link">Cancel</a>
-
           </div>
 
           <div class="dateInput {{#isnt status 'live'}}hidden{{/isnt}}">

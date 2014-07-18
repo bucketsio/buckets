@@ -14,13 +14,16 @@ app.route('/entries')
       return res.send(404) unless bucket
       return res.send(401) unless req.user?.hasRole(['editor', 'contributor'], bucket)
 
+      if !req.user?.hasRole('editor', bucket) and req.body.status is 'live'
+        req.body.status = 'pending'
+
       newEntry = new Entry req.body
+
       newEntry.save (err, entry) ->
         if err
           res.send 400, err
         else
           res.send 200, entry
-
 
   .get (req, res) ->
     query = {}
@@ -31,7 +34,7 @@ app.route('/entries')
 
 app.route('/entries/:entryID')
   .get (req, res) ->
-    Entry.findOne(_id: req.params.entryID).populate('bucket').exec (err, entry) ->
+    Entry.findOne(_id: req.params.entryID).populate('bucket').populate('author').exec (err, entry) ->
       if entry
         res.send entry
       else

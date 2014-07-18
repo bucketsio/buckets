@@ -21,7 +21,7 @@ module.exports = class MembersList extends View
     e.preventDefault()
 
     data = @$el.formParams(false)
-    u = @users.get(data.user).clone()
+    u = @users.get(data.user).toJSON()
     u.bucketId = @bucket.id
     u.role = data.role
 
