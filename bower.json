@@ -55,5 +55,5 @@
       "js": "seedrandom.js"
     },
     "/(backbone|chaplin|underscore|jquery|modernizr|handlebars|ace-builds|cocktail)/": {}
-  },
+  }
 }
