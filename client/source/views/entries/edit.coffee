@@ -13,7 +13,7 @@ module.exports = class EntryEditView extends PageView
   className: 'EntryEditView'
   template: tpl
   optionNames: PageView::optionNames.concat ['bucket', 'user']
-
+  region: 'detail'
   regions:
     'user-fields': '.userFields'
 

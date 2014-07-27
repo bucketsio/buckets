@@ -12,15 +12,14 @@ module.exports = (match) ->
   match 'reset/:token', 'auth#resetPassword', params: authRequired: no
 
   match 'buckets/add', 'buckets#add'
-  match 'buckets/add', 'buckets#add'
-  match 'buckets/:slug', 'buckets#listEntries'
-  match 'buckets/:slug/add', 'buckets#addEntry'
+  match 'buckets/:slug', 'buckets#browse'
+  match 'buckets/:slug/add', 'buckets#browse', params: add: yes
   match 'buckets/:slug/fields', 'buckets#editFields'
   match 'buckets/:slug/settings/members', 'buckets#settings', params: activeTab: 3
   match 'buckets/:slug/settings/fields', 'buckets#settings', params: activeTab: 2
   match 'buckets/:slug/settings', 'buckets#settings', params: activeTab: 1
 
-  match 'buckets/:slug/:entryID', 'buckets#editEntry'
+  match 'buckets/:slug/:entryID', 'buckets#browse'
 
   match 'templates(/*filename)', 'templates#edit'
   match 'routes', 'routes#list'

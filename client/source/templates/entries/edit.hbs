@@ -2,99 +2,84 @@
   {{hidden 'author' user._id}}
   {{hidden 'bucket' bucket._id}}
 
-  <div class="row">
-    <div class="col-md-6">
-      <ol class="breadcrumb pageBreadcrumb">
-        <li><a href="/{{adminSegment}}/buckets/{{bucket.slug}}">{{bucket.name}}</a></li>
-        <li class="active">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug size='lg' label="Title" required=true}}
+
+      <div class="userFields"></div>
+      <div class="clearfix"></div>
+
+      <div class="entry-publish">
+        {{#is status 'pending'}}
+          {{#hasRole 'editor'}}
+            <p>Submitted by {{gravatar user.email_hash}} {{user.name}}</p>
+          {{/hasRole}}
+        {{/is}}
+        {{#if _id}}
+          <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
+        {{/if}}
+        <div class="btn-group">
           {{#if _id}}
-            Edit {{bucket.singular}}
-          {{else}}
-            New {{bucket.singular}}
-          {{/if}}
-        </li>
-      </ol>
-
-      <div class="panel panel-default">
-        <div class="panel-body">
-          {{input 'title' title placeholder=newTitle slugName='slug' slugValue=slug size='lg' label="Title" required=true}}
-
-          <div class="userFields"></div>
-          <div class="clearfix"></div>
-
-          <div class="entry-publish">
-            {{#is status 'pending'}}
-              {{#hasRole 'editor'}}
-                <p>Submitted by {{gravatar user.email_hash}} {{user.name}}</p>
-              {{/hasRole}}
-            {{/is}}
-            {{#if _id}}
-              <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
-            {{/if}}
-            <div class="btn-group">
-              {{#if _id}}
-                {{#is status 'live'}}
-                  {{submit "Save"}}
-                {{else}}
-                  {{#is status 'pending'}}
-                    {{#hasRole 'editor'}}
-                      <a class="btn btn-primary" href="#publish">Approve &amp; publish</a>
-                    {{else}}
-                      {{submit "Save"}}
-                    {{/hasRole}}
-                  {{else}}
-                    {{submit "Save"}}
-                  {{/is}}
-                {{/is}}
-              {{else}}
+            {{#is status 'live'}}
+              {{submit "Save"}}
+            {{else}}
+              {{#is status 'pending'}}
                 {{#hasRole 'editor'}}
-                  {{submit "Publish"}}
+                  <a class="btn btn-primary" href="#publish">Approve &amp; publish</a>
                 {{else}}
-                  {{submit 'Submit to publish'}}
+                  {{submit "Save"}}
                 {{/hasRole}}
-              {{/if}}
-              <div class="btn-group">
-                <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  {{!-- SRY --}}
-                  {{#isnt status 'live'}}
-                    {{#is status 'draft'}}
-                      {{#if _id}}
-                        <li><a href="#publish">Publish now</a></li>
-                      {{else}}
-                        <li><a href="#draft">Save as a draft</a></li>
-                      {{/if}}
-                    {{else}}
-                      <li><a href="#draft">Save as a draft</a></li>
-                    {{/is}}
-                    <li><a href="#date">Publish on…</a></li>
-                  {{/isnt}}
+              {{else}}
+                {{submit "Save"}}
+              {{/is}}
+            {{/is}}
+          {{else}}
+            {{#hasRole 'editor'}}
+              {{submit "Publish"}}
+            {{else}}
+              {{submit 'Submit to publish'}}
+            {{/hasRole}}
+          {{/if}}
+          <div class="btn-group">
+            <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              {{!-- SRY --}}
+              {{#isnt status 'live'}}
+                {{#is status 'draft'}}
                   {{#if _id}}
-                    <li><a href="#copy">Copy as a new draft</a></li>
+                    <li><a href="#publish">Publish now</a></li>
+                  {{else}}
+                    <li><a href="#draft">Save as a draft</a></li>
                   {{/if}}
-                  {{#is status 'pending'}}
-                    {{#hasRole 'editor'}}
-                      <li><a href="#reject">Reject</a></li>
-                    {{/hasRole}}
-                  {{/is}}
-                 </ul>
-              </div>
-            </div>
-            <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/" class="btn btn-icon btn-link">Cancel</a>
-          </div>
-
-          <div class="dateInput {{#isnt status 'live'}}hidden{{/isnt}}">
-            <div class="form-group">
-              {{input 'publishDate' publishDate placeholder="Tomorrow at 9am" label="Publish Date"}}
-            </div>
-          </div>
-
-          <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
-          <div id="meta" class="collapse">
-            {{input 'keywords' keywords label="Keywords" size='sm'}}
-            {{textarea 'description' description label="Description" size='sm'}}
+                {{else}}
+                  <li><a href="#draft">Save as a draft</a></li>
+                {{/is}}
+                <li><a href="#date">Publish on…</a></li>
+              {{/isnt}}
+              {{#if _id}}
+                <li><a href="#copy">Copy as a new draft</a></li>
+              {{/if}}
+              {{#is status 'pending'}}
+                {{#hasRole 'editor'}}
+                  <li><a href="#reject">Reject</a></li>
+                {{/hasRole}}
+              {{/is}}
+             </ul>
           </div>
         </div>
+        <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/" class="btn btn-icon btn-link">Cancel</a>
+      </div>
+
+      <div class="dateInput {{#isnt status 'live'}}hidden{{/isnt}}">
+        <div class="form-group">
+          {{input 'publishDate' publishDate placeholder="Tomorrow at 9am" label="Publish Date"}}
+        </div>
+      </div>
+
+      <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
+      <div id="meta" class="collapse">
+        {{input 'keywords' keywords label="Keywords" size='sm'}}
+        {{textarea 'description' description label="Description" size='sm'}}
       </div>
     </div>
   </div>
