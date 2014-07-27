@@ -39,66 +39,52 @@ module.exports = class BucketsController extends Controller
       model: newBucket
       fields: @newFields
 
-  listEntries: (params) ->
-    bucket = mediator.buckets?.findWhere slug: params.slug
-
-    return @bucketNotFound() unless bucket
-    @adjustTitle bucket.get('name')
-
-    @entries = new Entries
-
-    @entries.fetch( data: {bucket: bucket.get('id')}, processData: yes ).done =>
-      @view = new EntriesList
-        collection: @entries
-        bucket: bucket
-
-  addEntry: (params) ->
+  browse: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
 
     return @bucketNotFound() unless bucket
 
-    @adjustTitle 'New ' + bucket.get('singular')
-
-    @entry = new Entry
-
-    @listenToOnce @entry, 'sync', =>
-      toastr.success 'Entry added'
-      @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
-
-    @view = new EntryEditView
-      model: @entry
-      bucket: bucket
-      user: mediator.user.toJSON()
-
-  editEntry: (params) ->
-    bucket = mediator.buckets?.findWhere slug: params.slug
-
-    if bucket and params.entryID
+    if params.add
       @adjustTitle 'New ' + bucket.get('singular')
+    else if params.entryID
+      @adjustTitle 'Edit'
+    else
+      @adjustTitle bucket.get('name')
 
-      @entry = new Entry _id: params.entryID
+    @reuse 'BucketBrowser',
+      compose: (options) ->
+        @entries = new Entries
 
-      @entry.fetch().done =>
+        @entries.fetch( data: {bucket: bucket.get('id')}, processData: yes ).done =>
+          @view = new EntriesList
+            collection: @entries
+            bucket: bucket
 
-        @entry.set 'publishDate', Handlebars.helpers.simpleDateTime @entry.get('publishDate')
+          if options.add
+            @view.loadNewEntry()
+          else if options.entryID
+            @view.loadEntry options.entryID
 
-        @listenToOnce @entry, 'sync', (entry, newData) =>
-          if newData._id
-            toastr.success "You saved “#{entry.get('title')}”"
+      check: (options) ->
+        if @view?
+          if options.add
+            @view.loadNewEntry()
+          else if options.entryID
+            @view.loadEntry options.entryID
           else
-            toastr.success "You deleted “#{entry.get('title')}”"
+            @view.subview('editEntry')?.dispose()
 
-          @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+        @view? and @view.bucket.get('id') is options.bucket.get('id')
 
-        @view = new EntryEditView
-          model: @entry
-          bucket: bucket
-          user: @entry.get('author') or mediator.user.toJSON()
+      options:
+        entryID: params.entryID
+        bucket: bucket
+        add: params.add
 
   settings: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
 
-    return @bucketNotFound unless bucket
+    return @bucketNotFound() unless bucket
 
     @listenToOnce bucket, 'sync', (bucket, data) =>
       mediator.buckets.fetch(reset: yes)
