@@ -79,6 +79,9 @@ app.get '*', (req, res, next) ->
 
         matchingRoutes.push localTemplateData
 
+    matchingRoutes.sort (a, b) ->
+      a.sort > b.sort
+
     async.detectSeries matchingRoutes, (templateData, callback) ->
       globalNext = callback
       res.render templateData.template, templateData, (err, html) ->

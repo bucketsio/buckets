@@ -19,6 +19,17 @@ module.exports = class RoutesList extends PageView
     'click [href="#delete"]': 'clickDelete'
     'click [href="#edit"]': 'clickEdit'
 
+  attach: ->
+    super
+    $sortable = document.getElementById 'sortable-routes'
+    new Sortable $sortable,
+      onUpdate: (e) =>
+        $('#sortable-routes').children().each (i, li) =>
+          model = @collection.findWhere _id: $(li).children('.route').data 'route-id'
+
+          if model
+            model.save sort: i
+
   clickNew: (e) ->
     e.preventDefault()
     newRoute = new Route
