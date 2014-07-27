@@ -4,12 +4,10 @@ db = require('../../../server/lib/database')
 {assert} = require('chai')
 
 describe 'Bucket', ->
-  before (done) ->
-    db.connection.on 'open', ->
-      db.connection.db.dropDatabase done
-
   afterEach (done) ->
-    db.connection.db.dropDatabase done
+    for _, c of db.connection.collections
+      c.remove(->)
+      done()
 
   describe '#getMembers', ->
     it 'returns members', (done) ->
