@@ -64,13 +64,13 @@ app.get '*', (req, res, next) ->
 
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
-  Route.find {}, (err, routes) ->
+  Route.find({}, null, sort: 'sort').exec (err, routes) ->
     throw err if err
 
     matchingRoutes = []
 
     for route in routes
-      matches = route.urlPatternRegex?.exec(req.path)
+      matches = route.urlPatternRegex.exec req.path
 
       if matches
         localTemplateData = _.clone templateData
@@ -78,9 +78,6 @@ app.get '*', (req, res, next) ->
         localTemplateData.req.params[key.name] = matches[i+1] for key, i in route.keys
 
         matchingRoutes.push localTemplateData
-
-    matchingRoutes.sort (a, b) ->
-      a.sort > b.sort
 
     async.detectSeries matchingRoutes, (templateData, callback) ->
       globalNext = callback
