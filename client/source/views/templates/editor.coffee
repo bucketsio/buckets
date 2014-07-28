@@ -7,8 +7,6 @@ FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/templates/editor'
 
 module.exports = class TemplateEditor extends PageView
-  @mixin FormMixin
-
   template: tpl
 
   listen:
@@ -26,7 +24,9 @@ module.exports = class TemplateEditor extends PageView
   render: ->
     super
     @$code = @$('textarea.code')
-
+    @$code.after """
+      <pre class="code editor hidden"></pre>
+    """
     unless Modernizr.touch
       @$code.addClass 'loading'
       Modernizr.load
@@ -72,6 +72,7 @@ module.exports = class TemplateEditor extends PageView
     @$code.val contents
     @$('[name="filename"]').val filename
     @editorSession?.setValue contents
+    @clearFormErrors()
     @$('.notForIndex').toggleClass 'hide', filename is 'index'
 
   submitForm: (e) ->
@@ -80,9 +81,18 @@ module.exports = class TemplateEditor extends PageView
 
     data = @formParams()
 
-    @model.save(data).done =>
+    @submit(@model.save data).done( =>
       toastr.success "Saved Template “#{@model.get('filename')}”"
       @collection.add @model
+    ).error (res) =>
+      if compileErr = res?.responseJSON?.errors?.contents
+        if compileErr.line
+          @editor.renderer.setShowGutter yes
+          @editor.getSession().setAnnotations [
+            row: compileErr.line - 1
+            text: compileErr.message
+            type: 'error'
+          ]
 
   clickNew: (e) ->
     e.preventDefault()
@@ -103,3 +113,5 @@ module.exports = class TemplateEditor extends PageView
   dispose: ->
     @editor?.destroy()
     super
+
+  @mixin FormMixin

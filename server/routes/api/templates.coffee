@@ -1,8 +1,23 @@
 express = require 'express'
+hbs = require 'hbs'
 config = require '../../config'
+
 Template = require('../../lib/template')(config.buckets?.templatePath)
 
 module.exports = app = express()
+
+validateTemplate = (contents) ->
+  compiled = hbs.handlebars.compile contents
+
+  try
+    null if compiled {}
+  catch e
+    lineNum = e.message.match(/^Parse error on line (\d+)/)?[1]
+    return errors:
+      contents:
+        path: 'contents'
+        message: e.message
+        line: parseInt(lineNum) if lineNum
 
 app.route('/templates')
   .get (req, res) ->
@@ -13,6 +28,10 @@ app.route('/templates')
         res.send files
 
   .post (req, res) ->
+
+    errors = validateTemplate req.body.contents
+    return res.send 400, errors if errors
+
     Template.write req.body.filename, req.body.contents, (err) ->
       if err
         res.send 500, err
@@ -40,6 +59,10 @@ app.route('/templates/:filename')
 
   # not a valid PUT request
   .put (req, res) ->
+
+    errors = validateTemplate req.body.contents
+    return res.send 400, errors if errors
+
     Template.write [req.params.filename, req.body.filename], req.body.contents, (err) ->
       if err
         res.send 500, err

@@ -26,8 +26,7 @@ module.exports =
   renderServerErrors: (res) ->
 
     # First let's get rid of the old ones
-    @$('.help-block').remove()
-    @$('.has-error').removeClass('has-error')
+    @clearFormErrors()
 
     if errors = res?.responseJSON?.errors
       _.each errors, (error) =>
@@ -45,3 +44,7 @@ module.exports =
           """
 
       @$('.has-error').eq(0).find('[name]').eq(0).focus()
+
+  clearFormErrors: ->
+    @$('.help-block').remove()
+    @$('.has-error').removeClass('has-error')
