@@ -81,3 +81,17 @@ module.exports = (hbs) ->
               console.log e
 
           cb ret.join('')
+
+    hbs.registerHelper 'inspect', (thing, options) ->
+      thing = @ unless thing? and options?
+
+      entities =
+        '<': '&lt;'
+        '>': '&gt;'
+        '&': '&amp;'
+
+      json = JSON
+        .stringify thing, null, 2
+        .replace /[&<>]/g, (key) -> entities[key]
+
+      new hbs.handlebars.SafeString "<pre>#{json}</pre>"
