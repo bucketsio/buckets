@@ -46,12 +46,6 @@ app.get '*', (req, res, next) ->
 
   hbs.registerHelper 'renderTime', -> getTime()
 
-  globalNext = null
-  hbs.registerHelper 'next', ->
-    if globalNext?
-      globalNext false
-      throw new Error '{{next}} called'
-
   templateData =
     adminSegment: config.buckets.adminSegment
     # Expose select items from the request object
@@ -61,6 +55,14 @@ app.get '*', (req, res, next) ->
       query: req.query unless _.isEmpty(req.query)
       params: {} # We fill this manually later
     user: req.user
+    errors: []
+
+  globalNext = null
+
+  hbs.registerHelper 'next', ->
+    if globalNext?
+      globalNext false
+      throw new Error '{{next}} called'
 
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
@@ -79,17 +81,21 @@ app.get '*', (req, res, next) ->
 
         matchingRoutes.push localTemplateData
 
-    async.detectSeries matchingRoutes, (templateData, callback) ->
+    async.detectSeries matchingRoutes, (localTemplateData, callback) ->
       globalNext = callback
-      res.render templateData.template, templateData, (err, html) ->
+      localTemplateData = _.extend localTemplateData, templateData
+
+      res.render localTemplateData.template, localTemplateData, (err, html) ->
         if err
-          console.log 'Render error', err
-          callback err
+          tplErr = {}
+          tplErr[localTemplateData.template] = err.message
+          templateData.errors.push tplErr
+          callback false, "#{err.name} #{err.message}"
         else if html
           res.send 200, html
           callback true
         else
-          callback 'The rendered page was blank.'
+          callback false, 'The rendered page was blank.'
     , (rendered) ->
       return if rendered
 
