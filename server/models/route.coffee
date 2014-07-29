@@ -28,7 +28,7 @@ routeSchema = new mongoose.Schema
   autoIndex: no
 
 routeSchema.path('urlPattern').validate (value) ->
-  !/[^a-zA-Z0-9-_\/:\*\?]|(^\/\/)/g.test value
+  !/[^a-zA-Z0-9-\._\/:\*\?]|(^\/\/)/g.test value
 , 'Route includes invalid characters.'
 
 routeSchema.pre 'validate', (next) ->
