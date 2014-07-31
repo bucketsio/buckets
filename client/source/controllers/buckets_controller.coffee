@@ -91,7 +91,7 @@ module.exports = class BucketsController extends Controller
 
       if data.slug
         toastr.success 'Bucket saved'
-        @redirectTo 'buckets#listEntries', slug: data.slug
+        @redirectTo 'buckets#browse', slug: data.slug
       else
         toastr.success 'Bucket deleted'
         @redirectTo 'buckets#dashboard'
