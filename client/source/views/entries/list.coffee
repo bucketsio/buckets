@@ -1,5 +1,6 @@
 _ = require 'underscore'
 Handlebars = require 'hbsfy/runtime'
+Chaplin = require 'chaplin'
 
 PageView = require 'views/base/page'
 Entry = require 'models/entry'
@@ -21,6 +22,7 @@ module.exports = class EntriesList extends PageView
   getTemplateData: ->
     _.extend super,
       bucket: @bucket.toJSON()
+      items: @collection?.toJSON()
 
   loadEntry: (entryID) ->
     @model = new Entry _id: entryID
@@ -35,7 +37,7 @@ module.exports = class EntriesList extends PageView
         else
           toastr.success "You deleted “#{entry.get('title')}”"
 
-        @redirectTo 'buckets#listEntries', slug: bucket.get('slug')
+        Chaplin.utils.redirectTo 'buckets#browse', slug: @bucket.get('slug')
 
       @renderDetailView()
 
@@ -45,7 +47,13 @@ module.exports = class EntriesList extends PageView
 
     @listenToOnce @model, 'sync', =>
       toastr.success "You added #{@model.get('title')}"
-      @redirectTo 'buckets#listEntries', slug: @bucket.get('slug')
+
+      # Gross-ness to get list refresh for now
+      # Should separate list into separate view
+      @collection.fetch({data: {bucket: @bucket.get('id')}}, {processData: yes, reset: yes}).done =>
+        @render()
+        _.defer =>
+          Chaplin.utils.redirectTo 'buckets#browse', slug: @bucket.get('slug')
 
     @renderDetailView()
 

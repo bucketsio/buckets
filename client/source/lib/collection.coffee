@@ -12,7 +12,7 @@ module.exports = class Collection extends Chaplin.Collection
     jqPromise.fail (jqXHR, statusCode) ->
       console.warn 'Collection Ajax error:', arguments
       if "#{jqXHR?.status}".charAt(0) is '5' or statusCode is 'parsererror' or statusCode is 'timeout'
-        Chaplin.helpers.redirectTo 'error#general'
+        Chaplin.utils.redirectTo 'error#general'
 
     jqPromise.always =>
       idx = @ajaxPool.indexOf jqPromise
