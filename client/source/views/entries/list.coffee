@@ -41,7 +41,7 @@ module.exports = class EntriesList extends PageView
 
   loadNewEntry: ->
     @model = new Entry
-      author: mediator.user.get('id')
+      author: mediator.user.toJSON()
 
     @listenToOnce @model, 'sync', =>
       toastr.success "You added #{@model.get('title')}"
@@ -53,4 +53,4 @@ module.exports = class EntriesList extends PageView
     @subview 'editEntry', new EntryEditView
       model: @model
       bucket: @bucket
-      user: @model.get('author') or mediator.user.toJSON()
+      author: @model.get('author') or mediator.user.toJSON()

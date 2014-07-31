@@ -12,7 +12,7 @@ mediator = require 'mediator'
 module.exports = class EntryEditView extends PageView
   className: 'EntryEditView'
   template: tpl
-  optionNames: PageView::optionNames.concat ['bucket', 'user']
+  optionNames: PageView::optionNames.concat ['bucket']
   region: 'detail'
   regions:
     'user-fields': '.userFields'

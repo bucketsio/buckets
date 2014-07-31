@@ -12,20 +12,6 @@ Route = require '../models/route'
 module.exports = app = express()
 tplPath = config.buckets?.templatePath
 
-hbs.registerHelper 'inspect', (thing, options) ->
-  thing = @ unless thing? and options?
-
-  entities =
-    '<': '&lt;'
-    '>': '&gt;'
-    '&': '&amp;'
-
-  json = JSON
-    .stringify thing, null, 2
-    .replace /[&<>]/g, (key) -> entities[key]
-
-  new hbs.handlebars.SafeString "<pre>#{json}</pre>"
-
 require('../lib/renderer')(hbs)
 
 app.set 'views', tplPath
@@ -46,12 +32,6 @@ app.get '*', (req, res, next) ->
 
   hbs.registerHelper 'renderTime', -> getTime()
 
-  globalNext = null
-  hbs.registerHelper 'next', ->
-    if globalNext?
-      globalNext false
-      throw new Error '{{next}} called'
-
   templateData =
     adminSegment: config.buckets.adminSegment
     # Expose select items from the request object
@@ -61,16 +41,24 @@ app.get '*', (req, res, next) ->
       query: req.query unless _.isEmpty(req.query)
       params: {} # We fill this manually later
     user: req.user
+    errors: []
+
+  globalNext = null
+
+  hbs.registerHelper 'next', ->
+    if globalNext?
+      globalNext false
+      throw new Error '{{next}} called'
 
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
-  Route.find {}, (err, routes) ->
+  Route.find({}, null, sort: 'sort').exec (err, routes) ->
     throw err if err
 
     matchingRoutes = []
 
     for route in routes
-      matches = route.urlPatternRegex?.exec(req.path)
+      matches = route.urlPatternRegex.exec req.path
 
       if matches
         localTemplateData = _.clone templateData
@@ -79,20 +67,21 @@ app.get '*', (req, res, next) ->
 
         matchingRoutes.push localTemplateData
 
-    matchingRoutes.sort (a, b) ->
-      a.sort > b.sort
-
-    async.detectSeries matchingRoutes, (templateData, callback) ->
+    async.detectSeries matchingRoutes, (localTemplateData, callback) ->
       globalNext = callback
-      res.render templateData.template, templateData, (err, html) ->
+      localTemplateData = _.extend localTemplateData, templateData
+
+      res.render localTemplateData.template, localTemplateData, (err, html) ->
         if err
-          console.log 'Render error', err
-          callback err
+          tplErr = {}
+          tplErr[localTemplateData.template] = err.message
+          templateData.errors.push tplErr
+          callback false, "#{err.name} #{err.message}"
         else if html
           res.send 200, html
           callback true
         else
-          callback 'The rendered page was blank.'
+          callback false, 'The rendered page was blank.'
     , (rendered) ->
       return if rendered
 

@@ -1,5 +1,5 @@
 <form>
-  {{hidden 'author' user._id}}
+  {{hidden 'author' author._id}}
   {{hidden 'bucket' bucket._id}}
 
   <div class="panel panel-default">
@@ -12,7 +12,7 @@
       <div class="entry-publish">
         {{#is status 'pending'}}
           {{#hasRole 'editor'}}
-            <p>Submitted by {{gravatar user.email_hash}} {{user.name}}</p>
+            <p>Submitted by {{gravatar author.email_hash}} {{author.name}}</p>
           {{/hasRole}}
         {{/is}}
         {{#if _id}}
