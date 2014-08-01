@@ -17,7 +17,7 @@ _ = require 'underscore'
 module.exports = class BucketsApp extends Chaplin.Application
   title: 'Buckets'
   initialize: (@options = {}) ->
-    @initRouter routes, {root: '/admin/'}
+    @initRouter routes, {root: "/#{@options.adminSegment}/"}
     @initDispatcher
       controllerPath: 'client/source/controllers/'
       controllerSuffix: '_controller.coffee'
