@@ -1,8 +1,36 @@
 mongoose = require 'mongoose'
+_ = require 'underscore'
 chrono = require 'chrono-node'
+async = require 'async'
 getSlug = require 'speakingurl'
 
 db = require '../lib/database'
+
+# Add a parser to Chrono to understand "now"
+# A bit hacky because Chrono doesn't support ms yet
+chrono.parsers.NowParser = (text, ref, opt) ->
+
+  parser = chrono.Parser(text, ref, opt)
+
+  parser.pattern = -> /now/i
+  parser.extract = (text, index) ->
+    mentioned_text = text.substr(index).match(/now/i)[0];
+
+    now = new Date()
+    new chrono.ParseResult
+      referenceDate : ref
+      text : mentioned_text
+      index: index
+      start:
+        year: now.getFullYear()
+        month: now.getMonth()
+        day: now.getDate()
+        hour: now.getHours()
+        minute: now.getMinutes()
+        second: now.getSeconds() + 1
+        millisecond: now.getMilliseconds()
+
+  parser
 
 Schema = mongoose.Schema
 
@@ -29,6 +57,7 @@ entrySchema = new Schema
   author:
     type: Schema.Types.ObjectId
     ref: 'User'
+    required: yes
   bucket:
     type: Schema.Types.ObjectId
     ref: 'Bucket'
@@ -65,6 +94,61 @@ entrySchema.path('publishDate').set (val='') ->
 entrySchema.path('description').validate (val) ->
   val?.length < 140
 , 'Descriptions must be less than 140 characters.'
+
+entrySchema.statics.findByParams = (params, callback) ->
+
+  settings = _.defaults params,
+    bucket: null
+    until: 'Now'
+    since: null
+    limit: 10
+    skip: 0
+    status: 'live'
+    sort: '-publishDate'
+    find: ''
+    slug: null
+
+  searchQuery = {}
+
+  async.parallel [
+    (callback) ->
+      if settings.bucket?
+        filteredBuckets = settings.bucket.split '|'
+        searchQuery.bucket = $in: []
+
+        mongoose.model('Bucket').find {slug: $in: filteredBuckets}, (err, buckets) =>
+          filteredBucketIDs = _.pluck _.filter(buckets, (bkt) -> bkt.slug in filteredBuckets), '_id'
+          searchQuery.bucket = $in: filteredBucketIDs
+          callback null
+      else
+        callback null
+  ], =>
+    if settings.slug
+      searchQuery.slug = settings.slug
+
+    if settings.where
+      searchQuery.$where = settings.where
+
+    if settings.status
+      searchQuery.status = settings.status
+
+    if settings.since or settings.until
+      searchQuery.publishDate = {}
+      searchQuery.publishDate.$gt = new Date(chrono.parseDate settings.since) if settings.since
+      searchQuery.publishDate.$lte = new Date(chrono.parseDate settings.until) if settings.until
+
+    @find searchQuery
+      .populate 'bucket'
+      .populate
+        path: 'author'
+        select: '-passwordDigest -resetPasswordToken -resetPasswordExpires'
+      .sort settings.sort
+      .limit settings.limit
+      .skip settings.skip
+      .exec (err, entries) ->
+        throw err if err
+
+        callback null, entries
 
 entrySchema.set 'toJSON', virtuals: true
 

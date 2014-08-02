@@ -23,75 +23,39 @@ module.exports = (hbs) ->
   hbs.registerHelper 'timeAgo', (value, options) ->
     moment(value).fromNow()
 
-  Bucket.find {}, (err, buckets) ->
+  # entries helper
+  hbs.registerAsyncHelper 'entries', (options, cb) ->
 
-    # Add the entries helper
-    hbs.registerAsyncHelper 'entries', (options, cb) ->
-      settings = _.defaults options.hash,
-        bucket: null
-        until: Date.now()
-        since: null
-        limit: 10
-        skip: 0
-        status: 'live'
-        sort: '-publishDate'
-        status: 'live'
-        find: ''
-        slug: null
+    Entry.findByParams options.hash, (err, entries) ->
+      console.log err if err
+      return cb options.inverse @ if entries?.length is 0 or err
 
-      searchQuery = {}
-      bucketPath = path: 'bucket'
+      ret = []
+      for entry in entries
 
-      if settings.bucket
-        filteredBuckets = settings.bucket.split '|'
-        filteredBucketIDs = _.pluck _.filter(buckets, (bkt) -> bkt.slug in filteredBuckets), '_id'
-        searchQuery['bucket'] = $in: filteredBucketIDs
+        # Make content attributes first-level tags, ie. `{{body}}` instead of `{{content.body}}`
+        entryJSON = _.extend entry.toJSON(), entry.content
+        delete entryJSON.content
 
-      if settings.slug
-        searchQuery.slug = settings.slug
+        try
+          ret.push options.fn entryJSON
+        catch e
+          console.log e
 
-      if settings.where
-        searchQuery.$where = settings.where
+      cb ret.join('')
 
-      if settings.status
-        searchQuery.status = settings.status
+  # inspect helper
+  # Prints out pretty JSON (in pre tag) of passed arg or current scope
+  hbs.registerHelper 'inspect', (thing, options) ->
+    thing = @ unless thing? and options?
 
-      Entry.find searchQuery
-        .populate 'bucket'
-        .populate
-          path: 'author'
-          select: '-passwordDigest -resetPasswordToken -resetPasswordExpires'
-        .sort settings.sort
-        .limit settings.limit
-        .skip settings.skip
-        .exec (err, entries) ->
-          console.log err if err
-          return cb options.inverse @ if entries?.length is 0 or err
+    entities =
+      '<': '&lt;'
+      '>': '&gt;'
+      '&': '&amp;'
 
-          ret = []
-          for entry in entries
+    json = JSON
+      .stringify thing, null, 2
+      .replace /[&<>]/g, (key) -> entities[key]
 
-            # Make content attributes first-level tags, ie. `{{body}}` instead of `{{content.body}}`
-            entryJSON = _.extend entry.toJSON(), entry.content
-            delete entryJSON.content
-
-            try
-              ret.push options.fn entryJSON
-            catch e
-              console.log e
-
-          cb ret.join('')
-
-    hbs.registerHelper 'inspect', (thing, options) ->
-      thing = @ unless thing? and options?
-
-      entities =
-        '<': '&lt;'
-        '>': '&gt;'
-        '&': '&amp;'
-
-      json = JSON
-        .stringify thing, null, 2
-        .replace /[&<>]/g, (key) -> entities[key]
-
-      new hbs.handlebars.SafeString "<pre>#{json}</pre>"
+    new hbs.handlebars.SafeString "<pre>#{json}</pre>"

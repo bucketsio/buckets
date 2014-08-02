@@ -26,10 +26,7 @@ app.route('/entries')
           res.send 200, entry
 
   .get (req, res) ->
-    query = {}
-    query.bucket = req.query.bucket if req.query.bucket
-
-    Entry.find(query).populate('author').sort('publishDate desc').exec (err, entries) ->
+    Entry.findByParams req.query, (err, entries) ->
       res.send 200, entries
 
 app.route('/entries/:entryID')

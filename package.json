@@ -38,7 +38,7 @@
     "body-parser": "^1.0.2",
     "buckets-location": "0.0.2",
     "buckets-markdown": "0.0.2",
-    "chrono-node": "^0.1.8",
+    "chrono-node": "^0.1.10",
     "coffee-script": "^1.7.1",
     "coffeeify": "^0.6.0",
     "colors": "^0.6.2",

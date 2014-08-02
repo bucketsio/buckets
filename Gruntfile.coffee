@@ -229,6 +229,8 @@ module.exports = (grunt) ->
       serverTest:
         files: ['test/server/**/*.coffee']
         tasks: ['shell:mocha']
+        options:
+          interrupt: yes
 
       assets:
         files: ['client/assets/**/*.*']
