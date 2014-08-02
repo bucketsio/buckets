@@ -70,7 +70,7 @@ describe 'Entry', ->
         expect(entry.slug).to.equal 'resumes-and-cvs'
         done()
 
-  describe '#findByParams()', ->
+  describe '#findByParams', ->
     # Set up a bunch of entries to filter/search
     beforeEach (done) ->
       Bucket.create [
@@ -94,29 +94,29 @@ describe 'Entry', ->
         ], ->
           done()
 
-    it 'Can filter by bucket slug (empty)', (done) ->
+    it 'filters by bucket slug (empty)', (done) ->
       Entry.findByParams bucket: '', (e, entries) ->
         expect(entries).to.have.length 0
         done()
 
-    it 'Can filter by bucket slug', (done) ->
+    it 'filters by bucket slug', (done) ->
       Entry.findByParams bucket: 'photos', (e, entries) ->
         expect(entries).to.have.length 1
         expect(entries?[0]?.title).to.equal 'Test Photo'
         done()
 
-    it 'Can filter by multiple bucket slugs', (done) ->
+    it 'filters by multiple bucket slugs', (done) ->
       Entry.findByParams bucket: 'photos|articles', (e, entries) ->
         expect(entries).to.have.length 2
         done()
 
-    it 'Can filter with `since`', (done) ->
+    it 'filters with `since`', (done) ->
       Entry.findByParams since: 'yesterday', (e, entries) ->
         expect(entries).to.have.length 1
         expect(entries?[0]?.title).to.equal 'Test Photo'
         done()
 
-    it 'Can filter with `until`', (done) ->
+    it 'filters with `until`', (done) ->
       Entry.findByParams until: 'yesterday', (e, entries) ->
         expect(entries).to.have.length 1
         expect(entries?[0]?.title).to.equal 'Test Article'

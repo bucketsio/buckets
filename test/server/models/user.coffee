@@ -20,62 +20,54 @@ describe 'User', ->
   afterEach (done) ->
     db.connection.db.dropDatabase(done)
 
-  describe 'email attribute', ->
-    describe 'when email is valid', ->
-      it 'validates', (done) ->
-        user.email = 'hello@buckets.io'
-        user.save (e, u) ->
-          assert.isNull(e)
-          done()
+  describe 'Validation', ->
+    it 'validates a well-formatted email', (done) ->
+      user.email = 'hello@buckets.io'
+      user.save (e, u) ->
+        assert.isNull(e)
+        done()
 
-    describe 'when email is invalid', ->
-      it 'returns an error', (done) ->
-        user.email = 'invalid'
-        user.save (e, u) ->
-          assert.equal(e.errors.email.message, 'Not a valid email adress')
-          done()
+    it 'returns an error with invalid email', (done) ->
+      user.email = 'invalid'
+      user.save (e, u) ->
+        assert.equal(e.errors.email.message, 'Not a valid email adress')
+        done()
 
-  describe 'password virtual', ->
-    describe 'updating password', ->
-      it 'updates password', (done) ->
-        p = '1337abc123'
-        user.password = p
-        user.save ->
-          assert.isTrue(user.authenticate(p))
-          assert.isNull(user.password)
-          done()
+    it 'returns an error for a missing password', (done) ->
+      User.create { name: 'Bucketer', email: 'hello@buckets.io' }, (e, u) ->
+        assert.equal(e.errors.password.message, 'Password is required')
+        done()
 
-    describe 'when password is missing', ->
-      it 'returns an error', (done) ->
-        User.create { name: 'Bucketer', email: 'hello@buckets.io' }, (e, u) ->
-          assert.equal(e.errors.password.message, 'Password is required')
-          done()
+    it 'returns an error when password is invalid', (done) ->
+      User.create { name: 'Bucketer', email: 'hello@buckets.io', password: 'abc12' }, (e, u) ->
+        assert.equal(e.errors.password.message, 'Your password must be between 6–20 characters and include a number')
+        done()
 
-    describe 'when password is invalid', ->
-      it 'returns an error', (done) ->
-        User.create { name: 'Bucketer', email: 'hello@buckets.io', password: 'abc12' }, (e, u) ->
-          assert.equal(e.errors.password.message, 'Your password must be between 6–20 characters and include a number')
-          done()
+  describe 'Update', ->
+    it 'updates password', (done) ->
+      p = '1337abc123'
+      user.password = p
+      user.save ->
+        assert.isTrue(user.authenticate(p))
+        assert.isFalse(user.authenticate('bad password'))
+        assert.isNull(user.password)
+        done()
 
   describe '#upsertRole', ->
-    describe 'when a role is passed', ->
-      describe 'when user does not have the role', ->
-        it 'adds the global role', (done) ->
-          user.upsertRole 'administrator', ->
-            assert.lengthOf(user.roles, 1)
-            user.upsertRole 'administrator', ->
-              assert.lengthOf(user.roles, 1)
-              done()
+    it 'Adds a global role', (done) ->
+      user.upsertRole 'administrator', ->
+        assert.lengthOf(user.roles, 1)
+        user.upsertRole 'administrator', ->
+          assert.lengthOf(user.roles, 1)
+          done()
 
-    describe 'when a role and a resource are passed', ->
-      describe 'when user does not have a role for a resource', ->
-        it 'adds a role for the given resource', (done) ->
-          user.upsertRole 'editor', bucket, ->
-            assert.lengthOf(user.roles, 1)
-            assert.equal(user.roles[0].name, 'editor')
-            done()
+    it 'Adds a role for a given resource', (done) ->
+      user.upsertRole 'editor', bucket, ->
+        assert.lengthOf(user.roles, 1)
+        assert.equal(user.roles[0].name, 'editor')
+        done()
 
-      describe 'when user has a role for a resource', ->
+      describe 'Updates existing roles', ->
         beforeEach (done) ->
           user.upsertRole('editor', bucket, done)
 
@@ -95,44 +87,34 @@ describe 'User', ->
         done()
 
   describe '#hasRole', ->
-    describe 'when a resource is passed', ->
-      beforeEach (done) ->
-        user.upsertRole('editor', bucket, done)
 
-      describe 'when user has the role for the resource', ->
-        it 'returns true', ->
-          assert.isTrue(user.hasRole('editor', bucket))
+    it 'checks for a role', ->
+      user.upsertRole 'editor', bucket, ->
+        assert.isTrue(user.hasRole('editor', bucket))
+        assert.isFalse(user.hasRole('contributor', bucket))
+        assert.isFalse(user.hasRole('administrator'))
 
-      describe 'when user does not have the role for the resource', ->
-        it 'returns false', ->
-          assert.isFalse(user.hasRole('contributor', bucket))
-          assert.isFalse(user.hasRole('administrator'))
-
-    describe 'when user is administrator', ->
-      beforeEach (done) ->
-        user.upsertRole('administrator', done)
-
-      it 'returns true', ->
+    it 'always returns true for admins', ->
+      user.upsertRole 'administrator', ->
         assert.isTrue(user.hasRole('administrator'))
         assert.isTrue(user.hasRole('editor', bucket))
+        assert.isTrue(user.hasRole('contributor', bucket))
 
   describe '#getRoles', ->
     beforeEach (done) ->
       user.upsertRole('editor', bucket, done)
 
-    describe 'when a resource is passed', ->
-      it 'returns role for the resource', ->
-        roles = user.getRoles(bucket)
+    it 'returns role for a resource (object)', ->
+      roles = user.getRoles(bucket)
 
-        assert.isArray(roles)
-        assert.lengthOf(roles, 1)
+      assert.isArray(roles)
+      assert.lengthOf(roles, 1)
 
-    describe 'when a resource type is passed', ->
-      it 'returns role for the resource type', ->
-        roles = user.getRoles('Bucket')
+    it 'returns role for a resource type (string)', ->
+      roles = user.getRoles('Bucket')
 
-        assert.isArray(roles)
-        assert.lengthOf(roles, 1)
+      assert.isArray(roles)
+      assert.lengthOf(roles, 1)
 
   describe '#getResources', ->
     describe 'when user is administrator', ->
