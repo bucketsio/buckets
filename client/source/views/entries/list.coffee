@@ -17,7 +17,19 @@ module.exports = class EntriesList extends CollectionView
 
   itemRemoved: (entry) ->
     if id = entry?.get('_id')
-      @$("[data-entry-id=\"#{id}\"]").parent().slideUp
-        duration: 250
-        ease: Expo.easeIn
-        complete: -> $(@).remove()
+      @$("[data-entry-id=\"#{id}\"]").slideUp
+        duration: 200
+        easing: 'easeInExpo'
+        complete: -> $(@).parent().remove()
+
+    if @collection.length is 0
+      @$fallback.show()
+
+  itemAdded: (entry) ->
+    thing = super
+    if id = entry?.get('_id')
+      $el = @$("[data-entry-id=\"#{id}\"]").hide()
+      _.defer =>
+        $el.slideDown
+          duration: 200
+          easing: 'easeOutExpo'

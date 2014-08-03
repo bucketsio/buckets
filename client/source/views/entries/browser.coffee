@@ -19,6 +19,9 @@ module.exports = class EntriesBrowser extends PageView
     'detail': '.entry-detail'
     'list': '.entries'
 
+  listen:
+    'all collection': 'checkLength'
+
   getTemplateData: ->
     _.extend super,
       bucket: @bucket.toJSON()
@@ -44,6 +47,8 @@ module.exports = class EntriesBrowser extends PageView
       @renderDetailView()
 
   loadNewEntry: ->
+    @$('.entry.active').removeClass('active')
+
     @model = new Entry
       author: mediator.user.toJSON()
 
@@ -69,3 +74,8 @@ module.exports = class EntriesBrowser extends PageView
     model = @model
     @listenToOnce sv, 'dispose', =>
       model.off 'sync', @modelSaved
+
+  checkLength: ->
+    unless @disposed
+      @$('.hasEntries').toggleClass 'hidden', @collection.length is 0
+

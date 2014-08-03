@@ -5,9 +5,13 @@
 
 <div class="row">
   <div class="col-md-5">
-    <a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add {{bucket.singular}}</a>
 
-    <a class="btn btn-default noscript" href="/api/entries?bucket={{bucket.slug}}">JSON</a>
+    <div class="hasEntries {{#empty items}}hidden{{/empty}}">
+      <a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add {{bucket.singular}}</a>
+
+      <a class="btn btn-default noscript" href="/api/entries?bucket={{bucket.slug}}">JSON</a>
+    </div>
+
 
     <div class="entries"></div>
   </div>
