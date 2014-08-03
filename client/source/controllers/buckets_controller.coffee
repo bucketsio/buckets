@@ -4,7 +4,7 @@ MissingPageView = require 'views/missing'
 
 BucketEditView = require 'views/buckets/edit'
 DashboardView = require 'views/buckets/dashboard'
-EntriesList = require 'views/entries/list'
+EntriesBrowser = require 'views/entries/browser'
 EntryEditView = require 'views/entries/edit'
 
 Bucket = require 'models/bucket'
@@ -55,8 +55,8 @@ module.exports = class BucketsController extends Controller
       compose: (options) ->
         @entries = new Entries
 
-        @entries.fetch( data: {bucket: bucket.get('id')}, processData: yes ).done =>
-          @view = new EntriesList
+        @entries.fetch( data: {bucket: bucket.get('slug')}, processData: yes ).done =>
+          @view = new EntriesBrowser
             collection: @entries
             bucket: bucket
 

@@ -23,7 +23,8 @@ app.route('/entries')
         if err
           res.send 400, err
         else
-          res.send 200, entry
+          entry.populate 'bucket author', ->
+            res.send 200, entry
 
   .get (req, res) ->
     Entry.findByParams req.query, (err, entries) ->
@@ -31,14 +32,14 @@ app.route('/entries')
 
 app.route('/entries/:entryID')
   .get (req, res) ->
-    Entry.findOne(_id: req.params.entryID).populate('bucket').populate('author').exec (err, entry) ->
+    Entry.findOne(_id: req.params.entryID).populate('bucket author').exec (err, entry) ->
       if entry
         res.send entry
       else
         res.send 404
 
   .put (req, res) ->
-    Entry.findOne {_id: req.params.entryID}, (err, entry) ->
+    Entry.findOne(_id: req.params.entryID).exec (err, entry) ->
       if err
         res.send 400, err
       else
@@ -46,7 +47,8 @@ app.route('/entries/:entryID')
           if err
             res.send 400, err
           else
-            res.send 200, entry
+            entry.populate 'bucket author', ->
+              res.send 200, entry
 
   .delete (req, res) ->
     delete req.body._id

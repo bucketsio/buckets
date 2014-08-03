@@ -1,27 +1,6 @@
-<h1>
-  {{bucket.name}}
-  <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon show-tooltip"  title="Bucket Settings" data-placement="top">{{icon 'cog'}}</a>
-</h1>
-
-<div class="row">
-  <div class="col-md-5">
-    {{#any items}}
-      <a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add {{bucket.singular}}</a>
-    {{/any}}
-
-    {{#each items}}
-      <div class="entry">
-        <h3><a href="/{{adminSegment}}/buckets/{{../bucket.slug}}/{{id}}">{{title}}</a></h3>
-        <h4><span class="label label-{{statusColor status}}">{{status}}</span> <a href="/{{adminSegment}}/users/{{author.email}}">{{author.name}}</a> · {{timeAgo publishDate}}</h4>
-      </div>
-    {{else}}
-      <p class="lead">
-        This bucket doesn’t have any entries yet.
-      </p>
-      <a class="btn btn-primary" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add your first {{bucket.singular}}</a>
-    {{/each}}
-  </div>
-  <div class="col-md-7 entry-detail">
-
-  </div>
+<div class="fallback">
+  <p class="lead">
+    This bucket doesn’t have any entries yet.
+  </p>
+  <a class="btn btn-primary" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add your first {{bucket.singular}}</a>
 </div>

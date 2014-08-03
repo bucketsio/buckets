@@ -1,0 +1,17 @@
+<h1>
+  {{bucket.name}}
+  <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon show-tooltip"  title="Bucket Settings" data-placement="top">{{icon 'cog'}}</a>
+</h1>
+
+<div class="row">
+  <div class="col-md-5">
+    <a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add {{bucket.singular}}</a>
+
+    <a class="btn btn-default noscript" href="/api/entries?bucket={{bucket.slug}}">JSON</a>
+
+    <div class="entries"></div>
+  </div>
+  <div class="col-md-7 entry-detail">
+
+  </div>
+</div>
