@@ -36,12 +36,11 @@ Handlebars.registerHelper 'timeAgo', (dateTime) ->
   m = moment dateTime
   expanded = Handlebars.helpers.simpleDateTime dateTime
 
-  o = []
-  o.push """<span title="#{expanded}">"""
-  o.push moment(dateTime).fromNow()
-  o.push "</span>"
-
-  new Handlebars.SafeString o.join ''
+  new Handlebars.SafeString """
+    <span title="#{expanded}" class="show-tooltip">
+      #{moment(dateTime).fromNow()}
+    </span>
+  """
 
 Handlebars.registerHelper 'simpleDateTime', (dateTime) ->
   m = moment dateTime
