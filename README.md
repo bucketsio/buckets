@@ -2,7 +2,7 @@
 
 ## Manage content better.
 
-Buckets is a simple, open source, content management system for Node.js.
+Buckets is a simple, open source, content management system for Node.js. Read more about [our vision](docs/vision/vision.md).
 
 [![Build Status](https://travis-ci.org/asm-products/buckets.svg?branch=master)](https://travis-ci.org/asm-products/buckets)
 
@@ -42,9 +42,17 @@ After building, Buckets should then be accessible at the default address: [http:
 
 ### Documentation
 
+#### Developer Documentation
+
 * [Frontend Architecture](docs/frontend.md)
 * [Database](docs/database.md)
+* [Tests](docs/tests.md)
 * [Deploying to Heroku](docs/heroku.md)
+
+#### User Documentation
+
+* [Routes](docs/user-docs/routes.md)
+* [Templates](docs/user-docs/templates.md)
 
 ### Contributing
 
