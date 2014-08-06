@@ -78,7 +78,7 @@ app.get '*', (req, res, next) ->
           templateData.errors.push tplErr
           callback false, "#{err.name} #{err.message}"
         else if html
-          res.send 200, html
+          res.status(200).send html
           callback true
         else
           callback false, 'The rendered page was blank.'
@@ -92,6 +92,6 @@ app.get '*', (req, res, next) ->
         console.log 'Buckets caught an error trying to render the error page.', err if err
 
         if err
-          res.send 404, err
+          res.status(404).send err
         else
-          res.send 404, html
+          res.status(404).send html
