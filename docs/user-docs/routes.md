@@ -12,6 +12,8 @@ A quick primer on Route patterns:
 * **/entries/:var?** Matches both /entries/123 and /entries/ (param is optional)
 * **/entries/*** Matches /entries/123, /entries/, and /entries/123/456 (catch all)
 
+There are many more options available, like regex-style matching, one-or-more matching, etc. For a full list of the types of paths you can pass, refer to the [path-to-regexp](https://github.com/component/path-to-regexp/commits/master) documentation—or try testing patterns with the [Express Route Tester](http://forbeslindesay.github.io/express-route-tester/).
+
 ## Sorting Routes and Passing Through
 
 Buckets approximates Express.js’s system of middleware by allowing the website creator to use a `{{next}}` tag within Templates. This tag will immediately stop rendering the current template and “pass through” to the next template match. Similarly, a route will be passed through if the server experiences an error rendering the template. Here’s one example of using the same Route for two different templates:

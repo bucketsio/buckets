@@ -27,10 +27,6 @@ routeSchema = new mongoose.Schema
 ,
   autoIndex: no
 
-routeSchema.path('urlPattern').validate (value) ->
-  !/[^a-zA-Z0-9-\._\/:\*\?]|(^\/\/)/g.test value
-, 'Route includes invalid characters.'
-
 routeSchema.pre 'validate', (next) ->
   # Force the initial slash for consistency
   # (trailing slash is up to user)
@@ -38,6 +34,7 @@ routeSchema.pre 'validate', (next) ->
   @urlPattern = "/#{@urlPattern}".replace(/\/\/+/g, '/')
 
   # Generate the Express path regex
+  # and saves the keys to an array
   @keys = []
   @urlPatternRegex = pathRegexp @urlPattern, @keys, yes, no
 
