@@ -36,4 +36,4 @@ app.use require './routes/frontend'
 
 app.listen config.buckets.port
 
-console.log "\nBuckets".yellow + " is running at " + "http://localhost:#{config.buckets.port}/".underline.bold
+console.log ("\nBuckets is running at " + "http://localhost:#{config.buckets.port}/".underline.bold).yellow

@@ -293,7 +293,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'browserify:plugins', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
-  grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'express:dev', 'build', 'watch']
+  grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'build', 'express:dev', 'watch']
   grunt.registerTask 'devserve', ['checkDatabase', 'migrate:all', 'express:dev', 'watch']
   grunt.registerTask 'serve', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'minify', 'express:server']
 
