@@ -129,7 +129,7 @@ entrySchema.statics.findByParams = (params, callback) ->
     if settings.where
       searchQuery.$where = settings.where
 
-    if settings.status
+    if settings.status?.length > 0
       searchQuery.status = settings.status
 
     if settings.since or settings.until
