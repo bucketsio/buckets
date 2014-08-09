@@ -9,7 +9,6 @@
     "mongo"
   ],
   "website": "http://buckets.io",
-  "repository": "https://github.com/asm-products/buckets",
   "logo": "http://buckets.io/images/buckets-logo.svg",
   "env": {
     "BUILDPACK_URL": "https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git",
