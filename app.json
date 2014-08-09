@@ -10,6 +10,7 @@
   ],
   "website": "http://buckets.io",
   "logo": "http://buckets.io/images/buckets-logo.svg",
+  "success_url": "/admin/install",
   "env": {
     "BUILDPACK_URL": "https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git",
     "NODE_ENV": "production"
