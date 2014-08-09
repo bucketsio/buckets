@@ -8,6 +8,8 @@ Buckets is a simple, open source, content management system for Node.js. Read mo
 
 # Installing Buckets
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 ### Pre-requirements
 
 [MongoDB](http://www.mongodb.org), [Node.js](http://nodejs.org) and the following global:
