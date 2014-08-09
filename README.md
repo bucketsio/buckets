@@ -8,7 +8,11 @@ Buckets is a simple, open source, content management system for Node.js. Read mo
 
 # Installing Buckets
 
+There are several ways to install Buckets. The easiest way currently is to install on Heroku — as long as you have a Heroku account, you can simply use the button below:
+
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+Soon, you will also be able to install Buckets as an NPM module. Below are instructions for installing Buckets locally:
 
 ### Pre-requirements
 
