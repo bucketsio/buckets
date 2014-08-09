@@ -1,0 +1,37 @@
+{
+  "name": "Buckets",
+  "description": "Buckets is a CMS built with Node.js and MongoDB.",
+  "keywords": [
+    "cms",
+    "node",
+    "js",
+    "javascript",
+    "mongo"
+  ],
+  "website": "http://buckets.io",
+  "scripts": {
+    "start": "grunt serve",
+    "test": "grunt test",
+    "test-cov": "grunt test:server:cov"
+  },
+  "config": {
+    "blanket": {
+      "loader": "./node-loaders/coffee-script",
+      "pattern": "server",
+      "data-cover-never": "node_modules"
+    }
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://assemblymade.com/buckets/wips"
+  },
+  "repository": "https://github.com/asm-products/buckets",
+  "logo": "http://buckets.io/images/buckets-logo.svg",
+  "env": {
+    "BUILDPACK_URL": "https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git",
+    "NODE_ENV": "production",
+
+
+  },
+  "addons": ["mongohq", "mandrill"]
+}
