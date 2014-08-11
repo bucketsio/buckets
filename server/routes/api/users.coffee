@@ -14,14 +14,12 @@ app.route('/users')
     newUser = new User req.body
 
     newUser.save (err) ->
-      if err
-        res.send err, 400
-      else
-        res.send newUser, 200
+      return res.status(400).send err if err
+      res.status(200).send newUser
 
   .get (req, res) ->
     User.find {}, (err, users) ->
-      res.send users
+      res.status(200).send users
 
 app.route('/users/:userID')
   .get (req, res) ->
@@ -30,18 +28,17 @@ app.route('/users/:userID')
 
   .delete (req, res) ->
     User.remove _id: req.params.userID, (err) ->
-      if err
-        res.send e: err, 400
-      else
-        res.send {}, 200
+      return res.status(400).send e: err if err
+      res.status(200).end()
 
   .put (req, res) ->
     delete req.body._id
     User.findOne {_id: req.params.userID}, (err, user) ->
-      return res.send 400, e: err if err
+      return res.status(400).send e: err if err
+
       user.set(req.body).save (err, user) ->
-        return res.send 400, err if err
-        res.send 200, user
+        return res.status(400).send err if err
+        res.status(200).send user
 
 app.post '/forgot', (req, res) ->
   async.waterfall [
