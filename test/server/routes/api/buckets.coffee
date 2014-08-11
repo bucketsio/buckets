@@ -7,13 +7,14 @@ db = require('../../../../server/lib/database')
 
 describe 'Buckets routes', ->
   before (done) ->
-    db.connection.on 'open', ->
-      db.connection.db.dropDatabase done
+    db.connection.db.dropDatabase done
 
   afterEach (done) ->
     db.connection.db.dropDatabase done
 
   describe 'GET /buckets/:bucket/members', ->
+    # STUB: Need to add auth
+
     #it 'returns the members of a given bucket', (done) ->
       #Bucket.create { name: 'Products', slug: 'products', singular: 'product' }, (e, bucket) ->
         #u = new User({ name: 'Bucketer', email: 'hello@buckets.io', password: 'S3cr3ts' })

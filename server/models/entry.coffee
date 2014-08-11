@@ -1,9 +1,11 @@
 mongoose = require 'mongoose'
+mongoosastic = require 'mongoosastic'
 _ = require 'underscore'
 chrono = require 'chrono-node'
 async = require 'async'
 getSlug = require 'speakingurl'
 
+config = require '../config'
 db = require '../lib/database'
 
 # Add a parser to Chrono to understand "now"
@@ -38,9 +40,15 @@ entrySchema = new Schema
   title:
     type: String
     required: yes
-  description: String
+    es_boost: 3.0
+    es_indexed: yes
+  description:
+    type: String
+    es_boost: 2.0
+    es_indexed: yes
   slug:
     type: String
+    es_indexed: yes
   status:
     type: String
     enum: ['draft', 'live', 'pending', 'rejected']
@@ -48,11 +56,15 @@ entrySchema = new Schema
     default: 'draft'
   lastModified:
     type: Date
+    es_type: 'date'
+    default: Date.now
   publishDate:
     type: Date
+    es_type: 'date'
     default: Date.now
   createdDate:
     type: Date
+    es_type: 'date'
     default: Date.now
   author:
     type: Schema.Types.ObjectId
@@ -62,10 +74,16 @@ entrySchema = new Schema
     type: Schema.Types.ObjectId
     ref: 'Bucket'
     required: yes
-  keywords: [
-    type: String
-  ]
-  content: {}
+  keywords:
+    type: [String]
+    es_indexed: yes
+    es_boost: 2.0
+  content:
+    type: {}
+    default: {}
+    es_type : 'object'
+    es_indexed: yes
+    es_boost: 2.0
 
 entrySchema.pre 'save', (next) ->
   @lastModified = Date.now()
@@ -74,13 +92,15 @@ entrySchema.pre 'save', (next) ->
 entrySchema.pre 'validate', (next) ->
   @slug ?= getSlug @title
 
-  @model('Bucket').findOne _id: @bucket, (err, bkt) =>
+  mongoose.model('Bucket').findOne _id: @bucket, (err, bkt) =>
 
     @invalidate 'bucket', 'Must belong to a bucket' unless bkt
 
     for field in bkt?.fields or []
-      if field.settings?.required and !@content[field.slug]
+      if field.settings?.required and !@content[field.slug]?
         @invalidate field.slug, 'required'
+      else if @content[field.slug] is ''
+        delete @content[field.slug]
 
     next()
 
@@ -107,6 +127,8 @@ entrySchema.statics.findByParams = (params, callback) ->
     sort: '-publishDate'
     find: ''
     slug: null
+    search: null
+    query: null
 
   searchQuery = {}
 
@@ -132,6 +154,27 @@ entrySchema.statics.findByParams = (params, callback) ->
     if settings.status?.length > 0
       searchQuery.status = settings.status
 
+    if settings.search?
+      # Some default manipulation to make the search fuzzy
+      # and case insensitive by default
+      return @search query:
+        fuzzy:
+          _all:
+            value: "#{settings.search.toLowerCase()}*"
+            fuzziness: 5
+            prefix_length: 2
+      , {hydrate: yes, hydrateOptions: populate: 'bucket author'}, (err, elasticEntries) ->
+        throw err if err
+        callback null, elasticEntries.hits
+
+    if settings.query?
+      return @search query:
+        simple_query_string:
+          query: settings.query
+      , {hydrate: yes, hydrateOptions: populate: 'bucket author'}, (err, elasticEntries) ->
+        throw err if err
+        callback null, elasticEntries.hits
+
     if settings.since or settings.until
       searchQuery.publishDate = {}
       searchQuery.publishDate.$gt = new Date(chrono.parseDate settings.since) if settings.since
@@ -151,5 +194,7 @@ entrySchema.statics.findByParams = (params, callback) ->
         callback null, entries
 
 entrySchema.set 'toJSON', virtuals: true
+
+entrySchema.plugin mongoosastic, index: config.elastic_search_index
 
 module.exports = db.model 'Entry', entrySchema
