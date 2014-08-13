@@ -131,7 +131,6 @@ describe 'Entry', ->
     # We just create these once since we're only testing search
     # (and we're using a delay to guarantee they're indexed)
     before (done) ->
-      console.log config.elastic_search_index
       MongoosasticConfig.deleteIndexIfExists [config.elastic_search_index], ->
         Entry.synchronize().on 'close', ->
           Bucket.create [
@@ -155,7 +154,25 @@ describe 'Entry', ->
               author: user._id
               status: 'live'
               keywords: ['summer']
-            ], -> setTimeout done, 1100 # Gross, but ensures Elasticsearch index
+            ], (e, entry1, entry2) ->
+              throw e if e
+
+              e1indexed = no
+              e2indexed = no
+
+              entry1.on 'es-indexed', -> e1indexed = yes
+              entry2.on 'es-indexed', -> e2indexed = yes
+
+              checkIndexed = ->
+                if e1indexed and e2indexed
+                  # Even after being reported as indexed,
+                  # docs may not be searchable right away
+
+                  # The testing gods are crying, I know
+                  setTimeout done, 1100
+                  clearInterval interval
+
+              interval = setInterval checkIndexed, 10
 
     it 'performs a fuzzy search with `search`', (done) ->
       Entry.findByParams search: 'photoste', (e, entries) ->
