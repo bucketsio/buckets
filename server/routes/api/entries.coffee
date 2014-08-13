@@ -51,12 +51,12 @@ app.route('/entries/:entryID')
               res.send 200, entry
 
   .delete (req, res) ->
-    delete req.body._id
-    Entry.remove _id: req.params.entryID, (err) ->
-      if err
-        res.send e: err, 400
-      else
-        res.send {}, 200
+    Entry.findOne _id: req.params.entryID, (err, entry) ->
+      entry.remove (err) ->
+        if err
+          res.send e: err, 400
+        else
+          res.send {}, 200
 
 app.route('/entries/keywords')
   .get (req, res) ->
