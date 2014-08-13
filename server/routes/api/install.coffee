@@ -36,4 +36,4 @@ app.post '/install', (req, res) ->
         Entry.create entrySeed
       , renderError).then ->
         req.login newUser, ->
-          res.send 201, newUser
+          res.status(201).send newUser

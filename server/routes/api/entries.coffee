@@ -10,9 +10,9 @@ app.route('/entries')
     req.body.keywords = req.body.keywords?.split(',')
 
     Bucket.findById req.body.bucket, (e, bucket) ->
-      return res.send(400, e) if e
-      return res.send(404) unless bucket
-      return res.send(401) unless req.user?.hasRole(['editor', 'contributor'], bucket)
+      return res.status(400).send(e) if e
+      return res.status(404).end() unless bucket
+      return res.status(401).end() unless req.user?.hasRole(['editor', 'contributor'], bucket)
 
       if !req.user?.hasRole('editor', bucket) and req.body.status is 'live'
         req.body.status = 'pending'
@@ -21,42 +21,42 @@ app.route('/entries')
 
       newEntry.save (err, entry) ->
         if err
-          res.send 400, err
+          res.status(400).send err
         else
           entry.populate 'bucket author', ->
-            res.send 200, entry
+            res.status(200).send entry
 
   .get (req, res) ->
     Entry.findByParams req.query, (err, entries) ->
-      res.send 200, entries
+      res.status(200).send entries
 
 app.route('/entries/:entryID')
   .get (req, res) ->
     Entry.findOne(_id: req.params.entryID).populate('bucket author').exec (err, entry) ->
       if entry
-        res.send entry
+        res.status(200).send entry
       else
-        res.send 404
+        res.status(404).end()
 
   .put (req, res) ->
     Entry.findOne(_id: req.params.entryID).exec (err, entry) ->
       if err
-        res.send 400, err
+        res.status(400).send err
       else
         entry.set(req.body).save (err, entry) ->
           if err
-            res.send 400, err
+            res.status(400).send err
           else
             entry.populate 'bucket author', ->
-              res.send 200, entry
+              res.status(200).send entry
 
   .delete (req, res) ->
     Entry.findOne _id: req.params.entryID, (err, entry) ->
       entry.remove (err) ->
         if err
-          res.send e: err, 400
+          res.status(400).send e: err
         else
-          res.send {}, 200
+          res.status(204).end()
 
 app.route('/entries/keywords')
   .get (req, res) ->

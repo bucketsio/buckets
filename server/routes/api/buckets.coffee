@@ -9,17 +9,17 @@ app.route('/buckets')
   .post (req, res) ->
     newBucket = new Bucket req.body
 
-    newBucket.save (err, user) ->
+    newBucket.save (err, bucket) ->
       if err
-        res.send err, 400
-      else if user
-        res.send user
+        res.status(400).send err
+      else if bucket
+        res.status(200).send bucket
 
   .get (req, res) ->
-    return res.send(401) unless req.user
+    return res.status(401).end() unless req.user
 
     req.user.getBuckets (e, buckets) ->
-      res.send 200, buckets
+      res.status(200).send buckets
 
 app.route('/buckets/:bucketID')
   .delete (req, res) ->
@@ -27,30 +27,30 @@ app.route('/buckets/:bucketID')
       if err
         res.send 400, err
       else
-        bkt.remove (err, count) ->
+        bkt.remove (err) ->
           if err
-            res.send 400, err
+            res.status(400).send err
           else
-            res.send 200, {}
+            res.status(204).end()
 
   .put (req, res) ->
     delete req.body._id
     Bucket.findOne {_id: req.params.bucketID}, (err, bucket) ->
-      return res.send 400, e: err if err
+      return res.status(400).send e: err if err
       bucket.set(req.body).save (err, bucket) ->
-        return res.send 400, err if err
-        res.send 200, bucket
+        return res.status(400).send err if err
+        res.status(200).send bucket
 
 app.route('/buckets/:bucketId/members')
   .get (req, res) ->
-    return res.send(401) unless req.user?.hasRole 'administrator'
+    return res.status(401).end() unless req.user?.hasRole 'administrator'
 
     Bucket.findById req.params.bucketId, (err, bucket) ->
-      return res.send(e: err, 400) if err
-      return res.send(404) unless bucket
+      return res.status(400).send(e: err) if err
+      return res.status(404).end() unless bucket
 
       bucket.getMembers (err, users) ->
-        return res.send(e: err, 400) if err
+        return res.status(400).send(e: err) if err
 
         users = users.map (user) ->
           u = user.toJSON()
@@ -58,42 +58,41 @@ app.route('/buckets/:bucketId/members')
           u.bucketId = req.params.bucketId
           u
 
-        res.send users, 200
+        res.status(200).send users
 
 app.route('/buckets/:bucketId/members/:userId')
   .put (req, res) ->
-    return res.send(401) unless req.user?.hasRole 'administrator'
+    return res.status(401).end() unless req.user?.hasRole 'administrator'
 
     Bucket.findById req.params.bucketId, (err, bucket) ->
-      return res.send(e: err, 400) if err
-      return res.send(404) unless bucket
+      return res.status(400).send(e: err) if err
+      return res.status(404).end() unless bucket
 
       User.findById req.params.userId, (err, user) ->
-        return res.send(e: err, 400) if err
-        return res.send(404) unless user
+        return res.status(400).send(e: err) if err
+        return res.status(404).end() unless user
 
         user.upsertRole req.body.role, bucket, (err, user) ->
-          return res.send(e: err, 400) if err
+          return res.status(400).send(e: err) if err
 
           u = user.toJSON()
           u.role = req.body.role
           u.bucketId = req.params.bucketId
 
-          res.send u, 200
+          res.status(200).send u
 
   .delete (req, res) ->
-    return res.send(401) if !req.user || !req.user.hasRole('administrator')
+    return res.status(401).end() if !req.user || !req.user.hasRole('administrator')
 
     Bucket.findById req.params.bucketId, (err, bucket) ->
-      return res.send(e: err, 400) if err
-      return res.send(404) unless bucket
+      return res.status(400).send(e: err) if err
+      return res.status(404).end() unless bucket
 
       User.findById req.params.userId, (err, user) ->
-        return res.send(e: err, 400) if err
-        return res.send(404) unless user
+        return res.status(400).send(e: err) if err
+        return res.status(404).end() unless user
 
         user.removeRole bucket, (err, user) ->
-          return res.send(e: err, 400) if err
+          return res.status(400).send(e: err) if err
 
-          res.send 204
-
+          res.status(204).end()
