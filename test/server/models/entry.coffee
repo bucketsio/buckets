@@ -135,47 +135,45 @@ describe 'Entry', ->
       @timeout 5000
 
       MongoosasticConfig.deleteIndexIfExists [config.elastic_search_index], ->
-        Entry.synchronize().on 'close', ->
-          Bucket.create [
-            name: 'Articles'
-            slug: 'articles'
+        Bucket.create [
+          name: 'Articles'
+          slug: 'articles'
+        ,
+          name: 'Photos'
+          slug: 'photos'
+        ], (e, articleBucket, photoBucket) ->
+          throw e if e
+
+          Entry.create [
+            title: 'Test Article'
+            bucket: articleBucket._id
+            author: user._id
+            status: 'live'
+            publishDate: '2 days ago'
           ,
-            name: 'Photos'
-            slug: 'photos'
-          ], (e, articleBucket, photoBucket) ->
+            title: 'Test Photoset'
+            bucket: photoBucket._id
+            author: user._id
+            status: 'live'
+            keywords: ['summer']
+          ], (e, entry1, entry2) ->
             throw e if e
 
-            Entry.create [
-              title: 'Test Article'
-              bucket: articleBucket._id
-              author: user._id
-              status: 'live'
-              publishDate: '2 days ago'
-            ,
-              title: 'Test Photoset'
-              bucket: photoBucket._id
-              author: user._id
-              status: 'live'
-              keywords: ['summer']
-            ], (e, entry1, entry2) ->
-              throw e if e
+            e1indexed = no
+            e2indexed = no
 
-              e1indexed = no
-              e2indexed = no
+            entry1.on 'es-indexed', -> e1indexed = yes
+            entry2.on 'es-indexed', -> e2indexed = yes
 
-              entry1.on 'es-indexed', -> e1indexed = yes
-              entry2.on 'es-indexed', -> e2indexed = yes
+            checkIndexed = ->
+              if e1indexed and e2indexed
+                # Even after being reported as indexed,
+                # docs may not be searchable right away
+                # The testing gods are crying, I know
+                setTimeout done, 1100
+                clearInterval interval
 
-              checkIndexed = ->
-                if e1indexed and e2indexed
-                  # Even after being reported as indexed,
-                  # docs may not be searchable right away
-
-                  # The testing gods are crying, I know
-                  setTimeout done, 1100
-                  clearInterval interval
-
-              interval = setInterval checkIndexed, 10
+            interval = setInterval checkIndexed, 10
 
     it 'performs a fuzzy search with `search`', (done) ->
       Entry.findByParams search: 'photoste', (e, entries) ->
@@ -183,15 +181,14 @@ describe 'Entry', ->
         expect(entries?[0]?.title).to.equal 'Test Photoset'
         done()
 
-    describe 'uses Elasticsearch simple query string with `query`', ->
-      it 'can negate a term', (done) ->
-        Entry.findByParams query: '-article', (e, entries) ->
-          expect(entries).to.have.length 1
-          expect(entries?[0]?.title).to.equal 'Test Photoset'
-          done()
+    it 'can negate a term', (done) ->
+      Entry.findByParams query: '-article', (e, entries) ->
+        expect(entries).to.have.length 1
+        expect(entries?[0]?.title).to.equal 'Test Photoset'
+        done()
 
-      it 'searches tags', (done) ->
-        Entry.findByParams query: 'summer', (e, entries) ->
-          expect(entries).to.have.length 1
-          expect(entries?[0]?.title).to.equal 'Test Photoset'
-          done()
+    it 'searches tags', (done) ->
+      Entry.findByParams query: 'summer', (e, entries) ->
+        expect(entries).to.have.length 1
+        expect(entries?[0]?.title).to.equal 'Test Photoset'
+        done()
