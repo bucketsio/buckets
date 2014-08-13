@@ -127,10 +127,13 @@ describe 'Entry', ->
         expect(entries?[0]?.title).to.equal 'Test Article'
         done()
 
-  describe 'Search with #findByParams', ->
+  describe 'Search', ->
     # We just create these once since we're only testing search
     # (and we're using a delay to guarantee they're indexed)
+    # Yeah, it's pretty gross.
     before (done) ->
+      @timeout 5000
+
       MongoosasticConfig.deleteIndexIfExists [config.elastic_search_index], ->
         Entry.synchronize().on 'close', ->
           Bucket.create [
