@@ -22,9 +22,11 @@
 
     <div class="pull-right">
       {{#if _id}}
-        {{#isnt _id currentUser._id}}
-          <a class="btn btn-danger" href="#remove">Remove this user</a>
-        {{/isnt}}
+        {{#hasRole 'administrator'}}
+          {{#isnt _id currentUser._id}}
+            <a class="btn btn-danger" href="#remove">Remove this user</a>
+          {{/isnt}}
+        {{/hasRole}}
       {{/if}}
       {{submit "Save"}}
     </div>
