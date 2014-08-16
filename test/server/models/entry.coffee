@@ -97,7 +97,7 @@ describe 'Entry', ->
         ], done
 
     after (done) ->
-      Bucket.remove {}, -> Entry.remove {}, done
+      Bucket.remove {}, -> Entry.remove {}, -> _.setTimeout done, 200
 
     it 'filters by bucket slug (empty)', (done) ->
       Entry.findByParams bucket: '', (e, entries) ->
