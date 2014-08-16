@@ -62,7 +62,7 @@ describe 'Entry', ->
         author: user._id
       , (e, entry) ->
         expected = new Date
-        expected.setHours(21, 0, 0, 0)
+        expected.setHours 21, 0, 0, 0 # 9pm
 
         expect(expected.toISOString()).equal(entry.publishDate.toISOString())
         done()
@@ -83,6 +83,7 @@ describe 'Entry', ->
         slug: 'photos'
       ], (e, articleBucket, photoBucket) ->
         throw e if e
+
         Entry.create [
           title: 'Test Article'
           bucket: articleBucket._id
@@ -97,7 +98,8 @@ describe 'Entry', ->
         ], done
 
     after (done) ->
-      Bucket.remove {}, -> Entry.remove {}, -> setTimeout done, 1200
+      Bucket.find({}).remove().exec()
+      setTimeout done, 1200
 
     it 'filters by bucket slug (empty)', (done) ->
       Entry.findByParams bucket: '', (e, entries) ->
@@ -134,7 +136,7 @@ describe 'Entry', ->
     before (done) ->
       @timeout 5000
 
-      MongoosasticConfig.deleteIndexIfExists [config.elastic_search_index], ->
+      MongoosasticConfig.deleteIndexIfExists [config.elasticsearch.index], ->
         Bucket.create [
           name: 'Articles'
           slug: 'articles'
@@ -170,7 +172,7 @@ describe 'Entry', ->
                 # Even after being reported as indexed,
                 # docs may not be searchable right away
                 # The testing gods are crying, I know
-                setTimeout done, 1100
+                setTimeout done, 1200
                 clearInterval interval
 
             interval = setInterval checkIndexed, 10
