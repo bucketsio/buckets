@@ -14,7 +14,9 @@ config =
       pluginsPath: "#{__dirname}/../node_modules/"
       catchAll: yes
     db: "mongodb://localhost/buckets_#{env}"
-    elastic_search_index: "buckets_entries_#{env}"
+    elasticsearch:
+      url: process.env.BONSAI_URL || 'http://127.0.0.1:9200'
+      index: "buckets_entries_#{env}"
   production:
     smtp:
       service: 'Mandrill'

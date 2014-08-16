@@ -4,6 +4,7 @@ _ = require 'underscore'
 chrono = require 'chrono-node'
 async = require 'async'
 getSlug = require 'speakingurl'
+url = require 'url'
 
 config = require '../config'
 db = require '../lib/database'
@@ -163,7 +164,7 @@ entrySchema.statics.findByParams = (params, callback) ->
             value: "#{settings.search.toLowerCase()}*"
             fuzziness: 5
             prefix_length: 2
-      , {hydrate: yes, hydrateOptions: populate: 'bucket author'}, (err, elasticEntries) ->
+      , (err, elasticEntries) ->
         throw err if err
         callback null, elasticEntries.hits
 
@@ -171,7 +172,7 @@ entrySchema.statics.findByParams = (params, callback) ->
       return @search query:
         simple_query_string:
           query: settings.query
-      , {hydrate: yes, hydrateOptions: populate: 'bucket author'}, (err, elasticEntries) ->
+      , (err, elasticEntries) ->
         throw err if err
         callback null, elasticEntries.hits
 
@@ -195,6 +196,15 @@ entrySchema.statics.findByParams = (params, callback) ->
 
 entrySchema.set 'toJSON', virtuals: true
 
-entrySchema.plugin mongoosastic, index: config.elastic_search_index
+# Add Elasticsearch via mongoosastic
+elasticConnection = url.parse config.elasticsearch.url
+entrySchema.plugin mongoosastic,
+  index: config.elasticsearch.index
+  host: elasticConnection.hostname
+  auth: elasticConnection.auth
+  port: elasticConnection.port
+  hydrate: yes
+  hydrateOptions:
+    populate: 'bucket author'
 
 module.exports = db.model 'Entry', entrySchema
