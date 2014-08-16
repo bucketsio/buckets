@@ -8,7 +8,6 @@ db = require '../lib/database'
 fieldSchema = new mongoose.Schema
   name:
     type: String
-    unique: no
     required: yes
   slug:
     type: String
@@ -25,7 +24,19 @@ fieldSchema = new mongoose.Schema
     default: new Date
 
 fieldSchema.path('slug').validate (val) ->
-  val not in ['title', 'description', 'slug', 'status', 'lastModified', 'publishDate', 'createdAt', 'author', 'bucket', 'keywords', 'content']
+  val not in [
+    'title'
+    'description'
+    'slug'
+    'status'
+    'lastModified'
+    'publishDate'
+    'createdAt'
+    'author'
+    'bucket'
+    'keywords'
+    'content'
+  ]
 , 'Sorry, that’s a reserved field slug.'
 
 bucketSchema = new mongoose.Schema
@@ -47,12 +58,30 @@ bucketSchema = new mongoose.Schema
     required: yes
   icon:
     type: String
-    enum: ['edit', 'photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'artboard', 'contacts-1']
+    enum: [
+      'edit'
+      'photos'
+      'calendar'
+      'movie'
+      'music-note'
+      'map-pin'
+      'quote'
+      'artboard'
+      'contacts-1'
+    ]
     default: 'edit'
     required: yes
   color:
     type: String
-    enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange', 'green']
+    enum: [
+      'teal'
+      'purple'
+      'red'
+      'yellow'
+      'blue'
+      'orange'
+      'green'
+    ]
     default: 'teal'
     required: yes
   publishToSite:
@@ -84,7 +113,9 @@ bucketSchema.path('urlPattern').validate (value) ->
 bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
 
 bucketSchema.post 'remove', ->
-  @model('Entry').remove({bucket: @_id}).exec()
+  @model('Entry').find bucket: @_id, (e, doc) ->
+    throw e if e
+    doc.remove().exec()
 
 bucketSchema.methods.getMembers = (callback) ->
   @model('User').find
