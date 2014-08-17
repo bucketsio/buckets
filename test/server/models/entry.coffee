@@ -1,4 +1,3 @@
-db = require '../../../server/lib/database'
 config = require '../../../server/config'
 reset = require '../../reset'
 
@@ -24,7 +23,7 @@ describe 'Entry', ->
       user = u
       done()
 
-  after reset
+  after reset.db
 
   describe 'Validation', ->
 
@@ -55,7 +54,7 @@ describe 'Entry', ->
         bucketId = bucket._id
         done()
 
-    afterEach reset
+    afterEach reset.db
 
     it 'parses dates from strings', (done) ->
       Entry.create
@@ -139,7 +138,7 @@ describe 'Entry', ->
     before (done) ->
       @timeout 5000
 
-      MongoosasticConfig.deleteIndexIfExists [config.elasticsearch.index], ->
+      reset.all ->
         Bucket.create [
           name: 'Articles'
           slug: 'articles'

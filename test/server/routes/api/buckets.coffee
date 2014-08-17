@@ -21,7 +21,7 @@ describe 'Buckets routes', ->
       slug: 'docs'
     ], done
 
-  after reset
+  after reset.db
 
   describe 'GET /buckets', ->
     it 'returns a 401 if unauthorized', (done) ->
