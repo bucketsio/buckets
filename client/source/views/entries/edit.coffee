@@ -41,6 +41,7 @@ module.exports = class EntryEditView extends PageView
 
   render: ->
     super
+    @$('.panel').css opacity: 0
     content = @model.get('content')
 
     _.each @bucket.get('fields'), (field) =>
@@ -77,8 +78,14 @@ module.exports = class EntryEditView extends PageView
           </div>
         """
 
-    TweenLite.from @$('.panel'), .3,
-      scale: .8
+    TweenLite.fromTo @$('.panel'), .2,
+      y: 50
+      opacity: 0
+      scale: .9
+    ,
+      y: 0
+      scale: 1
+      opacity: 1
       ease: Back.easeOut
 
   submitForm: (e) ->

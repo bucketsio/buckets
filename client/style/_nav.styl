@@ -1,3 +1,6 @@
+#bkts-sidebar
+  background-color #f9f9f9
+
 @media (min-width: 768px)
   #bkts-sidebar
     width 240px
@@ -56,10 +59,6 @@
   > li > a
     padding-left 40px
 
-  li:active
-    position relative
-    top -1px
-
   a:first-child
     padding-right 40px
     white-space nowrap
@@ -105,25 +104,28 @@
     margin-left 40px
 
   > li > a:hover, > li > a:active
-    background-color transparent
+    background-color #fff
     color #555
 
   li.active
-    font-weight bold
+    background-color rgba(#fff, .4)
 
-    .bucket-add:hover
-      background-color rgba(#fff, .2) !important
+    // .bucket-add:hover
+    //   background-color rgba(#fff, .2) !important
 
     a
       background-color inherit
-      color #444
+      color #999
 
     a:hover
       background-color inherit
-      color #444
+      color #999
 
   li a
-    color #999
+    color #666
+
+    &:hover
+      color #333
 
 addColor($name, $color)
   .color-{$name},
@@ -133,7 +135,7 @@ addColor($name, $color)
   .nav-primary > .bucket.color-{$name} .icon
     color $color
   .nav-primary > .bucket.color-{$name}:not(.active) > a:hover:not(:active)
-    color darken($color, 15)
+    color lighten($color, 10)
   .swatches.colors > .{$name}
     background-color $color
 

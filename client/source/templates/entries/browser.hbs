@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-5 sidebar">
 
     <h1>
       {{bucket.name}}
@@ -10,7 +10,7 @@
     <div class="hasEntries {{#empty items}}hidden{{/empty}}">
       <a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add {{bucket.singular}}</a>
 
-      <a class="btn btn-default noscript" href="/api/entries?bucket={{bucket.slug}}&status=" target="_blank">JSON</a>
+      <a class="btn btn-default noscript" href="/api/entries?bucket={{bucket.slug}}&amp;status=" target="_blank">JSON</a>
     </div>
     <br>
     <div class="entries"></div>

@@ -1,15 +1,15 @@
 [{
+  "title": "Open Source & Community Built",
+  "slug": "community",
+  "status": "live",
+  "content": {
+    "body": "Buckets is open source and managed by a community of makers [on Assembly](https://assembly.com/buckets). By contributing to Buckets development, designers and developers also earn a portion of its profit.\n\n### Ways to Contribute\n\n#### Development\n\nBuckets is developed primarily in [CoffeeScript](http://coffeescript.org/) and has no shortage of tasks whether [frontend](https://assembly.com/buckets/wips?tag=backend) or [backend](https://assembly.com/buckets/wips?tag=backend). Pull requests can be [submitted directly to Github](https://github.com/asm-products/buckets).\n\n#### Design\n\nIn addition to being open source, the Buckets design is a collaborative effort between designers on Assembly. Any UI or UX proposals or requests can be submitted as [a new bounty](https://assembly.com/buckets/wips/new) there.\n\n#### Voting\n\nWhether you're a designer or developer, creating a profile on Assembly and voting for bounties helps determine which features or bugs are addressed with priority."
+  }
+}, {
   "title": "Welcome to Buckets",
   "slug": "welcome",
   "status": "live",
   "content": {
     "body": "Congrats, you’ve successfully installed Buckets!"
-  }
-}, {
-  "title": "Open Source & Community Built",
-  "slug": "community",
-  "status": "live",
-  "content": {
-    "body": "Buckets is open source and managed by a community of makers on Assembly. By contributing to Buckets development, designers and developers also earn a portion of its profit. [Learn more »](https://assembly.com/buckets) \n\n## Contributing\n\nThis is a product being built by the Assembly community. You can help push this idea forward by visiting https://assemblymade.com/buckets. We welcome any contributions to product design/direction or code."
   }
 }]
