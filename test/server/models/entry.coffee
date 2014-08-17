@@ -1,5 +1,6 @@
 db = require '../../../server/lib/database'
 config = require '../../../server/config'
+reset = require '../../reset'
 
 Entry = require '../../../server/models/entry'
 Bucket = require '../../../server/models/bucket'
@@ -13,9 +14,6 @@ describe 'Entry', ->
 
   user = null
 
-  after (done) ->
-    db.connection.db.dropDatabase done
-
   before (done) ->
     User.create
       name: 'Bucketer'
@@ -25,6 +23,8 @@ describe 'Entry', ->
       throw e if e
       user = u
       done()
+
+  after reset
 
   describe 'Validation', ->
 
@@ -46,13 +46,16 @@ describe 'Entry', ->
     bucketId = null
 
     beforeEach (done) ->
-      Bucket.create {name: 'Articles', slug: 'articles'}, (e, bucket) ->
+      # Create a Bucket to put our Test Entries in
+      Bucket.create
+        name: 'Articles'
+        slug: 'articles'
+      , (e, bucket) ->
         throw e if e
         bucketId = bucket._id
         done()
 
-    afterEach (done) ->
-      Bucket.remove {}, done
+    afterEach reset
 
     it 'parses dates from strings', (done) ->
       Entry.create
