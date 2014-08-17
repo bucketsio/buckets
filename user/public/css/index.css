@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Lato, Helvetica, sans-serif;
+  font-family: "Avenir Next", Avenir, Helvetica, sans-serif;
   color: #555;
 }
 
@@ -9,6 +9,22 @@ body {
   margin: 0 auto;
   max-width: 600px;
   color: #222;
+}
+
+strong, h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+h1 {
+  font-weight: 500;
+}
+
+h2 {
+  margin-bottom: .2em;
+}
+
+p {
+  margin-top: .2em;
 }
 
 a {
@@ -22,22 +38,20 @@ pre {
 
 #page-header {
   padding: 80px 40px;
-  background: url(../img/beach.jpg);
-  background-size: cover;
-  background-position: center center;
-  color: #fff;
+  background-color: #f5ce55;
+  color: #111;
   text-align: center;
   margin-bottom: 40px;
 }
 
 #page-header a {
-  color: #fff;
+  color: #111;
   text-decoration: none;
 }
 
 #page-header h1 {
-  font-weight: 100;
-  font-size: 36pt;
+  font-weight: 600;
+  font-size: 30pt;
   margin: 60px 0;
   letter-spacing: -1px;
 }
