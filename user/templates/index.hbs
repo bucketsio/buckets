@@ -1,36 +1,15 @@
 <header id="page-header">
-  <h1><a href="/">Welcome to Buckets</a></h1>
+  <h1><a href="/">Buckets</a></h1>
 </header>
 
 <div id="content">
-
-  {{!-- Show meetups if we’re on the homepage --}}
-  {{#is req.path '/'}}
-    <div class="sidebar">
-      <h4>Meetups</h4>
-
-      <ul>
-        {{#entries bucket="meetups" slug=req.params.slug}}
-          <li>
-            <a href="/meetups/{{slug}}">
-              {{title}}
-              {{map location}}
-            </a>
-          </li>
-        {{else}}
-          <li>No meetups found.</li>
-        {{/entries}}
-      </ul>
-    </div>
-  {{/is}}
-
-  {{#entries bucket="articles" slug=req.params.slug}}
-    <h2>
+  {{#entries bucket="articles" slug=req.params.slug search=req.query.q}}
+    <h1>
       <a href="/{{slug}}">{{title}}</a>
       {{#if author}}
         <em></em>
       {{/if}}
-    </h2>
+    </h1>
     {{markdown body}}
     <footer>
       <em>Published on {{formatTime publishDate format="MMM D, YYYY h:mma"}} by <strong>{{author.name}}</strong></em>
@@ -39,6 +18,4 @@
   {{else}}
     <p>Add some entries into any Bucket and they’ll show up here :)</p>
   {{/entries}}
-
-
 </div>
