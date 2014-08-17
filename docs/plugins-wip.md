@@ -5,8 +5,8 @@ Currently plugins are based on [NPM modules](https://www.npmjs.org). Plugin NPM 
 Here’s the basic client API so far (some of this is just conceptual for now):
 
 ```
-bkts.plugin(‘plugin_slug’, {
-  name: ‘Plugin Name’
+bkts.plugin('plugin_slug', {
+  name: 'Plugin Name'
   config: // Underscore template (as a string) or Backbone/Chaplin View (you can require a class as well)
   input: // Underscore template (as a string) or Backbone/Chaplin View (you can require a class as well)
 });
