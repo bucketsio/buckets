@@ -42,14 +42,11 @@ entrySchema = new Schema
     type: String
     required: yes
     es_boost: 3.0
-    es_indexed: yes
   description:
     type: String
     es_boost: 2.0
-    es_indexed: yes
   slug:
     type: String
-    es_indexed: yes
   status:
     type: String
     enum: ['draft', 'live', 'pending', 'rejected']
@@ -77,13 +74,13 @@ entrySchema = new Schema
     required: yes
   keywords:
     type: [String]
-    es_indexed: yes
+    default: []
     es_boost: 2.0
+    es_type: 'string'
   content:
     type: {}
     default: {}
     es_type : 'object'
-    es_indexed: yes
     es_boost: 2.0
 
 entrySchema.pre 'save', (next) ->
@@ -149,9 +146,6 @@ entrySchema.statics.findByParams = (params, callback) ->
     if settings.slug
       searchQuery.slug = settings.slug
 
-    if settings.where
-      searchQuery.$where = settings.where
-
     if settings.status?.length > 0
       searchQuery.status = settings.status
 
@@ -170,11 +164,14 @@ entrySchema.statics.findByParams = (params, callback) ->
 
     if settings.query?
       return @search query:
-        simple_query_string:
+        query_string:
           query: settings.query
+
       , (err, elasticEntries) ->
-        throw err if err
-        callback null, elasticEntries.hits
+        if err
+          callback err, []
+        else if elasticEntries.hits
+          callback null, elasticEntries.hits
 
     if settings.since or settings.until
       searchQuery.publishDate = {}

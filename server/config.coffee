@@ -15,7 +15,7 @@ config =
       catchAll: yes
     db: "mongodb://localhost/buckets_#{env}"
     elasticsearch:
-      url: process.env.BONSAI_URL || 'http://127.0.0.1:9200'
+      url: process.env.SEARCHBOX_SSL_URL || 'http://127.0.0.1:9200'
       index: "buckets_entries_#{env}"
   production:
     smtp:

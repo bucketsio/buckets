@@ -23,7 +23,7 @@ describe 'Entry', ->
       user = u
       done()
 
-  after reset.db
+  after reset.all
 
   describe 'Validation', ->
 
@@ -74,9 +74,18 @@ describe 'Entry', ->
         expect(entry.slug).to.equal 'resumes-and-cvs'
         done()
 
+    it 'automatically sets the publishDate', (done) ->
+      Entry.create
+        title: 'New Entry'
+        bucket: bucketId
+        author: user._id
+      , (e, entry) ->
+        expect(entry.publishDate).to.be.a 'Date'
+        done()
+
   describe '#findByParams', ->
     # Set up a bunch of entries to filter/search
-    before (done) ->
+    before (done) -> reset.all ->
       Bucket.create [
         name: 'Articles'
         slug: 'articles'
@@ -99,9 +108,7 @@ describe 'Entry', ->
           status: 'live'
         ], done
 
-    after (done) ->
-      Bucket.find({}).remove().exec()
-      setTimeout done, 1200
+    after reset.db
 
     it 'filters by bucket slug (empty)', (done) ->
       Entry.findByParams bucket: '', (e, entries) ->
@@ -113,6 +120,8 @@ describe 'Entry', ->
         expect(entries).to.have.length 1
         expect(entries?[0]?.title).to.equal 'Test Photoset'
         done()
+
+    it 'filters by bucket slug (w/negation)'
 
     it 'filters by multiple bucket slugs', (done) ->
       Entry.findByParams bucket: 'photos|articles', (e, entries) ->
@@ -132,9 +141,6 @@ describe 'Entry', ->
         done()
 
   describe 'Search', ->
-    # We just create these once since we're only testing search
-    # (and we're using a delay to guarantee they're indexed)
-    # Yeah, it's pretty gross.
     before (done) ->
       @timeout 5000
 
@@ -160,24 +166,10 @@ describe 'Entry', ->
             author: user._id
             status: 'live'
             keywords: ['summer']
-          ], (e, entry1, entry2) ->
-            throw e if e
-
-            e1indexed = no
-            e2indexed = no
-
-            entry1.on 'es-indexed', -> e1indexed = yes
-            entry2.on 'es-indexed', -> e2indexed = yes
-
-            checkIndexed = ->
-              if e1indexed and e2indexed
-                # Even after being reported as indexed,
-                # docs may not be searchable right away
-                # The testing gods are crying, I know
-                setTimeout done, 1200
-                clearInterval interval
-
-            interval = setInterval checkIndexed, 10
+          ], ->
+            # This is super painful, but only way I can
+            # think to test a live elasticsearch instance
+            Entry.synchronize -> Entry.refresh -> setTimeout done, 1500
 
     it 'performs a fuzzy search with `search`', (done) ->
       Entry.findByParams search: 'photoste', (e, entries) ->
@@ -191,8 +183,31 @@ describe 'Entry', ->
         expect(entries?[0]?.title).to.equal 'Test Photoset'
         done()
 
-    it 'searches tags', (done) ->
+    it 'can check for specific attribute', (done) ->
+      Entry.findByParams query: '_exists_:keywords', (e, entries) ->
+        expect(entries).to.have.length 1
+        expect(entries?[0]?.title).to.equal 'Test Photoset'
+        done()
+
+    it 'can search for specific attribute', (done) ->
+      Entry.findByParams query: 'keywords:summ*', (e, entries) ->
+        expect(entries).to.have.length 1
+        expect(entries?[0]?.title).to.equal 'Test Photoset'
+        done()
+
+    it 'doesn’t throw an exception for bad query', (done) ->
+      Entry.findByParams query: 'nokey:(6', (e, entries) ->
+        expect(entries).to.have.length 0
+        done()
+
+    it 'searches keywords', (done) ->
       Entry.findByParams query: 'summer', (e, entries) ->
+        expect(entries).to.have.length 1
+        expect(entries?[0]?.title).to.equal 'Test Photoset'
+        done()
+
+    it 'searches phrases', (done) ->
+      Entry.findByParams query: '"Test Photoset"', (e, entries) ->
         expect(entries).to.have.length 1
         expect(entries?[0]?.title).to.equal 'Test Photoset'
         done()
