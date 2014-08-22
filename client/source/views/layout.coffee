@@ -11,7 +11,7 @@ module.exports = class Layout extends Chaplin.Layout
 
   events:
     'keyup input[data-sluggify]': 'keyUpSluggify'
-    'click .btn-menu': 'clickMenu'
+    'click [href="#menu"]': 'clickMenu'
     'click #logo a': 'clickLogo'
     'click .nav-primary a': 'clickMenuNav'
     'click .logout a': 'fadeAwayFadeAway'
