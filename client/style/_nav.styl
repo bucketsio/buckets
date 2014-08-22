@@ -57,11 +57,14 @@
   margin-top 22px
   margin-right auto
   margin-left auto
-  height 40px
-  width 60px
+  height 25px
+  width 40px
   position relative
   cursor pointer
   background transparent !important
+
+  &:focus, &:active:focus
+    outline none
 
   &.active
     // override bootstrap's outline and shadow
@@ -84,8 +87,8 @@
     content ''
     display block
     position absolute
-    height 60px
-    width 60px
+    height 40px
+    width 40px
     top -23px
     left -5px
     transition .25s ease-in-out
@@ -93,7 +96,7 @@
   span
     display block
     width 70%
-    height 7px
+    height 5px
     left 15%
     background #8b8b8b
     position absolute
@@ -105,7 +108,7 @@
       right 15%
 
     &:nth-of-type(2)
-      top 14px
+      top 10px
 
       &:before
         content ''
@@ -118,7 +121,7 @@
         height 100%
 
     &:nth-of-type(3)
-      top 28px
+      top 20px
 
 
 
