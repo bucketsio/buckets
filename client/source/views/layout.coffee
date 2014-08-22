@@ -11,7 +11,7 @@ module.exports = class Layout extends Chaplin.Layout
 
   events:
     'keyup input[data-sluggify]': 'keyUpSluggify'
-    'click [href="#menu"]': 'clickMenu'
+    'click .btn-menu': 'clickMenu'
     'click #logo a': 'clickLogo'
     'click .nav-primary a': 'clickMenuNav'
     'click .logout a': 'fadeAwayFadeAway'
@@ -45,6 +45,7 @@ module.exports = class Layout extends Chaplin.Layout
   clickMenu: (e) ->
     e.preventDefault()
     @$('.nav-primary').toggleClass('hidden-xs').toggle().slideToggle 200
+    @$('.btn-menu').toggleClass('active')
 
   clickMenuNav: ->
     if @$('.hidden-xs:visible').length is 0
