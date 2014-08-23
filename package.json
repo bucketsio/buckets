@@ -32,6 +32,11 @@
   "engines": {
     "node": "0.10.x"
   },
+  "apidoc": {
+    "name": "Buckets REST API",
+    "title": "Buckets REST API",
+    "url": "/api"
+  },
   "dependencies": {
     "async": "^0.9.0",
     "bcrypt": "^0.8.0",
@@ -84,6 +89,7 @@
   "devDependencies": {
     "blanket": "*",
     "chai": "*",
+    "grunt-apidoc": "^0.7.0",
     "grunt-contrib-testem": "*",
     "mocha": "*",
     "rosie": "^0.3.1",

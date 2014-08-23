@@ -27,8 +27,7 @@ try
   for api in util.loadClasses "#{__dirname}/routes/api/"
     app.use "/#{config.buckets.apiSegment}", api if api.init
 catch e
-  console.log e
-  throw 'Missing API Class'.red
+  console.log 'Missing API Class'.red, e
 
 app.use "/#{config.buckets.adminSegment}", require('./routes/admin')
 
