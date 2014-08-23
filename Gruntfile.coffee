@@ -113,6 +113,11 @@ module.exports = (grunt) ->
         cwd: 'client/assets'
         src: ['**/*']
         dest: 'public/'
+      docs:
+        expand: yes
+        cwd: 'docs/api'
+        src: ['**/*']
+        dest: 'public/docs/api'
       fontastic:
         expand: yes
         cwd: 'client/assets/fontastic/fonts/'
