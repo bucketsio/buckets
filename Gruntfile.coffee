@@ -311,7 +311,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test:server', ['shell:mocha']
   grunt.registerTask 'test:server:cov', ['shell:cov']
-  grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test:client', ['build', 'browserify:tests', 'testem:ci:basic']
   grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
 
