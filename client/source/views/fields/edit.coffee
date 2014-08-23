@@ -38,7 +38,7 @@ module.exports = class FieldEditView extends View
     else
       SettingsView = FieldTypeSettingsView
 
-    @subview "settings_#{@model.get('slug')}", new SettingsView configOptions
+    @subview "settings_#{@model.get('slug')}", new FieldTypeSettingsView configOptions
 
   submitForm: (e) ->
     e.preventDefault()
