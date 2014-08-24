@@ -31,7 +31,7 @@ module.exports = class MembersList extends View
     e.preventDefault()
 
     if confirm 'Are you sure?'
-      model = @collection.findWhere _id: @$(e.currentTarget).closest('.member').data('memberId')
+      model = @collection.findWhere id: @$(e.currentTarget).closest('.member').data('memberId')
       model.destroy().done =>
         toastr.success "#{model.get('name')} has been removed from #{@bucket.name}"
 
@@ -40,6 +40,6 @@ module.exports = class MembersList extends View
       bucket: @bucket.toJSON()
       # Remove users which are already members
       users: _.compact @users.map (user) =>
-        user.toJSON() unless @collection.get(user.get('_id'))? or user.hasRole('administrator')
+        user.toJSON() unless @collection.get(user.get('id'))? or user.hasRole('administrator')
 
   @mixin FormMixin

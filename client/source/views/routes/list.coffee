@@ -25,7 +25,7 @@ module.exports = class RoutesList extends PageView
     new Sortable $sortable,
       onUpdate: (e) =>
         $('#sortable-routes').children().each (i, li) =>
-          model = @collection.findWhere _id: $(li).children('.route').data 'route-id'
+          model = @collection.findWhere id: $(li).children('.route').data 'route-id'
 
           if model
             model.save sort: i
@@ -47,7 +47,7 @@ module.exports = class RoutesList extends PageView
 
   clickDelete: (e) ->
     e.preventDefault()
-    model = @collection.findWhere _id: @$(e.currentTarget).closest('.route').data('route-id')
+    model = @collection.findWhere id: @$(e.currentTarget).closest('.route').data('route-id')
     if model and confirm "Are you sure you want to delete “#{model.get('urlPattern')}”?"
 
       model.destroy(wait: yes).done ->
@@ -57,7 +57,7 @@ module.exports = class RoutesList extends PageView
     e.preventDefault()
 
     $route = @$(e.currentTarget).closest('.route')
-    route = @collection.findWhere _id: $route.data('route-id')
+    route = @collection.findWhere id: $route.data('route-id')
 
     if route
       @listenToOnce route, 'sync', =>

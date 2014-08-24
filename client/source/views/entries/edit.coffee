@@ -105,7 +105,7 @@ module.exports = class EntryEditView extends PageView
 
     status = @model.get('status')
     # @model.set status: 'draft' if status is 'draft' LOL
-    @model.set status: 'live' unless @model.get('_id')
+    @model.set status: 'live' unless @model.get('id')
     @submit @model.save(@formParams(), wait: yes)
 
   clickDelete: (e) ->
@@ -140,7 +140,7 @@ module.exports = class EntryEditView extends PageView
     e.preventDefault()
 
     @model.set _.extend @formParams(),
-      _id: null
+      id: null
       publishDate: null
       status: 'draft'
 

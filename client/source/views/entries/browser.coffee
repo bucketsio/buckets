@@ -34,7 +34,7 @@ module.exports = class EntriesBrowser extends PageView
       bucket: @bucket
 
   loadEntry: (entryID) ->
-    @model = @collection.findWhere(_id: entryID) or new Entry _id: entryID
+    @model = @collection.findWhere(id: entryID) or new Entry id: entryID
 
     @model.fetch().done =>
       @$('.entry').removeClass('active').filter("[data-entry-id=#{@model.get('id')}]").addClass('active')
@@ -57,7 +57,7 @@ module.exports = class EntriesBrowser extends PageView
     @renderDetailView()
 
   modelSaved: (entry, newData) =>
-    if newData?._id
+    if newData?.id
       toastr.success "You saved “#{entry.get('title')}”"
       @collection.add @model
     else
@@ -78,4 +78,3 @@ module.exports = class EntriesBrowser extends PageView
   checkLength: ->
     unless @disposed
       @$('.hasEntries').toggleClass 'hidden', @collection.length is 0
-

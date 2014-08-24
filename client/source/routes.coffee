@@ -5,6 +5,7 @@ BucketsController = require 'controllers/buckets_controller'
 InstallController = require 'controllers/install_controller'
 RoutesController = require 'controllers/routes_controller'
 AuthController = require 'controllers/auth_controller'
+HelpController = require 'controllers/help_controller'
 
 module.exports = (match) ->
   match 'install', 'install#firstuser', params: authRequired: no
@@ -23,6 +24,8 @@ module.exports = (match) ->
 
   match 'templates(/*filename)', 'templates#edit'
   match 'routes', 'routes#list'
+
+  match 'help(/*doc)', 'help#index'
 
   match 'settings', 'settings#basic'
   match 'users(/:email)', 'settings#users'

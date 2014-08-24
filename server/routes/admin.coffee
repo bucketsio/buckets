@@ -1,7 +1,10 @@
 express = require 'express'
 compress = require 'compression'
 hbs = require 'hbs'
+glob = require 'glob'
+fs = require 'fs'
 _ = require 'underscore'
+marked = require 'marked'
 
 config = require '../config'
 plugins = require '../lib/plugins'
@@ -42,8 +45,14 @@ app.get '/logout', (req, res) ->
   req.logout()
   res.redirect "/#{adminSegment}/"
 
+app.get "/help-html/*", (req, res, next) ->
+  glob "../../docs/user-docs/#{req.params[0]}", cwd: __dirname, (e, files) ->
+    return res.status(404).end() unless files.length
+    fs.readFile "#{__dirname}/#{files[0]}", encoding: 'utf-8', (e, content) ->
+      return res.status(400).end() unless content and html = marked(content)
+      res.status(200).send html
+
 app.all '*', (req, res) ->
-  # This is kinda dumb, but whatever
   User.count({}).exec (err, userCount) ->
     res.send 500 if err
 
