@@ -14,7 +14,8 @@
       "data-cover-never": "node_modules"
     }
   },
-  "author": "",
+  "author": "David Kaneda <dk@morfunk.com>",
+  "license": "AGPL-3.0",
   "bugs": {
     "url": "https://assemblymade.com/buckets/wips"
   },
