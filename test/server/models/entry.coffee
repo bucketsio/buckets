@@ -84,6 +84,8 @@ describe 'Entry', ->
         done()
 
   describe '#findByParams', ->
+    @timeout 4000 # We do a network call to reset the ES index
+
     # Set up a bunch of entries to filter/search
     before (done) -> reset.all ->
       Bucket.create [
