@@ -1,6 +1,6 @@
 {
   "name": "buckets",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Manage content better.",
   "scripts": {
     "start": "grunt serve",
