@@ -3,9 +3,9 @@
 A fast, simple way to build dynamic websites on top of [Express](http://expressjs.com/), [MongoDB](http://www.mongodb.org/), and [ElasticSearch](http://www.elasticsearch.org/). [More about our vision](docs/vision/vision.md).
 
 [![Build Status](http://img.shields.io/travis/asm-products/buckets/master.svg?style=flat)](https://travis-ci.org/asm-products/buckets)
-[![Dependencies](http://img.shields.io/david/asm-products/buckets.svg?style=flat)]()
-[![License](http://img.shields.io/npm/l/buckets.svg?style=flat)]()
-[![NPM](http://img.shields.io/npm/v/buckets.svg?style=flat)]()
+[![Dependencies](http://img.shields.io/david/asm-products/buckets.svg?style=flat)](https://david-dm.org/asm-products/buckets)
+[![License](http://img.shields.io/npm/l/buckets.svg?style=flat)](LICENSE.md)
+[![NPM](http://img.shields.io/npm/v/buckets.svg?style=flat)](https://www.npmjs.org/package/buckets)
 
 # Installing Buckets
 
