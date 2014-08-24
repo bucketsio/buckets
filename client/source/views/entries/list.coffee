@@ -16,7 +16,7 @@ module.exports = class EntriesList extends CollectionView
     _.extend super, bucket: @bucket.toJSON()
 
   itemRemoved: (entry) ->
-    if id = entry?.get('_id')
+    if id = entry?.get('id')
       @$("[data-entry-id=\"#{id}\"]").slideUp
         duration: 200
         easing: 'easeInExpo'
@@ -27,7 +27,7 @@ module.exports = class EntriesList extends CollectionView
 
   itemAdded: (entry) ->
     thing = super
-    if id = entry?.get('_id')
+    if id = entry?.get('id')
       $el = @$("[data-entry-id=\"#{id}\"]").hide()
       _.defer =>
         $el.slideDown
