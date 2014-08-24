@@ -1,8 +1,8 @@
-Bucket = require './server/models/bucket'
-Entry = require './server/models/entry'
+Bucket = require '../server/models/bucket'
+Entry = require '../server/models/entry'
 
 http = require 'http'
-config = require './server/config'
+config = require '../server/config'
 
 module.exports =
   requiresDowntime: no # true or false
