@@ -114,16 +114,27 @@ describe 'Entry', ->
 
     it 'filters by bucket slug (empty)', (done) ->
       Entry.findByParams bucket: '', (e, entries) ->
-        expect(entries).to.have.length 0
+        expect(entries).to.have.length 2
         done()
 
     it 'filters by bucket slug', (done) ->
       Entry.findByParams bucket: 'photos', (e, entries) ->
+        throw e if e
         expect(entries).to.have.length 1
         expect(entries?[0]?.title).to.equal 'Test Photoset'
         done()
 
-    it 'filters by bucket slug (w/negation)'
+    it 'filters by bucket slug (invalid)', (done) ->
+      Entry.findByParams bucket: 'asdf', (e, entries) ->
+        throw e if e
+        expect(entries).to.have.length 0
+        done()
+
+    it 'filters by bucket slug (w/negation)', (done) ->
+      Entry.findByParams bucket: '-articles', (e, entries) ->
+        expect(entries).to.have.length 1
+        expect(entries?[0]?.title).to.equal 'Test Photoset'
+        done()
 
     it 'filters by multiple bucket slugs', (done) ->
       Entry.findByParams bucket: 'photos|articles', (e, entries) ->

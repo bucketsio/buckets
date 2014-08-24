@@ -137,16 +137,29 @@ entrySchema.statics.findByParams = (params, callback) ->
 
   async.parallel [
     (callback) ->
-      if settings.bucket?
-        filteredBuckets = settings.bucket.split '|'
-        searchQuery.bucket = $in: []
+      if settings.bucket?.length > 0
+        bucketStrings = settings.bucket.split '|'
 
-        mongoose.model('Bucket').find {slug: $in: filteredBuckets}, (err, buckets) =>
-          filteredBucketIDs = _.pluck _.filter(buckets, (bkt) -> bkt.slug in filteredBuckets), '_id'
+        return callback null if bucketStrings.length is 0
+
+        isNegated = (bkt) -> bkt.substr(0,1) is '-'
+
+        rejectedBuckets = _.map _.filter(bucketStrings, isNegated), (bkt) ->
+          bkt.substr(1)
+        filteredBuckets = _.reject bucketStrings, isNegated
+
+        $findParams = if rejectedBuckets.length
+          slug: $nin: rejectedBuckets
+        else
+          slug: $in: filteredBuckets
+
+        mongoose.model('Bucket').find $findParams, (err, buckets) =>
+          filteredBucketIDs = _.pluck buckets, '_id'
           searchQuery.bucket = $in: filteredBucketIDs
           callback null
       else
         callback null
+
   ], =>
     if settings.slug
       searchQuery.slug = settings.slug
@@ -184,10 +197,7 @@ entrySchema.statics.findByParams = (params, callback) ->
       searchQuery.publishDate.$lte = new Date(chrono.parseDate settings.until) if settings.until
 
     @find searchQuery
-      .populate 'bucket'
-      .populate
-        path: 'author'
-        select: '-passwordDigest -resetPasswordToken -resetPasswordExpires'
+      .populate 'bucket author'
       .sort settings.sort
       .limit settings.limit
       .skip settings.skip
