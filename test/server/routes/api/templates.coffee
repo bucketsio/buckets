@@ -12,7 +12,7 @@ DbRoute = require(path.resolve(serverPath, 'models/route'))
 Template = Factory('template', { filename: 'foo', contents: 'bar' })
 Route = Factory('route', { urlPattern: '/foo/bar', template: 'baz' })
 
-describe 'routes#api#template', ->
+describe 'Templates Routes', ->
   after (done) ->
     DbTemplate.remove {}, (err) ->
       DbRoute.remove {}, done
@@ -156,6 +156,7 @@ describe 'routes#api#template', ->
         .end (err, res) ->
           expect(err).not.to.exist;
           expect(res.status).to.equal(201)
+          expect(res.body).to.have.keys ['contents', 'filename']
           done();
 
     it 'allows renaming', (done) ->
@@ -175,6 +176,7 @@ describe 'routes#api#template', ->
               expect(err).not.to.exist;
               expect(res.status).to.equal(200)
               expect(res.body.contents).to.equal('baz')
+              expect(res.body).to.have.keys ['contents', 'filename']
               done();
 
   describe 'statics', ->
