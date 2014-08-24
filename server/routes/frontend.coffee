@@ -32,14 +32,14 @@ app.get '*', (req, res, next) ->
 
   hbs.registerHelper 'renderTime', -> getTime()
 
+  # Prepare the global template data
   templateData =
     adminSegment: config.buckets.adminSegment
-    # Expose select items from the request object
     req:
       body: req.body
       path: req.path
       query: req.query unless _.isEmpty(req.query)
-      params: {} # We fill this manually later
+      params: {}
     user: req.user
     errors: []
 
@@ -53,7 +53,7 @@ app.get '*', (req, res, next) ->
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
   Route.find({}, null, sort: 'sort').exec (err, routes) ->
-    throw err if err
+    return console.log 'Error looking up Routes.', err if err
 
     matchingRoutes = []
 
@@ -67,6 +67,7 @@ app.get '*', (req, res, next) ->
 
         matchingRoutes.push localTemplateData
 
+    # The magical, time-traveling Template lookup/renderer
     async.detectSeries matchingRoutes, (localTemplateData, callback) ->
       globalNext = callback
       localTemplateData = _.extend localTemplateData, templateData

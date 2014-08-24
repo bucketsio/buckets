@@ -5,6 +5,13 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
 
+    apidoc:
+      app:
+        src: 'server/routes/api/'
+        dest: 'docs/api/'
+        marked:
+          gfm: yes
+
     bower:
       install:
         options:
@@ -84,7 +91,7 @@ module.exports = (grunt) ->
 
     shell:
       mocha:
-        command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server'
+        command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server -b'
       cov:
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html'
       npm_install:
@@ -106,6 +113,11 @@ module.exports = (grunt) ->
         cwd: 'client/assets'
         src: ['**/*']
         dest: 'public/'
+      docs:
+        expand: yes
+        cwd: 'docs/api'
+        src: ['**/*']
+        dest: 'public/docs/api'
       fontastic:
         expand: yes
         cwd: 'client/assets/fontastic/fonts/'
@@ -210,6 +222,10 @@ module.exports = (grunt) ->
         mangle: yes
 
     watch:
+      apidoc:
+        files: ['server/routes/api/**/*.coffee']
+        tasks: ['apidoc']
+
       bower:
         files: ['bower.json']
         tasks: ['bower', 'uglify:vendor', 'browserify']
@@ -270,6 +286,7 @@ module.exports = (grunt) ->
         throw "\nBuckets could not connect to MongoDB :/\n".magenta + "See the " + 'README.md'.bold + " for more info on installing MongoDB and check your settings at " + 'server/config.coffee'.bold + "."
         exit
 
+  grunt.loadNpmTasks 'grunt-apidoc'
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
   grunt.loadNpmTasks 'grunt-contrib-clean'
@@ -290,16 +307,16 @@ module.exports = (grunt) ->
   grunt.registerTask 'build-scripts', ['browserify:app']
 
   grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['clean:app', 'bower', 'copy', 'uglify:vendor', 'browserify:plugins', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'build', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
 
   grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'build', 'express:dev', 'watch']
   grunt.registerTask 'devserve', ['checkDatabase', 'migrate:all', 'express:dev', 'watch']
   grunt.registerTask 'serve', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'minify', 'express:server']
 
-  grunt.registerTask 'test:server', ['build', 'shell:mocha']
-  grunt.registerTask 'test:server:cov', ['build', 'shell:cov']
-  grunt.registerTask 'test:client', ['browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test:server', ['shell:mocha']
+  grunt.registerTask 'test:server:cov', ['shell:cov']
+  grunt.registerTask 'test:client', ['build', 'browserify:tests', 'testem:ci:basic']
   grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
 

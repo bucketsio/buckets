@@ -31,11 +31,11 @@ app.post '/login', passport.authenticate('local', failureRedirect: "/#{adminSegm
 app.post '/checkLogin', (req, res) ->
   passport.authenticate('local', (err, user, authErr) ->
     if authErr
-      res.send 401, errors: [authErr]
+      res.status(401).send errors: [authErr]
     else if user
-      res.send 200
+      res.status(200).end()
     else
-      res.send 500, err
+      res.status(500).send err
   )(req, res)
 
 app.get '/logout', (req, res) ->

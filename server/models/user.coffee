@@ -13,7 +13,9 @@ roleSchema = new Schema
     type: String
     required: true
   resourceType: String
-  resourceId: Schema.Types.ObjectId
+  resourceId:
+    type: Schema.Types.ObjectId
+    index: yes
 
 roleSchema.virtual('resource').set (resource) ->
   @resourceId = resource.id
@@ -31,10 +33,8 @@ userSchema = new Schema
     unique: true
   passwordDigest:
     type: String
-    required: true
-  activated:
-    type: Boolean
-    default: false
+    required: yes
+    select: no
   last_active:
     type: Date
     default: Date.now
@@ -42,8 +42,19 @@ userSchema = new Schema
     type: Date
     default: Date.now
   roles: [roleSchema]
-  resetPasswordToken: String
-  resetPasswordExpires: Date
+  resetPasswordToken:
+    type: String
+    select: no
+  resetPasswordExpires:
+    type: Date
+    select: no
+,
+  toJSON:
+    virtuals: yes
+    transform: (doc, ret, options) ->
+      delete ret._id
+      delete ret.__v
+      ret
 
 userSchema.methods.authenticate = (password) ->
   bcrypt.compareSync password, @passwordDigest if @passwordDigest
@@ -67,8 +78,8 @@ userSchema.methods.upsertRole = (roleName, resource, callback) ->
 userSchema.methods.upsertGlobalRole = (roleName, callback) ->
   return callback?(null, @) if @hasRole(roleName)
 
-  @roles.push({ name: roleName })
-  @save(callback)
+  @roles.push name: roleName
+  @save callback
 
 userSchema.methods.upsertScopedRole = (roleName, resource, callback) ->
   resourceRoles = @getRolesForResource(resource)
@@ -110,37 +121,34 @@ userSchema.methods.getRolesForType = (resourceType) ->
   @roles.filter (role) ->
     role.resourceType is resourceType or !role.resourceType
 
-userSchema.virtual('email_hash').get ->
-  crypto.createHash('md5').update(@email).digest('hex') if @email
+userSchema.virtual 'email_hash'
+  .get ->
+    crypto.createHash('md5').update(@email).digest('hex') if @email
 
-passwordVirtual = userSchema.virtual('password')
+userSchema.virtual 'password'
+  .get -> @_password
+  .set (password) ->
+    @_password = password
+    @passwordDigest = bcrypt.hashSync(password, bcrypt.genSaltSync())
 
-passwordVirtual.get ->
-  @_password
+userSchema.path 'passwordDigest'
+  .validate (value) ->
+    if @isNew and !@password?
+      @invalidate 'password', 'A password is required.'
 
-passwordVirtual.set (password) ->
-  @_password = password
-  @passwordDigest = bcrypt.hashSync(password, bcrypt.genSaltSync())
+    if @password? and not /^(?=.*?\d)\w(\w|[!@#$%]){5,20}/.test(@password)
+      @invalidate 'password', 'Your password must be between 6–20 characters
+        and include a number.'
+  , null
 
-userSchema.path('passwordDigest').validate (value) ->
-
-  if @isNew and !@password?
-    @invalidate('password', 'Password is required')
-
-  if @password? && !/^(?=.*?\d)\w(\w|[!@#$%]){5,20}/.test(@password)
-    @invalidate('password', 'Your password must be between 6–20 characters and include a number')
-, null
-
-userSchema.path('email').validate (value) ->
-  if !validator.isEmail(value)
-    @invalidate('email', 'Not a valid email adress')
-, null
+userSchema.path 'email'
+  .validate (value) ->
+    validator.isEmail(value)
+  , 'Not a valid email adress'
 
 userSchema.post 'save', ->
   @_password = null
 
 userSchema.plugin uniqueValidator, message: '“{VALUE}” is already a user.'
-
-userSchema.set 'toJSON', virtuals: true
 
 module.exports = db.model 'User', userSchema

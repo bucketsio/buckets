@@ -1,21 +1,35 @@
 User = require('../../../server/models/user')
 Bucket = require('../../../server/models/bucket')
 db = require('../../../server/lib/database')
+
+reset = require '../../reset'
+
 {assert} = require('chai')
 
 describe 'Bucket', ->
-  afterEach (done) ->
-    for _, c of db.connection.collections
-      c.remove(->)
-      done()
+
+  before reset.db
+  after reset.db
 
   describe '#getMembers', ->
-    it 'returns members', (done) ->
-      Bucket.create { name: 'Images', slug: 'images' }, (e, bucket) ->
-        u = new User({ name: 'Bucketer', email: 'hello@buckets.io', password: 'S3cr3ts' })
+    u = null
+    b = null
 
-        u.upsertRole 'contributor', bucket, (e, user) ->
-          bucket.getMembers (e, users) ->
+    before (done) ->
+      Bucket.create { name: 'Images', slug: 'images' }, (e, bucket) ->
+        throw e if e
+        u = new User
+          name: 'Bucketer'
+          email: 'hello@buckets.io'
+          password: 'S3cr3ts'
+        b = bucket
+        done()
+
+    it 'returns members', (done) ->
+
+        u.upsertRole 'contributor', b, (e, user) ->
+          throw e if e
+          b.getMembers (e, users) ->
             assert.isArray(users)
             assert.lengthOf(users, 1)
             assert.equal(users[0].id, u.id)

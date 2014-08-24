@@ -45,6 +45,7 @@ module.exports = class Layout extends Chaplin.Layout
   clickMenu: (e) ->
     e.preventDefault()
     @$('.nav-primary').toggleClass('hidden-xs').toggle().slideToggle 200
+    @$('.btn-menu').toggleClass('active')
 
   clickMenuNav: ->
     if @$('.hidden-xs:visible').length is 0
