@@ -1,6 +1,6 @@
 {
   "name": "buckets",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Manage content better.",
   "scripts": {
     "start": "grunt serve",
@@ -14,7 +14,7 @@
       "data-cover-never": "node_modules"
     }
   },
-  "author": "David Kaneda <dk@morfunk.com>",
+  "author": "David Kaneda <dk@morfunk.com> (http://www.davidkaneda.com)",
   "license": "AGPL-3.0",
   "bugs": {
     "url": "https://assemblymade.com/buckets/wips"
@@ -57,7 +57,7 @@
     "grunt": "^0.4.4",
     "grunt-apidoc": "^0.7.0",
     "grunt-bower-task": "^0.4.0",
-    "grunt-browserify": "^2.0.8",
+    "grunt-browserify": "^2.2.0-beta1",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-concat": "^0.4.0",
     "grunt-contrib-copy": "^0.5.0",
@@ -76,13 +76,13 @@
     "inflection": "^1.3.6",
     "marked": "^0.3.2",
     "moment": "^2.7.0",
-    "mongoose": "^3.8.14",
+    "mongoose": "^3.9.1",
     "mongoose-regexp": "0.0.1",
     "mongoose-unique-validator": "^0.3.0",
     "nodemailer": "^0.6.5",
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
-    "path-to-regexp": "^0.2.4",
+    "path-to-regexp": "^0.2.5",
     "serve-static": "^1.4.3",
     "speakingurl": "^0.10.0",
     "swag": "^0.7.0",

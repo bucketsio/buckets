@@ -1,14 +1,15 @@
-# Buckets
+<div align="center"><img src="http://buckets.io/images/buckets-logo.svg" height="80"></div>
 
-## Manage content better.
+A fast, simple way to build dynamic websites on top of [Express](http://expressjs.com/), [MongoDB](http://www.mongodb.org/), and [ElasticSearch](http://www.elasticsearch.org/). [More about our vision](docs/vision/vision.md).
 
-Buckets is a simple, open source, content management system for Node.js. Read more about [our vision](docs/vision/vision.md).
-
-[![Build Status](https://travis-ci.org/asm-products/buckets.svg?branch=master)](https://travis-ci.org/asm-products/buckets)
+[![Build Status](http://img.shields.io/travis/asm-products/buckets/master.svg?style=flat)](https://travis-ci.org/asm-products/buckets)
+[![Dependencies](http://img.shields.io/david/asm-products/buckets.svg?style=flat)]()
+[![License](http://img.shields.io/npm/l/buckets.svg?style=flat)]()
+[![NPM](http://img.shields.io/npm/v/buckets.svg?style=flat)]()
 
 # Installing Buckets
 
-There are several ways to install Buckets. The easiest way currently is to install on Heroku — as long as you have a Heroku account, you can simply use the button below:
+There are several ways to install Buckets. The easiest way currently is to install on [Heroku](http://heroku.com/)—as long as you have a Heroku account, you can simply use the button below:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
