@@ -31,8 +31,8 @@ app.post '/install', (req, res) ->
         Bucket.create bucketSeed
       ).then( (bucket) ->
         for entry in entrySeed
-          entry.bucket = bucket.id
-          entry.author = newUser.id
+          entry.bucket = bucket._id
+          entry.author = newUser._id
         Entry.create entrySeed
       , renderError).then ->
         req.login newUser, ->
