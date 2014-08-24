@@ -1,4 +1,4 @@
-<div align="center"><img src="http://buckets.io/images/buckets-logo.svg" height="80"></div>
+<a href="http://buckets.io"><img src="http://buckets.io/images/buckets-logo.svg" height="80"></a>
 
 A fast, simple way to build dynamic websites on top of [Express](http://expressjs.com/), [MongoDB](http://www.mongodb.org/), and [ElasticSearch](http://www.elasticsearch.org/). [More about our vision](docs/vision/vision.md).
 
