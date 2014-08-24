@@ -13,13 +13,11 @@ module.exports = app = express()
 
   @apiParam {String} bucket Bucket ID
   @apiParam {String} author Author ID
-  @apiParam {String} [status] One of 'draft', 'live', 'pending', or 'rejected'. _See below for differences with contributor and editor permissions._
-  @apiParam (Contributor) {String} status="submitted" Available options are 'draft', 'submitted', and 'rejected' (using `live` will automatically switch to `submitted`).
-  @apiParam (Editor/Administrator) {String} status="live" Available options are `draft`, `submitted`, and `rejected`.
-
-  @apiParam {String} publishDate Can accept a DateTime or a relative date (eg. "Tomorrow at 9am").
-  @apiParam {Array} keywords Array of keywords (or comma-separated String) used for tagging and/or search results.
-  @apiParam {String} description Description used for search results.
+  @apiParam {String} [status="live"] One of 'draft', 'live', 'pending', or 'rejected'. _See below for differences for contributors._
+  @apiParam (Contributors) {String} [status="submitted"] Available options are 'draft' and 'submitted' (using `live` will automatically switch to `submitted`).
+  @apiParam {String} [publishDate="Now"] Can accept a DateTime or a relative date (eg. "Tomorrow at 9am").
+  @apiParam {Array} [keywords] Array of keywords (or comma-separated String) used for tagging and/or search results.
+  @apiParam {String} [description] Description used for search results.
   @apiParam {Object} content An special field for an object with custom field data. The accepted custom fields for an Entry depend on it’s which Bucket is it assigned to.
 ###
 
@@ -40,10 +38,9 @@ module.exports = app = express()
   @apiParam {String} [slug] A slug for a specific Entry to retrieve.
 ###
 
-
-app.route('/entries')
+app.route '/entries'
   .post (req, res) ->
-    req.body.keywords = req.body.keywords?.split(',')
+    req.body.keywords = req.body.keywords?.split ','
 
     Bucket.findById req.body.bucket, (e, bucket) ->
       return res.status(400).send(e) if e
@@ -66,7 +63,6 @@ app.route('/entries')
     Entry.findByParams req.query, (err, entries) ->
       res.status(200).send entries
 
-
 ###
   @api {get} /entries/:id Get Entry
   @apiVersion 0.0.2
@@ -74,6 +70,24 @@ app.route('/entries')
   @apiName GetEntry
 
   @apiParam {String} id Entry's unique ID (sent with the URL).
+###
+
+###
+  @api {put} /entries/:id Update an Entry
+  @apiVersion 0.0.2
+  @apiGroup Entries
+  @apiName PutEntry
+
+  @apiParam {String} id Entry's unique ID.
+###
+
+###
+  @api {delete} /entries/:id Remove an Entry
+  @apiVersion 0.0.2
+  @apiGroup Entries
+  @apiName DeleteEntry
+
+  @apiParam {String} id Entry's unique ID.
 ###
 
 app.route('/entries/:entryID')
@@ -85,36 +99,17 @@ app.route('/entries/:entryID')
         res.status(404).end()
 
   .put (req, res) ->
-    ###
-      @api {put} /entries/:id Update an Entry
-      @apiVersion 0.0.2
-      @apiGroup Entries
-      @apiName PutEntry
+    Entry.findById req.params.entryID, (err, entry) ->
+      return res.status(400).send err if err
 
-      @apiParam {String} id Entry's unique ID.
-    ###
-    Entry.findOne(_id: req.params.entryID).exec (err, entry) ->
-      if err
-        res.status(400).send err
-      else
-        entry.set(req.body).save (err, entry) ->
-          if err
-            res.status(400).send err
-          else
-            entry.populate 'bucket author', ->
-              res.status(200).send entry
+      entry.set(req.body).save (err, entry) ->
+        return res.status(400).send err if err
+
+        entry.populate 'bucket author', ->
+          res.status(200).send entry
 
   .delete (req, res) ->
-    ###
-      @api {delete} /entries/:id Remove an Entry
-      @apiVersion 0.0.2
-      @apiGroup Entries
-      @apiName DeleteEntry
-
-      @apiParam {String} id Entry's unique ID.
-    ###
-    delete req.body._id
-    Entry.remove _id: req.params.entryID, (err) ->
+    Entry.findById(req.params.entryID).remove (err) ->
       if err
         res.status(400).send e: err
       else
