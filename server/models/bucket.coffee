@@ -19,25 +19,23 @@ fieldSchema = new mongoose.Schema
     type: String
     required: yes
   settings: mongoose.Schema.Types.Mixed
-  dateCreated:
-    type: Date
-    default: new Date
 
-fieldSchema.path('slug').validate (val) ->
-  val not in [
-    'title'
-    'description'
-    'slug'
-    'status'
-    'lastModified'
-    'publishDate'
-    'createdAt'
-    'author'
-    'bucket'
-    'keywords'
-    'content'
-  ]
-, 'Sorry, that’s a reserved field slug.'
+fieldSchema.path 'slug'
+  .validate (val) ->
+    val not in [
+      'title'
+      'description'
+      'slug'
+      'status'
+      'lastModified'
+      'publishDate'
+      'createdAt'
+      'author'
+      'bucket'
+      'keywords'
+      'content'
+    ]
+  , 'Sorry, that’s a reserved field slug.'
 
 bucketSchema = new mongoose.Schema
   name:
@@ -84,18 +82,18 @@ bucketSchema = new mongoose.Schema
     ]
     default: 'teal'
     required: yes
-  publishToSite:
-    type: Boolean
-    default: no
   urlPattern: String
   route:
     type: mongoose.Schema.Types.ObjectId
     ref: 'Route'
   fields: [fieldSchema]
 ,
-  autoIndex: no
-
-bucketSchema.set 'toJSON', virtuals: true
+  toJSON:
+    virtuals: yes
+    transform: (doc, ret, options) ->
+      delete ret._id
+      delete ret.__v
+      ret
 
 bucketSchema.pre 'validate', (next) ->
   # Auto add singular if not provided
@@ -120,7 +118,6 @@ bucketSchema.methods.getMembers = (callback) ->
     roles:
       $elemMatch:
         resourceId: @_id
-        resourceType: 'Bucket'
   , callback
 
 module.exports = db.model 'Bucket', bucketSchema

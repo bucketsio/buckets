@@ -1,8 +1,9 @@
 User = require('../../../server/models/user')
 Bucket = require('../../../server/models/bucket')
-reset = require('../../reset')
 
-{assert} = require('chai')
+reset = require '../../reset'
+
+{assert} = require 'chai'
 
 describe 'Bucket', ->
   before reset.db

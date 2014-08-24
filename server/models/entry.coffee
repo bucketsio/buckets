@@ -35,9 +35,7 @@ chrono.parsers.NowParser = (text, ref, opt) ->
 
   parser
 
-Schema = mongoose.Schema
-
-entrySchema = new Schema
+entrySchema = new mongoose.Schema
   title:
     type: String
     required: yes
@@ -51,7 +49,7 @@ entrySchema = new Schema
     type: String
     enum: ['draft', 'live', 'pending', 'rejected']
     required: yes
-    default: 'draft'
+    default: 'live'
   lastModified:
     type: Date
     es_type: 'date'
@@ -65,11 +63,11 @@ entrySchema = new Schema
     es_type: 'date'
     default: Date.now
   author:
-    type: Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId
     ref: 'User'
     required: yes
   bucket:
-    type: Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId
     ref: 'Bucket'
     required: yes
   keywords:
@@ -82,6 +80,13 @@ entrySchema = new Schema
     default: {}
     es_type : 'object'
     es_boost: 2.0
+,
+  toJSON:
+    virtuals: yes
+    transform: (doc, ret, options) ->
+      delete ret._id
+      delete ret.__v
+      ret
 
 entrySchema.pre 'save', (next) ->
   @lastModified = Date.now()
@@ -187,11 +192,10 @@ entrySchema.statics.findByParams = (params, callback) ->
       .limit settings.limit
       .skip settings.skip
       .exec (err, entries) ->
-        throw err if err
-
-        callback null, entries
-
-entrySchema.set 'toJSON', virtuals: true
+        if err
+          callback err
+        else
+          callback null, entries
 
 # Add Elasticsearch via mongoosastic
 elasticConnection = url.parse config.elasticsearch.url

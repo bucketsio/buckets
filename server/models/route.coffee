@@ -25,7 +25,12 @@ routeSchema = new mongoose.Schema
     type: Boolean
     default: no
 ,
-  autoIndex: no
+  toJSON:
+    virtuals: yes
+    transform: (doc, ret) ->
+      delete ret._id
+      delete ret.__v
+      ret
 
 routeSchema.pre 'validate', (next) ->
   # Force the initial slash for consistency

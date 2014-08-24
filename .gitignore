@@ -1,11 +1,7 @@
 .DS_Store
-
 coverage.html
-
 bower_components
-
 /public
-
 node_modules
-
 tmp
+docs/api

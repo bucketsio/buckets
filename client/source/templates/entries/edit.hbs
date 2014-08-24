@@ -1,6 +1,6 @@
 <form>
-  {{hidden 'author' author._id}}
-  {{hidden 'bucket' bucket._id}}
+  {{hidden 'author' author.id}}
+  {{hidden 'bucket' bucket.id}}
 
   <div class="panel panel-default">
     <div class="panel-body">
@@ -15,11 +15,11 @@
             <p>Submitted by {{gravatar author.email_hash}} {{author.name}}</p>
           {{/hasRole}}
         {{/is}}
-        {{#if _id}}
+        {{#if id}}
           <a href="#delete" class="btn btn-icon btn-link pull-right">{{icon 'trash'}}</a>
         {{/if}}
         <div class="btn-group">
-          {{#if _id}}
+          {{#if id}}
             {{#is status 'live'}}
               {{submit "Save"}}
             {{else}}
@@ -46,7 +46,7 @@
               {{!-- SRY --}}
               {{#isnt status 'live'}}
                 {{#is status 'draft'}}
-                  {{#if _id}}
+                  {{#if id}}
                     <li><a href="#publish">Publish now</a></li>
                   {{else}}
                     <li><a href="#draft">Save as a draft</a></li>
@@ -56,7 +56,7 @@
                 {{/is}}
                 <li><a href="#date">Publish on…</a></li>
               {{/isnt}}
-              {{#if _id}}
+              {{#if id}}
                 <li><a href="#copy">Copy as a new draft</a></li>
               {{/if}}
               {{#is status 'pending'}}
