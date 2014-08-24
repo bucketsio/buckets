@@ -151,7 +151,7 @@ Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
 
   settings = _.defaults options.hash,
     className: 'form-control'
-    valueKey: '_id'
+    valueKey: 'id'
     nameKey: 'name'
     tabIndex: 1
 

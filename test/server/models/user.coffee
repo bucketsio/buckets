@@ -1,6 +1,6 @@
-User = require('../../../server/models/user')
-Bucket = require('../../../server/models/bucket')
-db = require('../../../server/lib/database')
+User = require '../../../server/models/user'
+Bucket = require '../../../server/models/bucket'
+db = require '../../../server/lib/database'
 {assert} = require('chai')
 
 describe 'User', ->
@@ -35,12 +35,12 @@ describe 'User', ->
 
     it 'returns an error for a missing password', (done) ->
       User.create { name: 'Bucketer', email: 'hello@buckets.io' }, (e, u) ->
-        assert.equal(e.errors.password.message, 'Password is required')
+        assert.equal(e.errors.password.message, 'A password is required.')
         done()
 
     it 'returns an error when password is invalid', (done) ->
       User.create { name: 'Bucketer', email: 'hello@buckets.io', password: 'abc12' }, (e, u) ->
-        assert.equal(e.errors.password.message, 'Your password must be between 6–20 characters and include a number')
+        assert.equal(e.errors.password.message, 'Your password must be between 6–20 characters and include a number.')
         done()
 
   describe 'Update', ->

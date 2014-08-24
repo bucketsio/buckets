@@ -32,6 +32,11 @@
   "engines": {
     "node": "0.10.x"
   },
+  "apidoc": {
+    "name": "Buckets REST API",
+    "title": "Buckets REST API",
+    "url": "/api"
+  },
   "dependencies": {
     "async": "^0.9.0",
     "bcrypt": "^0.8.0",
@@ -49,6 +54,7 @@
     "express": "^4.2.0",
     "glob": "^4.0.0",
     "grunt": "^0.4.4",
+    "grunt-apidoc": "^0.7.0",
     "grunt-bower-task": "^0.4.0",
     "grunt-browserify": "^2.0.8",
     "grunt-contrib-clean": "^0.6.0",

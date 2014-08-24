@@ -2,7 +2,7 @@
   <div class="panel-body">
     {{input 'name' name placeholder="Full name" label="Name"}}
     {{input 'email' email placeholder="Email" label="Email"}}
-    {{#is _id currentUser._id}}
+    {{#is id currentUser.id}}
       <h4 data-toggle="collapse" data-target="#changePassword" class="collapsed"><span class="caret"></span> Update your password</h4>
       <div id="changePassword" class="collapse">
         {{input 'oldpassword' '' placeholder="Old password" type="password"}}
@@ -11,7 +11,7 @@
       </div>
 
     {{else}}
-      {{#unless _id}}
+      {{#unless id}}
         {{input 'password' '' placeholder="Password" type="password"}}
       {{/unless}}
     {{/is}}
@@ -21,8 +21,8 @@
     {{/hasRole}}
 
     <div class="pull-right">
-      {{#if _id}}
-        {{#isnt _id currentUser._id}}
+      {{#if id}}
+        {{#isnt id currentUser.id}}
           <a class="btn btn-danger" href="#remove">Remove this user</a>
         {{/isnt}}
       {{/if}}
