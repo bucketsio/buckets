@@ -169,7 +169,7 @@ describe 'Entry', ->
           ], ->
             # This is super painful, but only way I can
             # think to test a live elasticsearch instance
-            Entry.synchronize -> Entry.refresh -> setTimeout done, 1500
+            Entry.synchronize -> Entry.refresh -> setTimeout done, 2000
 
     it 'performs a fuzzy search with `search`', (done) ->
       Entry.findByParams search: 'photoste', (e, entries) ->
