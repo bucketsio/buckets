@@ -15,5 +15,5 @@
     "BUILDPACK_URL": "https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git",
     "NODE_ENV": "production"
   },
-  "addons": ["mongohq", "mandrill", "bonsai"]
+  "addons": ["mongohq", "mandrill", "searchbox"]
 }
