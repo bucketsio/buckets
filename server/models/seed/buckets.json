@@ -15,11 +15,11 @@
   "icon": "calendar",
   "color": "blue",
   "fields": [{
-    "name": "Body",
-    "slug": "body",
+    "name": "Outline",
+    "slug": "outline",
     "fieldType": "markdown",
     "settings": {
-      "size": "lg"
+      "size": "sm"
     }
   },{
     "name": "Location",

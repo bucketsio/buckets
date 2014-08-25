@@ -1,15 +1,13 @@
 <div class="row">
+  <h1 class="page-title background-{{bucket.color}}">
+    {{bucket.name}}
+    {{#hasRole 'administrator'}}
+    <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon">{{icon 'cog'}}</a>
+    {{/hasRole}}
+  </h1>
   <div class="col-md-5 sidebar">
-    <h1 class="page-title background-{{bucket.color}}">
-      {{bucket.name}}
-      <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon">{{icon 'cog'}}</a>
-    </h1>
-
-
     <div class="hasEntries {{#empty items}}hidden{{/empty}}">
-      <a class="btn btn-default" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">Add {{bucket.singular}}</a>
-
-      <a class="btn btn-default noscript" href="/api/entries?bucket={{bucket.slug}}&amp;status=" target="_blank">JSON</a>
+      <a class="btn btn-link btn-icon show-tooltip" title="Add {{bucket.singular}}" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">{{icon 'add'}}</a>
     </div>
     <br>
     <div class="entries"></div>

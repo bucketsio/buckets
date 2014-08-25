@@ -7,7 +7,26 @@ module.exports =
       return if @disposed
 
       # Automatically focus the first visible input (on non-touch devices)
-      @$('.form-control:visible').eq(0).focus() unless Modernizr.touch
+      $firstField = @$('.form-control:visible').eq(0)
+      $firstField.focus() unless Modernizr.touch or $firstField.val()
+
+      # Prep slugs
+      @$('.input-slug').each (i, el) ->
+        $slug = $(el)
+        $input = $slug.prev()
+
+        $inputs = $slug.parent().find('input')
+
+        unless $input.is(':focus')
+          $slug.css display: 'none'
+
+        closeTimeout = null
+        $inputs.focus ->
+          $slug.slideDown 80
+          clearTimeout closeTimeout if closeTimeout
+        $inputs.blur -> closeTimeout = setTimeout ->
+          $slug.slideUp 80
+        , 50
 
   formParams: ->
     # Uses jQuery formParams, but don't try to convert number values to numbers, etc.

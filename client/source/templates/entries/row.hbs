@@ -2,5 +2,5 @@
   <h3><a href="/{{adminSegment}}/buckets/{{bucket.slug}}/{{id}}">{{title}}</a></h3>
   <p class="text-muted">
     {{gravatar author.email_hash}}
-    <span class="label label-{{statusColor status}}">{{status}}</span> · {{timeAgo publishDate}}</p>
+    {{#isnt status 'live'}}<span class="label label-{{statusColor status}}">{{status}}</span>{{/isnt}} {{timeAgo publishDate}}</p>
 </div>
