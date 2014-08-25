@@ -11,7 +11,7 @@
 
       <div class="entry-publish">
         {{#is status 'pending'}}
-          {{#hasRole 'editor'}}
+          {{#hasRole 'editor' bucket.id}}
             <p>Submitted by {{gravatar author.email_hash}} {{author.name}}</p>
           {{/hasRole}}
         {{/is}}
@@ -24,7 +24,7 @@
               {{submit "Save"}}
             {{else}}
               {{#is status 'pending'}}
-                {{#hasRole 'editor'}}
+                {{#hasRole 'editor' bucket.id}}
                   <a class="btn btn-primary" href="#publish">Approve &amp; publish</a>
                 {{else}}
                   {{submit "Save"}}
@@ -34,7 +34,7 @@
               {{/is}}
             {{/is}}
           {{else}}
-            {{#hasRole 'editor'}}
+            {{#hasRole 'editor' bucket.id}}
               {{submit "Publish"}}
             {{else}}
               {{submit 'Submit to publish'}}
@@ -60,7 +60,7 @@
                 <li><a href="#copy">Copy as a new draft</a></li>
               {{/if}}
               {{#is status 'pending'}}
-                {{#hasRole 'editor'}}
+                {{#hasRole 'editor' bucket.id}}
                   <li><a href="#reject">Reject</a></li>
                 {{/hasRole}}
               {{/is}}
