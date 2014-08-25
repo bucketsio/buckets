@@ -92,6 +92,8 @@ Passes through to the next matching [Route](routes.md). Best used in conjunction
 {{/entries}}
 ```
 
+_Note: All of these parameters are also supported by the [Buckets REST API](api/)._
+
 ### inspect
 
 Pretty-prints an object for debugging. Automatically HTML-encodes values.
