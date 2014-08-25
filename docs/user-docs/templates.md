@@ -1,12 +1,8 @@
 # User Templates
 
-**Alpha Notice** Please note that Buckets is in Alpha stage and some features listed below may not be implemented yet. [Help decide how templates shape up](https://assembly.com/buckets/projects/54).
+Buckets uses [hbs](https://github.com/donpark/hbs) (a version of [Handlebars](http://handlebarsjs.com) optimized for Express) as it’s template engine. Additionally, we load [Swag](https://github.com/elving/swag) by default, which provides a lot of convenient Helpers.
 
-This document describes the functionality available in the user-facing templates in Buckets.
-
-## Basic
-
-Buckets uses [hbs](https://github.com/donpark/hbs) (a version of [Handlebars](http://handlebarsjs.com) optimized for Express) as it’s template engine. Additionally, we load [Swag](https://github.com/elving/swag) which provides a lot of convenient Helpers like `{{#is}}` (used below).
+**Alpha Notice:** Buckets is in Alpha stage and some features listed below may not be implemented yet. [Help decide how templates shape up](https://assembly.com/buckets/projects/54).
 
 ## Special Templates
 
@@ -14,10 +10,6 @@ Buckets uses [hbs](https://github.com/donpark/hbs) (a version of [Handlebars](ht
 * **error**.hbs: Buckets will automatically attempt to render the error page if it encounters either a missing Route (404) or encounters an error (500). It’s recommended to not use the `entries` tag within the error template.
 
 Both of these templates are included by default.
-
-## Partials
-
-TODO
 
 ## Helpers
 
@@ -89,7 +81,7 @@ Shows the difference between the date given and now.
 
 ### next
 
-Passes through to the next Route/Template combination after the current one. Best used in conjunction with entries tag like so:
+Passes through to the next matching [Route](routes.md). Best used in conjunction with entries tag like so:
 
 ```
 {{#entries}}
@@ -99,3 +91,81 @@ Passes through to the next Route/Template combination after the current one. Bes
   {{next}}
 {{/entries}}
 ```
+
+_Note: All of these parameters are also supported by the [Buckets REST API](api/)._
+
+### inspect
+
+Pretty-prints an object for debugging. Automatically HTML-encodes values.
+
+```
+{{inspect req}}
+```
+
+## Global variables
+
+Basic global object passed to every Template:
+
+
+### req
+
+An object of data about the current page request.
+
+### req.body
+
+The `body` object of data from POST requests (values received when forms are submitted).
+
+```
+<form method="POST">
+  <input type="text" name="foo">
+  {{#if req.body}}
+    You submitted {{req.body.foo}}
+  {{/if}}
+</form>
+```
+
+### req.path
+
+The current request URL.
+
+### req.query
+
+An object of query parameters (id. "?foo=bar" on the URL).
+
+```
+<a href="/?clicked=true">Click Me</a>
+{{#if req.query.clicked}}
+  You clicked it!
+{{/if}}
+```
+
+### req.params
+
+An object of parameters passed through [the Route’s URL](routes.md)
+
+```
+<a href="/?clicked=true">Click Me</a>
+{{#if req.query.clicked}}
+  You clicked it!
+{{/if}}
+```
+
+### adminSegment
+
+The slug of your Buckets admin.
+
+```
+<a href="/{{adminSegment}}/">Sign In</a>
+```
+
+### user
+
+An object of data about the current Buckets user.
+
+```
+You are currently logged in as {{user.name}}
+```
+
+## Partials
+
+TODO

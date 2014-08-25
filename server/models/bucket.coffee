@@ -11,7 +11,7 @@ fieldSchema = new mongoose.Schema
     required: yes
   slug:
     type: String
-    unique: yes
+    index: yes
     required: yes
   required: Boolean
   instructions: String

@@ -32,11 +32,15 @@ app.route('/templates')
     errors = validateTemplate req.body.contents
     return res.status(400).send errors if errors
 
-    Template.write req.body.filename, req.body.contents, (err) ->
+    {filename, contents} = req.body
+
+    Template.write filename, contents, (err) ->
       if err
         res.status(500).send err
       else
-        res.status(201).end()
+        res.status(201).send
+          filename: filename
+          contents: contents
 
 app.route('/templates/:filename')
   .get (req, res) ->
@@ -64,7 +68,11 @@ app.route('/templates/:filename')
     return res.status(400).send errors if errors
 
     Template.write [req.params.filename, req.body.filename], req.body.contents, (err) ->
+      filename = req.params.filename
+      contents = req.body.contents
       if err
         res.status(500).send err
       else
-        res.status(201).end()
+        res.status(201).send
+          filename: filename
+          contents: contents
