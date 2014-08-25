@@ -45,4 +45,4 @@ module.exports = class DashboardView extends PageView
   selectItem: (e, item) ->
     Chaplin.utils.redirectTo 'buckets#browse',
       slug: item.bucket.slug
-      entryID: item._id
+      entryID: item.id
