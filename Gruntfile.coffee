@@ -213,6 +213,7 @@ module.exports = (grunt) ->
 
           # Remove some which we’ll load on the fly
           '!public/vendor/fastclick/fastclick.js'
+          '!public/vendor/jquery/**/*.js'
         ]
         filter: 'isFile'
 
