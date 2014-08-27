@@ -1,22 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="46px" height="41px" viewBox="0 0 46 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
-    <title>buckets</title>
+<svg width="231px" height="205px" viewBox="0 0 231 205" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.4 (8053) - http://www.bohemiancoding.com/sketch -->
+    <title>Buckets-Logo-Final</title>
     <desc>Created with Sketch.</desc>
-    <defs></defs>
+    <defs>
+        <path id="path-1" d="M103.064555,44.94 C152.784992,44.0923617 192,34.3691398 192,22.5 C192,10.074 149.019,0 96,0 C44.1278633,0 1.86415596,9.64288878 0.06,21.6970128 L0.06,23.3029872 C1.78151673,34.804973 40.3409791,44.1115574 88.9354447,44.94 L103.064555,44.94 L103.064555,44.94 Z"></path>
+        <path id="path-3" d="M0,0 C0,0 15.605,133.097 17.153,141.882 C18.702,148.799 22.229,156.465 31.843,160.577 C43.92,164.647 60.266,169.983 87.84,170.049 C115.734,169.983 132.08,164.647 144.157,160.577 C153.771,156.465 157.298,148.799 158.847,141.882 C160.395,133.097 176,0 176,0 L0,0 L0,0 Z"></path>
+        <path id="path-5" d="M231,204.94 L231,0 L0.06,0 L0.06,204.94 L231,204.94 L231,204.94 Z"></path>
+        <path id="path-7" d="M88,41 C63.42,41 40.425,38.333 23.561,33.709 C8.316,29.529 0,24.138 0,20.5 C0,16.862 8.316,11.471 23.561,7.291 C40.425,2.667 63.42,0 88,0 C112.58,0 135.575,2.667 152.439,7.291 C167.684,11.471 176,16.862 176,20.5 C176,24.138 167.684,29.529 152.439,33.709 C135.575,38.333 112.58,41 88,41 L88,41 Z"></path>
+        <path id="path-9" d="M93,51 C144.362,51 186,39.583 186,25.5 C186,11.417 144.362,0 93,0 C41.638,0 0,11.417 0,25.5 C0,39.583 41.638,51 93,51 L93,51 Z"></path>
+        <path id="path-11" d="M231,204.94 L231,0 L0.06,0 L0.06,204.94 L231,204.94"></path>
+        <path id="path-13" d="M7.5,15 C11.642,15 15,11.642 15,7.5 C15,3.358 11.642,0 7.5,0 C3.358,0 0,3.358 0,7.5 C0,11.642 3.358,15 7.5,15 L7.5,15 Z"></path>
+        <path id="path-15" d="M7.5,15 C11.642,15 15,11.642 15,7.5 C15,3.358 11.642,0 7.5,0 C3.358,0 0,3.358 0,7.5 C0,11.642 3.358,15 7.5,15 L7.5,15 Z"></path>
+    </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="Final" sketch:type="MSArtboardGroup" transform="translate(-697.000000, -492.000000)">
-            <g id="buckets" sketch:type="MSLayerGroup" transform="translate(697.000000, 492.000000)">
-                <ellipse id="shadow" fill="#F3EEEE" sketch:type="MSShapeGroup" cx="19.1150442" cy="36.5" rx="19.1150442" ry="4.5"></ellipse>
-                <g id="bucket" transform="translate(5.973451, 0.000000)" sketch:type="MSShapeGroup">
-                    <path d="M0.995575221,5.2 C0.995575221,5.2 3.96366366,31.3101532 4.41106769,33.5763555 C4.85847172,35.8425578 5.42180154,36.4929687 7.33595046,37.3154297 C9.74069849,38.1294922 12.9954404,39.1965336 18.4858217,39.2098138 C24.0399579,39.1965336 27.2946997,38.1294922 29.6994478,37.3154297 C31.6135967,36.4929687 32.3159439,34.9597656 32.6243305,33.5763555 C32.9327172,31.8193126 36.039823,5.2 36.039823,5.2" id="base" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#FFFFFF"></path>
-                    <path d="M37.0353982,5.1 C37.0353982,2.28334778 28.7447419,0 18.5176991,0 C8.29065629,0 -2.34479103e-13,2.28334778 -2.34479103e-13,5.1 C-2.34479103e-13,7.91665222 8.29065629,10.2 18.5176991,10.2 C28.7447419,10.2 37.0353982,7.91665222 37.0353982,5.1 Z M5.95476033,6.77803714 C4.44912311,6.3633663 3.28010227,5.88679893 2.54654099,5.4091423 C2.25908393,5.22196535 2.07111728,5.05552506 1.9815963,4.93503825 C1.97588634,4.92735317 2,4.9927479 2,5.1 C2,5.2072521 1.97588634,5.27264683 1.9815963,5.26496175 C2.07111728,5.14447494 2.25908393,4.97803465 2.54654099,4.7908577 C3.28010227,4.31320107 4.44912311,3.8366337 5.95476033,3.42196286 C9.21872418,2.52302744 13.7086336,2 18.5176991,2 C23.3267647,2 27.816674,2.52302744 31.0806379,3.42196286 C32.5862751,3.8366337 33.755296,4.31320107 34.4888572,4.7908577 C34.7763143,4.97803465 34.9642809,5.14447494 35.0538019,5.26496175 C35.0595119,5.27264683 35.0353982,5.2072521 35.0353982,5.1 C35.0353982,4.9927479 35.0595119,4.92735317 35.0538019,4.93503825 C34.9642809,5.05552506 34.7763143,5.22196535 34.4888572,5.4091423 C33.755296,5.88679893 32.5862751,6.3633663 31.0806379,6.77803714 C27.816674,7.67697256 23.3267647,8.2 18.5176991,8.2 C13.7086336,8.2 9.21872418,7.67697256 5.95476033,6.77803714 Z" id="opening" fill="#4A4A4A"></path>
-                </g>
-                <path d="M8.07549969,9.6 L3.79452623,9.6 C3.79452623,9.6 2.20238367,32.0734375 24.3150427,32.0734375 C46.5879271,32.0734375 44.9957845,9.6 44.9957845,9.6 L40.7148111,9.6" id="handle" stroke="#4A4A4A" stroke-width="1.8" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
-                <g id="eyes" transform="translate(17.123894, 19.600000)" fill="#4A4A4A" sketch:type="MSShapeGroup">
-                    <ellipse id="left" cx="1.49336283" cy="1.5" rx="1.49336283" ry="1.5"></ellipse>
-                    <ellipse id="right" cx="13.4402655" cy="1.5" rx="1.49336283" ry="1.5"></ellipse>
-                </g>
+        <g id="Buckets-Logo-Final" sketch:type="MSLayerGroup">
+            <g id="Group-3" transform="translate(0.000000, 160.000000)">
+                <mask id="mask-2" sketch:name="Clip 2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-2"></g>
+                <path d="M0.06,-0.06 L192.06,-0.06 L192.06,44.94 L0.06,44.94 L0.06,-0.06 Z" id="Fill-1" fill-opacity="0.199416893" fill="#666666" sketch:type="MSShapeGroup" mask="url(#mask-2)"></path>
+            </g>
+            <g id="Group-6" transform="translate(35.000000, 26.000000)">
+                <mask id="mask-4" sketch:name="Clip 5" fill="white">
+                    <use xlink:href="#path-3"></use>
+                </mask>
+                <g id="Clip-5"></g>
+                <path d="M-0.02,-0.1 L176.02,-0.1 L176.02,170.06 L-0.02,170.06 L-0.02,-0.1 Z" id="Fill-4" fill="#FFFFFF" sketch:type="MSShapeGroup" mask="url(#mask-4)"></path>
+            </g>
+            <g id="Group-9">
+                <mask id="mask-6" sketch:name="Clip 8" fill="white">
+                    <use xlink:href="#path-5"></use>
+                </mask>
+                <g id="Clip-8"></g>
+                <path d="M35,26 C35,26 50.605,159.097 52.153,167.882 C53.702,174.799 57.229,182.465 66.843,186.577 C78.92,190.647 95.266,195.983 122.84,196.049 C150.734,195.983 167.08,190.647 179.157,186.577 C188.771,182.465 192.298,174.799 193.847,167.882 C195.395,159.097 211,26 211,26 L35,26 L35,26 Z" id="Stroke-7" stroke="#4A4A4A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup" mask="url(#mask-6)"></path>
+            </g>
+            <g id="Group-12" transform="translate(35.000000, 5.000000)">
+                <mask id="mask-8" sketch:name="Clip 11" fill="white">
+                    <use xlink:href="#path-7"></use>
+                </mask>
+                <g id="Clip-11"></g>
+                <path d="M88,46 C139.362,46 181,34.583 181,20.5 C181,6.417 139.362,-5 88,-5 C36.638,-5 -5,6.417 -5,20.5 C-5,34.583 36.638,46 88,46 L88,46 Z" id="Fill-10" fill="#FFFFFF" sketch:type="MSShapeGroup" mask="url(#mask-8)"></path>
+            </g>
+            <g id="Group-15" transform="translate(30.000000, 0.000000)">
+                <mask id="mask-10" sketch:name="Clip 14" fill="white">
+                    <use xlink:href="#path-9"></use>
+                </mask>
+                <g id="Clip-14"></g>
+                <path d="M93,51 C144.362,51 186,39.583 186,25.5 C186,11.417 144.362,0 93,0 C41.638,0 0,11.417 0,25.5 C0,39.583 41.638,51 93,51 L93,51 Z" id="Stroke-13" stroke="#4A4A4A" stroke-width="20" stroke-linejoin="round" sketch:type="MSShapeGroup" mask="url(#mask-10)"></path>
+            </g>
+            <g id="Group-18">
+                <mask id="mask-12" sketch:name="Clip 17" fill="white">
+                    <use xlink:href="#path-11"></use>
+                </mask>
+                <g id="Clip-17"></g>
+                <path d="M40.557,48 L19.057,48 C19.057,48 11.061,160.367 122.116,160.367 C233.975,160.367 225.979,48 225.979,48 L204.479,48" id="Stroke-16" stroke="#4A4A4A" stroke-width="9" stroke-linejoin="round" sketch:type="MSShapeGroup" mask="url(#mask-12)"></path>
+            </g>
+            <g id="Group-21" transform="translate(86.000000, 98.000000)">
+                <mask id="mask-14" sketch:name="Clip 20" fill="white">
+                    <use xlink:href="#path-13"></use>
+                </mask>
+                <g id="Clip-20"></g>
+                <path d="M-0.02,-0.1 L15.1,-0.1 L15.1,15.02 L-0.02,15.02 L-0.02,-0.1 Z" id="Fill-19" fill="#4A4A4A" sketch:type="MSShapeGroup" mask="url(#mask-14)"></path>
+            </g>
+            <g id="Group-24" transform="translate(146.000000, 98.000000)">
+                <mask id="mask-16" sketch:name="Clip 23" fill="white">
+                    <use xlink:href="#path-15"></use>
+                </mask>
+                <g id="Clip-23"></g>
+                <path d="M-0.02,-0.1 L15.1,-0.1 L15.1,15.02 L-0.02,15.02 L-0.02,-0.1 Z" id="Fill-22" fill="#4A4A4A" sketch:type="MSShapeGroup" mask="url(#mask-16)"></path>
             </g>
         </g>
     </g>
