@@ -275,9 +275,9 @@ module.exports = (grunt) ->
       livereload:
         options:
           livereload: true
+          interrupt: true
         files: [
-          'public/css/buckets.css'
-          'public/js/{buckets,vendor}.css'
+          'public/{css,js}/*.{css,js}'
           'public/plugins/**/*.{css,js}'
         ]
 
