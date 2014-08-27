@@ -19,7 +19,10 @@ hbs.registerHelper 'json', (context) ->
   new hbs.handlebars.SafeString JSON.stringify(context)
 
 app.set 'views', "#{__dirname}/../views"
-app.use(favicon(__dirname + '/../../public/favicon.ico'))
+
+faviconFile = "#{__dirname}/../../public/favicon.ico"
+app.use favicon faviconFile if fs.existsSync faviconFile
+
 app.use express.static "#{__dirname}/../../public/", maxAge: 86400000 * 7 # One week
 
 app.set 'plugins', plugins.load()
