@@ -78,15 +78,21 @@ module.exports = class EntryEditView extends PageView
           </div>
         """
 
-    TweenLite.fromTo @$('.panel'), .2,
-      y: 50
-      opacity: 0
-      scale: .9
-    ,
-      y: 0
-      scale: 1
+    $panel = @$('.panel').css
+      position: 'fixed'
+      right: 0
+      top: 0
+      bottom: 0
+      overflow: 'auto'
+      width: '480px'
+      'margin-bottom': 0
       opacity: 1
-      ease: Back.easeOut
+
+    TweenLite.from $panel, .25,
+      opacity: .8
+      x: 500
+
+      ease: Sine.easeOut
 
   submitForm: (e) ->
     e.preventDefault()
@@ -96,17 +102,17 @@ module.exports = class EntryEditView extends PageView
       content[field.slug] = @subview("field_#{field.slug}").getValue?()
       continue if content[field.slug]
 
-      data = @subview("field_#{field.slug}").$el.formParams no
+      data = @subview "field_#{field.slug}"
+        .$el.formParams no
       simpleValue = data[field.slug]
 
       content[field.slug] = if simpleValue? then simpleValue else data
 
     @model.set content: content
 
-    status = @model.get('status')
-    # @model.set status: 'draft' if status is 'draft' LOL
-    @model.set status: 'live' unless @model.get('id')
-    @submit @model.save(@formParams(), wait: yes)
+    status = @model.get 'status'
+    @model.set status: 'live' unless @model.get 'id'
+    @submit @model.save @formParams(), wait: yes
 
   clickDelete: (e) ->
     e.preventDefault()
@@ -145,5 +151,9 @@ module.exports = class EntryEditView extends PageView
       status: 'draft'
 
     @submit @model.save @model.toJSON(), wait: yes
+
+  dispose: ->
+    @$('.panel').css(opacity: 0) unless @disposed
+    super
 
   @mixin FormMixin

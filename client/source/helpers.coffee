@@ -21,8 +21,7 @@ Handlebars.registerHelper 'gravatar', (email_hash) ->
   color = defaultColors[Math.floor(defaultColors.length * randomize())]
 
   new Handlebars.SafeString """
-    <div class="avatar avatar-#{color}"
-      style="background-image: url(https://www.gravatar.com/avatar/#{email_hash}?d=404), url(/#{mediator.options.adminSegment}/img/avatars/#{color}.png)"></div>
+    <div class="avatar avatar-#{color}" style="background-image: url(https://www.gravatar.com/avatar/#{email_hash}?d=404), url(/#{mediator.options.adminSegment}/img/avatars/#{color}.png)"></div>
   """
 
 Handlebars.registerHelper 'highlightWildcards', (path) ->
@@ -52,8 +51,7 @@ Handlebars.registerHelper 'debug', ->
 Handlebars.registerHelper 'logo', ->
   new Handlebars.SafeString """
     <h1 id="logo">
-      <a href="/#{mediator.options.adminSegment}/"><img src="/#{mediator.options.adminSegment}/img/buckets.svg" width="46" height="41"></a>
-      <span class="version-badge">alpha</span>
+      <a href="/#{mediator.options.adminSegment}/"><img src="/#{mediator.options.adminSegment}/img/buckets.svg" width="200"></a>
     </h1>
   """
 

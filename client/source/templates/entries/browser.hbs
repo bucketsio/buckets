@@ -2,13 +2,14 @@
   <h1 class="page-title background-{{bucket.color}}">
     {{bucket.name}}
     {{#hasRole 'administrator'}}
-    <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon">{{icon 'cog'}}</a>
+      <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/settings" class="btn btn-link btn-icon">{{icon 'setting-gear'}}</a>
     {{/hasRole}}
+
+    <span class="hasEntries {{#empty items}}hidden{{/empty}}">
+      <a class="btn btn-link btn-icon show-tooltip" title="Add {{bucket.singular}}" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">{{icon 'add'}}</a>
+    </span>
   </h1>
   <div class="col-md-5 sidebar">
-    <div class="hasEntries {{#empty items}}hidden{{/empty}}">
-      <a class="btn btn-link btn-icon show-tooltip" title="Add {{bucket.singular}}" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">{{icon 'add'}}</a>
-    </div>
     <br>
     <div class="entries"></div>
   </div>

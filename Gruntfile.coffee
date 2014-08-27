@@ -101,7 +101,6 @@ module.exports = (grunt) ->
       style:
         files:
           'public/css/buckets.css': [
-            'public/fontastic/styles.css'
             'public/vendor/**/*.css'
             'public/css/bootstrap.css'
             'public/css/index.css'
@@ -118,11 +117,6 @@ module.exports = (grunt) ->
         cwd: 'docs/api'
         src: ['**/*']
         dest: 'public/docs/api'
-      fontastic:
-        expand: yes
-        cwd: 'client/assets/fontastic/fonts/'
-        src: ['*']
-        dest: 'public/css/fonts/'
       ace:
         expand: yes
         cwd: 'bower_components/ace-builds/src-min-noconflict/'
