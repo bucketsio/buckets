@@ -1,8 +1,8 @@
 express = require 'express'
-compress = require 'compression'
 hbs = require 'hbs'
 glob = require 'glob'
 fs = require 'fs'
+favicon = require 'serve-favicon'
 _ = require 'underscore'
 marked = require 'marked'
 
@@ -19,8 +19,8 @@ hbs.registerHelper 'json', (context) ->
   new hbs.handlebars.SafeString JSON.stringify(context)
 
 app.set 'views', "#{__dirname}/../views"
-app.use compress()
-app.use express.static '#{__dirname}/../public/', maxAge: 86400000 * 7 # One week
+app.use(favicon(__dirname + '/../../public/favicon.ico'))
+app.use express.static "#{__dirname}/../../public/", maxAge: 86400000 * 7 # One week
 
 app.set 'plugins', plugins.load()
 

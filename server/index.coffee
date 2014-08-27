@@ -2,6 +2,7 @@ express = require 'express'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
 session = require 'cookie-session'
+compression = require 'compression'
 colors = require 'colors'
 
 passport = require './lib/auth'
@@ -14,10 +15,13 @@ app.set 'views', 'public/'
 app.set 'view engine', 'hbs'
 
 # Handle cookies and sessions and stuff
+app.use compression()
 app.use cookieParser config.buckets.salt
+app.use session
+  secret: config.buckets.salt
+  name: 'buckets'
 app.use bodyParser.json()
 app.use bodyParser.urlencoded extended: true
-app.use session secret: config.buckets.salt, name: 'buckets'
 
 app.use passport.initialize()
 app.use passport.session()
