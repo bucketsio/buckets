@@ -1,24 +1,30 @@
 User = require '../../../server/models/user'
 Bucket = require '../../../server/models/bucket'
-db = require '../../../server/lib/database'
-{assert} = require('chai')
+reset = require '../../reset'
+
+{assert} = require 'chai'
 
 describe 'User', ->
   bucket = null
   user = null
 
   beforeEach (done) ->
-    Bucket.create { name: 'Images', slug: 'images' }, (e, b) ->
+    Bucket.create
+      name: 'Images'
+      slug: 'images'
+    , (e, b) ->
       throw e if e
       bucket = b
-      User.create { name: 'Bucketer', email: 'hello@buckets.io', password: 'S3cr3ts' }, (e, u) ->
+      User.create
+        name: 'Bucketer'
+        email: 'hello@buckets.io'
+        password: 'S3cr3ts'
+      , (e, u) ->
         throw e if e
         user = u
-
         done()
 
-  afterEach (done) ->
-    db.connection.db.dropDatabase(done)
+  afterEach reset.db
 
   describe 'Validation', ->
     it 'validates a well-formatted email', (done) ->

@@ -9,12 +9,13 @@ Route = require "#{serverPath}/models/route"
 config = require "#{serverPath}/config"
 reset = require '../../../reset'
 
-app = require serverPath
-
 {expect} = require 'chai'
 
 describe 'Install routes', ->
-  before reset.db
+  app = null
+  before (done) -> reset.db ->
+    app = reset.server done
+
   after reset.db
 
   describe 'Validation', ->
@@ -28,6 +29,7 @@ describe 'Install routes', ->
           password: '123'
         .expect 400
         .end (err, res) ->
+          throw err if err
           expect(err).to.not.exist
           expect(res.body.errors).to.exist
           expect(res.body.errors.password.name).to.equal 'ValidatorError'
@@ -36,7 +38,6 @@ describe 'Install routes', ->
     it 'should not install if a user exists'
 
   describe 'Installation', ->
-
     it 'should return a populated user object w/administrator permissions', (done) ->
       request app
         .post "/#{config.buckets.apiSegment}/install"

@@ -1,3 +1,4 @@
+_ = require 'underscore'
 express = require 'express'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
@@ -6,37 +7,47 @@ compression = require 'compression'
 colors = require 'colors'
 
 passport = require './lib/auth'
-util = require './lib/util'
-config = require './config'
+baseConfig = require './config'
 
-module.exports = app = express()
+class Buckets
+  routers:
+    admin: require './routes/admin'
+    api: require './routes/api'
+    frontend: require './routes/frontend'
 
-app.set 'views', 'public/'
-app.set 'view engine', 'hbs'
+  constructor: ->
+    @app = express()
 
-# Handle cookies and sessions and stuff
-app.use compression()
-app.use cookieParser config.buckets.salt
-app.use session
-  secret: config.buckets.salt
-  name: 'buckets'
-app.use bodyParser.json()
-app.use bodyParser.urlencoded extended: true
+  init: (config={}) ->
+    @config = _.extend baseConfig, config
 
-app.use passport.initialize()
-app.use passport.session()
+    # Handle cookies and sessions and stuff
+    @app.use compression()
+    @app.use cookieParser @config.buckets.salt
+    @app.use session
+      secret: @config.buckets.salt
+      name: 'buckets'
+    @app.use bodyParser.json()
+    @app.use bodyParser.urlencoded extended: true
+    @app.use passport.initialize()
+    @app.use passport.session()
 
-# Load Routes for the API, admin, and frontend
-try
-  for api in util.loadClasses "#{__dirname}/routes/api/"
-    app.use "/#{config.buckets.apiSegment}", api if api.init
-catch e
-  console.log 'Missing API Class'.red, e
+    # Load Routes for the API, admin, and frontend
+    @app.use "/#{@config.buckets.apiSegment}", @routers.api
+    @app.use "/#{@config.buckets.adminSegment}", @routers.admin
+    @app.use @routers.frontend
 
-app.use "/#{config.buckets.adminSegment}", require('./routes/admin')
+    @app.set 'view engine', 'hbs'
 
-app.use require './routes/frontend'
+    @start() if @config.buckets.autoStart
 
-app.listen config.buckets.port
+    @
 
-console.log ("\nBuckets is running at " + "http://localhost:#{config.buckets.port}/".underline.bold).yellow
+  start: (done) ->
+    done?() if @server
+
+    @server ?= @app.listen @config.buckets.port, =>
+      console.log ("\nBuckets is running at " + "http://localhost:#{@config.buckets.port}/".underline.bold).yellow
+      done?()
+
+module.exports = new Buckets

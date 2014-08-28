@@ -13,6 +13,7 @@ config =
       publicPath: "#{__dirname}/../user/public/"
       pluginsPath: "#{__dirname}/../node_modules/"
       catchAll: yes
+      autoStart: yes
     db: "mongodb://localhost/buckets_#{env}"
   production:
     smtp:
