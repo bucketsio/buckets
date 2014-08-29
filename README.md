@@ -78,3 +78,13 @@ One quick note on adding dependencies: First, you probably shouldn't have to add
 vagrant plugin install vagrant-librarian-chef
 vagrant up
 ```
+
+after that just do 
+
+```
+vagrant ssh 
+cd buckets
+grunt serve
+```
+
+Buckets will be accessible on [http://localhost:3001/](http://localhost:3001/)
