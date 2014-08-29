@@ -322,4 +322,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
 
-  grunt.registerTask 'heroku:production', ['minify', 'migrate:all']
+  grunt.registerTask 'heroku:production', ['prepublish', 'migrate:all']
