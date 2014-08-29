@@ -10,5 +10,5 @@ npm install -g grunt-cli bower
 echo -e "==> RUNNING: npm install"
 sudo -u vagrant -H bash -c 'npm install'
 
-echo -e "==> RUNNING: grunt serve"
-sudo -u vagrant -H bash -c 'grunt serve'
+# echo -e "==> RUNNING: grunt serve"
+# sudo -u vagrant -H bash -c 'grunt serve'
