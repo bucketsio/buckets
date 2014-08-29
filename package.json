@@ -5,8 +5,7 @@
   "scripts": {
     "start": "grunt serve",
     "test": "grunt test",
-    "test-cov": "grunt test:server:cov",
-    "prepublish": "grunt prepublish"
+    "test-cov": "grunt test:server:cov"
   },
   "main": "server/index.coffee",
   "config": {
