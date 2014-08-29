@@ -71,3 +71,10 @@ Assembly products are like open-source and made with contributions from the comm
 One quick note on adding dependencies: First, you probably shouldn't have to add too many. But if you find yourself needing to `npm install awesome-sauce`, make sure you include either the `--save` flag (if the dependency will be needed in production) or `--save-dev` (if the dependency is only needed for testing/development).
 
 [Or support Buckets via gittip :)](https://www.gittip.com/DavidKaneda/)
+
+### Vagrant
+
+```
+vagrant plugin install vagrant-librarian-chef
+vagrant up
+```
