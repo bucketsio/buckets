@@ -123,7 +123,7 @@ entrySchema.statics.findByParams = (params, callback) ->
           .filter (bucket) -> bucket.indexOf('-') == 0
           .map (bucket) -> bucket.substring(1)
           .value()
-        queryObject = if excludedBuckets.length > 0 then {slug: $ne: excludedBuckets} else {slug: $in: filteredBuckets}
+        queryObject = if excludedBuckets.length > 0 then {slug: $nin: excludedBuckets} else {slug: $in: filteredBuckets}
         searchQuery.bucket = $in: []
 
         mongoose.model('Bucket').find queryObject, (err, buckets) =>
