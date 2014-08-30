@@ -1,1 +1,1 @@
-require('./../server/index').init().start()
+require('./../server')()

@@ -1,6 +1,6 @@
 db = require '../server/lib/database'
 config = require '../server/config'
-buckets = require('../server').init()
+buckets = require('../server')
 Entry = require '../server/models/entry'
 
 dropDatabase = (done) ->
@@ -15,7 +15,7 @@ prep = (done) ->
       db.connection.db.dropDatabase done
 
 server = (done) ->
-  buckets.init().start done
+  buckets().start done
 
 module.exports =
   db: dropDatabase

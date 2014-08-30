@@ -2,7 +2,7 @@ express = require 'express'
 hbs = require 'hbs'
 config = require '../../config'
 
-Template = require('../../lib/template')(config.buckets?.templatePath)
+Template = require('../../lib/template')(config?.templatePath)
 
 module.exports = app = express()
 

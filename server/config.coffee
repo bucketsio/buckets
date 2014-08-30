@@ -3,17 +3,16 @@ _ = require 'underscore'
 
 config =
   default:
-    buckets:
-      adminSegment: 'admin'
-      apiSegment: 'api'
-      salt: 'BUCKETS4LIFE!!1'
-      port: process.env.PORT || 3000
-      env: env
-      templatePath: "#{__dirname}/../user/templates/"
-      publicPath: "#{__dirname}/../user/public/"
-      pluginsPath: "#{__dirname}/../node_modules/"
-      catchAll: yes
-      autoStart: yes
+    adminSegment: 'admin'
+    apiSegment: 'api'
+    salt: 'BUCKETS4LIFE!!1'
+    port: process.env.PORT || 3000
+    env: env
+    templatePath: "#{__dirname}/../user/templates/"
+    publicPath: "#{__dirname}/../user/public/"
+    pluginsPath: "#{__dirname}/../node_modules/"
+    catchAll: yes
+    autoStart: yes
     db: "mongodb://localhost/buckets_#{env}"
   production:
     smtp:

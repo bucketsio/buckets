@@ -7,7 +7,7 @@
     "test": "grunt test",
     "test-cov": "grunt test:server:cov"
   },
-  "main": "server/index.coffee",
+  "main": "index.js",
   "config": {
     "blanket": {
       "loader": "./node-loaders/coffee-script",

@@ -13,7 +13,7 @@ User = require '../models/user'
 
 module.exports = app = express()
 
-{adminSegment} = config.buckets
+{adminSegment} = config
 
 hbs.registerHelper 'json', (context) ->
   new hbs.handlebars.SafeString JSON.stringify(context)
@@ -64,8 +64,8 @@ app.all '*', (req, res) ->
 
     res.render 'admin',
       user: req.user
-      env: config.buckets.env
+      env: config.env
       plugins: localPlugins
       adminSegment: adminSegment
-      apiSegment: config.buckets.apiSegment
+      apiSegment: config.apiSegment
       needsInstall: userCount is 0

@@ -22,7 +22,7 @@ describe 'Install routes', ->
 
     it 'returns an error if password isn’t valid', (done) ->
       request app
-        .post "/#{config.buckets.apiSegment}/install"
+        .post "/#{config.apiSegment}/install"
         .send
           name: 'Test User'
           email: 'user@buckets.io'
@@ -40,7 +40,7 @@ describe 'Install routes', ->
   describe 'Installation', ->
     it 'should return a populated user object w/administrator permissions', (done) ->
       request app
-        .post "/#{config.buckets.apiSegment}/install"
+        .post "/#{config.apiSegment}/install"
         .send
           name: 'Test User'
           email: 'user@buckets.io'
