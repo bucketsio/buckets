@@ -119,12 +119,15 @@ entrySchema.statics.findByParams = (params, callback) ->
     (callback) ->
       if settings.bucket?
         filteredBuckets = settings.bucket.split '|'
-        excludedBuckets = filteredBuckets.map (bucket) -> bucket.substring(1) if bucket.indexOf('-') == 0
-        queryObject = if excludedBuckets[0]? then {slug: $ne: excludedBuckets} else {slug: $in: filteredBuckets}
+        excludedBuckets = _.chain(filteredBuckets)
+          .filter (bucket) -> bucket.indexOf('-') == 0
+          .map (bucket) -> bucket.substring(1)
+          .value()
+        queryObject = if excludedBuckets.length > 0 then {slug: $ne: excludedBuckets} else {slug: $in: filteredBuckets}
         searchQuery.bucket = $in: []
 
         mongoose.model('Bucket').find queryObject, (err, buckets) =>
-          filteredBucketIDs = _.pluck _.filter(buckets, (bkt) -> bkt.slug in filteredBuckets), '_id'
+          filteredBucketIDs = _.pluck _.filter(buckets, (bkt) -> bkt.slug?), '_id'
           searchQuery.bucket = $in: filteredBucketIDs
           callback null
       else
