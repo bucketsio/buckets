@@ -4,6 +4,8 @@ Entry = require '../../../server/models/entry'
 Bucket = require '../../../server/models/bucket'
 User = require '../../../server/models/user'
 
+reset = require '../../reset'
+
 {expect} = require 'chai'
 
 describe 'Entry', ->
@@ -25,8 +27,7 @@ describe 'Entry', ->
       c.remove(->)
       done()
 
-  afterEach (done) ->
-    db.connection.db.dropDatabase done
+  afterEach reset.db
 
   describe 'Validation', ->
 

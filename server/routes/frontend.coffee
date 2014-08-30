@@ -10,14 +10,14 @@ config = require '../config'
 Route = require '../models/route'
 
 module.exports = app = express()
-tplPath = config.buckets?.templatePath
+tplPath = config.templatePath
 
 require('../lib/renderer')(hbs)
 
 app.set 'views', tplPath
 app.set 'view cache', off
 
-app.use express.static config.buckets.publicPath, maxAge: 86400000 * 7 # One week
+app.use express.static config.publicPath, maxAge: 86400000 * 7 # One week
 
 plugins = app.get 'plugins'
 
@@ -34,7 +34,7 @@ app.get '*', (req, res, next) ->
 
   # Prepare the global template data
   templateData =
-    adminSegment: config.buckets.adminSegment
+    adminSegment: config.adminSegment
     req:
       body: req.body
       path: req.path
