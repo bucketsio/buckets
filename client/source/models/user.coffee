@@ -6,9 +6,11 @@ module.exports = class User extends Model
   defaults:
     roles: []
 
-  hasRole: (name, type, id) ->
+  hasRole: (name, id, type) ->
     _.any @get('roles'), (role) ->
-      role.name is name and
-        (!type and !id) or
+      return yes if role.name is 'administrator'
+      
+      role.name is name and (
         (!id and role.resourceType is type) or
-        (role.resourceType is type and role.resource is id)
+        (role.resourceId is id)
+      )

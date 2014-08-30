@@ -1,16 +1,13 @@
 <form class="row">
+  <h1 class="page-title background-{{color}}">
+    {{#if id}}
+      <a href="#delete" class="btn btn-link btn-icon pull-right">{{icon 'trash'}}</a>
+      Edit Bucket
+    {{else}}
+      New Bucket
+    {{/if}}
+  </h1>
   <div class="col-md-8">
-    <h1>
-      {{#if id}}
-        <a href="#delete" class="btn btn-link btn-icon pull-right">{{icon 'trash'}}</a>
-        Edit Bucket
-      {{else}}
-        New Bucket
-      {{/if}}
-    </h1>
-
-    <p class="lead">Buckets are containers for any type of content.</p>
-
     <!-- Tab panes -->
     <div class="panel panel-default">
       <div class="panel-body">

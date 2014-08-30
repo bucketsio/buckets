@@ -57,7 +57,7 @@ module.exports = class EntriesBrowser extends PageView
     @renderDetailView()
 
   modelSaved: (entry, newData) =>
-    if newData.id
+    if newData?.id
       toastr.success "You saved “#{entry.get('title')}”"
       @collection.add @model
     else
@@ -78,4 +78,3 @@ module.exports = class EntriesBrowser extends PageView
   checkLength: ->
     unless @disposed
       @$('.hasEntries').toggleClass 'hidden', @collection.length is 0
-

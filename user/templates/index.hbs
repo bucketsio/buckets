@@ -1,5 +1,5 @@
 <header id="page-header">
-  <h1><a href="/">Buckets</a></h1>
+  <h1 class="page-title"><a href="/">Buckets</a></h1>
 </header>
 
 <div id="content">
@@ -12,7 +12,8 @@
     </h1>
     {{markdown body}}
     <footer>
-      <em>Published on {{formatTime publishDate format="MMM D, YYYY h:mma"}} by <strong>{{author.name}}</strong></em>
+      <em>Published on {{formatTime publishDate format="MMM D, YYYY h:mma"}} by 
+      <strong>{{author.name}}</strong></em>
     </footer>
     {{!-- {{inspect .}} --}}
   {{else}}

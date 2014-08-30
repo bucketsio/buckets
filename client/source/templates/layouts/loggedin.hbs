@@ -1,52 +1,54 @@
 <div class="container-fluid loggedInView">
   <div class="row">
     <nav class="col-xs-12" id="bkts-sidebar">
-      <header id="bkts-hdr">
-        <span class="visible-xs pull-right" data-toggle="nav-primary">
-          <a href="#menu" class="btn btn-menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </a>
-        </span>
-        {{logo}}
-      </header>
-
-      <ul class="nav nav-pills nav-stacked nav-primary hidden-xs collapse in" id="nav-primary">
-        {{#each buckets}}
-          <li class="bucket color-{{color}}">
-            <a href="/{{adminSegment}}/buckets/{{slug}}">
-              {{icon icon}} {{name}}
+      <div class="bkts-sidebar-inner">
+        <header id="bkts-hdr">
+          <span class="visible-xs pull-right" data-toggle="nav-primary">
+            <a href="#menu" class="btn btn-menu">
+              <span></span>
+              <span></span>
+              <span></span>
             </a>
-            <a class="bucket-add" href="/{{adminSegment}}/buckets/{{slug}}/add">{{icon 'add'}}</a>
-          </li>
-        {{/each}}
-        {{#hasRole 'administrator'}}
-          <li><a href="/{{adminSegment}}/buckets/add">{{icon 'add'}} New Bucket</a></li>
-        {{/hasRole}}
+          </span>
+          {{logo}}
+        </header>
 
-        {{#hasRole 'administrator'}}
+        <ul class="nav nav-pills nav-stacked nav-primary hidden-xs collapse in" id="nav-primary">
+          {{#each buckets}}
+            <li class="bucket color-{{color}}">
+              <a href="/{{adminSegment}}/buckets/{{slug}}">
+                {{icon icon}} {{name}}
+              </a>
+              <a class="bucket-add" href="/{{adminSegment}}/buckets/{{slug}}/add">{{icon 'add'}}</a>
+            </li>
+          {{/each}}
+          {{#hasRole 'administrator'}}
+            <li><a href="/{{adminSegment}}/buckets/add">{{icon 'add'}} New Bucket</a></li>
+          {{/hasRole}}
+
+          {{#hasRole 'administrator'}}
+            <li class="divider"></li>
+            <li><a href="/{{adminSegment}}/routes">{{icon 'direction-sign'}} Routes</a></li>
+            <li><a href="/{{adminSegment}}/templates">{{icon 'file-code'}} Templates</a></li>
+            <li class="divider"></li>
+            {{!-- <li><a href="/{{adminSegment}}/settings">{{icon 'setting-gear'}} Settings</a></li> --}}
+            <li><a href="/{{adminSegment}}/users">{{icon 'contacts'}} Users</a></li>
+          {{/hasRole}}
           <li class="divider"></li>
-          <li><a href="/{{adminSegment}}/routes">{{icon 'direction-sign'}} Routes</a></li>
-          <li><a href="/{{adminSegment}}/templates">{{icon 'file-code'}} Templates</a></li>
-          <li class="divider"></li>
-          {{!-- <li><a href="/{{adminSegment}}/settings">{{icon 'setting-gear'}} Settings</a></li> --}}
-          <li><a href="/{{adminSegment}}/users">{{icon 'contacts'}} Users</a></li>
-        {{/hasRole}}
-        <li class="divider"></li>
-        <li class="usernav">
-          <a href="/{{adminSegment}}/users/{{email}}">{{gravatar email_hash}} {{name}}</a>
-        </li>
-        <li class="logout">
-          <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
-        </li>
-        <li>
-          <footer id="bkts-ftr">
-              <hr class="tiny">
-              <a href="/" class="noscript">‹ Return to website</a><br>Made with ♥︎ on <a href="http://assemblymade.com/buckets" target="_blank">Assembly</a><br><a href="https://github.com/asm-products/buckets" target="_blank"><span class="icon buckets-icon-github"></span></a>
-          </footer>
-        </li>
-      </ul>
+          <li class="usernav">
+            <a href="/{{adminSegment}}/users/{{email}}">{{gravatar email_hash}} {{name}}</a>
+          </li>
+          <li class="logout">
+            <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
+          </li>
+          <li>
+            <footer id="bkts-ftr">
+                <hr class="tiny">
+                <a href="/" class="noscript">‹ Return to website</a><br>Made with ♥︎ on <a href="http://assemblymade.com/buckets" target="_blank">Assembly</a><br><a href="https://github.com/asm-products/buckets" target="_blank"><span class="icon buckets-icon-github"></span></a>
+            </footer>
+          </li>
+        </ul>
+      </div>
     </nav>
 
     <div class="clearfix visible-xs"></div>

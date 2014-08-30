@@ -186,11 +186,11 @@
 
     a
       background-color inherit
-      color #999
+      color #444
 
     a:hover
       background-color inherit
-      color #999
+      color #444
 
   li a
     color #666
@@ -207,7 +207,9 @@ addColor($name, $color)
     color $color
   .nav-primary > .bucket.color-{$name}:not(.active) > a:hover:not(:active)
     color lighten($color, 10)
+  .background-{$name},
   .swatches.colors > .{$name}
+    color #fff
     background-color $color
 
 addColor('teal', $teal)
@@ -220,7 +222,6 @@ addColor('purple', $purple)
 addColor('gray', $gray)
 
 .usernav .avatar
-  transform scale(.8)
   transform-origin 0 50%
   @extend .nav-primary a:first-child .icon
   top 4px

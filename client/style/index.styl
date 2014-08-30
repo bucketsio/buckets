@@ -4,36 +4,6 @@
 
 $primary = #edb91d
 
-// $red = #dc2d2e
-// $blue = #39a0a4
-// $orange = #e45906
-// $yellow = #edb91d
-// $teal = #5aa97f
-// $purple = #825a7b
-
-
-// Flat UI Colors
-// $red = #c0392b
-// $green = #27ae60
-// $blue = #2980b9
-// $orange = #d35400
-// $yellow = #f39c12
-// $teal = #16a085
-// $purple = #8e44ad
-// $gray = #7f8c8d
-
-
-// Material Design Colors
-// $red = #e51c23
-// $green = #8bc34a
-// $blue = #03a9f4
-// $orange = #ff5722
-// $yellow = #f39c12
-// $teal = #009688
-// $purple = #8e44ad
-// $gray = #9e9e9e
-
-
 // Material Design 700
 $red = #d01716
 $green = #689f38
@@ -64,6 +34,7 @@ body
   background-size cover, cover
   border-radius 20px
   display inline-block
+  transform scale(.85)
 
 #bkts-hdr
   color #555
@@ -98,15 +69,17 @@ hr.tiny
   margin 8px auto
   border-bottom 1px solid #eee
 
-.page
-  h1
-    font-weight 400
-    letter-spacing -1px
-    margin-top 30px
-    padding-bottom 10px
-    border-bottom 3px solid rgba($primary, .5)
-    color #888
-    font-size 40px
+.page-title
+  font-weight 400
+  letter-spacing -1px
+  margin 0 0 15px
+  padding 40px 15px 10px
+  color #bbb
+  border-bottom 1px solid #ddd
+  font-size 36px
+
+  .btn-link
+    color rgba(#000, .4)
 
 @import '_typography'
 @import '_nav'
@@ -116,12 +89,6 @@ hr.tiny
 
 .tab-pane
   padding-top 20px
-
-.toolbar
-  padding 8px
-  background-color #f6f6f6
-  border-bottom 1px solid #eee
-  margin-bottom 4px
 
 h4[data-toggle]
   cursor pointer
@@ -178,8 +145,8 @@ input[type="text"].form-control, textarea.form-control
   padding-left 10px
   padding-right 10px
 
-.nav-tabs
-  font-weight 900
+.input-lg
+  font-weight bold
 
 .btn-default
   background-color rgba(#fff, .5)

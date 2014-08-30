@@ -213,6 +213,7 @@ module.exports = (grunt) ->
 
           # Remove some which we’ll load on the fly
           '!public/vendor/fastclick/fastclick.js'
+          '!public/vendor/jquery/**/*.js'
         ]
         filter: 'isFile'
 
@@ -274,9 +275,9 @@ module.exports = (grunt) ->
       livereload:
         options:
           livereload: true
+          interrupt: true
         files: [
-          'public/css/buckets.css'
-          'public/js/{buckets,vendor}.css'
+          'public/{css,js}/*.{css,js}'
           'public/plugins/**/*.{css,js}'
         ]
 

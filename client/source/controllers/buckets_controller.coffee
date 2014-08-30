@@ -89,7 +89,7 @@ module.exports = class BucketsController extends Controller
     @listenToOnce bucket, 'sync', (bucket, data) =>
       mediator.buckets.fetch(reset: yes)
 
-      if data.slug
+      if data?.slug
         toastr.success 'Bucket saved'
         @redirectTo 'buckets#browse', slug: data.slug
       else
