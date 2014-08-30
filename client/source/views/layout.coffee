@@ -34,6 +34,10 @@ module.exports = class Layout extends Chaplin.Layout
     # Add delegated tooltip for all help icons
     @$el.tooltip
       selector: '.show-tooltip'
+      align: 'bottom'
+      delay:
+        show: 800
+        hide: 50
 
     # Add Fastclick for touch devices
     Modernizr.load

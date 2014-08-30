@@ -34,6 +34,9 @@
     "jquery.formParams": {
       "js": "jquery.formParams.js"
     },
+    "jquery": {
+      "js": "dist/jquery.min.js"
+    },
     "ladda": {
       "js": "js/{ladda.js,ladda.jquery.js}",
       "css": "dist/ladda-themeless.min.css"
@@ -55,6 +58,6 @@
     "seedrandom": {
       "js": "seedrandom.js"
     },
-    "/(backbone|chaplin|underscore|jquery|modernizr|handlebars|ace-builds|cocktail)/": {}
+    "/(backbone|chaplin|underscore|modernizr|handlebars|ace-builds|cocktail)/": {}
   }
 }
