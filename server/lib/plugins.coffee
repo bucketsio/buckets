@@ -8,7 +8,7 @@ hbs = require 'hbs'
 db = require '../lib/database'
 config = require '../config'
 
-cwd = config.buckets?.pluginsPath
+cwd = config?.pluginsPath
 
 module.exports =
   load: ->

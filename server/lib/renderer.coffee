@@ -10,7 +10,7 @@ module.exports = (hbs) ->
 
   # Add Swag helpers
   Swag.registerHelpers hbs.handlebars
-  hbs.registerPartials config.buckets.templatePath
+  hbs.registerPartials config.templatePath
 
   # formatTime helper
   hbs.registerHelper 'formatTime', (value, options) ->

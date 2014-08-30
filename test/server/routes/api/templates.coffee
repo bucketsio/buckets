@@ -3,16 +3,19 @@ expect = require('chai').expect
 sinon = require('sinon')
 path = require('path')
 serverPath = path.resolve(__dirname, '../../../../server')
-app = require(serverPath)
 fs = require('fs')
 Factory = require(path.resolve(__dirname, '../../..', 'factory_wrapper'))
 DbTemplate = require(path.resolve(serverPath, 'models/template'))
 DbRoute = require(path.resolve(serverPath, 'models/route'))
+reset = require '../../../reset'
 
 Template = Factory('template', { filename: 'foo', contents: 'bar' })
 Route = Factory('route', { urlPattern: '/foo/bar', template: 'baz' })
 
 describe 'Templates Routes', ->
+  app = null
+  before (done) -> app = reset.server done
+
   after (done) ->
     DbTemplate.remove {}, (err) ->
       DbRoute.remove {}, done

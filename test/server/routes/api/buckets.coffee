@@ -1,14 +1,14 @@
-request = require('supertest')
-User = require('../../../../server/models/user')
-Bucket = require('../../../../server/models/bucket')
-app = require('../../../../server')
-db = require('../../../../server/lib/database')
-{assert} = require('chai')
+request = require 'supertest'
+User = require '../../../../server/models/user'
+Bucket = require '../../../../server/models/bucket'
+reset = require '../../../reset'
+
+{assert} = require 'chai'
 
 describe 'Buckets routes', ->
-  before (done) ->
-    db.connection.on 'open', ->
-      db.connection.db.dropDatabase done
+  app = null
+  before (done) -> reset.db ->
+    app = reset.server done
 
   afterEach (done) ->
     db.connection.db.dropDatabase done

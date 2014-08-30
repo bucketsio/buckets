@@ -202,7 +202,7 @@ app.post '/forgot', (req, res) ->
         text: """
           You are receiving this because you (or someone else) has requested the reset of the password for your account.\n
           Please click on the following link, or paste this into your browser to complete the process:\n
-          http://#{req.headers.host}/#{config.buckets.adminSegment}/reset/#{token}\n\n
+          http://#{req.headers.host}/#{config.adminSegment}/reset/#{token}\n\n
           If you did not request this, please ignore this email and your password will remain unchanged.\n
         """
       mailer.sendMail mailOptions, (err) ->

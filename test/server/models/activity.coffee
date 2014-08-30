@@ -5,7 +5,6 @@ Activity = require '../../../server/models/activity'
 
 {expect} = require 'chai'
 sinon = require 'sinon'
-moment = require 'moment'
 
 describe 'Activity', ->
 
