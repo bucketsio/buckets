@@ -6,20 +6,20 @@ User = require "#{serverPath}/models/user"
 Bucket = require "#{serverPath}/models/bucket"
 reset = require '../../../reset'
 
-app = require serverPath
-
 {expect} = require 'chai'
 
 describe 'Buckets routes', ->
+  app = null
 
   before (done) ->
-    Bucket.create [
-      name: 'Photos'
-      slug: 'photos'
-    ,
-      name: 'Docs'
-      slug: 'docs'
-    ], done
+    app = reset.server ->
+      Bucket.create [
+        name: 'Photos'
+        slug: 'photos'
+      ,
+        name: 'Docs'
+        slug: 'docs'
+      ], done
 
   after reset.db
 

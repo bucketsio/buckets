@@ -5,7 +5,6 @@ reset = require '../../reset'
 
 {expect} = require 'chai'
 sinon = require 'sinon'
-moment = require 'moment'
 
 describe 'Activity', ->
   before reset.prep

@@ -9,11 +9,38 @@ A fast, simple way to build dynamic websites on top of [Express](http://expressj
 
 # Installing Buckets
 
-There are several ways to install Buckets. The easiest way currently is to install on [Heroku](http://heroku.com/)—as long as you have a Heroku account, you can simply use the button below:
+There are several ways to install Buckets. Choose the path which is the easiest fit for your development environment.
+
+## Heroku
+
+The easiest way currently is to install on [Heroku](http://heroku.com/)—as long as you have a Heroku account, you can simply use the button below:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-Soon, you will also be able to install Buckets as an NPM module. Below are instructions for installing Buckets locally:
+## NPM
+
+To use Buckets directly from NPM, use:
+
+```
+npm install buckets --save
+```
+
+To add Buckets to your package.json. From here, you can run Buckets in your script like so:
+
+```
+buckets = require('buckets');
+buckets({
+  templatePath: __dirname + “/templates/“,
+  publicPath: __dirname + “/public/“,
+  // Additional configuration…
+});
+```
+
+Note: We aim to provide separate middleware to build into existing Express apps soon.
+
+## From this repo
+
+If you plan on contributing to Buckets' development, you can install Buckets directly from this repo.
 
 ### Pre-requirements
 

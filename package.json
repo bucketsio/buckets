@@ -7,6 +7,7 @@
     "test": "grunt test",
     "test-cov": "grunt test:server:cov"
   },
+  "main": "index.js",
   "config": {
     "blanket": {
       "loader": "./node-loaders/coffee-script",
@@ -64,6 +65,7 @@
     "grunt-contrib-cssmin": "^0.10.0",
     "grunt-contrib-less": "^0.11.4",
     "grunt-contrib-stylus": "^0.18.0",
+    "grunt-contrib-testem": "*",
     "grunt-contrib-uglify": "^0.5.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-express-server": "^0.4.19",
@@ -94,7 +96,6 @@
   "devDependencies": {
     "blanket": "*",
     "chai": "*",
-    "grunt-contrib-testem": "*",
     "mocha": "*",
     "rosie": "^0.3.1",
     "sinon": "*",

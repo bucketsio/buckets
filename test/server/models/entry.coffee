@@ -5,6 +5,8 @@ Entry = require '../../../server/models/entry'
 Bucket = require '../../../server/models/bucket'
 User = require '../../../server/models/user'
 
+reset = require '../../reset'
+
 {expect} = require 'chai'
 
 MongoosasticConfig = require 'mongoosastic/test/config'

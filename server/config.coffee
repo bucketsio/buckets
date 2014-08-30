@@ -3,16 +3,16 @@ _ = require 'underscore'
 
 config =
   default:
-    buckets:
-      adminSegment: 'admin'
-      apiSegment: 'api'
-      salt: 'BUCKETS4LIFE!!1'
-      port: process.env.PORT || 3000
-      env: env
-      templatePath: "#{__dirname}/../user/templates/"
-      publicPath: "#{__dirname}/../user/public/"
-      pluginsPath: "#{__dirname}/../node_modules/"
-      catchAll: yes
+    adminSegment: 'admin'
+    apiSegment: 'api'
+    salt: 'BUCKETS4LIFE!!1'
+    port: process.env.PORT || 3000
+    env: env
+    templatePath: "#{__dirname}/../user/templates/"
+    publicPath: "#{__dirname}/../user/public/"
+    pluginsPath: "#{__dirname}/../node_modules/"
+    catchAll: yes
+    autoStart: yes
     db: "mongodb://localhost/buckets_#{env}"
     elasticsearch:
       url: process.env.SEARCHBOX_SSL_URL || 'http://127.0.0.1:9200'
