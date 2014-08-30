@@ -19,19 +19,4 @@
   {{else}}
     <p>Add some entries into any Bucket and they’ll show up here :)</p>
   {{/entries}}
-  {{#entries bucket="-meetups" slug=req.params.slug search=req.query.q}}
-    <h1>
-      <a href="/{{slug}}">{{title}}</a>
-      {{#if author}}
-        <em></em>
-      {{/if}}
-    </h1>
-    {{markdown body}}
-    <footer>
-      <em>Published on {{formatTime publishDate format="MMM D, YYYY h:mma"}} by <strong>{{author.name}}</strong></em>
-    </footer>
-    {{!-- {{inspect .}} --}}
-  {{else}}
-    <p>Add some entries into any Bucket and they’ll show up here :)</p>
-  {{/entries}}
 </div>
