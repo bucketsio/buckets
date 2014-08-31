@@ -56,27 +56,17 @@ Then install the local Node dependencies:
 npm install
 ```
 
-### Running Buckets
-
 At this point, you should be able to run:
 
 ```
 grunt serve
 ```
 
-After building, Buckets should then be accessible at the default address: [http://localhost:3000/](http://localhost:3000/)
+After building, Buckets should then be accessible at the default address: [http://localhost:3000/](http://localhost:3000/). If you plan on working on Buckets source, you should [check out the other grunt tasks available](docs/frontend.md#grunt-tasks) for `dev` and `test` commands.
 
-[More Grunt tasks »](docs/frontend.md#grunt-tasks)
+# Documentation
 
-### Test tasks
-
-- `grunt test:client`: To run client tests
-- `grunt test:server`: To run server tests
-- `grunt test`: To run both client and server tests
-
-### Documentation
-
-#### Developer Documentation
+### Developer Documentation
 
 * [Frontend Architecture](docs/frontend.md)
 * [Database](docs/database.md)
@@ -84,17 +74,21 @@ After building, Buckets should then be accessible at the default address: [http:
 * [Migrations](docs/migrations.md)
 * [Deploying to Heroku](docs/heroku.md)
 
-#### User Documentation
+### User Documentation
 
 * [Routes](docs/user-docs/routes.md)
 * [Templates](docs/user-docs/templates.md)
+
+# Community
+
+Follow along with Buckets’ progress and keep in touch with other Buckets users.
+
+* Follow Buckets on [Twitter](http://twitter.com/bucketsio) and [Facebook](http://facebook.com/bucketsio)
+* Keep up to date with [announcements](https://assembly.com/buckets/posts/) and track [project progress](https://assembly.com/buckets/wips) on Assembly.
+* [Sign up](http://buckets.io) to be notified when Buckets is available for public beta.
 
 ### Contributing
 
 This is a product being built by the [Assembly](https://assemblymade.com) community. You can help push this idea forward by visiting [https://assemblymade.com/buckets](https://assemblymade.com/buckets). We welcome any contributions to product design/direction or code.
 
-Assembly products are like open-source and made with contributions from the community. Assembly handles the boring stuff like hosting, support, financing, legal, etc. Once the product launches we collect the revenue and split the profits amongst the contributors.
-
-One quick note on adding dependencies: First, you probably shouldn't have to add too many. But if you find yourself needing to `npm install awesome-sauce`, make sure you include either the `--save` flag (if the dependency will be needed in production) or `--save-dev` (if the dependency is only needed for testing/development).
-
-[Or support Buckets via gittip :)](https://www.gittip.com/DavidKaneda/)
+Assembly products are made with contributions from the community. Assembly handles the boring stuff like hosting, support, financing, legal, etc. Once the product launches we collect the revenue and split the profits amongst the contributors.
