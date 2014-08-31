@@ -73,15 +73,15 @@ describe 'User', ->
         assert.equal(user.roles[0].name, 'editor')
         done()
 
-      describe 'Updates existing roles', ->
-        beforeEach (done) ->
-          user.upsertRole('editor', bucket, done)
+    describe 'Updates existing roles', ->
+      beforeEach (done) ->
+        user.upsertRole('editor', bucket, done)
 
-        it 'updates the role for a given resource', (done) ->
-          user.upsertRole 'contributor', bucket, (e, u) ->
-            assert.lengthOf(user.roles, 1)
-            assert.equal(user.roles[0].name, 'contributor')
-            done()
+      it 'updates the role for a given resource', (done) ->
+        user.upsertRole 'contributor', bucket, (e, u) ->
+          assert.lengthOf(user.roles, 1)
+          assert.equal(user.roles[0].name, 'contributor')
+          done()
 
   describe '#removeRole', ->
     beforeEach (done) ->

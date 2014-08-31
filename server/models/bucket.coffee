@@ -8,7 +8,6 @@ db = require '../lib/database'
 fieldSchema = new mongoose.Schema
   name:
     type: String
-    unique: no
     required: yes
   slug:
     type: String
@@ -21,8 +20,7 @@ fieldSchema = new mongoose.Schema
     required: yes
   settings: mongoose.Schema.Types.Mixed
 
-fieldSchema
-  .path 'slug'
+fieldSchema.path 'slug'
   .validate (val) ->
     val not in [
       'title'
@@ -58,12 +56,30 @@ bucketSchema = new mongoose.Schema
     required: yes
   icon:
     type: String
-    enum: ['edit', 'photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'artboard', 'contacts-1']
+    enum: [
+      'edit'
+      'photos'
+      'calendar'
+      'movie'
+      'music-note'
+      'map-pin'
+      'quote'
+      'artboard'
+      'contacts-1'
+    ]
     default: 'edit'
     required: yes
   color:
     type: String
-    enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange', 'green']
+    enum: [
+      'teal'
+      'purple'
+      'red'
+      'yellow'
+      'blue'
+      'orange'
+      'green'
+    ]
     default: 'teal'
     required: yes
   urlPattern: String
@@ -95,7 +111,7 @@ bucketSchema.path('urlPattern').validate (value) ->
 bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
 
 bucketSchema.post 'remove', ->
-  @model('Entry').remove(bucket: @_id).exec()
+  @model('Entry').find(bucket: @_id).remove().exec()
 
 bucketSchema.methods.getMembers = (callback) ->
   @model('User').find

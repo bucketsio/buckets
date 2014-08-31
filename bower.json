@@ -27,7 +27,8 @@
     "fastclick": "~1.0.2",
     "gsap": "~1.13.1",
     "seedrandom": "~2.3.6",
-    "Sortable": "~0.3.0"
+    "Sortable": "~0.3.0",
+    "typeahead.js": "~0.10.5"
   },
   "exportsOverride": {
     "jquery.formParams": {

@@ -55,7 +55,7 @@ module.exports = class BucketsController extends Controller
       compose: (options) ->
         @entries = new Entries
 
-        @entries.fetch( data: {bucket: bucket.get('slug'), status: ''}, processData: yes ).done =>
+        @entries.fetchWithParams( bucket: bucket.get('slug'), status: '' ).done =>
           @view = new EntriesBrowser
             collection: @entries
             bucket: bucket

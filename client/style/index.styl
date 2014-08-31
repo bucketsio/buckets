@@ -18,10 +18,9 @@ $sans = 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, 'Segoe UI', Segoe, R
 
 body
   background-color #fcfcfc
-  display table
   width 100%
+  overflow-x hidden
   display flex
-  min-height 100vh
   flex-direction column
 
 #bkts-content
@@ -157,3 +156,45 @@ input[type="text"].form-control, textarea.form-control
 .pageBreadcrumb
   margin 10px 0
   background-color #f1f1f1
+
+
+.tt-query
+  width 300px
+  outline none
+
+.tt-hint
+  color: #999
+
+.tt-highlight
+  background-color rgba(lighten($yellow, 30), .5)
+
+.tt-dropdown-menu
+  margin-top 12px
+  padding 2px 0
+  background-color #fff
+  border 1px solid #ccc
+  border 1px solid rgba(0, 0, 0, 0.2)
+  border-radius 2px
+  width 100%
+  color #555
+
+  .icon
+    vertical-align middle
+    display inline-block
+    font-size 24px
+
+.tt-suggestion
+  padding: 3px 20px
+  font-size: 18px
+  line-height: 24px
+
+.tt-suggestion.tt-cursor
+  color #222
+  background-color lighten($primary, 30)
+  cursor pointer
+
+.tt-suggestion p
+  margin: 0
+
+.tt-empty
+  padding: 3px 20px

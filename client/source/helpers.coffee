@@ -37,7 +37,7 @@ Handlebars.registerHelper 'timeAgo', (dateTime) ->
   expanded = Handlebars.helpers.simpleDateTime dateTime
 
   new Handlebars.SafeString """
-    <span title="#{expanded}" class="show-tooltip">
+    <span title="#{expanded}" class="show-tooltip" data-placement="right">
       #{moment(dateTime).fromNow()}
     </span>
   """

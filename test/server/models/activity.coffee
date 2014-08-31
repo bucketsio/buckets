@@ -1,17 +1,14 @@
-db = require '../../../server/lib/database'
 mongoose = require 'mongoose'
 
 Activity = require '../../../server/models/activity'
+reset = require '../../reset'
 
 {expect} = require 'chai'
 sinon = require 'sinon'
 
 describe 'Activity', ->
-
-  afterEach (done) ->
-    for _, c of db.connection.collections
-      c.remove(->)
-      done()
+  before reset.prep
+  afterEach reset.db
 
   describe 'Validation', ->
     it 'requires an actor', (done) ->

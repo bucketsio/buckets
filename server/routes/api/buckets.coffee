@@ -151,6 +151,7 @@ module.exports = app = express()
 
 app.route('/buckets')
   .post (req, res) ->
+    return res.status(401).end() unless req.user
 
     newBucket = new Bucket req.body
 

@@ -1,6 +1,8 @@
 language: node_js
 
-services: mongodb
+services:
+  - mongodb
+  - elasticsearch
 
 before_install:
   - npm install -g grunt-cli

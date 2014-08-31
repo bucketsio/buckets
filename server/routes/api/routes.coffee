@@ -51,9 +51,9 @@ app.route('/routes')
 
     Route.find().sort(urlPattern: 1).exec (err, routes) ->
       if err
-        res.send err, 400
+        res.status(400).send err
       else if routes
-        res.send routes
+        res.status(200).send routes
 
   .post (req, res) ->
     ###
@@ -70,9 +70,9 @@ app.route('/routes')
 
     newRoute.save (err) ->
       if err
-        res.send 400, err
+        res.status(400).send err
       else
-        res.send 201, newRoute
+        res.status(201).send newRoute
 
 ###
 @api {post} /routes/:id Remove a Route
