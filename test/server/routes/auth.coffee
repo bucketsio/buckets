@@ -4,22 +4,19 @@ config = require "#{serverPath}/config"
 User = require "#{serverPath}/models/user"
 
 reset = require '../../reset'
-buckets = require(serverPath)()
+app = require(serverPath)().app
 
 request = require 'supertest'
 
 {expect} = require 'chai'
 
 describe 'Auth routes', ->
-  app = null
-
   before (done) ->
     User.create
       name: 'Test Admin'
       email: 'test+admin@buckets.io'
       password: 'testing123'
-    , ->
-      app = buckets.start done
+    , done
 
   after reset.db
 

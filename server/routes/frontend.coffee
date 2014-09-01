@@ -40,15 +40,14 @@ app.get '*', (req, res, next) ->
     errors: []
 
   globalNext = null
-
+  globalNextCalled = no
   hbs.registerHelper 'next', ->
-    if globalNext?
-      globalNext false
-      throw new Error '{{next}} called'
+    globalNext.called = yes
+    globalNext? false
 
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
-  Route.find({}, null, sort: 'sort').exec (err, routes) ->
+  Route.find {}, null, sort: 'sort', (err, routes) ->
     return console.log 'Error looking up Routes.', err if err
 
     matchingRoutes = []
@@ -66,22 +65,24 @@ app.get '*', (req, res, next) ->
     # The magical, time-traveling Template lookup/renderer
     async.detectSeries matchingRoutes, (localTemplateData, callback) ->
       globalNext = callback
+      globalNext.called = no
       localTemplateData = _.extend localTemplateData, templateData
 
       res.render localTemplateData.template, localTemplateData, (err, html) ->
+
         if err
           tplErr = {}
           tplErr[localTemplateData.template] = err.message
           templateData.errors.push tplErr
           callback false, "#{err.name} #{err.message}"
-        else if html
+        else if html and not globalNext.called
           res.status(200).send html
           callback true
-        else
+        else if not html
           callback false, 'The rendered page was blank.'
     , (rendered) ->
       return if rendered
-
+      console.log 'Couldn’t match a Route, trying to render `error` template.'
       templateData.errorCode = 404
       templateData.errorText = 'Page missing'
 
@@ -89,6 +90,6 @@ app.get '*', (req, res, next) ->
         console.log 'Buckets caught an error trying to render the error page.', err if err
 
         if err
-          res.status(404).send err
+          res.status(404).end()
         else
           res.status(404).send html

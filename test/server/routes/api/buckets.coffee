@@ -2,16 +2,13 @@ request = require 'supertest'
 User = require '../../../../server/models/user'
 Bucket = require '../../../../server/models/bucket'
 reset = require '../../../reset'
+app = require '../../../../server'
 
 {assert} = require 'chai'
 
 describe 'Buckets routes', ->
-  app = null
-  before (done) -> reset.db ->
-    app = reset.server done
-
-  afterEach (done) ->
-    db.connection.db.dropDatabase done
+  before reset.db
+  afterEach reset.db
 
   describe 'GET /buckets/:bucket/members', ->
     #it 'returns the members of a given bucket', (done) ->

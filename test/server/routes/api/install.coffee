@@ -2,23 +2,22 @@ path = require 'path'
 request = require 'supertest'
 
 serverPath = path.resolve __dirname, '../../../../server'
-User = require "#{serverPath}/models/user"
-Bucket = require "#{serverPath}/models/bucket"
+
 Entry = require "#{serverPath}/models/entry"
 Route = require "#{serverPath}/models/route"
 config = require "#{serverPath}/config"
 reset = require '../../../reset'
 
+app = require(serverPath)().app
+
 {expect} = require 'chai'
 
-describe 'Install routes', ->
-  app = null
-  before (done) -> reset.db ->
-    app = reset.server done
-
-  after reset.db
+describe 'REST#Install', ->
+  before reset.db
 
   describe 'Validation', ->
+
+    afterEach reset.db
 
     it 'returns an error if password isn’t valid', (done) ->
       request app
@@ -38,6 +37,9 @@ describe 'Install routes', ->
     it 'should not install if a user exists'
 
   describe 'Installation', ->
+
+    after reset.db
+
     it 'should return a populated user object w/administrator permissions', (done) ->
       request app
         .post "/#{config.apiSegment}/install"
@@ -54,7 +56,7 @@ describe 'Install routes', ->
 
     # This also generally tests that sample Buckets were added as well
     it 'should add sample Buckets/Entries', (done) ->
-      Entry.find {}, (e, entries)->
+      Entry.find {}, (e, entries) ->
         expect(e).to.not.exist
         expect(entries).to.have.length.above 0
         done()
@@ -64,3 +66,9 @@ describe 'Install routes', ->
         expect(e).to.not.exist
         expect(routes).to.have.length.above 0
         done()
+
+    it 'starts serving a 200 at /', (done) ->
+      request(app).get('/').expect(200, done)
+
+    it 'still serves a 404 at /404', (done) ->
+      request(app).get('/404').expect(404, done)

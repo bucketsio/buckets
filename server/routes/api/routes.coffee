@@ -68,11 +68,11 @@ app.route('/routes')
 
     newRoute = new Route req.body
 
-    newRoute.save (err) ->
+    newRoute.save (err, route) ->
       if err
-        res.send 400, err
+        res.status(400).send err
       else
-        res.send 201, newRoute
+        res.status(201).send route
 
 ###
 @api {post} /routes/:id Remove a Route
@@ -108,12 +108,11 @@ app.route('/routes/:routeID')
   .put (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
-    Route.findById(req.params.routeID).exec (err, route) ->
-      if err or not route
-        res.status(400).end()
-      else
-        route.save req.body, (err) ->
-          if err
-            res.status(500).send err
-          else
-            res.send route
+    Route.findById req.params.routeID, (err, route) ->
+      return res.status(400).end() unless route
+
+      route.save (err, route) ->
+        if err
+          res.status(500).send err
+        else
+          res.status(200).send route

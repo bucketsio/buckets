@@ -9,12 +9,13 @@ DbTemplate = require(path.resolve(serverPath, 'models/template'))
 DbRoute = require(path.resolve(serverPath, 'models/route'))
 reset = require '../../../reset'
 
+app = require(serverPath)().app
+
 Template = Factory('template', { filename: 'foo', contents: 'bar' })
 Route = Factory('route', { urlPattern: '/foo/bar', template: 'baz' })
 
 describe 'Templates Routes', ->
-  app = null
-  before (done) -> app = reset.server done
+  before reset.db
 
   after (done) ->
     DbTemplate.remove {}, (err) ->
