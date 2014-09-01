@@ -82,5 +82,5 @@ describe 'REST#Install', ->
     it 'starts serving a 200 at /', (done) ->
       request(app).get('/').expect(200, done)
 
-    it 'still serves a 404 at /404', (done) ->
-      request(app).get('/404').expect(404, done)
+    it 'serves a 404 at /bad/url', (done) ->
+      request(app).get('/bad/url').expect(404, done)
