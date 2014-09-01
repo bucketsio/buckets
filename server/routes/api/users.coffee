@@ -117,13 +117,19 @@ app.route('/users')
 
 ###
   @api {put} /users/:id Edit a User
-  @apiVersion 0.0.2
+  @apiVersion 0.0.3
   @apiGroup Users
-  @apiName GetUser
+  @apiName PutUser
 
   @apiParam {String} id User ID (sent in URL)
+  @apiParam {String} [name] The full name of the user.
+  @apiParam {String} [email] The user’s email address.
 
   @apiPermission administrator
+
+  @apiParam (Changing password) {String} [password] The new password you would like to use.
+  @apiParam (Changing password) {String} [passwordconfirm] The new password you would like to use.
+  @apiParam (Changing password) {String} [oldpassword] Your current password.
 
   @apiSuccessStructure User
 
@@ -151,14 +157,28 @@ app.route('/users/:userID')
     res.send user if user
 
   .delete (req, res) ->
+    return res.status(401).end() unless req.user?.hasRole ['administrator']
+
     User.remove _id: req.params.userID, (err) ->
       return res.status(400).send e: err if err
       res.status(200).end()
 
   .put (req, res) ->
-    delete req.body._id
-    User.findOne {_id: req.params.userID}, (err, user) ->
+    return res.status(401).end() unless req.user?.hasRole ['administrator'] or req.user?._id is req.params.userID
+
+    User.findOne {_id: req.params.userID}, 'passwordDigest', (err, user) ->
       return res.status(400).send e: err if err
+
+      {password, passwordconfirm, oldpassword} = req.body
+      delete req.body.password # Only add back after checking below
+      if password and passwordconfirm and oldpassword
+        if password isnt passwordconfirm
+          user.invalidate 'passwordconfirm', 'Your new password and confirmation don’t match.'
+        else if not user.authenticate oldpassword
+          user.invalidate 'oldpassword', 'The provided password is incorrect.'
+        else
+          # All good
+          req.body.password = password
 
       user.set(req.body).save (err, user) ->
         return res.status(400).send err if err
