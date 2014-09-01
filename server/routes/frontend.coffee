@@ -24,13 +24,9 @@ plugins = app.get 'plugins'
 app.get '*', (req, res, next) ->
 
   # dynamic renderTime helper
-  startTime = new Date
-
-  getTime = ->
+  hbs.registerHelper 'renderTime', ->
     now = new Date
-    (now.getTime() - startTime.getTime()) + 'ms'
-
-  hbs.registerHelper 'renderTime', -> getTime()
+    (now - req.startTime) + 'ms'
 
   # Prepare the global template data
   templateData =

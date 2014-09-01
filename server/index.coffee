@@ -21,6 +21,10 @@ class Buckets
 
     @app = express()
 
+    @app.use (req, res, next) ->
+      req.startTime = Date.now()
+      next()
+
     # Handle cookies and sessions and stuff
     @app.use compression()
     @app.use cookieParser @config.salt
