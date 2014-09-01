@@ -66,10 +66,6 @@ bucketSchema = new mongoose.Schema
     enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange', 'green']
     default: 'teal'
     required: yes
-  urlPattern: String
-  route:
-    type: mongoose.Schema.Types.ObjectId
-    ref: 'Route'
   fields: [fieldSchema]
 ,
   toJSON:
@@ -81,16 +77,8 @@ bucketSchema = new mongoose.Schema
 
 bucketSchema.pre 'validate', (next) ->
   # Auto add singular if not provided
-  @singular ?= inflection.singularize @name
+  @singular ?= inflection.singularize @name if @name
   next()
-
-# Make sure it contains :slug
-bucketSchema.path('urlPattern').validate (value) ->
-  if @publishToSite
-    /\/?:slug[\.\/]?/g.test value
-  else
-    true
-, 'A :slug param is required.'
 
 bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
 

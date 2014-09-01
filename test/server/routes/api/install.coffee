@@ -7,6 +7,7 @@ Entry = require "#{serverPath}/models/entry"
 Route = require "#{serverPath}/models/route"
 config = require "#{serverPath}/config"
 reset = require '../../../reset'
+auth = require '../../../auth'
 
 app = require(serverPath)().app
 
@@ -28,13 +29,24 @@ describe 'REST#Install', ->
           password: '123'
         .expect 400
         .end (err, res) ->
-          throw err if err
-          expect(err).to.not.exist
           expect(res.body.errors).to.exist
-          expect(res.body.errors.password.name).to.equal 'ValidatorError'
+          expect(res.body.errors.password.name).to.match /ValidatorError/
           done()
 
-    it 'should not install if a user exists'
+    it 'should not install if a user exists', (done) ->
+      auth.createUser ->
+        request app
+          .post "/#{config.apiSegment}/install"
+          .send
+            name: 'Test User'
+            email: 'user@buckets.io'
+            password: 'secret123'
+          .expect 400
+          .end (err, res) ->
+            throw err if err
+            expect(err).to.not.exist
+            expect(res.body.errors).to.exist
+            done()
 
   describe 'Installation', ->
 
