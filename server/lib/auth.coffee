@@ -16,4 +16,8 @@ passport.deserializeUser (id, done) ->
   User.findOne {_id: id}, (err, user) ->
     done err, user
 
+    if user
+      user.last_active = Date.now()
+      user.save()
+
 module.exports = passport

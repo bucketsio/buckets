@@ -14,6 +14,12 @@
       {{#unless id}}
         {{input 'password' '' placeholder="Password" type="password"}}
       {{/unless}}
+      {{#if last_active}}
+        <p>{{name}} was last active {{timeAgo last_active}}.</p>
+      {{else}}
+        <p>{{name}} has not logged in yet.</p>
+      {{/if}}
+
     {{/is}}
     {{#hasRole 'administrator'}}
       <h4>Permissions</h4>
