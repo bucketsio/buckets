@@ -94,6 +94,14 @@ Passes through to the next matching [Route](routes.md). Best used in conjunction
 
 _Note: All of these parameters are also supported by the [Buckets REST API](api/)._
 
+### munge
+
+Good for hiding email addresses from spammers.
+
+```
+Contact us at {{munge 'support@buckets.io'}}
+```
+
 ### inspect
 
 Pretty-prints an object for debugging. Automatically HTML-encodes values.

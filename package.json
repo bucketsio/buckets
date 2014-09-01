@@ -81,6 +81,7 @@
     "mongoose": "^3.8.15",
     "mongoose-regexp": "0.0.1",
     "mongoose-unique-validator": "^0.3.0",
+    "munge": "^0.1.4",
     "nodemailer": "^1.2.1",
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
