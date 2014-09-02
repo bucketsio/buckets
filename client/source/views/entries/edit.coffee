@@ -41,7 +41,6 @@ module.exports = class EntryEditView extends PageView
 
   render: ->
     super
-    @$('.panel').css opacity: 0
     content = @model.get('content')
 
     _.each @bucket.get('fields'), (field) =>
@@ -68,7 +67,7 @@ module.exports = class EntryEditView extends PageView
               template: plugin.inputView
               model: fieldModel
 
-        @subview('field_'+field.slug).$el.html """
+        @subview("field_#{field.slug}").$el.html """
           <label class="text-danger">#{field.name}</label>
           <div class="alert alert-danger">
             <p>
@@ -77,23 +76,6 @@ module.exports = class EntryEditView extends PageView
             </p>
           </div>
         """
-
-    $panel = @$('.panel').css
-      position: 'fixed'
-      right: 0
-      top: 0
-      bottom: 0
-      overflow: 'auto'
-      width: '480px'
-      'margin-bottom': 0
-      opacity: 1
-
-    TweenLite.from $panel, .25,
-      opacity: .8
-      x: 500
-
-      ease: Sine.easeOut
-
   submitForm: (e) ->
     e.preventDefault()
 

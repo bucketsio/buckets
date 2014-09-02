@@ -39,6 +39,10 @@ body
 .form-control
   border-width 2px
   box-shadow none
+  transition all 200ms cubic-bezier(.4,0,.2,1)
+
+  &:hover
+    color #222
 
   &:focus
     box-shadow none !important
@@ -65,9 +69,9 @@ hr.tiny
   font-weight 400
   letter-spacing -1px
   margin 0 0 15px
-  padding 40px 15px 10px
+  padding 30px 15px 30px
   color #bbb
-  font-size 36px
+  font-size 30px
 
   .btn-link
     color rgba(#fff, .9)
@@ -116,15 +120,20 @@ th
   z-index 5
 
 .input-slug
-  background-color #fcfcfc
   font-family Menlo, 'Courier New', monospace
   margin-top -2px
   border-radius top 0, bottom 6px
   color rgba(darken($primary, 40), .4)
   position relative
+  opacity .6
+  transition all 150ms cubic-bezier(.4,0,.2,1)
   z-index 2
 
+  &:hover
+    opacity .9
+
   &:focus
+    opacity 1
     color darken($primary, 20)
     z-index 10
 

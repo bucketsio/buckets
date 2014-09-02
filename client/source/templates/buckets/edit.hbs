@@ -8,80 +8,73 @@
     {{/if}}
   </h1>
   <div class="col-md-8">
-    <!-- Tab panes -->
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <!-- Nav tabs -->
-        {{#if id}}
-        <ul class="nav nav-tabs">
-          <li class="active">
-            <a href="{{#if  id}}/{{adminSegment}}/buckets/{{slug}}/settings{{else}}#{{/if}}" data-target="#basic" data-toggle="tab">Basic</a>
-          </li>
-          <li>
-            <a href="{{#if id}}/{{adminSegment}}/buckets/{{slug}}/settings/fields{{else}}#{{/if}}" data-target="#fields" data-toggle="tab">Fields</a>
-          </li>
+    <!-- Nav tabs -->
+    {{#if id}}
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="{{#if  id}}/{{adminSegment}}/buckets/{{slug}}/settings{{else}}#{{/if}}" data-target="#basic" data-toggle="tab">Basic</a>
+      </li>
+      <li>
+        <a href="{{#if id}}/{{adminSegment}}/buckets/{{slug}}/settings/fields{{else}}#{{/if}}" data-target="#fields" data-toggle="tab">Fields</a>
+      </li>
 
-          <li>
-            <a href="/{{adminSegment}}/buckets/{{slug}}/settings/members" data-target="#members" data-toggle="tab">Members</a>
-          </li>
-        </ul>
-        {{/if}}
-        <div class="tab-content">
-          <div class="tab-pane active" id="basic">
-            <div class="row">
-              <div class="col-sm-3">
-                <div class="icon-preview pull-right center">
-                  <div class="color-{{color}}">
-                    {{icon icon}}
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-9">
-                {{input 'name' name placeholder=randomBucketPlaceholder slugName='slug' slugValue=slug size="lg" label="What does this bucket hold?"}}
-
-                <label>Icon</label>
-
-                <div class="swatches icons">
-                  {{hidden 'icon' icon}}
-                  {{#each icons}}
-                    <div data-value={{.}} {{#is . ../icon}}class="selected"{{/is}}>
-                      {{icon .}}
-                    </div>
-                  {{/each}}
-                </div>
-
-                <label>Color</label>
-                {{hidden 'color' color}}
-
-                <div class="swatches colors">
-                  {{#each colors}}
-                    <div data-value="{{.}}" class="{{.}}{{#is . ../color}} selected{{/is}}"></div>
-                  {{/each}}
-                </div>
-
-                <br>
-
-                {{#if id}}
-                  {{input 'singular' singular label="What’s the singular version?" placeholder="Thing"}}
-
-                  {{input 'titlePlaceholder' titlePlaceholder label="Title Placeholder Text" placeholder="Use a | to provide multiple, randomized, placeholders."}}
-                {{/if}}
-
-
-                {{#if id}}
-                  {{submit 'Save Bucket' size='lg'}}
-                {{else}}
-                  {{submit 'Next: Define fields' size='lg'}}
-                {{/if}}
+      <li>
+        <a href="/{{adminSegment}}/buckets/{{slug}}/settings/members" data-target="#members" data-toggle="tab">Members</a>
+      </li>
+    </ul>
+    {{/if}}
+    <div class="tab-content">
+      <div class="tab-pane active" id="basic">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="icon-preview pull-right center">
+              <div class="color-{{color}}">
+                {{icon icon}}
               </div>
             </div>
           </div>
-          <div class="tab-pane" id="fields"></div>
-          <div class="tab-pane" id="members"></div>
+          <div class="col-sm-9">
+            {{input 'name' name placeholder=randomBucketPlaceholder slugName='slug' slugValue=slug size="lg" label="What does this bucket hold?"}}
+
+            <label>Icon</label>
+
+            <div class="swatches icons">
+              {{hidden 'icon' icon}}
+              {{#each icons}}
+                <div data-value={{.}} {{#is . ../icon}}class="selected"{{/is}}>
+                  {{icon .}}
+                </div>
+              {{/each}}
+            </div>
+
+            <label>Color</label>
+            {{hidden 'color' color}}
+
+            <div class="swatches colors">
+              {{#each colors}}
+                <div data-value="{{.}}" class="{{.}}{{#is . ../color}} selected{{/is}}"></div>
+              {{/each}}
+            </div>
+
+            <br>
+
+            {{#if id}}
+              {{input 'singular' singular label="What’s the singular version?" placeholder="Thing"}}
+
+              {{input 'titlePlaceholder' titlePlaceholder label="Title Placeholder Text" placeholder="Use a | to provide multiple, randomized, placeholders."}}
+            {{/if}}
+
+
+            {{#if id}}
+              {{submit 'Save Bucket' size='lg'}}
+            {{else}}
+              {{submit 'Next: Define fields' size='lg'}}
+            {{/if}}
+          </div>
         </div>
       </div>
+      <div class="tab-pane" id="fields"></div>
+      <div class="tab-pane" id="members"></div>
     </div>
-
-
   </div>
 </form>

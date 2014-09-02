@@ -5,4 +5,4 @@ module.exports = class Bucket extends Model
   defaults:
     fields: []
     color: 'teal'
-    icon: 'edit'
+    icon: 'write'
