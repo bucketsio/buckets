@@ -1,6 +1,6 @@
 # User Templates
 
-Buckets uses [hbs](https://github.com/donpark/hbs) (a version of [Handlebars](http://handlebarsjs.com) optimized for Express) as it’s template engine. Additionally, we load [Swag](https://github.com/elving/swag) by default, which provides a lot of convenient Helpers.
+Buckets uses [hbs](https://github.com/donpark/hbs) (a version of [Handlebars](http://handlebarsjs.com) optimized for Express) as its template engine. Additionally, we load [Swag](https://github.com/elving/swag) by default, which provides a lot of convenient Helpers.
 
 **Alpha Notice:** Buckets is in Alpha stage and some features listed below may not be implemented yet. [Help decide how templates shape up](https://assembly.com/buckets/projects/54).
 
@@ -93,6 +93,14 @@ Passes through to the next matching [Route](routes.md). Best used in conjunction
 ```
 
 _Note: All of these parameters are also supported by the [Buckets REST API](api/)._
+
+### munge
+
+Good for hiding email addresses from spammers.
+
+```
+Contact us at {{munge 'support@buckets.io'}}
+```
 
 ### inspect
 

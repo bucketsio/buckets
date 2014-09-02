@@ -37,7 +37,6 @@ userSchema = new Schema
     select: no
   last_active:
     type: Date
-    default: Date.now
   date_created:
     type: Date
     default: Date.now

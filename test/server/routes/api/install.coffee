@@ -2,44 +2,59 @@ path = require 'path'
 request = require 'supertest'
 
 serverPath = path.resolve __dirname, '../../../../server'
-User = require "#{serverPath}/models/user"
-Bucket = require "#{serverPath}/models/bucket"
+
 Entry = require "#{serverPath}/models/entry"
 Route = require "#{serverPath}/models/route"
 config = require "#{serverPath}/config"
 reset = require '../../../reset'
+auth = require '../../../auth'
 
-app = require serverPath
+app = require(serverPath)().app
 
 {expect} = require 'chai'
 
-describe 'Install routes', ->
+describe 'REST#Install', ->
   before reset.db
-  after reset.db
 
   describe 'Validation', ->
 
+    afterEach reset.db
+
     it 'returns an error if password isn’t valid', (done) ->
       request app
-        .post "/#{config.buckets.apiSegment}/install"
+        .post "/#{config.apiSegment}/install"
         .send
           name: 'Test User'
           email: 'user@buckets.io'
           password: '123'
         .expect 400
         .end (err, res) ->
-          expect(err).to.not.exist
           expect(res.body.errors).to.exist
-          expect(res.body.errors.password.name).to.equal 'ValidatorError'
+          expect(res.body.errors.password.name).to.match /ValidatorError/
           done()
 
-    it 'should not install if a user exists'
+    it 'should not install if a user exists', (done) ->
+      auth.createUser ->
+        request app
+          .post "/#{config.apiSegment}/install"
+          .send
+            name: 'Test User'
+            email: 'user@buckets.io'
+            password: 'secret123'
+          .expect 400
+          .end (err, res) ->
+            throw err if err
+            expect(err).to.not.exist
+            expect(res.body.errors).to.exist
+            done()
 
   describe 'Installation', ->
 
+    after reset.db
+
     it 'should return a populated user object w/administrator permissions', (done) ->
       request app
-        .post "/#{config.buckets.apiSegment}/install"
+        .post "/#{config.apiSegment}/install"
         .send
           name: 'Test User'
           email: 'user@buckets.io'
@@ -53,7 +68,7 @@ describe 'Install routes', ->
 
     # This also generally tests that sample Buckets were added as well
     it 'should add sample Buckets/Entries', (done) ->
-      Entry.find {}, (e, entries)->
+      Entry.find {}, (e, entries) ->
         expect(e).to.not.exist
         expect(entries).to.have.length.above 0
         done()
@@ -63,3 +78,9 @@ describe 'Install routes', ->
         expect(e).to.not.exist
         expect(routes).to.have.length.above 0
         done()
+
+    it 'starts serving a 200 at /', (done) ->
+      request(app).get('/').expect(200, done)
+
+    it 'serves a 404 at /bad/url', (done) ->
+      request(app).get('/bad/url').expect(404, done)

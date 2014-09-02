@@ -4,12 +4,31 @@ db = require('../../../server/lib/database')
 
 reset = require '../../reset'
 
-{assert} = require('chai')
+{expect, assert} = require 'chai'
 
-describe 'Bucket', ->
+describe 'Model#Bucket', ->
 
   before reset.db
-  after reset.db
+  afterEach reset.db
+
+  describe 'Validation', ->
+    it 'requires a name and a slug', (done) ->
+      bucket = new Bucket
+      bucket.save (err, bucket) ->
+        expect(err).to.exist
+        expect(err).to.match /ValidationError/
+        expect(err.errors).to.include.keys ['slug', 'name']
+        done()
+
+  describe 'Creation', ->
+    it 'automatically creates a singular attribute', ->
+      bucket = new Bucket
+        name: 'Articles'
+        slug: 'articles'
+      bucket.save (err, bucket) ->
+        expect(err).to.not.exist
+        expect(bucket).to.exist
+        expect(bucket.singular).to.equal 'Article'
 
   describe '#getMembers', ->
     u = null
@@ -17,7 +36,6 @@ describe 'Bucket', ->
 
     before (done) ->
       Bucket.create { name: 'Images', slug: 'images' }, (e, bucket) ->
-        throw e if e
         u = new User
           name: 'Bucketer'
           email: 'hello@buckets.io'
@@ -26,12 +44,10 @@ describe 'Bucket', ->
         done()
 
     it 'returns members', (done) ->
+      u.upsertRole 'contributor', b, (e, user) ->
+        b.getMembers (e, users) ->
+          assert.isArray(users)
+          assert.lengthOf(users, 1)
+          assert.equal(users[0].id, u.id)
 
-        u.upsertRole 'contributor', b, (e, user) ->
-          throw e if e
-          b.getMembers (e, users) ->
-            assert.isArray(users)
-            assert.lengthOf(users, 1)
-            assert.equal(users[0].id, u.id)
-
-            done()
+          done()

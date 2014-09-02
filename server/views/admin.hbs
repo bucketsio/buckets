@@ -21,10 +21,37 @@
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+    <div id="preload"></div>
 
     <div id="bkts-content"></div>
 
     <!-- env: {{env}} -->
+    <script src="/{{adminSegment}}/vendor/spin.js/spin.js"></script>
+    <script>
+      if (Spinner) {
+        var opts = {
+          lines: 12, // The number of lines to draw
+          length: 3, // The length of each line
+          width: 3, // The line thickness
+          radius: 12, // The radius of the inner circle
+          corners: 1, // Corner roundness (0..1)
+          rotate: 0, // The rotation offset
+          direction: 1, // 1: clockwise, -1: counterclockwise
+          color: '#f9d232', // #rgb or #rrggbb or array of colors
+          speed: 1.1, // Rounds per second
+          trail: 50, // Afterglow percentage
+          shadow: false, // Whether to render a shadow
+          hwaccel: true, // Whether to use hardware acceleration
+          className: 'spinner', // The CSS class to assign to the spinner
+          zIndex: 2e9, // The z-index (defaults to 2000000000)
+          top: '50%', // Top position relative to parent
+          left: '50%' // Left position relative to parent
+        };
+        var preload = document.getElementById('preload');
+        var spinner = new Spinner(opts).spin(preload);
+      }
+
+    </script>
     <script src="/{{adminSegment}}/js/modernizr.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/{{adminSegment}}/vendor/jquery/js/jquery.min.js"><\/script>')</script>
@@ -36,7 +63,6 @@
         BucketsApp = require('buckets');
 
         window.bkts = new BucketsApp({
-
           adminSegment: '{{adminSegment}}'
           ,apiSegment: '{{apiSegment}}'
 
@@ -50,11 +76,15 @@
             ,user: {{json user}}
           {{/if}}
         });
+        $(preload).fadeOut(function(){
+          this.remove();
+        });
       } catch (e) {
         if (e && e.message && window.jQuery) {
           console.error(e);
           $('#bkts-content').append("<div class=\"container\"><div class=\"alert center alert-danger\"><strong>There was an error loading the Buckets JavaScript.</strong> <br>If you’re the site developer, have you run <code>grunt build</code> or <code>grunt dev</code>?</div></div>")
         }
+        document.body.removeChild(preload);
       }
     </script>
     {{#each plugins}}

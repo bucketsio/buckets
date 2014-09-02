@@ -94,8 +94,6 @@ module.exports = (grunt) ->
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server -b'
       cov:
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html'
-      npm_install:
-        command: 'npm install'
 
     concat:
       style:
@@ -147,8 +145,7 @@ module.exports = (grunt) ->
         options:
           background: false
       options:
-        port: process.env.PORT or 3000
-        script: 'server/index.coffee'
+        script: 'server/start.coffee'
         opts: ['node_modules/coffee-script/bin/coffee']
 
     less:
@@ -199,13 +196,13 @@ module.exports = (grunt) ->
         dest: 'public/js/vendor.js'
         src: [
           # Order matters for some
-          'public/vendor/spin.js/spin.js'
           'public/vendor/ladda/js/ladda.js'
           'public/vendor/ladda/js/ladda.jquery.js'
 
           'public/vendor/**/*.js'
 
           # Remove some which we’ll load on the fly
+          '!public/vendor/spin.js/spin.js'
           '!public/vendor/fastclick/fastclick.js'
           '!public/vendor/jquery/**/*.js'
         ]
@@ -219,7 +216,7 @@ module.exports = (grunt) ->
     watch:
       apidoc:
         files: ['server/routes/api/**/*.coffee']
-        tasks: ['apidoc']
+        tasks: ['apidoc', 'copy:docs']
 
       bower:
         files: ['bower.json']
@@ -301,18 +298,21 @@ module.exports = (grunt) ->
   grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
   grunt.registerTask 'build-scripts', ['browserify:app']
 
+  # Building
   grunt.registerTask 'default', ['build']
   grunt.registerTask 'build', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'build-scripts', 'build-style', 'modernizr']
-  grunt.registerTask 'minify', ['build', 'uglify:app', 'cssmin']
+  grunt.registerTask 'prepublish', ['build', 'uglify:app', 'cssmin']
 
-  grunt.registerTask 'dev', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'build', 'express:dev', 'watch']
-  grunt.registerTask 'devserve', ['checkDatabase', 'migrate:all', 'express:dev', 'watch']
-  grunt.registerTask 'serve', ['shell:npm_install', 'checkDatabase', 'migrate:all', 'minify', 'express:server']
+  # Serving
+  grunt.registerTask 'dev', ['checkDatabase', 'migrate:all', 'build', 'express:dev', 'watch']
+  grunt.registerTask 'devserve', ['migrate:all', 'express:dev', 'watch']
+  grunt.registerTask 'serve', ['migrate:all', 'express:server']
 
+  # Tests
   grunt.registerTask 'test:server', ['shell:mocha']
   grunt.registerTask 'test:server:cov', ['shell:cov']
   grunt.registerTask 'test:client', ['build', 'browserify:tests', 'testem:ci:basic']
   grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
 
-  grunt.registerTask 'heroku:production', ['minify', 'migrate:all']
+  grunt.registerTask 'heroku:production', ['prepublish', 'migrate:all']

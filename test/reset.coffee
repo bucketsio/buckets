@@ -1,14 +1,17 @@
-mongoose = require 'mongoose'
-
 db = require '../server/lib/database'
 config = require '../server/config'
 Entry = require '../server/models/entry'
 
 dropDatabase = (done) ->
-  db.connection.db.dropDatabase done
+  prep ->
+    db.connection.db.dropDatabase done
 
 prep = (done) ->
-  mongoose.connection.on 'connected', done
+  if db.connection.readyState is 1
+    done()
+  else
+    db.connection.on 'connected', ->
+      db.connection.db.dropDatabase done
 
 module.exports =
   db: dropDatabase

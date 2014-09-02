@@ -5,12 +5,13 @@ config = require '../config'
 Entry = require '../models/entry'
 Bucket = require '../models/bucket'
 moment = require 'moment'
+munge = require 'munge'
 
 module.exports = (hbs) ->
 
   # Add Swag helpers
   Swag.registerHelpers hbs.handlebars
-  hbs.registerPartials config.buckets.templatePath
+  hbs.registerPartials config.templatePath
 
   # formatTime helper
   hbs.registerHelper 'formatTime', (value, options) ->
@@ -22,6 +23,10 @@ module.exports = (hbs) ->
   # timeAgo helper
   hbs.registerHelper 'timeAgo', (value, options) ->
     moment(value).fromNow()
+
+  # munge helper
+  hbs.registerHelper 'munge', (value) ->
+    new hbs.handlebars.SafeString munge value
 
   # entries helper
   hbs.registerAsyncHelper 'entries', (options, cb) ->

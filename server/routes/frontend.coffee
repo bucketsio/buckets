@@ -10,31 +10,27 @@ config = require '../config'
 Route = require '../models/route'
 
 module.exports = app = express()
-tplPath = config.buckets?.templatePath
+tplPath = config.templatePath
 
 require('../lib/renderer')(hbs)
 
 app.set 'views', tplPath
 app.set 'view cache', off
 
-app.use express.static config.buckets.publicPath, maxAge: 86400000 * 7 # One week
+app.use express.static config.publicPath, maxAge: 86400000 * 7 # One week
 
 plugins = app.get 'plugins'
 
 app.get '*', (req, res, next) ->
 
   # dynamic renderTime helper
-  startTime = new Date
-
-  getTime = ->
+  hbs.registerHelper 'renderTime', ->
     now = new Date
-    (now.getTime() - startTime.getTime()) + 'ms'
-
-  hbs.registerHelper 'renderTime', -> getTime()
+    (now - req.startTime) + 'ms'
 
   # Prepare the global template data
   templateData =
-    adminSegment: config.buckets.adminSegment
+    adminSegment: config.adminSegment
     req:
       body: req.body
       path: req.path
@@ -44,15 +40,14 @@ app.get '*', (req, res, next) ->
     errors: []
 
   globalNext = null
-
+  globalNextCalled = no
   hbs.registerHelper 'next', ->
-    if globalNext?
-      globalNext false
-      throw new Error '{{next}} called'
+    globalNext.called = yes
+    globalNext? false
 
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
-  Route.find({}, null, sort: 'sort').exec (err, routes) ->
+  Route.find {}, null, sort: 'sort', (err, routes) ->
     return console.log 'Error looking up Routes.', err if err
 
     matchingRoutes = []
@@ -70,22 +65,24 @@ app.get '*', (req, res, next) ->
     # The magical, time-traveling Template lookup/renderer
     async.detectSeries matchingRoutes, (localTemplateData, callback) ->
       globalNext = callback
+      globalNext.called = no
       localTemplateData = _.extend localTemplateData, templateData
 
       res.render localTemplateData.template, localTemplateData, (err, html) ->
+
         if err
           tplErr = {}
           tplErr[localTemplateData.template] = err.message
           templateData.errors.push tplErr
           callback false, "#{err.name} #{err.message}"
-        else if html
+        else if html and not globalNext.called
           res.status(200).send html
           callback true
-        else
+        else if not html
           callback false, 'The rendered page was blank.'
     , (rendered) ->
       return if rendered
-
+      console.log 'Couldn’t match a Route, trying to render `error` template.'
       templateData.errorCode = 404
       templateData.errorText = 'Page missing'
 
@@ -93,6 +90,6 @@ app.get '*', (req, res, next) ->
         console.log 'Buckets caught an error trying to render the error page.', err if err
 
         if err
-          res.status(404).send err
+          res.status(404).end()
         else
           res.status(404).send html

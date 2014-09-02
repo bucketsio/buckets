@@ -1,42 +1,61 @@
-express = require 'express'
-cookieParser = require 'cookie-parser'
-bodyParser = require 'body-parser'
-session = require 'cookie-session'
-compression = require 'compression'
-colors = require 'colors'
+class Buckets
+  constructor: (config) ->
+    _ = require 'underscore'
+    baseConfig = require './config'
 
-passport = require './lib/auth'
-util = require './lib/util'
-config = require './config'
+    @config = baseConfig = _.extend baseConfig, config
 
-module.exports = app = express()
+    express = require 'express'
+    cookieParser = require 'cookie-parser'
+    bodyParser = require 'body-parser'
+    session = require 'cookie-session'
+    compression = require 'compression'
+    colors = require 'colors'
 
-app.set 'views', 'public/'
-app.set 'view engine', 'hbs'
+    passport = require './lib/auth'
 
-# Handle cookies and sessions and stuff
-app.use compression()
-app.use cookieParser config.buckets.salt
-app.use session
-  secret: config.buckets.salt
-  name: 'buckets'
-app.use bodyParser.json()
-app.use bodyParser.urlencoded extended: true
+    @routers =
+      admin: require './routes/admin'
+      api: require './routes/api'
+      frontend: require './routes/frontend'
 
-app.use passport.initialize()
-app.use passport.session()
+    @app = express()
 
-# Load Routes for the API, admin, and frontend
-try
-  for api in util.loadClasses "#{__dirname}/routes/api/"
-    app.use "/#{config.buckets.apiSegment}", api if api.init
-catch e
-  console.log 'Missing API Class'.red, e
+    @app.use (req, res, next) ->
+      req.startTime = Date.now()
+      next()
 
-app.use "/#{config.buckets.adminSegment}", require('./routes/admin')
+    # Handle cookies and sessions and stuff
+    @app.use compression()
+    @app.use cookieParser @config.salt
+    @app.use session
+      secret: @config.salt
+      name: 'buckets'
+    @app.use bodyParser.json()
+    @app.use bodyParser.urlencoded extended: true
+    @app.use passport.initialize()
+    @app.use passport.session()
 
-app.use require './routes/frontend'
+    @app.set 'view engine', 'hbs'
 
-app.listen config.buckets.port
+    # Load Routes for the API, admin, and frontend
+    @app.use "/#{@config.apiSegment}", @routers.api
+    @app.use "/#{@config.adminSegment}", @routers.admin
+    @app.use @routers.frontend
 
-console.log ("\nBuckets is running at " + "http://localhost:#{config.buckets.port}/".underline.bold).yellow
+    @start() if @config.autoStart
+
+  start: (done) ->
+    done?() if @server
+    @server ?= @app.listen @config.port, =>
+      console.log ("\nBuckets is running at " + "http://localhost:#{@config.port}/".underline.bold).yellow
+      done?()
+
+  stop: (done) ->
+    done?() unless @server
+    @server.close done
+
+# There can be only one #highlander
+buckets = null
+module.exports = (config={}) ->
+  buckets ?= new Buckets config

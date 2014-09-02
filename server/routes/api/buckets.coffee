@@ -151,6 +151,7 @@ module.exports = app = express()
 
 app.route('/buckets')
   .post (req, res) ->
+    return res.status(401).end() unless req.user?.hasRole ['administrator']
 
     newBucket = new Bucket req.body
 
@@ -194,6 +195,8 @@ app.route('/buckets')
 
 app.route('/buckets/:bucketID')
   .delete (req, res) ->
+    return res.status(401).end() unless req.user?.hasRole ['administrator']
+
     Bucket.findOne _id: req.params.bucketID, (err, bkt) ->
       if err
         res.send 400, err
@@ -205,6 +208,8 @@ app.route('/buckets/:bucketID')
             res.status(204).end()
 
   .put (req, res) ->
+    return res.status(401).end() unless req.user?.hasRole ['administrator']
+
     delete req.body._id
     Bucket.findOne {_id: req.params.bucketID}, (err, bucket) ->
       return res.status(400).send e: err if err
