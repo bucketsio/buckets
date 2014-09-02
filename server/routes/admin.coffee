@@ -77,7 +77,9 @@ app.all '*', (req, res) ->
         exif: yes
         colors: yes
         faces: yes
-        eager: 'w_300,h_600,c_fit,q_30'
+        eager: 'c_limit,w_600,h_300,f_auto'
+        eager_async: yes
+
       signature = cloudinary.utils.sign_request cloudinaryData,
         cloud_name: cloud_name
         api_key: api_key

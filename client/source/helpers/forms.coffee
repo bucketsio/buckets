@@ -184,10 +184,11 @@ Handlebars.registerHelper 'cloudinaryUpload', (name, value, options) ->
   img = if value
     Handlebars.helpers.cloudinaryImage value,
       hash:
-        crop: 'fit'
+        crop: 'limit'
         width: 600
         height: 300
-        quality: 30
+        fetch_format: 'auto'
+
   else
     ''
 

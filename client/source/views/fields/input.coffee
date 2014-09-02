@@ -39,26 +39,29 @@ module.exports = class FieldTypeInputView extends View
       .bind 'fileuploadprogress', (e, data) ->
         percent = data.loaded/data.total*100
         $progressBar.css(width: "#{percent}%").attr 'aria-valuenow', percent
+        if percent is 100
+          $progressBar
+            .addClass 'progress-bar-success'
+            .removeClass 'active progress-bar-striped'
+            .text 'Processing image…'
+
       .bind 'cloudinarydone', (e, data) =>
+        $progressBar
+          .text 'Fetching image…'
+
         $preview
           .css height: 0
           .show()
           .find '.preview-inner'
-          .html $.cloudinary.image data.result.public_id,
-            format: data.result.format
-            version: data.result.version
-            crop: 'fit'
-            width: 600
-            height: 300
-            quality: 50
-        $progressBar.text 'Processing image…'
-
+          .html """<img src="#{data.result.url}">"""
 
         imagesLoaded $preview, =>
           # Reset the progress bar
           $progress
             .addClass 'hide'
           $progressBar
+            .removeClass 'progress-bar-success'
+            .addClass 'progress-bar-striped active'
             .css width: 0
             .text ''
             .attr 'aria-valuenow', 0
