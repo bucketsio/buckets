@@ -10,3 +10,6 @@
 {{#is fieldType 'number'}}
   {{input slug value label=name type=fieldType help=instructions required=required size=settings.size}}
 {{/is}}
+{{#is fieldType 'cloudinary_image'}}
+  {{cloudinaryUpload slug value help=instructions label=name}}
+{{/is}}

@@ -27,9 +27,22 @@
     "fastclick": "~1.0.2",
     "gsap": "~1.13.1",
     "seedrandom": "~2.3.6",
-    "Sortable": "~0.3.0"
+    "Sortable": "~0.3.0",
+    "cloudinary_js": "~1.0.19",
+    "imagesloaded": "~3.1.8"
   },
   "exportsOverride": {
+    "blueimp-file-upload": {
+      "js": [
+        "js/vendor/jquery.ui.widget.js",
+        "js/jquery.fileupload.js"
+      ],
+      "css": "css/jquery.fileupload.css"
+    },
+    "cloudinary_js": {
+      "html": "html/cloudinary_cors.html",
+      "js": "js/jquery.cloudinary.js"
+    },
     "jquery.formParams": {
       "js": "jquery.formParams.js"
     },
@@ -57,6 +70,6 @@
     "seedrandom": {
       "js": "seedrandom.js"
     },
-    "/(backbone|chaplin|underscore|modernizr|handlebars|ace-builds|cocktail)/": {}
+    "/(backbone|chaplin|underscore|modernizr|handlebars|ace-builds|cocktail|blueimp-tmpl|blueimp-load-image|blueimp-canvas-to-blob)/": {}
   }
 }

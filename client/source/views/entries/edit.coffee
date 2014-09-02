@@ -51,7 +51,7 @@ module.exports = class EntryEditView extends PageView
       @subview 'field_'+field.slug, new FieldTypeInputView
         model: fieldModel
 
-      return if field.fieldType in ['text', 'textarea', 'checkbox', 'number']
+      return if field.fieldType in ['text', 'textarea', 'checkbox', 'number', 'cloudinary_image']
 
       # Otherwise ensure the plugin is loaded and see if one exists
       mediator.loadPlugin(field.fieldType).done =>

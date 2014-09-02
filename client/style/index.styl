@@ -157,3 +157,33 @@ input[type="text"].form-control, textarea.form-control
 .pageBreadcrumb
   margin 10px 0
   background-color #f1f1f1
+
+
+.dropzone
+  overflow hidden
+  position relative
+  background-color lighten($gray, 35)
+  border-radius 4px
+  border 2px solid lighten($gray, 30)
+  margin 6px 0
+  padding 10px 20px
+  text-align center
+  font-size 12px
+  &.hover
+    background-color #fff
+
+.preview
+  overflow hidden
+  margin-bottom 10px
+  position relative
+
+  img
+    display block
+    position relative
+    margin 0 auto
+    max-width 100%
+  .close
+    position absolute
+    top 5px
+    right 5px
+    z-index 20
