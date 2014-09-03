@@ -16,13 +16,15 @@ $gray = #9e9e9e
 
 $sans = 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, 'Segoe UI', Segoe, Roboto, sans-serif
 
+*
+  box-sizing border-box
+
+.ui-text
+  cursor default
+
+
 body
   background-color #fcfcfc
-  display table
-  width 100%
-  display flex
-  min-height 100vh
-  flex-direction column
 
 #bkts-content
   flex 1
@@ -35,6 +37,9 @@ body
   border-radius 20px
   display inline-block
   transform scale(.85)
+
+.form-group
+  margin-bottom 20px
 
 .form-control
   border-width 2px
@@ -59,6 +64,12 @@ body
   &:active
     position relative
     top 1px
+
+.btn-icon-small .icon
+  font-size 16px
+
+.btn-help
+  cursor help
 
 hr.tiny
   width 5%
@@ -150,12 +161,6 @@ input[type="text"].form-control, textarea.form-control
 
 .input-lg
   font-weight bold
-
-.btn-default
-  background-color rgba(#fff, .5)
-
-  &:hover
-    background-color rgba(#fff, .9)
 
 .pageBreadcrumb
   margin 10px 0
