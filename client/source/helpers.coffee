@@ -24,12 +24,19 @@ Handlebars.registerHelper 'gravatar', (email_hash) ->
     <div class="avatar avatar-#{color}" style="background-image: url(https://www.gravatar.com/avatar/#{email_hash}?d=404), url(/#{mediator.options.adminSegment}/img/avatars/#{color}.png)"></div>
   """
 
-Handlebars.registerHelper 'highlightWildcards', (path) ->
-  new Handlebars.SafeString( path
-    .replace(/(\/?):([a-zA-Z0-9-_]*)\?/g, '<strong class="bkts-wildcard-optional show-tooltip" title="Optional parameter">$1$2</strong>')
-    .replace(/\/:([a-zA-Z0-9-_]*)/g, '/<strong class="bkts-wildcard-param show-tooltip" title="Required parameter">$1</strong>')
-    .replace('*', '<strong class="bkts-wildcard-catchall show-tooltip" title="Catch-all">…</strong>')
-  )
+Handlebars.registerHelper 'renderRoute', (keys) ->
+  url = @urlPattern
+
+  for key in @keys
+    url = url.replace ///:#{key.name}\??\*?\+?(\(.+\))?///, (match, regex) ->
+      className = 'show-tooltip bkts-wildcard'
+      className += ' bkts-wildcard-optional' if key.optional
+
+      """
+        <strong class="#{className}" title="#{match}">#{key.name}</strong>
+      """
+
+  new Handlebars.SafeString url
 
 Handlebars.registerHelper 'timeAgo', (dateTime) ->
   m = moment dateTime
@@ -67,3 +74,4 @@ Handlebars.registerHelper 'hasRole', (role..., options) ->
     options.fn @
   else
     options.inverse @
+

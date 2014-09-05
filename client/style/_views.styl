@@ -61,30 +61,21 @@
   font-weight 500
 
 .bkts-wildcard
-  padding 0 6px
-  border-radius 2px
+  color $active
 
 .bkts-wildcard-optional
   @extend .bkts-wildcard
-  background-color rgba($primary, .15)
-  darken($primary, 10)
-  color #999
-
-.bkts-wildcard-param
-  @extend .bkts-wildcard
-  background-color rgba($primary, .3)
-  darken($primary, 30)
-
-.bkts-wildcard-catchall
-  @extend .bkts-wildcard
-  color $primary
+  opacity .7
 
 .route
   position relative
   padding-left 40px
 
-  h2 a:hover
-    text-decoration none
+  h2 a
+    color #999
+
+    &:hover
+      text-decoration none
 
   .btn-icon
     opacity 0

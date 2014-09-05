@@ -106,6 +106,7 @@ describe 'REST#Templates', ->
             .expect 200
             .end (err, res) ->
               expect(res.body.id).to.exist
+              expect(res.body.urlPattern).to.equal '/new'
               done()
 
     describe 'DELETE /routes/:id', ->

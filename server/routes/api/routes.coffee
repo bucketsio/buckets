@@ -110,7 +110,7 @@ app.route('/routes/:routeID')
 
     Route.findById req.params.routeID, (err, route) ->
       return res.status(400).end() unless route
-
+      route.set req.body
       route.save (err, route) ->
         if err
           res.status(500).send err
