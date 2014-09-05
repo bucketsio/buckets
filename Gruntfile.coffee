@@ -99,6 +99,7 @@ module.exports = (grunt) ->
       style:
         files:
           'public/css/buckets.css': [
+            'public/fontastic/styles.css'
             'public/vendor/**/*.css'
             'public/css/bootstrap.css'
             'public/css/index.css'
@@ -125,6 +126,11 @@ module.exports = (grunt) ->
           'theme-*.js' # These are loaded on the fly anyway
         ]
         dest: 'public/js/ace/'
+      fontastic:
+        expand: yes
+        cwd: 'client/assets/fontastic/fonts/'
+        src: ['*']
+        dest: 'public/css/fonts/'
 
     cssmin:
       app:

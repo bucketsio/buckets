@@ -22,23 +22,21 @@ module.exports = class LoggedInLayout extends View
     @subscribeEvent 'dispatcher:dispatch', @checkNav
     @listenTo mediator.buckets, 'sync add', => @render()
 
+    @throttledCheckSize = _.throttle @checkSize, 1000, trailing: yes
+    $(window).on 'resize', @throttledCheckSize
+
   render: ->
     super
     @$navLinks = @$('.nav-primary a')
 
-    @navTimeline ?= new TimelineLite
-    @navTimeline.staggerFrom @$('.nav-primary li'), .15,
-      y: '30px'
-      opacity: 0
-      ease: Back.easeOut
-    , .02
+    @$('.nav-primary li').each (i, el) ->
+      TweenLite.from el, .15,
+        y: '30px'
+        opacity: 0
+        ease: Back.easeOut
+        delay: i * .02
 
-    @navTimeline.play()
-    _.delay =>
-      @collapseNav()
-
-
-    , 3000
+    # _.delay @collapseNav, 4000
 
     $sidebar = @$('#bkts-sidebar')
     openTimeout = null
@@ -51,12 +49,10 @@ module.exports = class LoggedInLayout extends View
       clearTimeout openTimeout if openTimeout
       openTimeout = setTimeout =>
         @collapseNav()
-      , 800
-
-
+      , 30
 
   checkNav: (controller, params, route) ->
-    @collapseNav()
+    @collapseNav() if route.previous
 
     @$('.nav-primary li').removeClass 'active'
 
@@ -71,11 +67,14 @@ module.exports = class LoggedInLayout extends View
         break
 
   collapseNav: ->
-    $logo = @$('#logo')
-    $body = $('.loggedInView')
+    return unless $(window).width() > 768
+
+    @$logo ?= @$('#logo')
+    $view = $('.loggedInView')
+
     $menuBtn = @$('.btn-menu').css display: 'block'
 
-    TweenLite.to $logo, 1,
+    TweenLite.to @$logo, 1,
       scale: .6
       x: -10
       ease: Bounce.easeOut
@@ -88,14 +87,15 @@ module.exports = class LoggedInLayout extends View
     TweenLite.to @$('#bkts-sidebar'), .25,
       width: 60
       ease: Sine.easeIn
+      overflow: 'hidden'
       delay: .1
 
-    TweenLite.to $body, .25,
+    TweenLite.to $view, .25,
       marginLeft: 60
       ease: Sine.easeIn
       delay: .1
 
-    TweenLite.to @$('#bkts-sidebar li > a'), .25,
+    TweenLite.to @$('#bkts-sidebar li'), .25,
       opacity: 0
       x: -90
       opacity: 0
@@ -103,23 +103,30 @@ module.exports = class LoggedInLayout extends View
       ease: Sine.easeIn
 
   openNav: ->
-    $body = $('.loggedInView')
-    $logo = @$('#logo')
+    return unless $(window).width() > 768
+
+    $view = $('.loggedInView')
+    @$logo ?= @$('#logo')
+
+    TweenLite.killTweensOf @$('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr')
+
     TweenLite.to @$('#bkts-sidebar'), .3,
       width: 240
       ease: Sine.easeOut
+      overflow: 'scroll'
 
-    TweenLite.to $body, .3,
+    TweenLite.to $view, .3,
       marginLeft: 240
       ease: Sine.easeOut
 
-    TweenLite.to @$('#bkts-sidebar li > a'), .25,
-      opacity: 1
-      x: 0
-      delay: .1
-      ease: Sine.easeOut
+    for $link, i in @$('#bkts-sidebar li')
+      TweenLite.to $link, .2 - .008*i,
+        opacity: 1
+        x: 0
+        delay: .04 * i - i * .008
+        ease: Sine.easeOut
 
-    TweenLite.to $logo, 1,
+    TweenLite.to @$logo, .8,
       scale: 1
       x: 0
       ease: Bounce.easeOut
@@ -129,3 +136,17 @@ module.exports = class LoggedInLayout extends View
       opacity: 1
       ease: Sine.easeOut
       delay: .4
+
+  checkSize: =>
+    if $(window).width() <= 768
+
+      $view = $('.loggedInView')
+      @$logo ?= @$('#logo')
+      $animated = @$('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr')
+      TweenLite.set $animated, clearProps: 'all'
+    else
+      @openNav()
+
+  dispose: ->
+    $(window).off 'resize', @throttledCheckSize
+    super

@@ -26,7 +26,7 @@ module.exports = class BucketEditView extends PageView
       randomBucketPlaceholder: _.sample ['Articles','Songs','Videos','Events']
       colors: ['green', 'teal', 'blue', 'purple', 'red', 'orange', 'yellow', 'gray']
       icons: [
-        'ink'
+        'edit'
         'camera-front'
         'calendar'
         'video-camera'
@@ -40,15 +40,6 @@ module.exports = class BucketEditView extends PageView
         'star'
         'bookmark'
         'toolbox'
-        # 'edit'
-        # 'photos'
-        # 'calendar'
-        # 'movie'
-        # 'music-note'
-        # 'map-pin'
-        # 'quote'
-        # 'artboard'
-        # 'contacts-1'
       ]
 
   render: ->

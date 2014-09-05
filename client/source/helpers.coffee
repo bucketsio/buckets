@@ -1,5 +1,5 @@
 Handlebars = require 'hbsfy/runtime'
-mediator = require('chaplin').mediator
+mediator = require 'mediator'
 _ = require 'underscore'
 moment = require 'moment'
 
@@ -12,6 +12,12 @@ Handlebars.registerHelper 'adminSegment', ->
 
 Handlebars.registerHelper 'icon', (type) ->
   new Handlebars.SafeString """<span class="icon buckets-icon-#{type}"></span>"""
+
+Handlebars.registerHelper 'helpIcon', (tooltip, options) ->
+  new Handlebars.SafeString if options.hash?.docsPath
+    """<a class="btn btn-small btn-help btn-link btn-icon btn-icon-small show-tooltip" title="#{tooltip}" href="/#{mediator.options.adminSegment}/help/#{options.hash.docsPath}" target="_blank">#{Handlebars.helpers.icon 'question'}</a>"""
+  else
+    """<span class="btn-icon btn-help btn-icon-small show-tooltip" title="#{tooltip}">#{Handlebars.helpers.icon 'question'}</span>"""
 
 Handlebars.registerHelper 'gravatar', (email_hash) ->
 

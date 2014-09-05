@@ -59,7 +59,7 @@ bucketSchema = new mongoose.Schema
   icon:
     type: String
     enum: [
-      'ink'
+      'edit'
       'camera-front'
       'calendar'
       'video-camera'
@@ -77,7 +77,6 @@ bucketSchema = new mongoose.Schema
       'bookmark'
       'toolbox'
       'person'
-      # 'edit', 'photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'artboard', 'contacts-1'
     ]
     default: 'edit'
     required: yes
