@@ -21,7 +21,7 @@ describe 'Model#Bucket', ->
         done()
 
   describe 'Creation', ->
-    it 'automatically creates a singular attribute', ->
+    it 'automatically creates a singular attribute', (done) ->
       bucket = new Bucket
         name: 'Articles'
         slug: 'articles'
@@ -29,6 +29,7 @@ describe 'Model#Bucket', ->
         expect(err).to.not.exist
         expect(bucket).to.exist
         expect(bucket.singular).to.equal 'Article'
+        done()
 
   describe '#getMembers', ->
     u = null
