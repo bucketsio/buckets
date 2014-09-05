@@ -63,6 +63,33 @@ app.route '/entries'
     Entry.findByParams req.query, (err, entries) ->
       res.status(200).send entries
 
+
+###
+  @api {get} /entries/keywords Get keywords
+  @apiDescription Show distinct keywords used across all entries.
+  @apiVersion 0.0.2
+  @apiGroup Entries
+  @apiName GetKeywords
+
+  @apiSuccess {Array} keywords Array of unique keywords.
+###
+app.route('/entries/keywords')
+  .get (req, res) ->
+    # This is like a mapReduce but much faster
+    # It gives the counts for popular keywords
+    Entry.aggregate [
+      $match: {}
+    ,
+      $project: keywords: 1
+    ,
+      $unwind: '$keywords'
+    ,
+      $group:
+        _id: keyword: '$keywords'
+        count: $sum: 1
+    ], (err, keywords) ->
+      res.status(200).send keywords
+
 ###
   @api {get} /entries/:id Get Entry
   @apiVersion 0.0.2
@@ -114,17 +141,3 @@ app.route('/entries/:entryID')
         res.status(400).send e: err
       else
         res.status(204).end()
-
-app.route('/entries/keywords')
-  .get (req, res) ->
-    ###
-      @api {get} /entries/keywords Get keywords
-      @apiDescription Show distinct keywords used across all entries.
-      @apiVersion 0.0.2
-      @apiGroup Entries
-      @apiName GetKeywords
-
-      @apiSuccess {Array} keywords Array of unique keywords.
-    ###
-    Entry.distinct 'keywords', {}, (err, tags) ->
-      res.send tags

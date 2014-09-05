@@ -60,9 +60,12 @@ entrySchema = new mongoose.Schema
     type: mongoose.Schema.Types.ObjectId
     ref: 'Bucket'
     required: yes
-  keywords: [
-    type: String
-  ]
+  keywords:
+    type: [
+      type: String
+      trim: yes
+    ]
+    default: []
   content: {}
 ,
   toJSON:
