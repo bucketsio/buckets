@@ -1,5 +1,6 @@
 express = require 'express'
 hbs = require 'hbs'
+cors = require 'cors'
 glob = require 'glob'
 fs = require 'fs'
 favicon = require 'serve-favicon'
@@ -22,7 +23,10 @@ app.set 'views', "#{__dirname}/../views"
 
 faviconFile = "#{__dirname}/../../public/favicon.ico"
 app.use favicon faviconFile if fs.existsSync faviconFile
+
+app.get '/*.(woff|ttf|eot|otf)', cors()
 app.use express.static "#{__dirname}/../../public/", maxAge: 86400000 * 7 # One week
+
 app.set 'plugins', plugins.load()
 
 # Special case for install

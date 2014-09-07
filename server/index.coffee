@@ -1,16 +1,26 @@
+_ = require 'underscore'
+hbs = require 'hbs'
+colors = require 'colors'
+cookieParser = require 'cookie-parser'
+bodyParser = require 'body-parser'
+session = require 'cookie-session'
+compression = require 'compression'
+express = require 'express'
+fs = require 'fs'
+
 class Buckets
   constructor: (config) ->
-    _ = require 'underscore'
+
     baseConfig = require './config'
 
     @config = baseConfig = _.extend baseConfig, config
 
-    express = require 'express'
-    cookieParser = require 'cookie-parser'
-    bodyParser = require 'body-parser'
-    session = require 'cookie-session'
-    compression = require 'compression'
-    colors = require 'colors'
+    try
+      newrelicConfig = require '../newrelic'
+      if newrelicConfig.license_key
+        newrelic = require 'newrelic'
+        hbs.registerHelper 'newrelic', ->
+          new hbs.handlebars.SafeString newrelic.getBrowserTimingHeader()
 
     passport = require './lib/auth'
 
