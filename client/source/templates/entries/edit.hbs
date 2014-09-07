@@ -70,14 +70,13 @@
         <a href="/{{adminSegment}}/buckets/{{bucket.slug}}/" class="btn btn-icon btn-link">Cancel</a>
       </div>
 
-      <div class="dateInput {{#isnt status 'live'}}hidden{{/isnt}}">
-        <div class="form-group">
-          {{input 'publishDate' publishDate placeholder="Tomorrow at 9am" label="Publish Date"}}
-        </div>
-      </div>
-
       <h4 data-toggle="collapse" data-target="#meta" class="collapsed"><span class="caret"></span> Meta</h4>
       <div id="meta" class="collapse">
+        <div class="dateInput {{#isnt status 'live'}}hidden{{/isnt}}">
+          <div class="form-group">
+            {{input 'publishDate' publishDate placeholder="Tomorrow at 9am" label="Publish Date"}}
+          </div>
+        </div>
         {{input 'keywords' keywords label="Keywords" size='sm'}}
         {{textarea 'description' description label="Description" size='sm'}}
       </div>

@@ -10,6 +10,7 @@ marked = require 'marked'
 config = require '../config'
 plugins = require '../lib/plugins'
 passport = require '../lib/auth'
+pkg = require '../../package'
 User = require '../models/user'
 
 module.exports = app = express()
@@ -76,6 +77,7 @@ app.get '/:admin*?', (req, res) ->
           "/#{adminSegment}"
       apiSegment: config.apiSegment
       needsInstall: userCount is 0
+      version: pkg.version
 
     if req.user
       req.user.last_active = Date.now()

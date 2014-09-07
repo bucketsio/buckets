@@ -50,7 +50,7 @@
       try {
         BucketsApp = require('buckets');
         window.bkts = new BucketsApp({
-          adminSegment: '{{adminSegment}}', apiSegment: '{{apiSegment}}'
+          adminSegment: '{{adminSegment}}', apiSegment: '{{apiSegment}}', version: '{{version}}'
           {{~#if needsInstall~}}
             ,needsInstall: {{~needsInstall~}}
           {{~/if~}}

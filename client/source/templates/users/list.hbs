@@ -1,11 +1,7 @@
-<div class="pull-right">
-  <a href="#add" class="btn btn-default">Add a user</a>
-</div>
-
-<h1 class="page-title">Users</h1>
-
 <div class="row">
-  <div class="col-md-4 col-sm-5">
+  <h1 class="page-title">Users <a href="#add" class="btn btn-link btn-icon">{{icon 'add'}}</a></h1>
+
+  <div class="col-md-3 col-sm-4">
     {{#if items}}
       <ul class="nav nav-stacked nav-pills users">
       {{#each items}}
@@ -15,6 +11,6 @@
     {{/if}}
   </div>
   <hr class="visible-xs">
-  <div class="col-md-8 col-sm-7 detail">
+  <div class="col-sm-8 detail">
   </div>
 </div>
