@@ -30,7 +30,8 @@ userSchema = new Schema
     required: true
     lowercase: true
     trim: true
-    unique: true
+    index:
+      unique: yes
   passwordDigest:
     type: String
     required: yes
@@ -51,6 +52,7 @@ userSchema = new Schema
   toJSON:
     virtuals: yes
     transform: (doc, ret, options) ->
+      delete ret.password # Since we include virtuals
       delete ret._id
       delete ret.__v
       ret

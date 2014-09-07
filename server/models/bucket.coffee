@@ -19,7 +19,7 @@ fieldSchema = new mongoose.Schema
   fieldType:
     type: String
     required: yes
-  settings: mongoose.Schema.Types.Mixed
+  settings: {}
 
 fieldSchema
   .path 'slug'

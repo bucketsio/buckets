@@ -22,9 +22,7 @@ app.set 'views', "#{__dirname}/../views"
 
 faviconFile = "#{__dirname}/../../public/favicon.ico"
 app.use favicon faviconFile if fs.existsSync faviconFile
-
 app.use express.static "#{__dirname}/../../public/", maxAge: 86400000 * 7 # One week
-
 app.set 'plugins', plugins.load()
 
 # Special case for install
@@ -56,6 +54,7 @@ app.get "/help-html/*", (req, res, next) ->
       res.status(200).send html
 
 app.all '*', (req, res) ->
+  # Todo: Don't do install check if user exists (obviously false)
   User.count({}).exec (err, userCount) ->
     res.send 500 if err
 
@@ -69,3 +68,7 @@ app.all '*', (req, res) ->
       adminSegment: adminSegment
       apiSegment: config.apiSegment
       needsInstall: userCount is 0
+
+    if req.user
+      req.user.last_active = Date.now()
+      req.user.save()

@@ -146,14 +146,20 @@ entrySchema.statics.findByParams = (params, callback) ->
       searchQuery.publishDate.$lte = new Date(chrono.parseDate settings.until) if settings.until
 
     @find searchQuery
-      .populate 'bucket'
+      .populate
+        path: 'bucket'
+        select: '-fields'
+        limit: 1
       .populate
         path: 'author'
-        select: '-passwordDigest -resetPasswordToken -resetPasswordExpires'
+        select: '-roles -last_active -date_created'
+        limit: 1
       .sort settings.sort
       .limit settings.limit
       .skip settings.skip
       .exec (err, entries) ->
+        entries = entries.map (entry) -> entry.toJSON()
+
         if err
           callback err
         else
