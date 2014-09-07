@@ -21,74 +21,86 @@ app.use express.static config.publicPath, maxAge: 86400000 * 7 # One week
 
 plugins = app.get 'plugins'
 
-app.get '*', (req, res, next) ->
+app.all '/:frontend*?', (req, res, next) ->
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
   Route.find {}, null, sort: 'sort', (err, routes) ->
-    return next() unless routes?.length
+    return next() unless routes?.length or config.catchAll is yes
 
     # dynamic renderTime helper
     hbs.registerHelper 'renderTime', ->
       now = new Date
       (now - req.startTime) + 'ms'
 
+    # Ability to set the status code from the frontend
+    hbs.registerHelper 'statusCode', (val) ->
+      res.status val unless res.headersSent
+      ''
+
     # Prepare the global template data
     templateData =
       adminSegment: config.adminSegment
-      req:
-        body: req.body
-        path: req.path
-        query: req.query unless _.isEmpty(req.query)
-        params: {}
       user: req.user
       errors: []
 
-    globalNext = null # We’ll assign our render callback to this
+    globalNext = false # We’ll assign our render callback to this
     hbs.registerHelper 'next', ->
-      if globalNext
-        globalNext false, 'Next called from page template.'
-        globalNext.called = yes
+      globalNext = true
 
     matchingRoutes = []
 
     for route in routes
+
       matches = route.urlPatternRegex.exec req.path
 
       if matches
         localTemplateData = _.clone templateData
         localTemplateData.route = route
+        localTemplateData.req =
+          body: req.body
+          path: req.path
+          query: req.query unless _.isEmpty(req.query)
+          params: {}
         localTemplateData.req.params[key.name] = matches[i+1] for key, i in route.keys
         matchingRoutes.push localTemplateData
 
     # The magical, time-traveling Template lookup/renderer
     async.detectSeries matchingRoutes, (localTemplateData, callback) ->
-      globalNext = callback
-      globalNext.called = no
-      localTemplateData = _.extend localTemplateData, templateData
-
+      localTemplateData = _.extend localTemplateData, templateData # Re-grab the global stuff (for errors)
       res.render localTemplateData.route.template, localTemplateData, (err, html) ->
-        if err
+
+        if globalNext
+          globalNext = false
+          callback false
+          # console.log '{{next}} was called.'
+        else if err
+          # console.log 'Hit error, going to next match.', err
           tplErr = {}
           tplErr[localTemplateData.route.template] = err.message
           templateData.errors.push tplErr
-          callback false, "#{err.name} #{err.message}"
-        else if html and not globalNext.called
+          callback false
+
+        else if html
           if res.headersSent
-            callback false, 'Attempting to render a page which has already rendered.'
+            # console.log 'Rendered HTML, but headers sent.'
+            callback false
           else
-            res.status(200).send html
-            callback true
+            # console.log 'Rendering.'
+            res.send html
+            callback yes
         else if not html
-          callback false, 'The rendered page was blank.'
+          # console.log 'No HTML came back.'
+          callback false
         else
-          callback false, 'Template {{next}} hit'
+          # console.log 'WTF. I really don’t know how we get here'
+          callback false
+
     , (rendered) ->
       return if rendered
       return next() unless config.catchAll
 
       res.render 'error', templateData, (err, html) ->
         console.log 'Buckets caught an error trying to render the error page.', err if err
-
         if err
           res.status(500)
 

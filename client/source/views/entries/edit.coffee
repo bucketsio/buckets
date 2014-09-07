@@ -76,6 +76,28 @@ module.exports = class EntryEditView extends PageView
             </p>
           </div>
         """
+
+    # Convert keywords to input
+    popularKeywords = new Bloodhound
+      name: 'keywords'
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('keyword')
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+      prefetch:
+        url: '/api/entries/keywords'
+        ttl: 0
+    popularKeywords.clearPrefetchCache()
+    popularKeywords.initialize()
+
+    $keywords = @$('[name="keywords"]')
+    $keywords.tagsinput
+      typeaheadjs:
+        name: 'keywords'
+        displayKey: 'keyword'
+        valueKey: 'keyword'
+        source: popularKeywords.ttAdapter()
+
+    @$('.bootstrap-tagsinput').addClass 'form-control'
+
   submitForm: (e) ->
     e.preventDefault()
 
@@ -135,7 +157,9 @@ module.exports = class EntryEditView extends PageView
     @submit @model.save @model.toJSON(), wait: yes
 
   dispose: ->
-    @$('.panel').css(opacity: 0) unless @disposed
+    unless @disposed
+      @$('.panel').css(opacity: 0)
+      @$('[name="keywords"]').tagsinput 'destroy'
     super
 
   @mixin FormMixin

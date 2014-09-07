@@ -53,7 +53,7 @@ app.get "/help-html/*", (req, res, next) ->
       return res.status(400).end() unless content and html = marked(content)
       res.status(200).send html
 
-app.all '*', (req, res) ->
+app.get '/:admin*?', (req, res) ->
   # Todo: Don't do install check if user exists (obviously false)
   User.count({}).exec (err, userCount) ->
     res.send 500 if err

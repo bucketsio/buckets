@@ -4,7 +4,7 @@
   "sort": "1"
 },
 {
-  "urlPattern": "",
+  "urlPattern": "/",
   "template": "index",
   "sort": "2"
 },

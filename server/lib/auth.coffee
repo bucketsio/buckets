@@ -12,7 +12,9 @@ passport.use new LocalStrategy (username, password, done) ->
 
 passport.serializeUser (user, done) -> done null, user.id
 passport.deserializeUser (id, done) -> User.find _id: id, null, limit: 1, (e, users) ->
-  return unless users?[0]
-  done e, users[0]
+  if users?[0]
+    done e, users[0]
+  else
+    done null, false
 
 module.exports = passport

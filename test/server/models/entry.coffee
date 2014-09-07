@@ -41,7 +41,7 @@ describe 'Entry', ->
         expect(e).to.have.deep.property 'errors.author'
         done()
 
-  describe.only 'Creation', ->
+  describe 'Creation', ->
     bucketId = null
 
     beforeEach (done) ->
