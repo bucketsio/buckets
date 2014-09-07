@@ -6,7 +6,7 @@ module.exports = app = express()
 
 ###
 @api {get} /routes Get Routes
-@apiVersion 0.0.2
+@apiVersion 0.0.4
 @apiGroup Routes
 @apiGroupDescription Routes can be saved by Users and are a way to match frontend URL patterns to templates.
 @apiName GetRoutes
@@ -58,7 +58,7 @@ app.route('/routes')
   .post (req, res) ->
     ###
       @api {post} /routes Create a Route
-      @apiVersion 0.0.2
+      @apiVersion 0.0.4
       @apiGroup Routes
       @apiName GetRoutes
 
@@ -76,7 +76,7 @@ app.route('/routes')
 
 ###
 @api {post} /routes/:id Remove a Route
-@apiVersion 0.0.2
+@apiVersion 0.0.4
 @apiGroup Routes
 @apiName GetRoutes
 
@@ -88,7 +88,7 @@ HTTP/1.1 204 No Content
 
 ###
 @api {post} /routes Update a Route
-@apiVersion 0.0.2
+@apiVersion 0.0.4
 @apiGroup Routes
 @apiName PutRoute
 
