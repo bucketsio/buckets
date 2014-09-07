@@ -1,8 +1,8 @@
 <form class="row">
-  <div class="pull-right">
-    <a href="#new" class="btn btn-default">New</a>
-  </div>
-  <h1 class="page-title">Templates</h1>
+  <h1 class="page-title background-yellow">
+    Templates
+    <a href="#new" class="btn pull-right btn-link btn-icon btn-icon-small">{{icon 'plus'}}</a>
+  </h1>
   <div class="col-xs-8">
     <div class="input-group">
       <input name="filename" value="{{filename}}" placeholder="Filename" class="form-control">
@@ -18,6 +18,9 @@
       </div>
     </div>
   </div>
+  <div class="panel">
+
+  </div>
   <div class="col-xs-4" align="right">
     <span class="notForIndex {{#is filename 'index'}}hide{{/is}}">
     <a href="#delete" class="btn btn-icon btn-link">{{icon 'trash'}}</a>
@@ -26,7 +29,12 @@
   </div>
 
   <div class="col-xs-12">
-    {{textarea 'contents' contents label="Handlebars" className='form-control code' size='lg'}}
-    {{helpIcon 'View Template documentation' docsPath='templates.md'}}
+    <div class="panel">
+      <div class="panel-body">
+        {{textarea 'contents' contents label="Handlebars" className='form-control code' size='lg'}}
+        {{helpIcon 'View Template documentation' docsPath='templates.md'}}
+      </div>
+    </div>
+
   </div>
 </form>

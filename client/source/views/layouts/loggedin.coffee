@@ -79,7 +79,7 @@ module.exports = class LoggedInLayout extends View
     TweenLite.to $logo, .5,
       scale: .6
       x: -9
-      ease: Elastic.easeOut
+      ease: Back.easeOut
       delay: .1
 
     TweenLite.to @$('#bkts-ftr'), .15,
@@ -133,7 +133,7 @@ module.exports = class LoggedInLayout extends View
     TweenLite.to $logo, .5,
       scale: 1
       x: 0
-      ease: Elastic.easeOut
+      ease: Back.easeOut
 
     TweenLite.to @$('#bkts-ftr'), .15,
       opacity: 1
@@ -141,15 +141,16 @@ module.exports = class LoggedInLayout extends View
       delay: .4
 
   killTweens: ->
-    @$tweenedEls ?= @$('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr')
-    TweenLite.killTweensOf @$tweenedEls
+    TweenLite.killTweensOf $('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr')
 
   checkSize: =>
     if $(window).width() <= 768
       @killTweens()
+      TweenLite.set $('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr'),
+        clearProps: 'all'
     else
       @killTweens()
-      @openNav()
+      @collapseNav()
 
   dispose: ->
     $(window).off 'resize', @throttledCheckSize
