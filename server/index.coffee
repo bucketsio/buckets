@@ -1,3 +1,6 @@
+dotenv = require 'dotenv'
+dotenv.load()
+
 _ = require 'underscore'
 hbs = require 'hbs'
 colors = require 'colors'
@@ -17,10 +20,13 @@ class Buckets
 
     try
       newrelicConfig = require '../newrelic'
-      if newrelicConfig.license_key
+      if newrelicConfig.config.license_key
         newrelic = require 'newrelic'
+        console.log 'Loaded newrelic'
         hbs.registerHelper 'newrelic', ->
           new hbs.handlebars.SafeString newrelic.getBrowserTimingHeader()
+    catch e
+      console.log 'Could not load newrelic', e
 
     passport = require './lib/auth'
 
