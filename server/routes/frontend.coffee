@@ -22,6 +22,10 @@ app.use express.static config.publicPath, maxAge: 86400000 * 7 # One week
 plugins = app.get 'plugins'
 
 app.all '/:frontend*?', (req, res, next) ->
+
+  # Cheating a bit, but if it's not in their publicPath, they shouldn't be serving it w/Templates
+  return next() if req.path.match /\.(gif|jpg|css|js|ico)$/
+
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
   Route.find {}, null, sort: 'sort', (err, routes) ->
