@@ -18,17 +18,17 @@ require('../lib/renderer')(hbs)
 app.set 'views', tplPath
 app.set 'view cache', off
 
-# Purge on prod pushes
-if config.fastly?.api_key and config.fastly?.service_id and config.env is 'production'
-  fastly = require('fastly')(config.fastly.api_key)
-  fastly.purgeAll config.fastly.service_id, ->
-    console.log 'Purged Fastly Cache'.red
-
 app.use express.static config.publicPath, maxAge: 86400000 * 7 # One week
 
 plugins = app.get 'plugins'
 
 app.all '/:frontend*?', (req, res, next) ->
+
+  getTime = ->
+    now = new Date
+    (now - req.startTime) + 'ms'
+
+  console.log 'Starting Route', getTime()
 
   # Cheating a bit, but if it's not in their publicPath, they shouldn't be serving it w/Templates
   return next() if req.path.match /\.(gif|jpg|css|js|ico|woff|ttf)$/
@@ -36,6 +36,7 @@ app.all '/:frontend*?', (req, res, next) ->
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
   Route.find {}, null, sort: 'sort', (err, routes) ->
+    console.log 'Got Routes', getTime()
     return next() unless routes?.length or config.catchAll is yes
 
     # dynamic renderTime helper
@@ -103,6 +104,7 @@ app.all '/:frontend*?', (req, res, next) ->
             callback false
           else
             # console.log 'Rendering.'
+            console.log 'Rendering', getTime()
             res.send html
             callback yes
         else if not html
@@ -113,6 +115,7 @@ app.all '/:frontend*?', (req, res, next) ->
           callback false
 
     , (rendered) ->
+      console.log 'Done?', rendered, getTime()
       return if rendered
       return next() unless config.catchAll
 

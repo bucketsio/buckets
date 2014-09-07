@@ -28,6 +28,11 @@ class Buckets
     catch e
       console.log 'Could not load newrelic', e
 
+    # Purge Fastly on prod pushes
+    if @config.fastly?.api_key and @config.fastly?.service_id and @config.env is 'production'
+      fastly = require('fastly')(@config.fastly.api_key)
+      fastly.purgeAll @config.fastly.service_id, -> console.log 'Purged Fastly Cache'.red
+
     passport = require './lib/auth'
 
     @routers =
