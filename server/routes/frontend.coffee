@@ -17,6 +17,12 @@ require('../lib/renderer')(hbs)
 app.set 'views', tplPath
 app.set 'view cache', off
 
+# Purge on prod pushes
+if config.fastly?.api_key and config.fastly?.service_id and config.env is 'production'
+  fastly = require('fastly')(config.fastly.api_key)
+  fastly.purgeAll config.fastly.service_id, ->
+    console.log 'Purged Fastly Cache'.red
+
 app.use express.static config.publicPath, maxAge: 86400000 * 7 # One week
 
 plugins = app.get 'plugins'
@@ -24,7 +30,7 @@ plugins = app.get 'plugins'
 app.all '/:frontend*?', (req, res, next) ->
 
   # Cheating a bit, but if it's not in their publicPath, they shouldn't be serving it w/Templates
-  return next() if req.path.match /\.(gif|jpg|css|js|ico)$/
+  return next() if req.path.match /\.(gif|jpg|css|js|ico|woff|ttf)$/
 
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
@@ -32,11 +38,13 @@ app.all '/:frontend*?', (req, res, next) ->
     return next() unless routes?.length or config.catchAll is yes
 
     # dynamic renderTime helper
+    # (startTime is set in index.coffee)
     hbs.registerHelper 'renderTime', ->
       now = new Date
       (now - req.startTime) + 'ms'
 
-    # Ability to set the status code from the frontend
+    # set the status code from a Template like this:
+    # {{statusCode 404}}
     hbs.registerHelper 'statusCode', (val) ->
       res.status val unless res.headersSent
       ''
@@ -47,9 +55,9 @@ app.all '/:frontend*?', (req, res, next) ->
       user: req.user
       errors: []
 
-    globalNext = false # We’ll assign our render callback to this
-    hbs.registerHelper 'next', ->
-      globalNext = true
+    # Used to block rendering if {{next}} is called
+    globalNext = false
+    hbs.registerHelper 'next', -> globalNext = true
 
     matchingRoutes = []
 

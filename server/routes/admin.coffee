@@ -70,7 +70,10 @@ app.get '/:admin*?', (req, res) ->
       env: config.env
       plugins: localPlugins
       adminSegment: adminSegment
-      assetPath: if config.cdn then "http://#{config.cdn}/#{adminSegment}" else "/#{adminSegment}"
+      assetPath: if config.fastly?.cdn_url and config.env is 'production'
+          "http://#{config.fastly.cdn_url}/#{adminSegment}"
+        else
+          "/#{adminSegment}"
       apiSegment: config.apiSegment
       needsInstall: userCount is 0
 

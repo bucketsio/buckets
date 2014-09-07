@@ -55,6 +55,7 @@
     "cors": "^2.4.1",
     "datejs": "^1.0.0-beta",
     "express": "^4.2.0",
+    "fastly": "^1.2.0",
     "glob": "^4.0.0",
     "grunt": "^0.4.5",
     "grunt-apidoc": "^0.7.0",
