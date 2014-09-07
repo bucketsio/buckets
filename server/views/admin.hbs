@@ -11,18 +11,17 @@
     <link rel="apple-touch-icon-precomposed" href="/{{adminSegment}}/apple-touch-icon-precomposed.png">
 
     <link rel="stylesheet" href="{{assetPath}}/css/buckets.css">
-    {{#each plugins}}
-      {{#if clientStyle}}
+    {{~#each plugins~}}
+      {{~#if clientStyle~}}
         <link rel="stylesheet" href="{{../../assetPath}}/plugins/{{slug}}.css">
-      {{/if}}
-    {{/each}}
+      {{~/if~}}
+    {{~/each~}}
   </head>
   <body>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div id="preload"></div>
-
     <div id="bkts-content"></div>
 
     <!-- env: {{env}} -->
@@ -30,27 +29,17 @@
     <script>
       if (Spinner) {
         var opts = {
-          lines: 12, // The number of lines to draw
-          length: 3, // The length of each line
-          width: 3, // The line thickness
-          radius: 8, // The radius of the inner circle
-          corners: 1, // Corner roundness (0..1)
-          rotate: 0, // The rotation offset
-          direction: 1, // 1: clockwise, -1: counterclockwise
-          color: '#999', // #rgb or #rrggbb or array of colors
-          speed: 1.2, // Rounds per second
-          trail: 60, // Afterglow percentage
-          shadow: false, // Whether to render a shadow
-          hwaccel: true, // Whether to use hardware acceleration
-          className: 'spinner', // The CSS class to assign to the spinner
-          zIndex: 2e9, // The z-index (defaults to 2000000000)
-          top: '50%', // Top position relative to parent
-          left: '50%' // Left position relative to parent
+          lines: 12,
+          length: 3,
+          width: 3,
+          radius: 8,
+          color: '#999',
+          speed: 1.2,
+          hwaccel: true
         };
         var preload = document.getElementById('preload');
         var spinner = new Spinner(opts).spin(preload);
       }
-
     </script>
     <script src="{{assetPath}}/js/modernizr.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -58,23 +47,19 @@
     <script src="{{assetPath}}/js/vendor.js"></script>
     <script src="{{assetPath}}/js/buckets.js"></script>
     <script>
-
       try {
         BucketsApp = require('buckets');
-
         window.bkts = new BucketsApp({
-          adminSegment: '{{adminSegment}}'
-          ,apiSegment: '{{apiSegment}}'
-
-          {{#if needsInstall}}
-            ,needsInstall: {{needsInstall}}
-          {{/if}}
-          {{#if plugins}}
-            ,bootPlugins: {{json plugins}}
-          {{/if}}
-          {{#if user}}
-            ,user: {{json user}}
-          {{/if}}
+          adminSegment: '{{adminSegment}}', apiSegment: '{{apiSegment}}'
+          {{~#if needsInstall~}}
+            ,needsInstall: {{~needsInstall~}}
+          {{~/if~}}
+          {{~#if plugins~}}
+            ,bootPlugins: {{~json plugins~}}
+          {{~/if~}}
+          {{~#if user~}}
+            ,user: {{~json user~}}
+          {{~/if~}}
         });
         $(preload).fadeOut(function(){
           this.remove();
@@ -87,13 +72,13 @@
         document.body.removeChild(preload);
       }
     </script>
-    {{#each plugins}}
-      {{#if client}}
+    {{~#each plugins~}}
+      {{~#if client~}}
         <script src="{{../../assetPath}}/plugins/{{slug}}.js"></script>
-      {{/if}}
-    {{/each}}
-    {{#isnt env 'production'}}
+      {{~/if~}}
+    {{~/each~}}
+    {{~#isnt env 'production'~}}
       <script src="//localhost:35729/livereload.js"></script>
-    {{/isnt}}
+    {{~/isnt~}}
   </body>
 </html>
