@@ -28,7 +28,9 @@
     "gsap": "~1.13.1",
     "open-iconic": "~1.1.1",
     "seedrandom": "~2.3.6",
-    "Sortable": "~0.3.0"
+    "Sortable": "~0.3.0",
+    "bootstrap-tagsinput": "~0.4.2",
+    "typeahead.js": "~0.10.5"
   },
   "exportsOverride": {
     "jquery.formParams": {

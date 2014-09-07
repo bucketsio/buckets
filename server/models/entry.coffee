@@ -103,6 +103,11 @@ entrySchema.path('description').validate (val) ->
   val?.length < 140
 , 'Descriptions must be less than 140 characters.'
 
+entrySchema.path 'keywords'
+  .set (val) ->
+    return unless _.isString val
+    _.compact _.map val.split(','), (val) -> val.trim()
+
 entrySchema.statics.findByParams = (params, callback) ->
 
   settings = _.defaults params,

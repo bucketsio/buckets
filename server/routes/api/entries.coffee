@@ -7,7 +7,7 @@ module.exports = app = express()
 
 ###
   @api {post} /entries Create an entry
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Entries
   @apiName PostEntry
 
@@ -22,9 +22,25 @@ module.exports = app = express()
 ###
 
 ###
+  @api {post} /entries Create an entry
+  @apiVersion 0.0.5
+  @apiGroup Entries
+  @apiName PostEntry
+
+  @apiParam {String} bucket Bucket ID
+  @apiParam {String} author Author ID
+  @apiParam {String} [status="live"] One of 'draft', 'live', 'pending', or 'rejected'. _See below for differences for contributors._
+  @apiParam (Contributors) {String} [status="submitted"] Available options are 'draft' and 'submitted' (using `live` will automatically switch to `submitted`).
+  @apiParam {String} [publishDate="Now"] Can accept a DateTime or a relative date (eg. "Tomorrow at 9am").
+  @apiParam {String} [keywords] String of comma-separated keywords used for tagging and/or search results.
+  @apiParam {String} [description] Description used for search results.
+  @apiParam {Object} content An special field for an object with custom field data. The accepted custom fields for an Entry depend on it’s which Bucket is it assigned to.
+###
+
+###
   @api {get} /entries Get Entries
   @apiDescription This is the primary endpoint for retrieving a list of entries, regardless of Bucket. By default, it will respond with an RSS-style list of entries, ie. Only entries which are live, and dated in the past. It's easy to customize what types of entries are retrieved, though, with a variety of flexible, optional parameters.
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Entries
   @apiName GetEntries
 
@@ -40,13 +56,12 @@ module.exports = app = express()
 
 app.route '/entries'
   .post (req, res) ->
-    req.body.keywords = req.body.keywords?.split ','
-
     Bucket.findById req.body.bucket, (e, bucket) ->
       return res.status(400).send(e) if e
       return res.status(404).end() unless bucket
       return res.status(401).end() unless req.user?.hasRole(['editor', 'contributor'], bucket)
 
+      # todo: Move this to the model
       if !req.user?.hasRole('editor', bucket) and req.body.status is 'live'
         req.body.status = 'pending'
 
@@ -63,36 +78,49 @@ app.route '/entries'
     Entry.findByParams req.query, (err, entries) ->
       res.status(200).send entries
 
-
 ###
   @api {get} /entries/keywords Get keywords
   @apiDescription Show distinct keywords used across all entries.
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Entries
   @apiName GetKeywords
 
   @apiSuccess {Array} keywords Array of unique keywords.
 ###
+
+###
+  @api {get} /entries/keywords Get keywords
+  @apiGroup Entries
+  @apiName GetKeywords
+  @apiVersion 0.0.5
+  @apiSuccess {Object[]} keywords Array of unique keywords.
+  @apiSuccess {String} keywords.keyword Array of unique keywords.
+  @apiSuccess {Number} keywords.count Number of times this keyword has been used.
+###
 app.route('/entries/keywords')
   .get (req, res) ->
     # This is like a mapReduce but much faster
     # It gives the counts for popular keywords
-    Entry.aggregate [
-      $match: {}
-    ,
-      $project: keywords: 1
-    ,
-      $unwind: '$keywords'
-    ,
-      $group:
-        _id: keyword: '$keywords'
+    Entry
+      .aggregate()
+      .project 'keywords keyword'
+      .unwind 'keywords'
+      .group
+        _id: '$keywords'
         count: $sum: 1
-    ], (err, keywords) ->
-      res.status(200).send keywords
+      .sort
+        count: -1
+      .project
+        _id: 0
+        keyword: '$_id'
+        count: '$count'
+      .exec (e, keywords) ->
+        return res.status(400).end() if e
+        res.status(200).send keywords
 
 ###
   @api {get} /entries/:id Get Entry
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Entries
   @apiName GetEntry
 
@@ -101,7 +129,7 @@ app.route('/entries/keywords')
 
 ###
   @api {put} /entries/:id Update an Entry
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Entries
   @apiName PutEntry
 
@@ -110,7 +138,7 @@ app.route('/entries/keywords')
 
 ###
   @api {delete} /entries/:id Remove an Entry
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Entries
   @apiName DeleteEntry
 
