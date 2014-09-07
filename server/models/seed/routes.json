@@ -1,7 +1,15 @@
 [{
-  "urlPattern": "",
-  "template": "index"
-},{
   "urlPattern": "/:slug",
-  "template": "index"
+  "template": "index",
+  "sort": "1"
+},
+{
+  "urlPattern": "",
+  "template": "index",
+  "sort": "2"
+},
+{
+  "urlPattern": "/:fourohfour*",
+  "template": "error",
+  "sort": "3"
 }]

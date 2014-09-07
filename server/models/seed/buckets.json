@@ -9,24 +9,4 @@
       "size": "lg"
     }
   }]
-}, {
-  "name": "Meetups",
-  "slug": "meetups",
-  "icon": "calendar",
-  "color": "blue",
-  "fields": [{
-    "name": "Outline",
-    "slug": "outline",
-    "fieldType": "markdown",
-    "settings": {
-      "size": "sm"
-    }
-  },{
-    "name": "Location",
-    "slug": "location",
-    "fieldType": "location",
-    "settings": {
-      "placeholder": "Address"
-    }
-  }]
 }]
