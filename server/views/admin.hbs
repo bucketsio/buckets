@@ -6,13 +6,13 @@
     <title>Buckets</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
-    <link rel="shortcut icon" href="/{{adminSegment}}/favicon.ico?v1">
+    <link rel="shortcut icon" href="{{assetPath}}/favicon.ico?v1">
     <link rel="apple-touch-icon-precomposed" href="/{{adminSegment}}/apple-touch-icon-precomposed.png">
 
-    <link rel="stylesheet" href="/{{adminSegment}}/css/buckets.css">
+    <link rel="stylesheet" href="{{assetPath}}/css/buckets.css">
     {{#each plugins}}
       {{#if clientStyle}}
-        <link rel="stylesheet" href="/{{../../adminSegment}}/plugins/{{slug}}.css">
+        <link rel="stylesheet" href="{{../../assetPath}}/plugins/{{slug}}.css">
       {{/if}}
     {{/each}}
   </head>
@@ -25,7 +25,7 @@
     <div id="bkts-content"></div>
 
     <!-- env: {{env}} -->
-    <script src="/{{adminSegment}}/vendor/spin.js/spin.js"></script>
+    <script src="{{assetPath}}/vendor/spin.js/spin.js"></script>
     <script>
       if (Spinner) {
         var opts = {
@@ -51,11 +51,11 @@
       }
 
     </script>
-    <script src="/{{adminSegment}}/js/modernizr.min.js"></script>
+    <script src="{{assetPath}}/js/modernizr.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/{{adminSegment}}/vendor/jquery/js/jquery.min.js"><\/script>')</script>
-    <script src="/{{adminSegment}}/js/vendor.js"></script>
-    <script src="/{{adminSegment}}/js/buckets.js"></script>
+    <script src="{{assetPath}}/js/vendor.js"></script>
+    <script src="{{assetPath}}/js/buckets.js"></script>
     <script>
 
       try {
@@ -88,7 +88,7 @@
     </script>
     {{#each plugins}}
       {{#if client}}
-        <script src="/{{../../adminSegment}}/plugins/{{slug}}.js"></script>
+        <script src="{{../../assetPath}}/plugins/{{slug}}.js"></script>
       {{/if}}
     {{/each}}
     {{#isnt env 'production'}}

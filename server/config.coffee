@@ -14,6 +14,7 @@ config =
     catchAll: yes
     autoStart: yes
     db: "mongodb://localhost/buckets_#{env}"
+    cdn: process.env.FASTLY_CDN_URL
   production:
     smtp:
       service: 'Mandrill'
