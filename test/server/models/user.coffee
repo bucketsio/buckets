@@ -4,9 +4,11 @@ reset = require '../../reset'
 
 {assert} = require 'chai'
 
-describe 'User', ->
+describe 'Model#User', ->
   bucket = null
   user = null
+
+  before reset.db
 
   beforeEach (done) ->
     Bucket.create
@@ -47,6 +49,15 @@ describe 'User', ->
     it 'returns an error when password is invalid', (done) ->
       User.create { name: 'Bucketer', email: 'hello@buckets.io', password: 'abc12' }, (e, u) ->
         assert.equal(e.errors.password.message, 'Your password must be between 6–20 characters and include a number.')
+        done()
+
+    it 'returns an error if the email is not unique', (done) ->
+      User.create
+        name: 'Other Bucketer'
+        email: 'hello@buckets.io'
+        password: 'xyz123'
+      , (e, u) ->
+        assert.match e, /ValidationError/
         done()
 
   describe 'Update', ->

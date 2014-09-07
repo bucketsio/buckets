@@ -49,7 +49,7 @@ app.route('/routes')
   .get (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
-    Route.find().sort(urlPattern: 1).exec (err, routes) ->
+    Route.find {}, null, sort: 'sort', (err, routes) ->
       if err
         res.send err, 400
       else if routes
@@ -108,11 +108,12 @@ app.route('/routes/:routeID')
   .put (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
-    Route.findById req.params.routeID, (err, route) ->
-      return res.status(400).end() unless route
+    Route.find _id: req.params.routeID, null, limit: 1, (err, routes) ->
+      return res.status(404).end() unless route = routes?[0]
+
       route.set req.body
       route.save (err, route) ->
         if err
-          res.status(500).send err
+          res.status(400).send err
         else
           res.status(200).send route
