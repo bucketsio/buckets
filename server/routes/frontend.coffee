@@ -2,6 +2,7 @@
 
 async = require 'async'
 hbs = require 'hbs'
+fastly = require 'fastly'
 pathRegexp = require 'path-to-regexp'
 express = require 'express'
 _ = require 'underscore'
@@ -54,6 +55,10 @@ app.all '/:frontend*?', (req, res, next) ->
       adminSegment: config.adminSegment
       user: req.user
       errors: []
+      assetPath: if config.fastly?.cdn_url and config.env is 'production'
+          "http://#{config.fastly.cdn_url}/"
+        else
+          "/"
 
     # Used to block rendering if {{next}} is called
     globalNext = false
