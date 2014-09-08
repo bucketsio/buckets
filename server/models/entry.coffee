@@ -49,6 +49,7 @@ entrySchema = new mongoose.Schema
   publishDate:
     type: Date
     default: Date.now
+    index: yes
   createdDate:
     type: Date
     default: Date.now

@@ -20,6 +20,7 @@ routeSchema = new mongoose.Schema
   sort:
     type: Number
     default: 0
+    index: yes
   keys: []
 ,
   toJSON:
