@@ -93,11 +93,9 @@ entrySchema.pre 'validate', (next) ->
     next()
 
 entrySchema.path('publishDate').set (val='') ->
-  parsed = chrono.parse(val)
-  if parsed?[0]?.startDate
-    parsed[0].startDate
-  else
-    Date.now()
+  parsed = chrono.parse(val)?[0]?.startDate
+  parsed || Date.now()
+
 
 entrySchema.path('description').validate (val) ->
   val?.length < 140
@@ -157,8 +155,9 @@ entrySchema.statics.findByParams = (params, callback) ->
         limit: 1
       .populate
         path: 'author'
-        select: '-roles -last_active -date_created'
+        select: '-roles -last_active -date_created -activated'
         limit: 1
+      .select('-createdDate')
       .sort settings.sort
       .limit settings.limit
       .skip settings.skip

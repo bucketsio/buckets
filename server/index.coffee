@@ -8,6 +8,7 @@ cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
 session = require 'cookie-session'
 compression = require 'compression'
+responseTime = require 'response-time'
 express = require 'express'
 fs = require 'fs'
 
@@ -47,7 +48,8 @@ class Buckets
       next()
 
     # Handle cookies and sessions and stuff
-    @app.use compression()
+    @app.use compression level: 4
+    @app.use responseTime() if @config.env isnt 'production'
     @app.use cookieParser @config.salt
     @app.use session
       secret: @config.salt

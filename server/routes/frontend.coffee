@@ -22,21 +22,15 @@ app.use express.static config.publicPath, maxAge: 86400000 * 7 # One week
 
 plugins = app.get 'plugins'
 
+staticRegex = /\.(gif|jpg|css|js|ico|woff|ttf)$/
+
 app.all '/:frontend*?', (req, res, next) ->
-
-  getTime = ->
-    now = new Date
-    (now - req.startTime) + 'ms'
-
-  console.log 'Starting Route', getTime()
-
   # Cheating a bit, but if it's not in their publicPath, they shouldn't be serving it w/Templates
-  return next() if req.path.match /\.(gif|jpg|css|js|ico|woff|ttf)$/
+  return next() if staticRegex.test req.path
 
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
-  Route.find {}, null, sort: 'sort', (err, routes) ->
-    console.log 'Got Routes', getTime()
+  Route.find {}, 'urlPattern urlPatternRegex template keys', sort: 'sort', (err, routes) ->
     return next() unless routes?.length or config.catchAll is yes
 
     # dynamic renderTime helper
@@ -51,51 +45,50 @@ app.all '/:frontend*?', (req, res, next) ->
       res.status val unless res.headersSent
       ''
 
-    # Prepare the global template data
-    templateData =
-      adminSegment: config.adminSegment
-      user: req.user
-      errors: []
-      assetPath: if config.fastly?.cdn_url and config.env is 'production'
-          "http://#{config.fastly.cdn_url}/"
-        else
-          "/"
-
     # Used to block rendering if {{next}} is called
     globalNext = false
     hbs.registerHelper 'next', -> globalNext = true
 
     matchingRoutes = []
 
-    for route in routes
+    templateData =
+      adminSegment: config.adminSegment
+      user: req.user
+      assetPath: if config.fastly?.cdn_url and config.env is 'production'
+          "http://#{config.fastly.cdn_url}/"
+        else
+          "/"
+      errors: []
 
+    for route in routes
+      continue unless route.urlPatternRegex.test req.path
       matches = route.urlPatternRegex.exec req.path
 
-      if matches
-        localTemplateData = _.clone templateData
-        localTemplateData.route = route
-        localTemplateData.req =
-          body: req.body
-          path: req.path
-          query: req.query unless _.isEmpty(req.query)
-          params: {}
-        localTemplateData.req.params[key.name] = matches[i+1] for key, i in route.keys
-        matchingRoutes.push localTemplateData
+      # Prepare the global template data
+      localTemplateData = _.clone templateData
+
+      localTemplateData.route = route
+      localTemplateData.req =
+        body: req.body
+        path: req.path
+        query: req.query
+        params: {}
+      localTemplateData.req.params[key.name] = matches[i+1] for key, i in route.keys
+      matchingRoutes.push localTemplateData
 
     # The magical, time-traveling Template lookup/renderer
     async.detectSeries matchingRoutes, (localTemplateData, callback) ->
-      localTemplateData = _.extend localTemplateData, templateData # Re-grab the global stuff (for errors)
+      localTemplateData.errors = templateData.errors
       res.render localTemplateData.route.template, localTemplateData, (err, html) ->
-
         if globalNext
           globalNext = false
           callback false
           # console.log '{{next}} was called.'
         else if err
-          # console.log 'Hit error, going to next match.', err
+          throw err
           tplErr = {}
           tplErr[localTemplateData.route.template] = err.message
-          templateData.errors.push tplErr
+          globalErrors.push tplErr
           callback false
 
         else if html
@@ -104,7 +97,6 @@ app.all '/:frontend*?', (req, res, next) ->
             callback false
           else
             # console.log 'Rendering.'
-            console.log 'Rendering', getTime()
             res.send html
             callback yes
         else if not html
@@ -115,7 +107,6 @@ app.all '/:frontend*?', (req, res, next) ->
           callback false
 
     , (rendered) ->
-      console.log 'Done?', rendered, getTime()
       return if rendered
       return next() unless config.catchAll
 

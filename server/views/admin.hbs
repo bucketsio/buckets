@@ -11,11 +11,7 @@
     <link rel="apple-touch-icon-precomposed" href="/{{adminSegment}}/apple-touch-icon-precomposed.png">
 
     <link rel="stylesheet" href="{{assetPath}}/css/buckets.css">
-    {{~#each plugins~}}
-      {{~#if clientStyle~}}
-        <link rel="stylesheet" href="{{../../assetPath}}/plugins/{{slug}}.css">
-      {{~/if~}}
-    {{~/each~}}
+    <link rel="stylesheet" href="{{assetPath}}/css/plugins.css">
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -27,7 +23,7 @@
     <!-- env: {{env}} -->
     <script src="{{assetPath}}/vendor/spin.js/spin.js"></script>
     <script>
-      if (Spinner) {
+      if (typeof Spinner !== 'undefined') {
         var opts = {
           lines: 12,
           length: 3,
@@ -72,11 +68,7 @@
         document.body.removeChild(preload);
       }
     </script>
-    {{~#each plugins~}}
-      {{~#if client~}}
-        <script src="{{../../assetPath}}/plugins/{{slug}}.js"></script>
-      {{~/if~}}
-    {{~/each~}}
+    <script src="{{assetPath}}/js/plugins.js"></script>
     {{~#isnt env 'production'~}}
       <script src="//localhost:35729/livereload.js"></script>
     {{~/isnt~}}

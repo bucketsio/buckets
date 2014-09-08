@@ -90,6 +90,7 @@
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
     "path-to-regexp": "^1.0.0",
+    "response-time": "^2.0.1",
     "serve-favicon": "^2.1.1",
     "serve-static": "^1.4.3",
     "speakingurl": "^0.11.0",
