@@ -4,6 +4,7 @@ Model = require 'lib/model'
 PageView = require 'views/base/page'
 FormMixin = require 'views/base/mixins/form'
 FieldTypeInputView = require 'views/fields/input'
+Chaplin = require 'chaplin'
 
 tpl = require 'templates/entries/edit'
 
@@ -149,12 +150,22 @@ module.exports = class EntryEditView extends PageView
   clickCopy: (e) ->
     e.preventDefault()
 
-    @model.set _.extend @formParams(),
+    newModel = @model.clone()
+    newModel.set _.extend @formParams(),
       id: null
-      publishDate: null
+      publishDate: 'Now'
       status: 'draft'
 
-    @submit @model.save @model.toJSON(), wait: yes
+    collection = @model.collection
+    @model = newModel
+
+    @submit(@model.save @model.toJSON(), wait: yes).done (newEntry) =>
+      collection.add newModel
+      newModel = null
+      collection = null
+      Chaplin.utils.redirectTo 'buckets#browse', {slug: @bucket.get('slug'), entryID: newEntry.id}
+
+
 
   dispose: ->
     unless @disposed

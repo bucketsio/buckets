@@ -1,6 +1,7 @@
 _ = require 'underscore'
 
 Chaplin = require 'chaplin'
+Cocktail = require 'cocktail'
 
 module.exports = class View extends Chaplin.View
   autoRender: yes
@@ -24,3 +25,5 @@ module.exports = class View extends Chaplin.View
   dispose: ->
     @trigger 'dispose'
     super
+
+  @mixin = (mixin) -> Cocktail.mixin View, mixin
