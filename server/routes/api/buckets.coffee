@@ -128,7 +128,7 @@ module.exports = app = express()
 
 ###
   @api {post} /buckets Create a Bucket
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Buckets
   @apiName PostBucket
   @apiStructure Bucket
@@ -140,7 +140,7 @@ module.exports = app = express()
 ###
   @api {get} /buckets Get Buckets
   @apiDescription List Buckets you have access to.
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Buckets
   @apiName GetBuckets
 
@@ -170,7 +170,7 @@ app.route('/buckets')
 
 ###
   @api {delete} /buckets/:id Remove a Bucket
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiDescription Removes a Bucket and all of its Entries.
   @apiGroup Buckets
   @apiName DeleteBucket
@@ -183,7 +183,7 @@ app.route('/buckets')
 
 ###
   @api {put} /buckets/:id Update a Bucket
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Buckets
   @apiName PutBucket
 
@@ -220,7 +220,7 @@ app.route('/buckets/:bucketID')
 ###
   @api {get} /buckets/:id/members Get Members
   @apiDescription Get current members of a Bucket (ie. editors and contributors)
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Buckets
   @apiName GetMembers
 
@@ -249,7 +249,7 @@ app.route('/buckets/:bucketId/members')
 ###
   @api {put} /buckets/:id/members/:userID Add a Member
   @apiDescription Add a member (contributor or editor) to a Bucket.
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Buckets
   @apiName PostMember
 
@@ -265,7 +265,7 @@ app.route('/buckets/:bucketId/members')
 ###
   @api {delete} /buckets/:id/members/:userID Remove a Member
   @apiDescription Remove a member's access to a Bucket.
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Buckets
   @apiName DeleteMember
 

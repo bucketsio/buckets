@@ -39,7 +39,7 @@ module.exports = (hbs) ->
       for entry in entries
 
         # Make content attributes first-level tags, ie. `{{body}}` instead of `{{content.body}}`
-        entryJSON = _.extend entry.toJSON(), entry.content
+        entryJSON = _.extend entry, entry.content
         delete entryJSON.content
 
         try

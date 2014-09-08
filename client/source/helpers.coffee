@@ -33,11 +33,13 @@ Handlebars.registerHelper 'gravatar', (email_hash) ->
 Handlebars.registerHelper 'renderRoute', (keys) ->
   url = @urlPattern
 
+  highlightedKeys = []
   for key in @keys
-    url = url.replace ///:#{key.name}\??\*?\+?(\(.+\))?///, (match, regex) ->
+    continue if key.name in highlightedKeys
+    url = url.replace ///:#{key.name}\??\*?\+?(\(.+\))?///g, (match, regex) ->
       className = 'show-tooltip bkts-wildcard'
       className += ' bkts-wildcard-optional' if key.optional
-
+      highlightedKeys.push key.name
       """
         <strong class="#{className}" title="#{match}">#{key.name}</strong>
       """

@@ -1,4 +1,5 @@
 db = require '../../../server/lib/database'
+mongoose = require 'mongoose'
 
 Entry = require '../../../server/models/entry'
 Bucket = require '../../../server/models/bucket'
@@ -12,7 +13,7 @@ describe 'Entry', ->
 
   user = null
 
-  before (done) ->
+  before (done) -> reset.db ->
     User.create
       name: 'Bucketer'
       email: 'hello@buckets.io'
@@ -20,11 +21,6 @@ describe 'Entry', ->
     , (e, u) ->
       throw e if e
       user = u
-      done()
-
-  beforeEach (done) ->
-    for _, c of db.connection.collections
-      c.remove(->)
       done()
 
   afterEach reset.db
@@ -70,6 +66,32 @@ describe 'Entry', ->
       Entry.create {title: 'Resumés & CVs', bucket: bucketId, author: user._id}, (e, entry) ->
         expect(entry.slug).to.equal 'resumes-and-cvs'
         done()
+
+    it 'saves keywords as a trimmed Array', (done) ->
+      Entry.create
+        title: 'Woohoo entry'
+        author: user._id
+        bucket: bucketId
+        keywords: 'Resumés, work , CVs'
+      , (e, entry) ->
+        expect(entry.keywords.length).to.equal 3
+        expect(entry.keywords[2]).to.equal 'CVs'
+        done()
+
+    it 'doesn’t save blank keywords', (done) ->
+
+      Entry.create
+        title: 'Some Entry'
+        author: user._id
+        bucket: bucketId
+        keywords: ' ,, '
+      , (e, entry) ->
+        expect(e).to.not.exist
+        expect(entry.keywords).to.be.empty
+        # expect(entry).to.be.undefined
+        # expect(e).to.have.deep.property 'errors.author'
+        done()
+
 
   describe '#findByParams', ->
     # Set up a bunch of entries to filter/search

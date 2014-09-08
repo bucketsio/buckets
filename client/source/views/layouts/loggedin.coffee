@@ -16,6 +16,7 @@ module.exports = class LoggedInLayout extends View
   getTemplateData: ->
     _.extend super,
       buckets: mediator.buckets?.toJSON()
+      version: mediator.options?.version
 
   initialize: ->
     super
@@ -27,32 +28,31 @@ module.exports = class LoggedInLayout extends View
 
   render: ->
     super
-    @$navLinks = @$('.nav-primary a')
 
-    @$('.nav-primary li').each (i, el) ->
-      TweenLite.from el, .15,
+    @$('#bkts-sidebar li').each (i, el) ->
+      TweenLite.from el, .2,
         y: '30px'
         opacity: 0
-        ease: Back.easeOut
-        delay: i * .02
+        ease: Sine.easeOut
+        delay: i * .01
 
-    # _.delay @collapseNav, 4000
-
-    $sidebar = @$('#bkts-sidebar')
-    openTimeout = null
+    @openTimeout = null
     @$('#bkts-sidebar').hover =>
-      clearTimeout openTimeout if openTimeout
-      openTimeout = setTimeout =>
-        @openNav()
-      , 200
+      clearTimeout @openTimeout if @openTimeout
+      @openTimeout = setTimeout @openNav, 50
     , =>
-      clearTimeout openTimeout if openTimeout
-      openTimeout = setTimeout =>
-        @collapseNav()
-      , 30
+      clearTimeout @openTimeout if @openTimeout
+      @openTimeout = setTimeout @collapseNav, 50
+
+    setTimeout @collapseNav, 300
 
   checkNav: (controller, params, route) ->
-    @collapseNav() if route.previous
+    @$navLinks ?= @$('.nav-primary a')
+
+    if route.previous and not @$('#bkts-sidebar:hover').length
+      @openTimeout = setTimeout =>
+        @collapseNav()
+      , 200
 
     @$('.nav-primary li').removeClass 'active'
 
@@ -66,19 +66,21 @@ module.exports = class LoggedInLayout extends View
         $link.parent().addClass('active')
         break
 
-  collapseNav: ->
+  collapseNav: =>
     return unless $(window).width() > 768
 
-    @$logo ?= @$('#logo')
+    $logo = @$('#logo')
     $view = $('.loggedInView')
 
     $menuBtn = @$('.btn-menu').css display: 'block'
 
-    TweenLite.to @$logo, 1,
+    @killTweens()
+
+    TweenLite.to $logo, .5,
       scale: .6
-      x: -10
-      ease: Bounce.easeOut
-      delay: .08
+      x: -9
+      ease: Back.easeOut
+      delay: .1
 
     TweenLite.to @$('#bkts-ftr'), .15,
       opacity: 0
@@ -96,19 +98,20 @@ module.exports = class LoggedInLayout extends View
       delay: .1
 
     TweenLite.to @$('#bkts-sidebar li'), .25,
-      opacity: 0
-      x: -90
+      opacity: .5
+      x: -200
+      y: 0
       opacity: 0
       delay: .1
       ease: Sine.easeIn
 
-  openNav: ->
+  openNav: =>
     return unless $(window).width() > 768
 
-    $view = $('.loggedInView')
-    @$logo ?= @$('#logo')
+    @killTweens()
 
-    TweenLite.killTweensOf @$('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr')
+    $view = $('.loggedInView')
+    $logo = @$('#logo')
 
     TweenLite.to @$('#bkts-sidebar'), .3,
       width: 240
@@ -120,32 +123,34 @@ module.exports = class LoggedInLayout extends View
       ease: Sine.easeOut
 
     for $link, i in @$('#bkts-sidebar li')
-      TweenLite.to $link, .2 - .008*i,
+      TweenLite.to $link, .18 - .01*i,
         opacity: 1
         x: 0
+        y: 0
         delay: .04 * i - i * .008
         ease: Sine.easeOut
 
-    TweenLite.to @$logo, .8,
+    TweenLite.to $logo, .5,
       scale: 1
       x: 0
-      ease: Bounce.easeOut
-      delay: .08
+      ease: Back.easeOut
 
     TweenLite.to @$('#bkts-ftr'), .15,
       opacity: 1
       ease: Sine.easeOut
       delay: .4
 
+  killTweens: ->
+    TweenLite.killTweensOf $('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr')
+
   checkSize: =>
     if $(window).width() <= 768
-
-      $view = $('.loggedInView')
-      @$logo ?= @$('#logo')
-      $animated = @$('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr')
-      TweenLite.set $animated, clearProps: 'all'
+      @killTweens()
+      TweenLite.set $('.loggedInView, #logo, #bkts-sidebar, #bkts-sidebar li, #bkts-ftr'),
+        clearProps: 'all'
     else
-      @openNav()
+      @killTweens()
+      @collapseNav()
 
   dispose: ->
     $(window).off 'resize', @throttledCheckSize

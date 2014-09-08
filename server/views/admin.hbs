@@ -2,78 +2,60 @@
 <html class="no-js">
   <head>
     <meta charset="utf-8">
+    {{newrelic}}
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Buckets</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
-    <link rel="shortcut icon" href="/{{adminSegment}}/favicon.ico?v1">
+    <link rel="shortcut icon" href="{{assetPath}}/favicon.ico?v1">
     <link rel="apple-touch-icon-precomposed" href="/{{adminSegment}}/apple-touch-icon-precomposed.png">
 
-    <link rel="stylesheet" href="/{{adminSegment}}/css/buckets.css">
-    {{#each plugins}}
-      {{#if clientStyle}}
-        <link rel="stylesheet" href="/{{../../adminSegment}}/plugins/{{slug}}.css">
-      {{/if}}
-    {{/each}}
+    <link rel="stylesheet" href="{{assetPath}}/css/buckets.css">
+    <link rel="stylesheet" href="{{assetPath}}/css/plugins.css">
   </head>
   <body>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div id="preload"></div>
-
     <div id="bkts-content"></div>
 
     <!-- env: {{env}} -->
-    <script src="/{{adminSegment}}/vendor/spin.js/spin.js"></script>
+    <script src="{{assetPath}}/vendor/spin.js/spin.js"></script>
     <script>
-      if (Spinner) {
+      if (typeof Spinner !== 'undefined') {
         var opts = {
-          lines: 12, // The number of lines to draw
-          length: 3, // The length of each line
-          width: 3, // The line thickness
-          radius: 8, // The radius of the inner circle
-          corners: 1, // Corner roundness (0..1)
-          rotate: 0, // The rotation offset
-          direction: 1, // 1: clockwise, -1: counterclockwise
-          color: '#999', // #rgb or #rrggbb or array of colors
-          speed: 1.2, // Rounds per second
-          trail: 60, // Afterglow percentage
-          shadow: false, // Whether to render a shadow
-          hwaccel: true, // Whether to use hardware acceleration
-          className: 'spinner', // The CSS class to assign to the spinner
-          zIndex: 2e9, // The z-index (defaults to 2000000000)
-          top: '50%', // Top position relative to parent
-          left: '50%' // Left position relative to parent
+          lines: 12,
+          length: 3,
+          width: 3,
+          radius: 8,
+          color: '#999',
+          speed: 1.2,
+          hwaccel: true
         };
         var preload = document.getElementById('preload');
         var spinner = new Spinner(opts).spin(preload);
       }
-
     </script>
-    <script src="/{{adminSegment}}/js/modernizr.min.js"></script>
+    <script src="{{assetPath}}/js/modernizr.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/{{adminSegment}}/vendor/jquery/js/jquery.min.js"><\/script>')</script>
-    <script src="/{{adminSegment}}/js/vendor.js"></script>
-    <script src="/{{adminSegment}}/js/buckets.js"></script>
+    <script src="{{assetPath}}/js/vendor.js"></script>
+    <script src="{{assetPath}}/js/buckets.js"></script>
     <script>
-
       try {
         BucketsApp = require('buckets');
-
         window.bkts = new BucketsApp({
-          adminSegment: '{{adminSegment}}'
-          ,apiSegment: '{{apiSegment}}'
-
-          {{#if needsInstall}}
-            ,needsInstall: {{needsInstall}}
-          {{/if}}
-          {{#if plugins}}
-            ,bootPlugins: {{json plugins}}
-          {{/if}}
-          {{#if user}}
-            ,user: {{json user}}
-          {{/if}}
+          adminSegment: '{{adminSegment}}', apiSegment: '{{apiSegment}}', version: '{{version}}'
+          {{~#if needsInstall~}}
+            ,needsInstall: {{~needsInstall~}}
+          {{~/if~}}
+          {{~#if plugins~}}
+            ,bootPlugins: {{~json plugins~}}
+          {{~/if~}}
+          {{~#if user~}}
+            ,user: {{~json user~}}
+          {{~/if~}}
         });
         $(preload).fadeOut(function(){
           this.remove();
@@ -86,13 +68,9 @@
         document.body.removeChild(preload);
       }
     </script>
-    {{#each plugins}}
-      {{#if client}}
-        <script src="/{{../../adminSegment}}/plugins/{{slug}}.js"></script>
-      {{/if}}
-    {{/each}}
-    {{#isnt env 'production'}}
+    <script src="{{assetPath}}/js/plugins.js"></script>
+    {{~#isnt env 'production'~}}
       <script src="//localhost:35729/livereload.js"></script>
-    {{/isnt}}
+    {{~/isnt~}}
   </body>
 </html>

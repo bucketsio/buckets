@@ -1,6 +1,7 @@
+_ = require 'underscore'
 mongoose = require 'mongoose'
 db = require '../lib/database'
-pathRegexp = require('path-to-regexp')
+pathRegexp = require 'path-to-regexp'
 
 require('mongoose-regexp')(mongoose)
 
@@ -19,6 +20,7 @@ routeSchema = new mongoose.Schema
   sort:
     type: Number
     default: 0
+    index: yes
   keys: []
 ,
   toJSON:
@@ -40,7 +42,7 @@ routeSchema.pre 'validate', (next) ->
   # and saves the keys to an array
   @keys = []
   @urlPatternRegex = pathRegexp @urlPattern, @keys, yes, no
-
+  @invalidate 'urlPattern', 'That is not a valid URL pattern.' unless _.isRegExp @urlPatternRegex
   next()
 
 routeSchema.virtual('isCanonical').get ->

@@ -49,6 +49,7 @@ entrySchema = new mongoose.Schema
   publishDate:
     type: Date
     default: Date.now
+    index: yes
   createdDate:
     type: Date
     default: Date.now
@@ -93,15 +94,18 @@ entrySchema.pre 'validate', (next) ->
     next()
 
 entrySchema.path('publishDate').set (val='') ->
-  parsed = chrono.parse(val)
-  if parsed?[0]?.startDate
-    parsed[0].startDate
-  else
-    Date.now()
+  parsed = chrono.parse(val)?[0]?.startDate
+  parsed || Date.now()
+
 
 entrySchema.path('description').validate (val) ->
   val?.length < 140
 , 'Descriptions must be less than 140 characters.'
+
+entrySchema.path 'keywords'
+  .set (val) ->
+    return unless _.isString val
+    _.compact _.map val.split(','), (val) -> val.trim()
 
 entrySchema.statics.findByParams = (params, callback) ->
 
@@ -146,14 +150,21 @@ entrySchema.statics.findByParams = (params, callback) ->
       searchQuery.publishDate.$lte = new Date(chrono.parseDate settings.until) if settings.until
 
     @find searchQuery
-      .populate 'bucket'
+      .populate
+        path: 'bucket'
+        select: '-fields'
+        limit: 1
       .populate
         path: 'author'
-        select: '-passwordDigest -resetPasswordToken -resetPasswordExpires'
+        select: '-roles -last_active -date_created -activated'
+        limit: 1
+      .select('-createdDate')
       .sort settings.sort
       .limit settings.limit
       .skip settings.skip
       .exec (err, entries) ->
+        entries = entries.map (entry) -> entry.toJSON()
+
         if err
           callback err
         else

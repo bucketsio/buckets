@@ -63,6 +63,19 @@ Renders the time (in ms) the page has taken to render (best to place near the fo
 {{renderTime}}
 ```
 
+### statusCode
+
+Can change the status code sent to the browser as a response. _Buckets sends 200/OK by default for any rendered template._
+
+```
+{{#entries slug=req.params.slug}}
+  …
+{{else}}
+  {{statusCode 404}}
+  <h2>Couldn’t find entries</h2>
+{{/entries}}
+```
+
 ### formatTime
 
 Shows a formatted time using Moment.js. Check out [the docs](http://momentjs.com/docs/#/displaying/format/) to see what formats are available.

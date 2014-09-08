@@ -4,6 +4,7 @@ Model = require 'lib/model'
 PageView = require 'views/base/page'
 FormMixin = require 'views/base/mixins/form'
 FieldTypeInputView = require 'views/fields/input'
+Chaplin = require 'chaplin'
 
 tpl = require 'templates/entries/edit'
 
@@ -76,6 +77,28 @@ module.exports = class EntryEditView extends PageView
             </p>
           </div>
         """
+
+    # Convert keywords to input
+    popularKeywords = new Bloodhound
+      name: 'keywords'
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('keyword')
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+      prefetch:
+        url: '/api/entries/keywords'
+        ttl: 0
+    popularKeywords.clearPrefetchCache()
+    popularKeywords.initialize()
+
+    $keywords = @$('[name="keywords"]')
+    $keywords.tagsinput
+      typeaheadjs:
+        name: 'keywords'
+        displayKey: 'keyword'
+        valueKey: 'keyword'
+        source: popularKeywords.ttAdapter()
+
+    @$('.bootstrap-tagsinput').addClass 'form-control'
+
   submitForm: (e) ->
     e.preventDefault()
 
@@ -127,15 +150,27 @@ module.exports = class EntryEditView extends PageView
   clickCopy: (e) ->
     e.preventDefault()
 
-    @model.set _.extend @formParams(),
+    newModel = @model.clone()
+    newModel.set _.extend @formParams(),
       id: null
-      publishDate: null
+      publishDate: 'Now'
       status: 'draft'
 
-    @submit @model.save @model.toJSON(), wait: yes
+    collection = @model.collection
+    @model = newModel
+
+    @submit(@model.save @model.toJSON(), wait: yes).done (newEntry) =>
+      collection.add newModel
+      newModel = null
+      collection = null
+      Chaplin.utils.redirectTo 'buckets#browse', {slug: @bucket.get('slug'), entryID: newEntry.id}
+
+
 
   dispose: ->
-    @$('.panel').css(opacity: 0) unless @disposed
+    unless @disposed
+      @$('.panel').css(opacity: 0)
+      @$('[name="keywords"]').tagsinput 'destroy'
     super
 
   @mixin FormMixin

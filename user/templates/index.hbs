@@ -3,7 +3,7 @@
 </header>
 
 <div id="content">
-  {{#entries bucket="articles" slug=req.params.slug search=req.query.q}}
+  {{#entries slug=req.params.slug}}
     <h1>
       <a href="/{{slug}}">{{title}}</a>
       {{#if author}}
@@ -11,12 +11,13 @@
       {{/if}}
     </h1>
     {{markdown body}}
+    {{bucket.name}}
     <footer>
-      <em>Published on {{formatTime publishDate format="MMM D, YYYY h:mma"}} by 
+      <em>Published on {{formatTime publishDate format="MMM D, YYYY h:mma"}} by
       <strong>{{author.name}}</strong></em>
     </footer>
     {{!-- {{inspect .}} --}}
   {{else}}
-    <p>Add some entries into any Bucket and they’ll show up here :)</p>
+    {{next}}
   {{/entries}}
 </div>

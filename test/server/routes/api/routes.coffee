@@ -8,7 +8,7 @@ Route = require '../../../../server/models/route'
 
 {expect} = require 'chai'
 
-describe 'REST#Templates', ->
+describe 'REST#Routes', ->
 
   before reset.db
   afterEach reset.db
@@ -96,6 +96,18 @@ describe 'REST#Templates', ->
               urlPattern: '/new'
             .expect 401
             .end done
+
+      it.skip 'returns a 400 for a validation error', (done) ->
+        # Unfortunately this works
+        auth.createAdmin (err, admin) ->
+          admin
+            .put "/#{config.apiSegment}/routes/#{sampleRoute.id}"
+            .send
+              urlPattern: '...'
+            .expect 400
+            .end (e, res) ->
+              console.log e, res.body.urlPatternRegex
+              done()
 
       it 'returns a 200 and a Route', (done) ->
         auth.createAdmin (err, admin) ->

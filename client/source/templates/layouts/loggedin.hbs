@@ -3,7 +3,7 @@
     <nav class="col-xs-12" id="bkts-sidebar">
       <div class="bkts-sidebar-inner">
         <header id="bkts-hdr">
-          <span class="visible-xs pull-right" data-toggle="nav-primary">
+          <span class="visible-xs" data-toggle="nav-primary">
             <a href="#menu" class="btn btn-menu">
               <span></span>
               <span></span>
@@ -29,22 +29,32 @@
           {{#hasRole 'administrator'}}
             <li class="divider"></li>
             <li><a href="/{{adminSegment}}/routes">{{icon 'direction-sign'}} Routes</a></li>
-            <li><a href="/{{adminSegment}}/templates">{{icon 'file-code'}} Templates</a></li>
+            <li><a href="/{{adminSegment}}/templates">{{icon 'html'}} Templates</a></li>
             <li class="divider"></li>
             {{!-- <li><a href="/{{adminSegment}}/settings">{{icon 'setting-gear'}} Settings</a></li> --}}
-            <li><a href="/{{adminSegment}}/users">{{icon 'contacts'}} Users</a></li>
+            <li><a href="/{{adminSegment}}/users">{{icon 'user'}} People</a></li>
           {{/hasRole}}
           <li class="divider"></li>
-          <li class="usernav">
-            <a href="/{{adminSegment}}/users/{{email}}">{{gravatar email_hash}} {{name}}</a>
-          </li>
-          <li class="logout">
-            <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
+          <li class="usernav dropup btn-group">
+            <a href="#" data-toggle="dropdown">
+              {{gravatar email_hash}} <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="logout">
+                <a href="/" class="noscript">Return to website</a>
+                <a href="/{{adminSegment}}/docs/api/" target="_blank">API Docs</a>
+                <a href="/{{adminSegment}}/users/{{email}}">Profile</a>
+                <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
+              </li>
+            </ul>
           </li>
           <li>
             <footer id="bkts-ftr">
-                <hr class="tiny">
-                <a href="/" class="noscript">‹ Return to website</a><br>Made with ♥︎ on <a href="http://assemblymade.com/buckets" target="_blank">Assembly</a><br><a href="https://github.com/asm-products/buckets" target="_blank"><span class="icon buckets-icon-github"></span></a>
+              <br>
+              <a class="show-tooltip btn-icon btn-small btn-link pull-right" title="Fork me on GitHub" href="https://github.com/asm-products/buckets" target="_blank"><span class="icon buckets-icon-github"></span></a>
+
+              <strong>Buckets <small>{{version}}</small></strong>
             </footer>
           </li>
         </ul>
