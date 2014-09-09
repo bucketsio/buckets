@@ -181,16 +181,15 @@ Handlebars.registerHelper 'cloudinaryUpload', (name, value, options) ->
 
   settings = _.defaults options.hash, {}
 
-  img = if value
-    Handlebars.helpers.cloudinaryImage value,
+  img = ''
+  if value
+    preview = Handlebars.helpers.cloudinaryImage value,
       hash:
         crop: 'limit'
         width: 600
         height: 300
         fetch_format: 'auto'
-
-  else
-    ''
+    img = preview if preview
 
   cloudinaryConfig = JSON.stringify mediator.options.cloudinary
 
@@ -223,7 +222,8 @@ Handlebars.registerHelper 'cloudinaryUpload', (name, value, options) ->
     required: settings.required
     name: name
 
-Handlebars.registerHelper 'cloudinaryImage', (public_id, options) ->
-  return unless $.cloudinary.config().api_key
-  url = $.cloudinary.url(public_id, options.hash)
+Handlebars.registerHelper 'cloudinaryImage', (img, options) ->
+  return unless $.cloudinary.config().api_key and img?.public_id
+  url = $.cloudinary.url(img.public_id, options.hash)
+
   new Handlebars.SafeString """<img src="#{url}">"""

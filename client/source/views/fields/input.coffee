@@ -20,6 +20,7 @@ module.exports = class FieldTypeInputView extends View
 
   render: ->
     super
+    return unless @model.get('fieldType') is 'cloudinary_image'
 
     $preview = @$('.preview')
     $dropzone = @$('.dropzone')
@@ -31,7 +32,7 @@ module.exports = class FieldTypeInputView extends View
     else
       $preview.hide()
 
-    @$("input[type=file]")
+    @$input = $input = @$("input[type=file]")
       .cloudinary_fileupload
         dropzone: @$('.dropzone')
       .bind 'fileuploadstart', (e) ->
@@ -45,7 +46,7 @@ module.exports = class FieldTypeInputView extends View
             .removeClass 'active progress-bar-striped'
             .text 'Processing image…'
 
-      .bind 'cloudinarydone', (e, data) =>
+      .bind 'cloudinarydone', (e, data) ->
         $progressBar
           .text 'Fetching image…'
 
@@ -55,7 +56,7 @@ module.exports = class FieldTypeInputView extends View
           .find '.preview-inner'
           .html """<img src="#{data.result.url}">"""
 
-        imagesLoaded $preview, =>
+        imagesLoaded $preview, ->
           # Reset the progress bar
           $progress
             .addClass 'hide'
@@ -68,12 +69,15 @@ module.exports = class FieldTypeInputView extends View
 
           $preview.find('img').height()
 
-          @$('[type="hidden"]').val data.result.public_id
+          $input.data 'value-object', data.result
           TweenLite.to $preview, .5,
-            height: @$('.preview img').height()
+            height: $preview.find('img').height()
             ease: Sine.easeOut
 
           $dropzone.slideUp 200
+
+  getValue: ->
+    @$input.data('value-object') || @$input.val()
 
   hoverDropzone: ->
     clearTimeout @dropzoneTimeout if @dropzoneTimeout
