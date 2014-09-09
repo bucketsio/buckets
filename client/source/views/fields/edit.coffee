@@ -19,7 +19,7 @@ module.exports = class FieldEditView extends View
   render: ->
     super
 
-    if @model.get('fieldType') in ['text', 'textarea', 'checkbox', 'number']
+    if @model.get('fieldType') in ['text', 'textarea', 'checkbox', 'number', 'cloudinary_image']
       @renderSettings()
     else
       # Otherwise ensure the plugin is loaded and see if one exists

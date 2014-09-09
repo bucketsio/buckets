@@ -1,5 +1,6 @@
 Handlebars = require 'hbsfy/runtime'
 _ = require 'underscore'
+mediator = require 'mediator'
 
 createLabel = (text, name, options={}) ->
 
@@ -174,3 +175,55 @@ Handlebars.registerHelper 'select', (name, value, selectOptions, options) ->
   , optionEls.join ''),
     label: settings.label
     help: settings.help
+
+Handlebars.registerHelper 'cloudinaryUpload', (name, value, options) ->
+  return unless $.cloudinary.config().api_key
+
+  settings = _.defaults options.hash, {}
+
+  img = ''
+  if value
+    preview = Handlebars.helpers.cloudinaryImage value,
+      hash:
+        crop: 'limit'
+        width: 600
+        height: 300
+        fetch_format: 'auto'
+    img = preview if preview
+
+  cloudinaryConfig = JSON.stringify mediator.options.cloudinary
+
+  input = """
+    <div class="dropzone">
+      Upload files by dragging &amp; dropping,
+      or <a href="#" class="fileinput-button">selecting one from your computer
+      <input name="file" type="file" multiple="multiple"
+      class="cloudinary-fileupload" data-cloudinary-field="#{name}"
+      data-form-data='#{cloudinaryConfig}'></input></a>.
+    </div>
+    <input type="hidden" name="#{name}" value="#{value}">
+
+    <div class="progress hide">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+    </div>
+    <div class="preview">
+      <button type="button" class="close">
+        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+      </button>
+      <div class="preview-inner">
+        #{img}
+      </div>
+    </div>
+  """
+
+  new Handlebars.SafeString wrap input,
+    label: settings.label
+    help: settings.help
+    required: settings.required
+    name: name
+
+Handlebars.registerHelper 'cloudinaryImage', (img, options) ->
+  return unless $.cloudinary.config().api_key and img?.public_id
+  url = $.cloudinary.url(img.public_id, options.hash)
+
+  new Handlebars.SafeString """<img src="#{url}">"""

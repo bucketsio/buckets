@@ -209,6 +209,10 @@ module.exports = (grunt) ->
           'public/vendor/ladda/js/ladda.js'
           'public/vendor/ladda/js/ladda.jquery.js'
 
+          'public/vendor/blueimp-file-upload/js/jquery.ui.widget.js'
+          'public/vendor/blueimp-file-upload/js/jquery.fileupload.js'
+          'public/vendor/cloudinary_js/js/jquery.cloudinary.js'
+
           'public/vendor/**/*.js'
 
           # Remove some which we’ll load on the fly

@@ -32,6 +32,8 @@ module.exports = class BucketFieldsView extends View
         name: 'Checkbox', value: 'checkbox'
       ,
         name: 'Textarea', value: 'textarea'
+      ,
+        name: 'Image', value: 'cloudinary_image'
       ]
 
     # FIXME: This currently assumes all plugins are FieldTypes...
