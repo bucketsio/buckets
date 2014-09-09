@@ -104,6 +104,9 @@ module.exports = (grunt) ->
             'public/css/bootstrap.css'
             'public/css/index.css'
           ]
+      pluginsStyle:
+        files:
+          'public/css/plugins.css': ['public/plugins/*.css']
 
     copy:
       assets:
@@ -116,11 +119,6 @@ module.exports = (grunt) ->
         cwd: 'docs/api'
         src: ['**/*']
         dest: 'public/docs/api'
-      fontastic:
-        expand: yes
-        cwd: 'client/assets/fontastic/fonts/'
-        src: ['*']
-        dest: 'public/css/fonts/'
       ace:
         expand: yes
         cwd: 'bower_components/ace-builds/src-min-noconflict/'
@@ -131,6 +129,11 @@ module.exports = (grunt) ->
           'theme-*.js' # These are loaded on the fly anyway
         ]
         dest: 'public/js/ace/'
+      fontastic:
+        expand: yes
+        cwd: 'client/assets/fontastic/fonts/'
+        src: ['*']
+        dest: 'public/css/fonts/'
 
     cssmin:
       app:
@@ -197,6 +200,7 @@ module.exports = (grunt) ->
       app:
         files:
           'public/js/buckets.js': ['public/js/buckets.js']
+          'public/vendor/spin.js/spin.js': ['public/vendor/spin.js/spin.js']
 
       vendor:
         dest: 'public/js/vendor.js'
@@ -217,6 +221,10 @@ module.exports = (grunt) ->
           '!public/vendor/jquery/**/*.js'
         ]
         filter: 'isFile'
+
+      plugins:
+        dest: 'public/js/plugins.js'
+        src: ['public/plugins/*.js']
 
       options:
         sourceMap: yes
@@ -259,7 +267,7 @@ module.exports = (grunt) ->
         tasks: ['build-style']
 
       express:
-        files: ['server/**/*.coffee', 'node_modules/buckets-*/*.{coffee,hbs}']
+        files: ['server/**/*.coffee', 'node_modules/buckets-*/*.{coffee,hbs}', '.env']
         tasks: ['express:dev']
         options:
           spawn: false
@@ -267,11 +275,11 @@ module.exports = (grunt) ->
 
       pluginScripts:
         files: ['node_modules/buckets-*/**/{models,controllers,helpers,templates,views}/**/*.{coffee,hbs}', 'node_modules/buckets-*/*.{coffee,hbs}']
-        tasks: ['browserify:plugins']
+        tasks: ['browserify:plugins', 'uglify:plugins']
 
       pluginStyles:
         files: ['node_modules/buckets-*/**/*.styl']
-        tasks: ['stylus:plugins']
+        tasks: ['stylus:plugins', 'concat:plugins']
 
       livereload:
         options:
@@ -305,12 +313,12 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-mongo-migrations'
   grunt.loadNpmTasks 'grunt-shell'
 
-  grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style']
+  grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style', 'concat:pluginsStyle']
   grunt.registerTask 'build-scripts', ['browserify:app']
 
   # Building
   grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'build', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'uglify:plugins', 'build-scripts', 'build-style', 'modernizr']
   grunt.registerTask 'prepublish', ['build', 'uglify:app', 'cssmin']
 
   # Serving

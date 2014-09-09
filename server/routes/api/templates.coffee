@@ -7,7 +7,8 @@ Template = require('../../lib/template')(config?.templatePath)
 module.exports = app = express()
 
 validateTemplate = (contents) ->
-  compiled = hbs.handlebars.compile contents
+  compiler = hbs.create().handlebars
+  compiled = compiler.compile contents
 
   try
     null if compiled {}
@@ -28,7 +29,6 @@ app.route('/templates')
         res.send(files)
 
   .post (req, res) ->
-
     errors = validateTemplate req.body.contents
     return res.status(400).send errors if errors
 
@@ -73,6 +73,7 @@ app.route('/templates/:filename')
       if err
         res.status(500).send err
       else
+        hbs.cache = {} # Reset hbs internal cache
         res.status(201).send
           filename: filename
           contents: contents

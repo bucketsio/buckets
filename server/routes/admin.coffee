@@ -2,6 +2,7 @@ express = require 'express'
 hbs = require 'hbs'
 cloudinary = require 'cloudinary'
 url = require 'url'
+cors = require 'cors'
 glob = require 'glob'
 fs = require 'fs'
 favicon = require 'serve-favicon'
@@ -11,6 +12,7 @@ marked = require 'marked'
 config = require '../config'
 plugins = require '../lib/plugins'
 passport = require '../lib/auth'
+pkg = require '../../package'
 User = require '../models/user'
 
 module.exports = app = express()
@@ -25,6 +27,7 @@ app.set 'views', "#{__dirname}/../views"
 faviconFile = "#{__dirname}/../../public/favicon.ico"
 app.use favicon faviconFile if fs.existsSync faviconFile
 
+app.get '/*.(woff|ttf|eot|otf)', cors()
 app.use express.static "#{__dirname}/../../public/", maxAge: 86400000 * 7 # One week
 
 app.set 'plugins', plugins.load()
@@ -57,7 +60,8 @@ app.get "/help-html/*", (req, res, next) ->
       return res.status(400).end() unless content and html = marked(content)
       res.status(200).send html
 
-app.all '*', (req, res) ->
+app.get '/:admin*?', (req, res) ->
+  # Todo: Don't do install check if user exists (obviously false)
   User.count({}).exec (err, userCount) ->
     res.send 500 if err
 
@@ -96,6 +100,15 @@ app.all '*', (req, res) ->
       env: config.env
       plugins: localPlugins
       adminSegment: adminSegment
+      assetPath: if config.fastly?.cdn_url and config.env is 'production'
+          "http://#{config.fastly.cdn_url}/#{adminSegment}"
+        else
+          "/#{adminSegment}"
       apiSegment: config.apiSegment
       needsInstall: userCount is 0
       cloudinary: cloudinaryData
+      version: pkg.version
+
+    if req.user
+      req.user.last_active = Date.now()
+      req.user.save()

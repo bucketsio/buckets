@@ -1,23 +1,27 @@
 #bkts-sidebar
-  background-color #f9f9f9
+  background-color #fafafa
 
-@media (min-width: 768px)
-  #bkts-sidebar
-    width 240px
-    border-right 1px solid #ddd
-    float left
-    min-height 100%
-    position fixed
-    left 0
-    top 0
-    bottom 0
-    overflow auto
+#bkts-hdr
+  color #555
+  min-height 80px
+  padding 10px 15px
+  margin 0 -15px
 
-  .loggedInView
-    margin-left 240px
+  .pull-right a
+    position relative
+    z-index 20
+
+  .btn-menu
+    z-index 20
+    position absolute
+    top 28px
+    right 15px
 
 #logo
   position relative
+  margin 0 auto
+  transform-origin 60% 90%
+  transform scale(.8)
 
   .bkts-icon
     display block
@@ -33,30 +37,19 @@
       transition opacity 100ms ease-out
       text-decoration none
 
-.version-badge
-  font-size 12px
-  border-radius 3px
-  border 2px solid #969696
-  padding .15em .4em
-  margin-bottom 0 0 .4em
-  color #666
-  vertical-align top
-  font-weight 500
-  display inline-block
-  font-family $sans
-  position absolute
-  top 37px
-  left 15px
-  transform scale(.8) rotate(-3deg)
-  background #fff
-  pointer-events none
+#logo img
+  display block
+  width 60px
+  height auto
+  margin 0 auto
+  position relative
+  right 1px
 
 // based on http://codepen.io/designcouch/pen/lgnDJ
 .btn-menu
+  transform scale(.7)
   border none !important
-  margin-top 22px
-  margin-right auto
-  margin-left auto
+  margin-top 0
   height 25px
   width 40px
   position relative
@@ -123,9 +116,8 @@
     &:nth-of-type(3)
       top 20px
 
-
-
 .nav-primary
+  transform translateZ(0)
 
   > li > a
     padding-left 40px
@@ -158,9 +150,6 @@
 
     .no-touch &
       opacity 0
-
-    // padding-right 10px
-    border-radius 50px
 
     .icon
       top 2px
@@ -226,3 +215,24 @@ addColor('gray', $gray)
   @extend .nav-primary a:first-child .icon
   top 4px
   z-index 10
+
+
+@media (min-width: 768px)
+  #bkts-sidebar
+    width 240px
+    border-right 1px solid #ddd
+    background-color #f9f9f9
+    float left
+    min-height 100%
+    position fixed
+    left 0
+    top 0
+    bottom 0
+    overflow auto
+
+  .loggedInView
+    margin-left 240px
+
+  #bkts-hdr
+    min-height 110px
+    padding 20px 15px

@@ -9,10 +9,7 @@
     margin 60px auto 0px
 
   #logo img
-    display block
     width 100px
-    height auto
-    margin 0 auto
 
   #logo span
     display none
@@ -64,30 +61,21 @@
   font-weight 500
 
 .bkts-wildcard
-  padding 0 6px
-  border-radius 2px
+  color $active
 
 .bkts-wildcard-optional
   @extend .bkts-wildcard
-  background-color rgba($primary, .15)
-  darken($primary, 10)
-  color #999
-
-.bkts-wildcard-param
-  @extend .bkts-wildcard
-  background-color rgba($primary, .3)
-  darken($primary, 30)
-
-.bkts-wildcard-catchall
-  @extend .bkts-wildcard
-  color $primary
+  opacity .7
 
 .route
   position relative
   padding-left 40px
 
-  h2 a:hover
-    text-decoration none
+  h2 a
+    color #999
+
+    &:hover
+      text-decoration none
 
   .btn-icon
     opacity 0
@@ -114,17 +102,25 @@
   border-top 1px solid #ddd
 
 .entry
-  padding 20px 15px
-  margin 0 -15px
+  padding 15px
   border-bottom 1px solid #eee
+  background-color rgba(#eee, 0)
+  transition none
 
   &.active
-    background-color rgba(#eee, .5)
+    z-index 5
+    transition all 180ms ease-out
+    background-color #f6f6f6
+    margin -1px -1px 0
+    border-radius 2px
+    padding 16px 16px 15px
 
   h3
     font-size 18px
     margin-top 0
-    font-weight 700
+    margin-bottom 2px
 
 .entry-detail
-  margin -80px 0 20px
+  margin 20px 0 20px
+  opacity 1
+

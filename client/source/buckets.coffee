@@ -2,7 +2,6 @@ Backbone = require 'backbone'
 Cocktail = require 'cocktail'
 
 Backbone.$ = $
-Cocktail.patch Backbone
 
 Chaplin = require 'chaplin'
 
@@ -26,9 +25,6 @@ module.exports = class BucketsApp extends Chaplin.Application
     mediator.options = @options
     mediator.user = new User @options.user if @options.user
     mediator.plugins = {}
-
-    _.each @options.bootPlugins, (plugin) ->
-      mediator.loadPlugin plugin.slug if plugin.slug
 
     if options.cloudinary
       $.cloudinary.config

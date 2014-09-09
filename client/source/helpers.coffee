@@ -1,5 +1,5 @@
 Handlebars = require 'hbsfy/runtime'
-mediator = require('chaplin').mediator
+mediator = require 'mediator'
 _ = require 'underscore'
 moment = require 'moment'
 
@@ -13,6 +13,12 @@ Handlebars.registerHelper 'adminSegment', ->
 Handlebars.registerHelper 'icon', (type) ->
   new Handlebars.SafeString """<span class="icon buckets-icon-#{type}"></span>"""
 
+Handlebars.registerHelper 'helpIcon', (tooltip, options) ->
+  new Handlebars.SafeString if options.hash?.docsPath
+    """<a class="btn btn-small btn-help btn-link btn-icon btn-icon-small show-tooltip" title="#{tooltip}" href="/#{mediator.options.adminSegment}/help/#{options.hash.docsPath}" target="_blank">#{Handlebars.helpers.icon 'question'}</a>"""
+  else
+    """<span class="btn-icon btn-help btn-icon-small show-tooltip" title="#{tooltip}">#{Handlebars.helpers.icon 'question'}</span>"""
+
 Handlebars.registerHelper 'gravatar', (email_hash) ->
 
   randomize = new Math.seedrandom email_hash or 'mrbucket'
@@ -21,16 +27,24 @@ Handlebars.registerHelper 'gravatar', (email_hash) ->
   color = defaultColors[Math.floor(defaultColors.length * randomize())]
 
   new Handlebars.SafeString """
-    <div class="avatar avatar-#{color}"
-      style="background-image: url(https://www.gravatar.com/avatar/#{email_hash}?d=404), url(/#{mediator.options.adminSegment}/img/avatars/#{color}.png)"></div>
+    <div class="avatar avatar-#{color}" style="background-image: url(https://www.gravatar.com/avatar/#{email_hash}?d=404), url(/#{mediator.options.adminSegment}/img/avatars/#{color}.png)"></div>
   """
 
-Handlebars.registerHelper 'highlightWildcards', (path) ->
-  new Handlebars.SafeString( path
-    .replace(/(\/?):([a-zA-Z0-9-_]*)\?/g, '<strong class="bkts-wildcard-optional show-tooltip" title="Optional parameter">$1$2</strong>')
-    .replace(/\/:([a-zA-Z0-9-_]*)/g, '/<strong class="bkts-wildcard-param show-tooltip" title="Required parameter">$1</strong>')
-    .replace('*', '<strong class="bkts-wildcard-catchall show-tooltip" title="Catch-all">…</strong>')
-  )
+Handlebars.registerHelper 'renderRoute', (keys) ->
+  url = @urlPattern
+
+  highlightedKeys = []
+  for key in @keys
+    continue if key.name in highlightedKeys
+    url = url.replace ///:#{key.name}\??\*?\+?(\(.+\))?///g, (match, regex) ->
+      className = 'show-tooltip bkts-wildcard'
+      className += ' bkts-wildcard-optional' if key.optional
+      highlightedKeys.push key.name
+      """
+        <strong class="#{className}" title="#{match}">#{key.name}</strong>
+      """
+
+  new Handlebars.SafeString url
 
 Handlebars.registerHelper 'timeAgo', (dateTime) ->
   m = moment dateTime
@@ -50,8 +64,7 @@ Handlebars.registerHelper 'debug', ->
 Handlebars.registerHelper 'logo', ->
   new Handlebars.SafeString """
     <h1 id="logo">
-      <a href="/#{mediator.options.adminSegment}/"><img src="/#{mediator.options.adminSegment}/img/buckets.svg" width="46" height="41"></a>
-      <span class="version-badge">alpha</span>
+      <a href="/#{mediator.options.adminSegment}/"><img src="/#{mediator.options.adminSegment}/img/buckets.svg" width="200"></a>
     </h1>
   """
 
@@ -69,3 +82,4 @@ Handlebars.registerHelper 'hasRole', (role..., options) ->
     options.fn @
   else
     options.inverse @
+

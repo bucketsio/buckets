@@ -19,7 +19,7 @@ fieldSchema = new mongoose.Schema
   fieldType:
     type: String
     required: yes
-  settings: mongoose.Schema.Types.Mixed
+  settings: {}
 
 fieldSchema
   .path 'slug'
@@ -58,7 +58,26 @@ bucketSchema = new mongoose.Schema
     required: yes
   icon:
     type: String
-    enum: ['edit', 'photos', 'calendar', 'movie', 'music-note', 'map-pin', 'quote', 'artboard', 'contacts-1']
+    enum: [
+      'edit'
+      'camera-front'
+      'calendar'
+      'video-camera'
+      'headphone'
+      'map'
+      'quote'
+      'shopping-bag'
+      'cocktail'
+      'globe'
+      'call'
+      'goal'
+      'megaphone'
+      'star'
+      'chat-bubble'
+      'bookmark'
+      'toolbox'
+      'person'
+    ]
     default: 'edit'
     required: yes
   color:

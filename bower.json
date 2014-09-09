@@ -21,15 +21,18 @@
     "toastr": "~2.0.3",
     "ladda": "~0.9.3",
     "jquery.formParams": "~0.1.1",
-    "underscore": "~1.6.0",
+    "underscore": "~1.7.0",
     "ace-builds": "~1.1.3",
-    "cocktail": "~0.5.7",
+    "cocktail": "~0.5.8",
     "fastclick": "~1.0.2",
     "gsap": "~1.13.1",
+    "open-iconic": "~1.1.1",
     "seedrandom": "~2.3.6",
     "Sortable": "~0.3.0",
     "cloudinary_js": "~1.0.19",
-    "imagesloaded": "~3.1.8"
+    "imagesloaded": "~3.1.8",
+    "bootstrap-tagsinput": "~0.4.2",
+    "typeahead.js": "~0.10.5"
   },
   "exportsOverride": {
     "blueimp-file-upload": {

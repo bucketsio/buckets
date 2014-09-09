@@ -4,6 +4,7 @@ Model = require 'lib/model'
 PageView = require 'views/base/page'
 FormMixin = require 'views/base/mixins/form'
 FieldTypeInputView = require 'views/fields/input'
+Chaplin = require 'chaplin'
 
 tpl = require 'templates/entries/edit'
 
@@ -41,7 +42,6 @@ module.exports = class EntryEditView extends PageView
 
   render: ->
     super
-    @$('.panel').css opacity: 0
     content = @model.get('content')
 
     _.each @bucket.get('fields'), (field) =>
@@ -68,7 +68,7 @@ module.exports = class EntryEditView extends PageView
               template: plugin.inputView
               model: fieldModel
 
-        @subview('field_'+field.slug).$el.html """
+        @subview("field_#{field.slug}").$el.html """
           <label class="text-danger">#{field.name}</label>
           <div class="alert alert-danger">
             <p>
@@ -78,15 +78,26 @@ module.exports = class EntryEditView extends PageView
           </div>
         """
 
-    TweenLite.fromTo @$('.panel'), .2,
-      y: 50
-      opacity: 0
-      scale: .9
-    ,
-      y: 0
-      scale: 1
-      opacity: 1
-      ease: Back.easeOut
+    # Convert keywords to input
+    popularKeywords = new Bloodhound
+      name: 'keywords'
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('keyword')
+      queryTokenizer: Bloodhound.tokenizers.whitespace
+      prefetch:
+        url: '/api/entries/keywords'
+        ttl: 0
+    popularKeywords.clearPrefetchCache()
+    popularKeywords.initialize()
+
+    $keywords = @$('[name="keywords"]')
+    $keywords.tagsinput
+      typeaheadjs:
+        name: 'keywords'
+        displayKey: 'keyword'
+        valueKey: 'keyword'
+        source: popularKeywords.ttAdapter()
+
+    @$('.bootstrap-tagsinput').addClass 'form-control'
 
   submitForm: (e) ->
     e.preventDefault()
@@ -96,17 +107,17 @@ module.exports = class EntryEditView extends PageView
       content[field.slug] = @subview("field_#{field.slug}").getValue?()
       continue if content[field.slug]
 
-      data = @subview("field_#{field.slug}").$el.formParams no
+      data = @subview "field_#{field.slug}"
+        .$el.formParams no
       simpleValue = data[field.slug]
 
       content[field.slug] = if simpleValue? then simpleValue else data
 
     @model.set content: content
 
-    status = @model.get('status')
-    # @model.set status: 'draft' if status is 'draft' LOL
-    @model.set status: 'live' unless @model.get('id')
-    @submit @model.save(@formParams(), wait: yes)
+    status = @model.get 'status'
+    @model.set status: 'live' unless @model.get 'id'
+    @submit @model.save @formParams(), wait: yes
 
   clickDelete: (e) ->
     e.preventDefault()
@@ -139,11 +150,27 @@ module.exports = class EntryEditView extends PageView
   clickCopy: (e) ->
     e.preventDefault()
 
-    @model.set _.extend @formParams(),
+    newModel = @model.clone()
+    newModel.set _.extend @formParams(),
       id: null
-      publishDate: null
+      publishDate: 'Now'
       status: 'draft'
 
-    @submit @model.save @model.toJSON(), wait: yes
+    collection = @model.collection
+    @model = newModel
+
+    @submit(@model.save @model.toJSON(), wait: yes).done (newEntry) =>
+      collection.add newModel
+      newModel = null
+      collection = null
+      Chaplin.utils.redirectTo 'buckets#browse', {slug: @bucket.get('slug'), entryID: newEntry.id}
+
+
+
+  dispose: ->
+    unless @disposed
+      @$('.panel').css(opacity: 0)
+      @$('[name="keywords"]').tagsinput 'destroy'
+    super
 
   @mixin FormMixin

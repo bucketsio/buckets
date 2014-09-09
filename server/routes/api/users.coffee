@@ -68,7 +68,7 @@ module.exports = app = express()
 
 ###
   @api {post} /users Add a User
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Users
   @apiName PostUser
 
@@ -81,7 +81,7 @@ module.exports = app = express()
 
 ###
   @api {get} /users Request Users
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Users
   @apiName GetUsers
 
@@ -104,7 +104,7 @@ app.route('/users')
 
 ###
   @api {get} /users/:id Request a User
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Users
   @apiName GetUser
 
@@ -117,7 +117,7 @@ app.route('/users')
 
 ###
   @api {put} /users/:id Edit a User
-  @apiVersion 0.0.3
+  @apiVersion 0.0.4
   @apiGroup Users
   @apiName PutUser
 
@@ -139,7 +139,7 @@ app.route('/users')
 
 ###
   @api {delete} /users/:id Delete a User
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Users
   @apiName DeleteUser
 
@@ -153,8 +153,8 @@ app.route('/users')
 
 app.route('/users/:userID')
   .get (req, res) ->
-    User.findOne _id: req.params.userID, (err, user) ->
-    res.send user if user
+    User.findById req.params.userID, (err, user) ->
+      res.send user if user
 
   .delete (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
@@ -166,7 +166,7 @@ app.route('/users/:userID')
   .put (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator'] or req.user?._id is req.params.userID
 
-    User.findOne {_id: req.params.userID}, 'passwordDigest', (err, user) ->
+    User.findById req.params.userID, 'passwordDigest', (err, user) ->
       return res.status(400).send e: err if err
 
       {password, passwordconfirm, oldpassword} = req.body
@@ -187,7 +187,7 @@ app.route('/users/:userID')
 ###
   @api {post} /forgot Request a Password Reset
   @apiDescription Will look for the provided email, generate a reset token, and send a password reset email to the matching user.
-  @apiVersion 0.0.2
+  @apiVersion 0.0.4
   @apiGroup Users
   @apiName ResetPassword
 

@@ -11,14 +11,16 @@ module.exports =
       # Batch ops to set passwordDigest
       ops = []
       for user, i in users
-        if {password} = user.toObject()
-          next('Already migrated') if user.passwordDigest
-          user.passwordDigest = bcrypt.hashSync(password, bcrypt.genSaltSync())
+        {password} = user.toObject()
+        if user.passwordDigest or not password?
+          console.log('Already migrated')
+          return done()
 
-          ops.push (next) ->
-            user.save next
-        else
-          next('Couldn’t get the user’s password.')
+        user.passwordDigest = bcrypt.hashSync(password, bcrypt.genSaltSync())
+
+        ops.push (next) ->
+          user.save next
+
 
       async.parallel ops, (err) ->
         throw err if err

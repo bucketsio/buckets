@@ -39,176 +39,194 @@
 }
 
 .buckets-icon-twitter:before {
-  content: "d";
-}
-.buckets-icon-bubble:before {
-  content: "c";
-}
-.buckets-icon-contacts:before {
-  content: "f";
-}
-.buckets-icon-bag:before {
-  content: "e";
-}
-.buckets-icon-basket:before {
-  content: "g";
-}
-.buckets-icon-briefcase:before {
-  content: "h";
-}
-.buckets-icon-photos:before {
-  content: "i";
-}
-.buckets-icon-calendar:before {
-  content: "j";
-}
-.buckets-icon-artboard:before {
-  content: "k";
-}
-.buckets-icon-movie:before {
-  content: "l";
-}
-.buckets-icon-cloud:before {
-  content: "n";
-}
-.buckets-icon-clipboard:before {
-  content: "o";
-}
-.buckets-icon-edit:before {
-  content: "p";
-}
-.buckets-icon-present:before {
-  content: "r";
-}
-.buckets-icon-trophy:before {
-  content: "s";
-}
-.buckets-icon-heart:before {
-  content: "t";
-}
-.buckets-icon-bucket:before {
-  content: "u";
-}
-.buckets-icon-inbox:before {
-  content: "v";
-}
-.buckets-icon-github:before {
-  content: "w";
-}
-.buckets-icon-help:before {
-  content: "x";
-}
-.buckets-icon-info:before {
-  content: "y";
-}
-.buckets-icon-info:before {
-  content: "z";
-}
-.buckets-icon-alert:before {
-  content: "z";
-}
-.buckets-icon-dropbox:before {
-  content: "B";
-}
-.buckets-icon-clock:before {
-  content: "C";
-}
-.buckets-icon-bookmark:before {
-  content: "D";
-}
-.buckets-icon-back-in-time:before {
-  content: "E";
-}
-.buckets-icon-trash:before {
-  content: "F";
-}
-.buckets-icon-alert-2:before {
-  content: "G";
-}
-.buckets-icon-burst-new:before {
-  content: "H";
-}
-.buckets-icon-cog:before {
-  content: "I";
-}
-.buckets-icon-user:before {
-  content: "K";
-}
-.buckets-icon-anchor:before {
-  content: "L";
-}
-.buckets-icon-megaphone:before {
   content: "a";
 }
-.buckets-icon-music-note:before {
+.buckets-icon-bullhorn:before {
   content: "b";
 }
-.buckets-icon-map-pin:before {
+.buckets-icon-facebook:before {
+  content: "c";
+}
+.buckets-icon-denied-block:before {
+  content: "d";
+}
+.buckets-icon-bell:before {
+  content: "e";
+}
+.buckets-icon-anchor:before {
+  content: "f";
+}
+.buckets-icon-dropbox:before {
+  content: "l";
+}
+.buckets-icon-eye-visible:before {
   content: "m";
 }
-.buckets-icon-globe:before {
-  content: "M";
+.buckets-icon-eye-hidden:before {
+  content: "n";
 }
-.buckets-icon-filter-2:before {
-  content: "N";
+.buckets-icon-close-delete:before {
+  content: "o";
 }
-.buckets-icon-layers:before {
-  content: "N";
+.buckets-icon-location-arrow:before {
+  content: "p";
 }
-.buckets-icon-quote:before {
-  content: "O";
-}
-.buckets-icon-shift:before {
-  content: "P";
-}
-.buckets-icon-shift-2:before {
-  content: "P";
-}
-.buckets-icon-contacts-1:before {
-  content: "Q";
-}
-.buckets-icon-user-add:before {
+.buckets-icon-paper-clip:before {
   content: "q";
 }
-.buckets-icon-smiley:before {
-  content: "R";
+.buckets-icon-remove:before {
+  content: "r";
 }
-.buckets-icon-smiley-happy:before {
-  content: "S";
-}
-.buckets-icon-smiley-sad:before {
-  content: "T";
-}
-.buckets-icon-stationery:before {
-  content: "U";
-}
-.buckets-icon-file-code:before {
-  content: "V";
-}
-.buckets-icon-book:before {
-  content: "X";
-}
-.buckets-icon-tabbed-book:before {
-  content: "Y";
-}
-.buckets-icon-briefcase-1:before {
-  content: "0";
-}
-.buckets-icon-drawer-2:before {
-  content: "2";
+.buckets-icon-trash:before {
+  content: "s";
 }
 .buckets-icon-tag:before {
-  content: "3";
+  content: "t";
 }
-.buckets-icon-add-circle:before {
+.buckets-icon-search:before {
+  content: "v";
+}
+.buckets-icon-question:before {
+  content: "w";
+}
+.buckets-icon-plus:before {
+  content: "x";
+}
+.buckets-icon-bookmark-small:before {
+  content: "y";
+}
+.buckets-icon-calendar-small:before {
+  content: "z";
+}
+.buckets-icon-cursor-move:before {
+  content: "B";
+}
+.buckets-icon-exclamation:before {
+  content: "C";
+}
+.buckets-icon-check:before {
   content: "A";
 }
-.buckets-icon-add:before {
-  content: "4";
+.buckets-icon-circle:before {
+  content: "D";
 }
-.buckets-icon-direction-sign:before {
+.buckets-icon-log-in:before {
+  content: "E";
+}
+.buckets-icon-star-small:before {
+  content: "u";
+}
+.buckets-icon-ellipsis:before {
+  content: "F";
+}
+.buckets-icon-heart:before {
+  content: "G";
+}
+.buckets-icon-information-circle:before {
+  content: "H";
+}
+.buckets-icon-caret-down:before {
+  content: "h";
+}
+.buckets-icon-caret-up:before {
+  content: "i";
+}
+.buckets-icon-link:before {
+  content: "g";
+}
+.buckets-icon-google-plus:before {
+  content: "j";
+}
+.buckets-icon-github:before {
+  content: "k";
+}
+.buckets-icon-edit:before {
+  content: "I";
+}
+.buckets-icon-bookmark:before {
+  content: "J";
+}
+.buckets-icon-palette:before {
+  content: "K";
+}
+.buckets-icon-star:before {
+  content: "L";
+}
+.buckets-icon-chat-bubble:before {
+  content: "M";
+}
+.buckets-icon-megaphone:before {
+  content: "N";
+}
+.buckets-icon-user:before {
+  content: "O";
+}
+.buckets-icon-safe:before {
+  content: "T";
+}
+.buckets-icon-calendar:before {
+  content: "V";
+}
+.buckets-icon-briefcase:before {
+  content: "Y";
+}
+.buckets-icon-globe:before {
   content: "Z";
 }
+.buckets-icon-direction-sign:before {
+  content: "4";
+}
+.buckets-icon-power:before {
+  content: "U";
+}
+.buckets-icon-call:before {
+  content: "6";
+}
+.buckets-icon-shopping-bag:before {
+  content: "7";
+}
+.buckets-icon-video-camera:before {
+  content: "8";
+}
+.buckets-icon-camera-front:before {
+  content: "P";
+}
+.buckets-icon-headphone:before {
+  content: "Q";
+}
+.buckets-icon-cloud:before {
+  content: "S";
+}
+.buckets-icon-goal:before {
+  content: "9";
+}
+.buckets-icon-toolbox:before {
+  content: "R";
+}
+.buckets-icon-map:before {
+  content: "W";
+}
 .buckets-icon-setting-gear:before {
-  content: "J";
+  content: "5";
+}
+.buckets-icon-watch:before {
+  content: "!";
+}
+.buckets-icon-building:before {
+  content: "\"";
+}
+.buckets-icon-database:before {
+  content: "#";
+}
+.buckets-icon-card:before {
+  content: "2";
+}
+.buckets-icon-add:before {
+  content: "$";
+}
+.buckets-icon-script:before {
+  content: "%";
+}
+.buckets-icon-html:before {
+  content: "X";
 }

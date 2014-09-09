@@ -58,6 +58,7 @@ module.exports = class EntriesBrowser extends PageView
 
   modelSaved: (entry, newData) =>
     if newData?.id
+      @model.set newData
       toastr.success "You saved “#{entry.get('title')}”"
       @collection.add @model
     else

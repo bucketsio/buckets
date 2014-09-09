@@ -1,6 +1,7 @@
+_ = require 'underscore'
 mongoose = require 'mongoose'
 db = require '../lib/database'
-pathRegexp = require('path-to-regexp')
+pathRegexp = require 'path-to-regexp'
 
 require('mongoose-regexp')(mongoose)
 
@@ -16,14 +17,11 @@ routeSchema = new mongoose.Schema
   template:
     type: String
     required: yes
-  sort: Number
+  sort:
+    type: Number
+    default: 0
+    index: yes
   keys: []
-  createdDate:
-    type: Date
-    default: Date.now
-  isBucketRoute:
-    type: Boolean
-    default: no
 ,
   toJSON:
     virtuals: yes
@@ -33,6 +31,8 @@ routeSchema = new mongoose.Schema
       ret
 
 routeSchema.pre 'validate', (next) ->
+  @urlPattern ?= ''
+
   # Force the initial slash for consistency
   # (trailing slash is up to user)
   # Also truncate any multiple slashes to one...
@@ -42,9 +42,13 @@ routeSchema.pre 'validate', (next) ->
   # and saves the keys to an array
   @keys = []
   @urlPatternRegex = pathRegexp @urlPattern, @keys, yes, no
-
+  @invalidate 'urlPattern', 'That is not a valid URL pattern.' unless _.isRegExp @urlPatternRegex
   next()
 
-routeSchema.set 'toJSON', virtuals: true
+routeSchema.virtual('isCanonical').get ->
+  return no unless @keys?.length
+  for key in @keys
+    return no unless key.name in ['slug', 'year', 'month', 'day', 'bucket', 'slug']
+  yes
 
 module.exports = db.model 'Route', routeSchema
