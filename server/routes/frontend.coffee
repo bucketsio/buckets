@@ -16,7 +16,6 @@ tplPath = config.templatePath
 require('../lib/renderer')(hbs)
 
 app.set 'views', tplPath
-app.set 'view cache', off
 
 app.use express.static config.publicPath, maxAge: 86400000 * 7 # One week
 
@@ -47,6 +46,7 @@ app.all '/:frontend*?', (req, res, next) ->
 
     # Used to block rendering if {{next}} is called
     globalNext = false
+    hasRendered = no
     hbs.registerHelper 'next', -> globalNext = true
 
     matchingRoutes = []
@@ -78,6 +78,9 @@ app.all '/:frontend*?', (req, res, next) ->
 
     # The magical, time-traveling Template lookup/renderer
     async.detectSeries matchingRoutes, (localTemplateData, callback) ->
+      # console.log 'hasRendered', hasRendered
+      return if hasRendered is yes
+
       localTemplateData.errors = templateData.errors
       res.render localTemplateData.route.template, localTemplateData, (err, html) ->
         if globalNext
@@ -96,7 +99,8 @@ app.all '/:frontend*?', (req, res, next) ->
             # console.log 'Rendered HTML, but headers sent.'
             callback false
           else
-            # console.log 'Rendering.'
+            # console.log 'Rendering.'.green, arguments
+            hasRendered = yes
             res.send html
             callback yes
         else if not html

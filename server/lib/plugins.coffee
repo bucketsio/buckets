@@ -10,6 +10,7 @@ config = require '../config'
 
 cwd = config?.pluginsPath
 
+# todo: Re-write this to be non-blocking
 module.exports =
   load: ->
     return [] unless cwd

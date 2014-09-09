@@ -7,7 +7,8 @@ Template = require('../../lib/template')(config?.templatePath)
 module.exports = app = express()
 
 validateTemplate = (contents) ->
-  compiled = hbs.handlebars.compile contents
+  compiler = hbs.create().handlebars
+  compiled = compiler.compile contents
 
   try
     null if compiled {}
