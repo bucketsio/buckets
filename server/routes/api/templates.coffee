@@ -28,7 +28,6 @@ app.route('/templates')
         res.send(files)
 
   .post (req, res) ->
-
     errors = validateTemplate req.body.contents
     return res.status(400).send errors if errors
 
@@ -73,6 +72,7 @@ app.route('/templates/:filename')
       if err
         res.status(500).send err
       else
+        hbs.cache = {} # Reset hbs internal cache
         res.status(201).send
           filename: filename
           contents: contents
