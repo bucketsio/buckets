@@ -7,7 +7,7 @@ module.exports =
       return if @disposed
 
       # Automatically focus the first visible input (on non-touch devices)
-      $firstField = @$('.form-control:visible').eq(0)
+      $firstField = @$('.form-control').eq(0)
       $firstField.focus() unless Modernizr.touch or $firstField.val()
 
       # Prep slugs
