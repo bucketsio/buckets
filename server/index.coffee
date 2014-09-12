@@ -2,7 +2,6 @@ dotenv = require 'dotenv'
 dotenv.load()
 
 _ = require 'underscore'
-hbs = require 'hbs'
 colors = require 'colors'
 cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
@@ -10,7 +9,9 @@ session = require 'cookie-session'
 compression = require 'compression'
 responseTime = require 'response-time'
 express = require 'express'
+hbs = require 'hbs'
 fs = require 'fs'
+
 
 class Buckets
   constructor: (config) ->
@@ -23,11 +24,11 @@ class Buckets
       newrelicConfig = require '../newrelic'
       if newrelicConfig.config.license_key
         newrelic = require 'newrelic'
-        console.log 'Loaded newrelic'
+        console.log 'NewRelic '.cyan + 'On'
         hbs.registerHelper 'newrelic', ->
           new hbs.handlebars.SafeString newrelic.getBrowserTimingHeader()
     catch e
-      console.log 'Could not load newrelic', e
+      console.log 'There was an error loading NewRelic', e
 
     # Purge Fastly on prod pushes
     if @config.fastly?.api_key and @config.fastly?.service_id and @config.env is 'production'

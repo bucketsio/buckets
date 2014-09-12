@@ -13,6 +13,7 @@ config =
     pluginsPath: "#{__dirname}/../node_modules/"
     catchAll: yes
     autoStart: yes
+    cloudinary: process.env.CLOUDINARY_URL
     db: "mongodb://localhost/buckets_#{env}"
   production:
     smtp:

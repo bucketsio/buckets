@@ -1,6 +1,6 @@
 Swag = require 'swag'
 _ = require 'underscore'
-
+cloudinary = require 'cloudinary'
 config = require '../config'
 Entry = require '../models/entry'
 Bucket = require '../models/bucket'
@@ -64,3 +64,10 @@ module.exports = (hbs) ->
       .replace /[&<>]/g, (key) -> entities[key]
 
     new hbs.handlebars.SafeString "<pre>#{json}</pre>"
+
+  hbs.registerHelper 'img', (img, options) ->
+    return unless img?.public_id
+    settings = _.defaults options.hash,
+      fetch_format: 'auto'
+
+    new hbs.handlebars.SafeString cloudinary.image(img.public_id, settings)

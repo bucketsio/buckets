@@ -26,6 +26,19 @@ module.exports = class EntryEditView extends PageView
     'click [href="#publish"]': 'clickPublish'
     'click [href="#copy"]': 'clickCopy'
     'click [href="#reject"]': 'clickReject'
+    'keydown textarea, [type=text], [type=number]': 'keyDown'
+    'keyup textarea, [type=text], [type=number]': 'keyUp'
+
+  keyUp: (e) ->
+    if @cmdActive and e.which is 91
+      @cmdActive = false
+      e
+
+  keyDown: (e) ->
+    if @cmdActive and e.which is 13
+      @$('form').submit()
+    @cmdActive = e.metaKey
+    e
 
   getTemplateData: ->
     fields = @bucket.get('fields')
@@ -51,7 +64,7 @@ module.exports = class EntryEditView extends PageView
       @subview 'field_'+field.slug, new FieldTypeInputView
         model: fieldModel
 
-      return if field.fieldType in ['text', 'textarea', 'checkbox', 'number']
+      return if field.fieldType in ['text', 'textarea', 'checkbox', 'number', 'cloudinary_image']
 
       # Otherwise ensure the plugin is loaded and see if one exists
       mediator.loadPlugin(field.fieldType).done =>

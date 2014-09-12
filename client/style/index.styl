@@ -177,5 +177,37 @@ input[type="text"].form-control, textarea.form-control
   margin 10px 0
   background-color #f1f1f1
 
+.dropzone
+  overflow hidden
+  position relative
+  border-radius 4px
+  border 2px dashed lighten($gray, 30)
+  margin 6px 0
+  padding 30px 20px
+  text-align center
+  font-size 12px
+  transition all 200ms ease-out
+  &.hover
+    background-color lighten($gray, 35)
+    border-color $active
+
+.preview
+  overflow hidden
+  margin-bottom 10px
+  position relative
+  min-height 30px
+
+  img
+    display block
+    position relative
+    margin 0 auto
+    max-width 100%
+
+  .close
+    position absolute
+    top 5px
+    right 5px
+    z-index 20
+
 .bootstrap-tagsinput
   padding 4px 6px

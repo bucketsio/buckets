@@ -19,7 +19,6 @@
     <![endif]-->
     <div id="preload"></div>
     <div id="bkts-content"></div>
-
     <!-- env: {{env}} -->
     <script src="{{assetPath}}/vendor/spin.js/spin.js"></script>
     <script>
@@ -56,7 +55,11 @@
           {{~#if user~}}
             ,user: {{~json user~}}
           {{~/if~}}
+          {{~#if cloudinary~}}
+            ,cloudinary: {{~json cloudinary~}}
+          {{~/if~}}
         });
+
         $(preload).fadeOut(function(){
           this.remove();
         });

@@ -55,6 +55,18 @@ Parameters can be added to the tag like so:
 {{/entries}}
 ```
 
+### img
+
+This tag works with our Cloudinary image FieldType. Just pass it the image field from your Entry, and set any optional attributes via [Cloudinary](http://cloudinary.com/). For example, assuming we have a field called `headshot` on our "Team members" bucket, we can create a of headshots for our team with the following:
+
+```
+{{#entries}}
+  {{img headshot alt="Image of " width="150" height="150" crop="crop" gravity="face"}}
+{{/entries}}
+```
+
+Notice that Cloudinary gives Buckets the ability to dynamically render images in various sizes/formats, apply effects like saturation, and manipulate cropping/scaling options. [Learn more about all of the Cloudinary image transformations possible](http://cloudinary.com/documentation/node_image_manipulation).
+
 ### renderTime
 
 Renders the time (in ms) the page has taken to render (best to place near the footer).

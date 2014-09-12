@@ -1,5 +1,7 @@
 express = require 'express'
 hbs = require 'hbs'
+cloudinary = require 'cloudinary'
+url = require 'url'
 cors = require 'cors'
 glob = require 'glob'
 fs = require 'fs'
@@ -66,6 +68,33 @@ app.get '/:admin*?', (req, res) ->
     localPlugins = _.filter app.get('plugins'), (plugin) ->
       plugin.client or plugin.clientStyle
 
+    if config.cloudinary
+      parsed = url.parse(config.cloudinary)
+      [api_key,api_secret] = parsed.auth.split(':')
+      cloud_name = parsed.host
+
+      cloudinaryData =
+        timestamp: Date.now() # Lasts 1 hour
+        use_filename: yes
+        callback: "http://#{req.get('host')}/vendor/cloudinary_js/html/cloudinary_cors.html"
+        image_metadata: yes
+        exif: yes
+        colors: yes
+        faces: yes
+        eager: 'c_limit,w_600,h_300,f_auto'
+        eager_async: yes
+
+      signature = cloudinary.utils.sign_request cloudinaryData,
+        cloud_name: cloud_name
+        api_key: api_key
+        api_secret: api_secret
+      .signature
+      cloudinaryData.signature = signature
+      cloudinaryData.api_key = api_key
+      cloudinaryData.cloud_name = cloud_name
+    else
+      cloudinaryData = {}
+
     res.render 'admin',
       user: req.user
       env: config.env
@@ -77,6 +106,7 @@ app.get '/:admin*?', (req, res) ->
           "/#{adminSegment}"
       apiSegment: config.apiSegment
       needsInstall: userCount is 0
+      cloudinary: cloudinaryData
       version: pkg.version
 
     if req.user
