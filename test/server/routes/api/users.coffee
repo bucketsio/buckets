@@ -168,7 +168,7 @@ describe 'REST#Users', ->
 
     describe 'GET /users/:id', ->
 
-      it 'returns a 401 if user isn’t authenticated', (done) ->
+      it 'returns a 200 and User', (done) ->
         request app
           .get "/#{config.apiSegment}/users/#{sampleUser.id}"
           .expect 200
@@ -178,25 +178,15 @@ describe 'REST#Users', ->
             expect(user.email).equal('dave@buckets.io')
             expect(user.name).equal('David Kaneda')
             done()
+
       # TODO investigate failing test
       # it 'returns a 400 if user is not exist', (done) ->
-      #   auth.createUser (err, user) ->
-      #     user
-      #       .get "/#{config.apiSegment}/users/0000000000000"
-      #       .expect 400
-      #       .end done
+      #   request app
+      #     .get "/#{config.apiSegment}/users/0000000000000"
+      #     .expect 400
+      #     .end done
 
-      it 'returns a 200 and User', (done) ->
-        auth.createUser (err, user) ->
-          user
-            .get "/#{config.apiSegment}/users/#{sampleUser.id}"
-            .expect 200
-            .end (e, res) ->
-              respUser = res.body
-              expect(respUser.id).to.exist
-              expect(respUser.email).equal('dave@buckets.io')
-              expect(respUser.name).equal('David Kaneda')
-              done()
+
 
     describe 'PUT /users/:id', ->
 
