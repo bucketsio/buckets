@@ -217,7 +217,6 @@ describe 'REST#Users', ->
             .expect 401
             .end done
 
-      # TODO investigate failing test
       it 'returns a 400 if user is not exist', (done) ->
         auth.createAdmin (err, admin) ->
           admin
@@ -259,7 +258,6 @@ describe 'REST#Users', ->
             .expect 401
             .end done
 
-      # TODO investigate failing test
       it 'returns a 400 if user is not exist', (done) ->
         auth.createAdmin (err, admin) ->
           admin
