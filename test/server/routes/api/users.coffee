@@ -103,7 +103,6 @@ describe 'REST#Users', ->
           .expect 400
           .end done
 
-    # TODO investigate failing test
     it 'returns a 400 if password is more than 20 characters', (done) ->
       auth.createAdmin (err, admin) ->
         admin
