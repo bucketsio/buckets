@@ -291,3 +291,17 @@ describe 'REST#Users', ->
         .send 'Invalid JSON payload'
         .expect 404
         .end done
+
+  describe 'GET /reset/:token', ->
+    it 'returns a 404 if token is not exist', (done) ->
+      request app
+        .get "/#{config.apiSegment}/reset/12312213"
+        .expect 404
+        .end done
+
+  describe 'PUT /reset/:token', ->
+    it 'returns a 404 if token is not exist', (done) ->
+      request app
+        .put "/#{config.apiSegment}/reset/12312213"
+        .expect 404
+        .end done
