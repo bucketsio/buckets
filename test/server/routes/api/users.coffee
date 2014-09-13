@@ -275,3 +275,19 @@ describe 'REST#Users', ->
               User.findById sampleUser.id, (err, dbUser) ->
                 expect(dbUser).to.not.exist
                 done()
+
+  describe 'POST /forget', ->
+    it 'returns a 404 if user is not exist', (done) ->
+      request app
+        .post "/#{config.apiSegment}/forget"
+        .send
+          email: 'random@example.com'
+        .expect 404
+        .end done
+
+    it 'returns a 404 if payload is not json', (done) ->
+      request app
+        .post "/#{config.apiSegment}/forget"
+        .send 'Invalid JSON payload'
+        .expect 404
+        .end done
