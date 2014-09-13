@@ -9,6 +9,7 @@ module.exports = class EditRouteView extends View
   template: tpl
   className: 'routeEdit'
   optionNames: View::optionNames.concat ['templates']
+  mixins: [FormMixin]
 
   events:
     'submit form': 'submitForm'
@@ -25,4 +26,3 @@ module.exports = class EditRouteView extends View
   clickCancel: (e) ->
     e.preventDefault()
     @dispose()
-  @mixin FormMixin

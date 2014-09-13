@@ -6,7 +6,7 @@ tpl = require 'templates/members/list'
 
 module.exports = class MembersList extends View
   template: tpl
-
+  mixins: [FormMixin]
   optionNames: View::optionNames.concat ['bucket', 'users']
 
   listen:
@@ -41,5 +41,3 @@ module.exports = class MembersList extends View
       # Remove users which are already members
       users: _.compact @users.map (user) =>
         user.toJSON() unless @collection.get(user.get('id'))? or user.hasRole('administrator')
-
-  @mixin FormMixin

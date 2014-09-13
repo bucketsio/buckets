@@ -1,5 +1,4 @@
 Chaplin = require 'chaplin'
-getSlug = require 'speakingurl'
 _ = require 'underscore'
 
 mediator = Chaplin.mediator
@@ -10,7 +9,6 @@ module.exports = class Layout extends Chaplin.Layout
     'header': '#bkts-header'
 
   events:
-    'keyup input[data-sluggify]': 'keyUpSluggify'
     'click [href="#menu"]': 'clickMenu'
     'click #logo a': 'clickLogo'
     'click .nav-primary a': 'clickMenuNav'
@@ -64,15 +62,6 @@ module.exports = class Layout extends Chaplin.Layout
 
       @$nav.css(display: 'block').slideToggle 150, =>
         @$nav.toggleClass('hidden-xs').toggle()
-
-  keyUpSluggify: (e) ->
-    $el = @$(e.currentTarget)
-
-    val = $el.val()
-    $target = @$("input[name=\"#{$el.data('sluggify')}\"]")
-    slug = getSlug val
-
-    $target.val slug
 
   fadeAwayFadeAway: ->
     $('body').css opacity: .85

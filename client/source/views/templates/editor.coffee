@@ -8,7 +8,7 @@ tpl = require 'templates/templates/editor'
 
 module.exports = class TemplateEditor extends PageView
   template: tpl
-
+  mixins: [FormMixin]
   listen:
     'sync collection': 'render'
 
@@ -113,5 +113,3 @@ module.exports = class TemplateEditor extends PageView
   dispose: ->
     @editor?.destroy()
     super
-
-  @mixin FormMixin

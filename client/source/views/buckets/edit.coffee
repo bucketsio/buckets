@@ -7,10 +7,9 @@ FormMixin = require 'views/base/mixins/form'
 tpl = require 'templates/buckets/edit'
 
 module.exports = class BucketEditView extends PageView
-
   template: tpl
-
   optionNames: PageView::optionNames.concat ['fields', 'members', 'users']
+  mixins: [FormMixin]
 
   regions:
     'fields': '#fields'
@@ -82,5 +81,3 @@ module.exports = class BucketEditView extends PageView
 
   setActiveTab: (idx) ->
     @$('.nav-tabs li').eq(idx-1).find('a').click()
-
-  @mixin FormMixin

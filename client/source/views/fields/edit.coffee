@@ -9,6 +9,7 @@ tpl = require 'templates/fields/edit'
 
 module.exports = class FieldEditView extends View
   template: tpl
+  mixins: [FormMixin]
   events:
     'submit form': 'submitForm'
     'click [href="#cancel"]': 'clickCancel'
@@ -53,5 +54,3 @@ module.exports = class FieldEditView extends View
   clickCancel: (e) ->
     e.preventDefault()
     @dispose()
-
-  @mixin FormMixin

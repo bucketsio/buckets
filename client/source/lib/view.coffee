@@ -5,8 +5,12 @@ Cocktail = require 'cocktail'
 
 module.exports = class View extends Chaplin.View
   autoRender: yes
+  mixins: []
   getTemplateFunction: -> @template
   getTemplateHTML: -> @getTemplateFunction() @getTemplateData()
+
+  initialize: ->
+    Cocktail.mixin @, mixin for mixin in @mixins
 
   # Don't hate the player, hate the game
   getSize: ->
@@ -25,5 +29,3 @@ module.exports = class View extends Chaplin.View
   dispose: ->
     @trigger 'dispose'
     super
-
-  @mixin = (mixin) -> Cocktail.mixin View, mixin
