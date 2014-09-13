@@ -137,7 +137,7 @@ userSchema.path 'passwordDigest'
     if @isNew and !@password?
       @invalidate 'password', 'A password is required.'
 
-    if @password? and not /^(?=.*?\d)\w(\w|[!@#$%]){5,20}/.test(@password)
+    if @password? and not /^(?=.*?\d)\w(\w|[!@#$%]){5,20}$/.test(@password)
       @invalidate 'password', 'Your password must be between 6–20 characters
         and include a number.'
   , null

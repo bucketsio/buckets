@@ -104,16 +104,16 @@ describe 'REST#Users', ->
           .end done
 
     # TODO investigate failing test
-    # it 'returns a 400 if password is more than 20 characters', (done) ->
-    #   auth.createAdmin (err, admin) ->
-    #     admin
-    #       .post "/#{config.apiSegment}/users"
-    #       .send
-    #         name: 'David Kaneda'
-    #         email: 'dave@buckets.io'
-    #         password: 'extremelylongpassword2014'
-    #       .expect 400
-    #       .end done
+    it 'returns a 400 if password is more than 20 characters', (done) ->
+      auth.createAdmin (err, admin) ->
+        admin
+          .post "/#{config.apiSegment}/users"
+          .send
+            name: 'David Kaneda'
+            email: 'dave@buckets.io'
+            password: 'extremelylongpassword2014'
+          .expect 400
+          .end done
 
     it 'returns a 400 if password doesnot have a number', (done) ->
       auth.createAdmin (err, admin) ->
