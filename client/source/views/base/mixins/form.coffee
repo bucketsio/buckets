@@ -26,11 +26,9 @@ module.exports =
     @$el.formParams no
 
   submit: (promise) ->
-    console.log 'start', @$btn
     @$btn?.ladda 'start'
 
     promise.always =>
-      console.log 'ALWAYS', @$btn
       @$btn?.ladda 'stop'
     .fail _.bind(@renderServerErrors, @)
 
