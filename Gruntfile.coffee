@@ -54,7 +54,7 @@ module.exports = (grunt) ->
 
       plugins:
         options:
-          external: ['buckets', 'hbsfy/runtime']
+          exclude: ['buckets', 'hbsfy/runtime']
           alias: []
         files: [
           expand: yes
