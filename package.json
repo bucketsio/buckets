@@ -4,7 +4,6 @@
   "description": "Manage content better.",
   "scripts": {
     "start": "./node_modules/coffee-script/bin/coffee ./server/start.coffee",
-    "prepublish": "grunt prepublish",
     "test": "grunt test",
     "test-cov": "grunt test:server:cov"
   },

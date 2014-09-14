@@ -93,6 +93,8 @@ module.exports = (grunt) ->
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server -b'
       cov:
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html'
+      publish:
+        command: 'npm publish'
 
     concat:
       style:
@@ -299,12 +301,12 @@ module.exports = (grunt) ->
   # Building
   grunt.registerTask 'default', ['build']
   grunt.registerTask 'build', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'uglify:plugins', 'build-scripts', 'build-style', 'modernizr']
-  grunt.registerTask 'prepublish', ['build', 'uglify:app', 'cssmin']
+  grunt.registerTask 'prepublish', ['clean:all', 'build', 'uglify:app', 'cssmin']
+  grunt.registerTask 'publish', ['prepublish', 'shell:publish']
 
   # Serving
   grunt.registerTask 'dev', ['express:dev', 'watch']
   grunt.registerTask 'devserve', ['express:dev', 'watch']
-  grunt.registerTask 'serve', ['express:server']
 
   # Tests
   grunt.registerTask 'test:server', ['shell:mocha']
