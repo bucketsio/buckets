@@ -33,8 +33,8 @@ describe 'REST#Users', ->
           .end (e, res) ->
             users = res.body
             expect(users).to.exist
-            assert.isArray(users)
-            assert.lengthOf(users, 1)
+            expect(users).to.be.an 'Array'
+            expect(users.length).to.equal 1
             expect(users[0].id).to.exist
             expect(users[0].email).equal('test+user@buckets.io')
             expect(users[0].name).equal('Test User')
@@ -45,8 +45,8 @@ describe 'REST#Users', ->
       request app
         .post "/#{config.apiSegment}/users"
         .send
-          name: 'David Kaneda'
-          email: 'dave@buckets.io'
+          name: 'Phil'
+          email: 'phil@buckets.io'
           password: 'plainpassword2014'
         .expect 401
         .end done
@@ -56,8 +56,8 @@ describe 'REST#Users', ->
         user
           .post "/#{config.apiSegment}/users"
           .send
-            name: 'David Kaneda'
-            email: 'dave@buckets.io'
+            name: 'Phil'
+            email: 'phil@buckets.io'
             password: 'plainpassword2014'
           .expect 401
           .end done
@@ -67,7 +67,7 @@ describe 'REST#Users', ->
         admin
           .post "/#{config.apiSegment}/users"
           .send
-            email: 'dave@buckets.io'
+            email: 'phil@buckets.io'
             password: 'plainpassword2014'
           .expect 400
           .end done
@@ -77,7 +77,7 @@ describe 'REST#Users', ->
         admin
           .post "/#{config.apiSegment}/users"
           .send
-            name: 'David Kaneda'
+            name: 'Phil'
             password: 'plainpassword2014'
           .expect 400
           .end done
@@ -87,8 +87,8 @@ describe 'REST#Users', ->
         admin
           .post "/#{config.apiSegment}/users"
           .send
-            name: 'David Kaneda'
-            email: 'dave@buckets.io'
+            name: 'Phil'
+            email: 'phil@buckets.io'
           .expect 400
           .end done
 
@@ -97,8 +97,8 @@ describe 'REST#Users', ->
         admin
           .post "/#{config.apiSegment}/users"
           .send
-            name: 'David Kaneda'
-            email: 'dave@buckets.io'
+            name: 'Phil'
+            email: 'phil@buckets.io'
             password: 'sh0rt'
           .expect 400
           .end done
@@ -108,8 +108,8 @@ describe 'REST#Users', ->
         admin
           .post "/#{config.apiSegment}/users"
           .send
-            name: 'David Kaneda'
-            email: 'dave@buckets.io'
+            name: 'Phil'
+            email: 'phil@buckets.io'
             password: 'extremelylongpassword2014'
           .expect 400
           .end done
@@ -119,8 +119,8 @@ describe 'REST#Users', ->
         admin
           .post "/#{config.apiSegment}/users"
           .send
-            name: 'David Kaneda'
-            email: 'dave@buckets.io'
+            name: 'Phil'
+            email: 'phil@buckets.io'
             password: 'withoutnumber'
           .expect 400
           .end done
@@ -130,15 +130,15 @@ describe 'REST#Users', ->
         admin
           .post "/#{config.apiSegment}/users"
           .send
-            name: 'David Kaneda'
-            email: 'dave@buckets.io'
+            name: 'Phil'
+            email: 'phil@buckets.io'
             password: 'plainpassword2014'
           .expect 200
           .end (e, res) ->
             user = res.body
             expect(user.id).to.exist
-            expect(user.email).equal('dave@buckets.io')
-            expect(user.name).equal('David Kaneda')
+            expect(user.email).equal('phil@buckets.io')
+            expect(user.name).equal('Phil')
             done()
 
     it 'returns a 400 if creating user with duplicate email', (done) ->
@@ -147,7 +147,7 @@ describe 'REST#Users', ->
           .post "/#{config.apiSegment}/users"
           .send
             name: 'Peter Johnson'
-            email: 'dave@buckets.io'
+            email: 'phil@buckets.io'
             password: 'password2014'
           .expect 200
           .end done
@@ -164,8 +164,8 @@ describe 'REST#Users', ->
     sampleUser = null
     beforeEach (done) ->
       User.create
-        name: 'David Kaneda'
-        email: 'dave@buckets.io'
+        name: 'Phil'
+        email: 'phil@buckets.io'
         password: 'plainpassword2014'
       , (e, user) ->
         sampleUser = user
@@ -182,18 +182,15 @@ describe 'REST#Users', ->
           .end (e, res) ->
             user = res.body
             expect(user.id).to.exist
-            expect(user.email).equal('dave@buckets.io')
-            expect(user.name).equal('David Kaneda')
+            expect(user.email).equal('phil@buckets.io')
+            expect(user.name).equal('Phil')
             done()
 
-      # TODO investigate failing test
-      # it 'returns a 400 if user is not exist', (done) ->
-      #   request app
-      #     .get "/#{config.apiSegment}/users/0000000000000"
-      #     .expect 400
-      #     .end done
-
-
+      it 'returns a 400 if user does not exist', (done) ->
+        request app
+          .get "/#{config.apiSegment}/users/0000000000000"
+          .expect 400
+          .end done
 
     describe 'PUT /users/:id', ->
 
@@ -201,7 +198,7 @@ describe 'REST#Users', ->
         request app
           .put "/#{config.apiSegment}/users/#{sampleUser.id}"
           .send
-            name: 'Dave Kaneda'
+            name: 'Phil'
           .expect 401
           .end done
 
@@ -210,16 +207,16 @@ describe 'REST#Users', ->
           user
             .put "/#{config.apiSegment}/users/#{sampleUser.id}"
             .send
-              name: 'Dave Kaneda'
+              name: 'Phil'
             .expect 401
             .end done
 
-      it 'returns a 400 if user is not exist', (done) ->
+      it 'returns a 400 if user does not exist', (done) ->
         auth.createAdmin (err, admin) ->
           admin
             .put "/#{config.apiSegment}/users/0000000000000"
             .send
-              name: 'Dave Kaneda'
+              name: 'Phil'
             .expect 400
             .end done
 
@@ -228,21 +225,23 @@ describe 'REST#Users', ->
           admin
             .put "/#{config.apiSegment}/users/#{sampleUser.id}"
             .send
-              name: 'Dave Kaneda'
+              name: 'Mr. Phil'
             .expect 200
             .end (e, res) ->
               respUser = res.body
               expect(respUser.id).to.exist
-              expect(respUser.name).equal('Dave Kaneda')
+              expect(respUser.name).equal('Mr. Phil')
               done()
-      # TODO investigate why it's not failing
-      # it 'returns a 400 if payload is not json', (done) ->
-      #   auth.createAdmin (err, admin) ->
-      #     admin
-      #       .put "/#{config.apiSegment}/users/#{sampleUser.id}"
-      #       .send 'Invalid JSON payload'
-      #       .expect 400
-      #       .end done
+
+      # Express automatically will convert the string to an object
+      # but the data won’t save.
+      it.skip 'returns a 400 if payload is not json', (done) ->
+        auth.createAdmin (err, admin) ->
+          admin
+            .put "/#{config.apiSegment}/users/#{sampleUser.id}"
+            .send 'Invalid JSON payload'
+            .expect 400
+            .end done
 
     describe 'DELETE /users/:id', ->
 
@@ -277,7 +276,7 @@ describe 'REST#Users', ->
                 done()
 
   describe 'POST /forget', ->
-    it 'returns a 404 if user is not exist', (done) ->
+    it 'returns a 404 if user does not exist', (done) ->
       request app
         .post "/#{config.apiSegment}/forget"
         .send
@@ -293,14 +292,14 @@ describe 'REST#Users', ->
         .end done
 
   describe 'GET /reset/:token', ->
-    it 'returns a 404 if token is not exist', (done) ->
+    it 'returns a 404 if token does not exist', (done) ->
       request app
         .get "/#{config.apiSegment}/reset/12312213"
         .expect 404
         .end done
 
   describe 'PUT /reset/:token', ->
-    it 'returns a 404 if token is not exist', (done) ->
+    it 'returns a 404 if token does not exist', (done) ->
       request app
         .put "/#{config.apiSegment}/reset/12312213"
         .expect 404

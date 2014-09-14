@@ -91,6 +91,7 @@ module.exports = app = express()
 app.route('/users')
   .post (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
+    return req.status(400).end() unless typeof req?.body is 'object'
 
     newUser = new User req.body
 
@@ -154,20 +155,21 @@ app.route('/users')
 app.route('/users/:userID')
   .get (req, res) ->
     User.findById req.params.userID, (err, user) ->
+      return res.status(400).end() if err or not user
       res.send user if user
 
   .delete (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
     User.remove _id: req.params.userID, (err) ->
-      return res.status(400).send e: err if err
+      return res.status(400).end() if err
       res.status(200).end()
 
   .put (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator'] or req.user?._id is req.params.userID
 
     User.findById req.params.userID, 'passwordDigest', (err, user) ->
-      return res.status(400).send e: err if err
+      return res.status(400).end() if err or not user
 
       {password, passwordconfirm, oldpassword} = req.body
       delete req.body.password # Only add back after checking below
@@ -200,6 +202,8 @@ app.route('/users/:userID')
 ###
 
 app.post '/forgot', (req, res) ->
+  return req.status(400).end() unless typeof req?.body is 'object'
+
   async.waterfall [
     (done) ->
       crypto.randomBytes 20, (err, buf) ->
