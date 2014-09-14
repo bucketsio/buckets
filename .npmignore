@@ -1,0 +1,7 @@
+coverage.html
+bower_components
+node_modules
+tmp
+docs/api
+newrelic_agent.log
+.env
