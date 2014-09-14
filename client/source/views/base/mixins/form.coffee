@@ -3,37 +3,36 @@ getSlug = require 'speakingurl'
 
 module.exports =
   render: ->
-    # Defer to ensure view is fully rendered
-    return if @disposed
-
-    @delegate 'submit', 'form', @submitFormMixin
     @delegate 'keyup', 'input[data-sluggify]', @keyUpSluggify
 
-    # Automatically focus the first visible input (on non-touch devices)
-    _.defer ->
+    # Defer to ensure view is fully rendered
+    _.defer =>
+      return if @disposed
+
+      # Automatically focus the first visible input (on non-touch devices)
       $firstField = @$('.form-control').eq(0)
-      $firstField.focus() unless Modernizr.touch or $firstField.val()
+      $firstField.focus() unless Modernizr.touch
 
       # Prep slugs
       @$('.input-slug').each (i, el) ->
         $slug = $(el)
         $slug.data 'has-value', $slug.val()?.length > 0
-        $input = $slug.prev()
+
+      # Prep Ladda button
+      @$btn ?= @$('.ladda-button').ladda()
 
   formParams: ->
     # Uses jQuery formParams, but don't try to convert number values to numbers, etc.
     @$el.formParams no
 
-  submitFormMixin: (e)->
-    @$btn ?= $(e.currentTarget).find('.ladda-button').ladda()
+  submit: (promise) ->
+    console.log 'start', @$btn
     @$btn?.ladda 'start'
 
-  submit: (promise) ->
-    promise.always(
+    promise.always =>
+      console.log 'ALWAYS', @$btn
       @$btn?.ladda 'stop'
-    ).fail(
-      _.bind(@renderServerErrors, @)
-    )
+    .fail _.bind(@renderServerErrors, @)
 
   renderServerErrors: (res) ->
     # First let's get rid of the old ones

@@ -1,8 +1,10 @@
 <div class="row">
   <h1 class="page-title background-yellow">
     Routes
-    {{helpIcon 'More about URL patterns' docsPath="routes.md"}}
-    <a class="btn btn-link pull-right btn-icon btn-icon-small" href="#new">{{icon 'plus'}}</a>
+    <div class="pull-right">
+      {{helpIcon 'More about URL patterns' docsPath="routes.md"}}
+      <a class="btn btn-link btn-icon btn-icon-small" href="#new">{{icon 'plus'}}</a>
+    </div>
   </h1>
 </div>
 
@@ -13,7 +15,6 @@
     <li>
       <div class="route" data-route-id="{{id}}">
         <h2><a href="#edit">{{renderRoute}}</a> <a href="#delete" class="btn btn-link btn-icon">{{icon 'trash'}}</a></h2>
-
 
         <p class="text-muted">↳ <code><a href="/{{adminSegment}}/templates/{{template}}">{{template}}</a></code></p>
       </div>
