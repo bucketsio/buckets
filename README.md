@@ -26,17 +26,9 @@ buckets({
 });
 ```
 
-If you want plan on deploying to [Heroku](http://heroku.com/), you can also optionally use the button below to get started. This will install Buckets as well as set up any cloud services you need (like MongoDB). Note that you will still need to be comfortable with Git and npm modules in order to perform your own updates.
+There is a [skeleton project available](https://github.com/bucketsio/skeleton) which uses the above configuration as a sample. If you plan on deploying to [Heroku](http://heroku.com/), you can also optionally use the button below to get started—which will deploy the skeleton project to Heroku, automatically adding free plans for any necessary services.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-
-## Heroku
-
-The easiest way currently is to install on—as long as you have a Heroku account, you can simply use the button below:
-
-
-Note: We aim to provide separate middleware to build into existing Express apps soon.
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/bucketsio/skeleton)
 
 ## From this repo
 
@@ -79,8 +71,6 @@ If you're deploying directly from this repo, you'll need to make one change to y
 * [Frontend Architecture](docs/frontend.md)
 * [Database](docs/database.md)
 * [Tests](docs/tests.md)
-* [Migrations](docs/migrations.md)
-* [Deploying to Heroku](docs/heroku.md)
 
 ### User Documentation
 
