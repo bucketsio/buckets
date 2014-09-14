@@ -1,6 +1,6 @@
 <a href="http://buckets.io"><img src="http://buckets.io/images/buckets-logo.svg" height="80"></a>
 
-A fast, simple way to build dynamic websites on top of [Express](http://expressjs.com/), [MongoDB](http://www.mongodb.org/), and [ElasticSearch](http://www.elasticsearch.org/). [More about our vision](docs/vision/vision.md).
+A fast, simple way to build dynamic websites with [Node.js](http://nodejs.org). [More about our vision](docs/vision/vision.md).
 
 [![Build Status](http://img.shields.io/travis/asm-products/buckets/master.svg?style=flat)](https://travis-ci.org/asm-products/buckets)
 [![Dependencies](http://img.shields.io/david/asm-products/buckets.svg?style=flat)](https://david-dm.org/asm-products/buckets)
@@ -9,7 +9,7 @@ A fast, simple way to build dynamic websites on top of [Express](http://expressj
 
 # Getting Started
 
-Buckets requires [Node.js](http://nodejs.org) and [MongoDB](http://www.mongodb.org) to be installed. Typically, the easiest way to use Buckets is to install it as an NPM module:
+Buckets requires [Node.js](http://nodejs.org) and [MongoDB](http://www.mongodb.org). Once you have those, the easiest way to use Buckets is to install it as an NPM module:
 
 ```bash
 npm install buckets
@@ -20,8 +20,8 @@ You can also run the above command with `--save` to add Buckets to your app’s 
 ```javascript
 buckets = require('buckets');
 buckets({
-  templatePath: __dirname + “/templates/“,
-  publicPath: __dirname + “/public/“,
+  templatePath: __dirname + "/templates/",
+  publicPath: __dirname + "/public/",
   // Additional configuration…
 });
 ```
@@ -32,31 +32,24 @@ There is a [skeleton project available](https://github.com/bucketsio/skeleton) w
 
 ## Installing from this repo
 
-If you plan on contributing to Buckets' development, you can install and deploy Buckets directly from this repo.
-
-### Pre-requirements
-
-[MongoDB](http://www.mongodb.org), [Node.js](http://nodejs.org) and the following global:
+If you plan on contributing to Buckets' development, you can install and deploy Buckets directly from this repo. You will need to install a few extra dependencies for building the frontend files.
 
 ```bash
 npm install -g grunt-cli
-```
-
-Then install the local Node dependencies:
-
-```bash
 npm install
 ```
 
+This will install [Grunt](http://gruntjs.com/) globally and Buckets' dependencies (including devDependencies). Grunt can then be used for most tasks, as shown below.
+
 ### Building
 
-Now that everything is installed, you can build the Buckets source code by running `grunt`. This will build the client-side files for the Buckets admin panel, but unminified, and with source maps. If you'd like to see what the final client-side output will be, run `grunt prepublish` instead.
+You can compile the Buckets client-side assets by running `grunt`. This will build all of the JavaScript/CSS unminified, and with source maps. If you'd like to see what the final (compressed) output will be, run `grunt prepublish` instead.
 
 ### Running
 
-Once the source code has been built, you can run `npm start` to start the Buckets server and your site should be accessible at the default address: [http://localhost:3000/](http://localhost:3000/).
+Once the client-side assets has been compiled, you can run `npm start` to start the Buckets server and your site should be accessible at the default address: [http://localhost:3000/](http://localhost:3000/).
 
-Alternatively, you could run `grunt start`—this also starts a server at the default address, but also watches all files for changes. Any changes to server CoffeeScript will restart the web server and then reload the browser. Any changes to client-side CoffeeScript, Stylus, or Handlebars will re-compile the appropriate files, then reload the browser.
+Alternatively, you can run `grunt start`—this also starts a server at the default address, but will additionally watch all files for changes. Any changes to server CoffeeScript will restart the web server and then reload the browser. Any changes to client-side CoffeeScript, Stylus, or Handlebars will re-compile the appropriate files, then reload the browser.
 
 There are a few other Grunt tasks available for [building](docs/frontend.md) and [running tests](docs/tests.md).
 
