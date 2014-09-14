@@ -299,18 +299,17 @@ module.exports = (grunt) ->
   grunt.registerTask 'build-scripts', ['browserify:app']
 
   # Building
-  grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'uglify:plugins', 'build-scripts', 'build-style', 'modernizr']
-  grunt.registerTask 'prepublish', ['clean:all', 'build', 'uglify:app', 'cssmin']
+  grunt.registerTask 'default', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'uglify:plugins', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'prepublish', ['clean:all', 'default', 'uglify:app', 'cssmin']
   grunt.registerTask 'publish', ['prepublish', 'shell:publish']
 
   # Serving
-  grunt.registerTask 'dev', ['express:dev', 'watch']
-  grunt.registerTask 'devserve', ['express:dev', 'watch']
+  grunt.registerTask 'start', ['express:dev', 'watch']
+  grunt.registerTask 'dev', ['default', 'start']
 
   # Tests
   grunt.registerTask 'test:server', ['shell:mocha']
   grunt.registerTask 'test:server:cov', ['shell:cov']
-  grunt.registerTask 'test:client', ['build', 'browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test:client', ['default', 'browserify:tests', 'testem:ci:basic']
   grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
