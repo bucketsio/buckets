@@ -7,11 +7,9 @@ A fast, simple way to build dynamic websites on top of [Express](http://expressj
 [![License](http://img.shields.io/npm/l/buckets.svg?style=flat)](LICENSE.md)
 [![NPM](http://img.shields.io/npm/v/buckets.svg?style=flat)](https://www.npmjs.org/package/buckets)
 
-# Installing Buckets
+# Getting Started
 
-There are several ways to install Buckets. Choose the path which is the best fit for your development environment. Buckets requires [Node.js](http://nodejs.org) (which comes with npm), and [MongoDB](http://www.mongodb.org) to be installed.
-
-## NPM
+Buckets requires [Node.js](http://nodejs.org) (which comes with npm), and [MongoDB](http://www.mongodb.org) to be installed.
 
 ```
 npm install buckets
@@ -28,17 +26,15 @@ buckets({
 });
 ```
 
-A list of all the config variables can be found in docs/config.md, and a sample project with the above set-up is provided at bucketsio/skeleton.
+If you want plan on deploying to [Heroku](http://heroku.com/), you can also optionally use the button below to get started. This will install Buckets as well as set up any cloud services you need (like MongoDB). Note that you will still need to be comfortable with Git and npm modules in order to perform your own updates.
 
-## Installing from this repo
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-If you plan on working on the Buckets source code, you can
 
 ## Heroku
 
-The easiest way currently is to install on [Heroku](http://heroku.com/)—as long as you have a Heroku account, you can simply use the button below:
+The easiest way currently is to install on—as long as you have a Heroku account, you can simply use the button below:
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 Note: We aim to provide separate middleware to build into existing Express apps soon.
 
@@ -60,17 +56,21 @@ Then install the local Node dependencies:
 npm install
 ```
 
-### Building Buckets
+### Building
 
 Now that everything is installed, you can build the Buckets source code by running `grunt`. This will build the client-side files for the Buckets admin panel, but unminified, and with source maps. If you'd like to see what the final client-side output will be, run `grunt prepublish` instead.
 
-### Running Buckets
+### Running
 
 Once the source code has been built, you can run `npm start` to start the Buckets server and your site should be accessible at the default address: [http://localhost:3000/](http://localhost:3000/).
 
 Alternatively, you could run `grunt start`—this also starts a server at the default address, but also watches all files for changes. Any changes to server CoffeeScript will restart the web server and then reload the browser. Any changes to client-side CoffeeScript, Stylus, or Handlebars will re-compile the appropriate files, then reload the browser.
 
 There are a few other Grunt tasks available for [building](docs/frontend.md) and [running tests](docs/tests.md).
+
+### Deploying
+
+If you're deploying directly from this repo, you'll need to make one change to your local environment, which is to remove the `/public` from your `.gitignore` file. This is because we don't install Grunt or its dependencies in production environments to make everything faster/easier for people who install Buckets as an NPM module.
 
 # Documentation
 
