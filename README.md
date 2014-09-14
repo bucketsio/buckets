@@ -9,15 +9,15 @@ A fast, simple way to build dynamic websites on top of [Express](http://expressj
 
 # Getting Started
 
-Buckets requires [Node.js](http://nodejs.org) (which comes with npm), and [MongoDB](http://www.mongodb.org) to be installed.
+Buckets requires [Node.js](http://nodejs.org) and [MongoDB](http://www.mongodb.org) to be installed. Typically, the easiest way to use Buckets is to install it as an NPM module:
 
-```
+```bash
 npm install buckets
 ```
 
 You can also run the above command with `--save` to add Buckets to your app’s package.json. From here, you can run Buckets in a script like so:
 
-```
+```javascript
 buckets = require('buckets');
 buckets({
   templatePath: __dirname + “/templates/“,
@@ -30,7 +30,7 @@ There is a [skeleton project available](https://github.com/bucketsio/skeleton) w
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/bucketsio/skeleton)
 
-## From this repo
+## Installing from this repo
 
 If you plan on contributing to Buckets' development, you can install and deploy Buckets directly from this repo.
 
@@ -38,13 +38,13 @@ If you plan on contributing to Buckets' development, you can install and deploy 
 
 [MongoDB](http://www.mongodb.org), [Node.js](http://nodejs.org) and the following global:
 
-```
+```bash
 npm install -g grunt-cli
 ```
 
 Then install the local Node dependencies:
 
-```
+```bash
 npm install
 ```
 
