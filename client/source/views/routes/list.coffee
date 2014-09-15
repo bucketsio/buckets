@@ -21,14 +21,14 @@ module.exports = class RoutesList extends PageView
 
   attach: ->
     super
-    $sortable = document.getElementById 'sortable-routes'
-    new Sortable $sortable,
+    $sortable = $('#sortable-routes')
+    new Sortable $sortable.get(0),
+      handle: '.handle'
       onUpdate: (e) =>
-        $('#sortable-routes').children().each (i, li) =>
+        console.log 'update', arguments
+        $sortable.children().each (i, li) =>
           model = @collection.findWhere id: $(li).children('.route').data 'route-id'
-
-          if model
-            model.save sort: i
+          model.save sort: i if model
 
   clickNew: (e) ->
     e.preventDefault()

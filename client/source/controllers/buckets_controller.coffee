@@ -72,7 +72,7 @@ module.exports = class BucketsController extends Controller
           else if options.entryID
             @view.loadEntry options.entryID
           else
-            @view.subview('editEntry')?.dispose()
+            @view.clearEntry()
 
         @view? and @view.bucket.get('id') is options.bucket.get('id')
 

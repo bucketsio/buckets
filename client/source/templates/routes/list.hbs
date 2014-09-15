@@ -10,14 +10,26 @@
 
 <div class="editRoute"></div>
 
-<ul id="sortable-routes" class="sortable">
-  {{#each items}}
-    <li>
-      <div class="route" data-route-id="{{id}}">
-        <h2><a href="#edit">{{renderRoute}}</a> <a href="#delete" class="btn btn-link btn-icon">{{icon 'trash'}}</a></h2>
+<div class="row">
 
-        <p class="text-muted">↳ <code><a href="/{{adminSegment}}/templates/{{template}}">{{template}}</a></code></p>
-      </div>
-    </li>
-  {{/each}}
-</ul>
+  <div class="col-md-8">
+    <ul id="sortable-routes" class="sortable">
+      {{#each items}}
+        <li>
+          <div class="route" data-route-id="{{id}}">
+            <h2>
+              <div class="pull-right">
+                <a href="#delete" class="btn btn-link btn-icon btn-icon-small">{{icon 'trash'}}</a> <a class="btn btn-link btn-icon btn-icon-small handle" href="#">{{icon 'cursor-move'}}</a>
+
+                <span class="text-muted"><span class="arrow">&#8677;</span> <code><a href="/{{adminSegment}}/templates/{{template}}">{{template}}</a></code></span>
+              </div>
+
+              <a href="#edit">{{renderRoute}}</a>
+
+            </h2>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</div>

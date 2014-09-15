@@ -56,6 +56,13 @@ module.exports = class EntriesBrowser extends PageView
 
     @renderDetailView()
 
+  clearEntry: ->
+    subview = @subview('editEntry')
+    return unless subview?.$el
+
+    subview.$el.fadeOut 100, -> subview?.dispose()
+    @$('.entry').removeClass 'active'
+
   modelSaved: (entry, newData) =>
     if newData?.id
       @model.set newData

@@ -10,6 +10,7 @@ module.exports = class FirstUserView extends View
   template: tpl
   container: '#bkts-content'
   autoRender: yes
+  className: 'firstUser'
 
   events:
     'submit form': 'submitForm'

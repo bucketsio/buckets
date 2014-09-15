@@ -18,18 +18,16 @@ module.exports =
         $slug = $(el)
         $slug.data 'has-value', $slug.val()?.length > 0
 
-      # Prep Ladda button
-      @$btn ?= @$('.ladda-button').ladda()
-
   formParams: ->
     # Uses jQuery formParams, but don't try to convert number values to numbers, etc.
     @$el.formParams no
 
   submit: (promise) ->
-    @$btn?.ladda 'start'
+    $btn = @$('.ladda-button').ladda()
+    $btn.ladda 'start'
 
-    promise.always =>
-      @$btn?.ladda 'stop'
+    promise.always ->
+      $btn.ladda 'stop' if $btn?.data('ladda')
     .fail _.bind(@renderServerErrors, @)
 
   renderServerErrors: (res) ->
