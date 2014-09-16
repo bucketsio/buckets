@@ -100,7 +100,7 @@ app.all '/:frontend*?', (req, res, next) ->
             logger.debug 'Rendered HTML, but headers sent.'
             callback false
           else
-            logger.debug 'Rendering.', arguments
+            logger.debug 'Rendering.'.green, arguments
             hasRendered = yes
             res.send html
             callback yes

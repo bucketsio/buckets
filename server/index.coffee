@@ -24,7 +24,7 @@ class Buckets
       newrelicConfig = require '../newrelic'
       if newrelicConfig.config.license_key
         newrelic = require 'newrelic'
-        logger.info 'NewRelic On'
+        logger.info 'NewRelic '.cyan + 'On'
         hbs.registerHelper 'newrelic', ->
           new hbs.handlebars.SafeString newrelic.getBrowserTimingHeader()
     catch e
