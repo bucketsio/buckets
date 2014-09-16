@@ -82,7 +82,7 @@ bucketSchema = new mongoose.Schema
     required: yes
   color:
     type: String
-    enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange', 'green']
+    enum: ['teal', 'purple', 'red', 'yellow', 'blue', 'orange', 'green', 'gray']
     default: 'teal'
     required: yes
   fields: [fieldSchema]
