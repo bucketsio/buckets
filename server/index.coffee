@@ -72,7 +72,7 @@ class Buckets
   start: (done) ->
     done?() if @server
     @server ?= @app.listen @config.port, =>
-      logger.info ("\nBuckets is running at " + "http://localhost:#{@config.port}/".underline.bold).yellow
+      logger.info ("Buckets is running at " + "http://localhost:#{@config.port}/".underline.bold).yellow
       done?()
 
   stop: (done) ->

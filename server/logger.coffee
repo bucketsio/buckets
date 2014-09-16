@@ -1,9 +1,10 @@
+env = process.env.NODE_ENV || 'development'
 winston = require 'winston'
 
 
 config = {
   level: 'debug'
-  colorize: true
+  colorize: env isnt 'production'
   silent: false
   timestamp: true
 }
