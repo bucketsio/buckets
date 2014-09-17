@@ -11,7 +11,7 @@ responseTime = require 'response-time'
 express = require 'express'
 hbs = require 'hbs'
 fs = require 'fs'
-
+logger = require './logger'
 
 class Buckets
   constructor: (config) ->
@@ -24,16 +24,16 @@ class Buckets
       newrelicConfig = require '../newrelic'
       if newrelicConfig.config.license_key
         newrelic = require 'newrelic'
-        console.log 'NewRelic '.cyan + 'On'
+        logger.info 'NewRelic '.cyan + 'On'
         hbs.registerHelper 'newrelic', ->
           new hbs.handlebars.SafeString newrelic.getBrowserTimingHeader()
     catch e
-      console.log 'There was an error loading NewRelic', e
+      logger.error 'There was an error loading NewRelic', e
 
     # Purge Fastly on prod pushes
     if @config.fastly?.api_key and @config.fastly?.service_id and @config.env is 'production'
       fastly = require('fastly')(@config.fastly.api_key)
-      fastly.purgeAll @config.fastly.service_id, -> console.log 'Purged Fastly Cache'.red
+      fastly.purgeAll @config.fastly.service_id, -> logger.error 'Purged Fastly Cache'.red
 
     passport = require './lib/auth'
 
@@ -72,7 +72,7 @@ class Buckets
   start: (done) ->
     done?() if @server
     @server ?= @app.listen @config.port, =>
-      console.log ("\nBuckets is running at " + "http://localhost:#{@config.port}/".underline.bold).yellow
+      logger.info ("Buckets is running at " + "http://localhost:#{@config.port}/".underline.bold).yellow
       done?()
 
   stop: (done) ->

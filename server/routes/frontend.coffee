@@ -8,6 +8,7 @@ express = require 'express'
 _ = require 'underscore'
 
 config = require '../config'
+logger = require '../logger'
 Route = require '../models/route'
 
 module.exports = app = express()
@@ -78,7 +79,7 @@ app.all '/:frontend*?', (req, res, next) ->
 
     # The magical, time-traveling Template lookup/renderer
     async.detectSeries matchingRoutes, (localTemplateData, callback) ->
-      # console.log 'hasRendered', hasRendered
+      logger.debug 'hasRendered', hasRendered
       return if hasRendered is yes
 
       localTemplateData.errors = templateData.errors
@@ -86,7 +87,7 @@ app.all '/:frontend*?', (req, res, next) ->
         if globalNext
           globalNext = false
           callback false
-          # console.log '{{next}} was called.'
+          logger.debug '{{next}} was called.'
         else if err
           throw err
           tplErr = {}
@@ -96,18 +97,18 @@ app.all '/:frontend*?', (req, res, next) ->
 
         else if html
           if res.headersSent
-            # console.log 'Rendered HTML, but headers sent.'
+            logger.debug 'Rendered HTML, but headers sent.'
             callback false
           else
-            # console.log 'Rendering.'.green, arguments
+            logger.debug 'Rendering.'.green
             hasRendered = yes
             res.send html
             callback yes
         else if not html
-          # console.log 'No HTML came back.'
+          logger.debug 'No HTML came back.'
           callback false
         else
-          # console.log 'WTF. I really don’t know how we get here'
+          logger.error 'WTF. I really don’t know how we get here'
           callback false
 
     , (rendered) ->
@@ -115,7 +116,7 @@ app.all '/:frontend*?', (req, res, next) ->
       return next() unless config.catchAll
 
       res.render 'error', templateData, (err, html) ->
-        console.log 'Buckets caught an error trying to render the error page.', err if err
+        logger.error 'Buckets caught an error trying to render the error page.', err if err
         if err
           res.status(500)
 
