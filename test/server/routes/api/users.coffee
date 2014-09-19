@@ -292,6 +292,17 @@ describe 'REST#Users', ->
         .send 'Invalid JSON payload'
         .expect 404
         .end done
+    
+    it 'returns a 403 if body contains Mongo injection-style $ object key', (done) ->
+      badObject = {'$gt': ''}
+      r = request app
+        .post "/#{config.apiSegment}/forget"
+        .send
+          email: badObject
+        .expect 403
+        .end (e, res) ->
+          expect(res.text).equal('Disallowed object in request: ' + JSON.stringify(badObject))
+          done()
 
   describe 'GET /reset/:token', ->
     it 'returns a 404 if token does not exist', (done) ->

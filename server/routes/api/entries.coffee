@@ -147,7 +147,7 @@ app.route('/entries/keywords')
 
 app.route('/entries/:entryID')
   .get (req, res) ->
-    Entry.findOne(_id: req.params.entryID).populate('bucket author').exec (err, entry) ->
+    Entry.findById(req.params.entryID).populate('bucket author').exec (err, entry) ->
       if entry
         res.status(200).send entry
       else

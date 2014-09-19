@@ -197,7 +197,7 @@ app.route('/buckets/:bucketID')
   .delete (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
-    Bucket.findOne _id: req.params.bucketID, (err, bkt) ->
+    Bucket.findById req.params.bucketID, (err, bkt) ->
       if err
         res.send 400, err
       else
@@ -211,7 +211,7 @@ app.route('/buckets/:bucketID')
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
     delete req.body._id
-    Bucket.findOne {_id: req.params.bucketID}, (err, bucket) ->
+    Bucket.findById req.params.bucketID, (err, bucket) ->
       return res.status(400).send e: err if err
       bucket.set(req.body).save (err, bucket) ->
         return res.status(400).send err if err
