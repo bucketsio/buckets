@@ -18,7 +18,6 @@ app.get '/export', (req, res, next) ->
   async.parallel [
     (cb) ->
       Bucket.find {}, '-fields.id', (e, buckets) ->
-        ids = _.pluck buckets, 'id'
         async.map buckets, (bucket, callback) ->
           bkt = bucket.toJSON()
           Entry.find bucket: bkt.id, '-lastModified', (e, entries) ->
