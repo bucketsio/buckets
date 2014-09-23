@@ -172,17 +172,22 @@ app.route('/users/:userID')
       return res.status(400).end() if err or not user
 
       {password, passwordconfirm, oldpassword} = req.body
-      delete req.body.password # Only add back after checking below
       if password and passwordconfirm and oldpassword
         if password isnt passwordconfirm
           user.invalidate 'passwordconfirm', 'Your new password and confirmation don’t match.'
         else if not user.authenticate oldpassword
           user.invalidate 'oldpassword', 'The provided password is incorrect.'
         else
-          # All good
-          req.body.password = password
+          user.password = password
 
-      user.set(req.body).save (err, user) ->
+      {name, email} = req.body
+      if name?
+        user.name = name
+      
+      if email?
+        user.email = email
+        
+      user.save (err, user) ->
         return res.status(400).send err if err
         res.status(200).send user
 
