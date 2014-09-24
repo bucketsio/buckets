@@ -180,6 +180,7 @@ Handlebars.registerHelper 'cloudinaryUpload', (name, value, options) ->
   return unless $.cloudinary.config().api_key
 
   settings = _.defaults options.hash, {}
+  value ?= ''
 
   img = ''
   if value
@@ -195,24 +196,26 @@ Handlebars.registerHelper 'cloudinaryUpload', (name, value, options) ->
 
   input = """
     <div class="dropzone">
-      Upload files by dragging &amp; dropping,
+      <div class="preview">
+        <button type="button" class="close show-tooltip" title="Remove image">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <div class="preview-inner">
+          #{img}
+        </div>
+      </div>
+      <br>
+
+      <p>Upload files by dragging &amp; dropping,
       or <a href="#" class="fileinput-button">selecting one from your computer
       <input name="file" type="file" multiple="multiple"
       class="cloudinary-fileupload" data-cloudinary-field="#{name}"
-      data-form-data='#{cloudinaryConfig}'></input></a>.
+      data-form-data='#{cloudinaryConfig}'></input></a>.</p>
     </div>
     <input type="hidden" name="#{name}" value="#{value}">
 
     <div class="progress hide">
       <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-    </div>
-    <div class="preview">
-      <button type="button" class="close">
-        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-      </button>
-      <div class="preview-inner">
-        #{img}
-      </div>
     </div>
   """
 

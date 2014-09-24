@@ -9,7 +9,7 @@ module.exports = class LoginView extends View
   container: '#bkts-content'
   className: 'loginView'
   optionNames: View::optionNames.concat ['next']
-
+  mixins: [FormMixin]
   events:
     'submit form': 'submitForm'
     'click [href="#forgot"]': 'clickForgot'
@@ -95,5 +95,3 @@ module.exports = class LoginView extends View
   getTemplateData: ->
     if @next
       next: "/#{mediator.options.adminSegment}/#{@next}"
-
-  @mixin FormMixin

@@ -1,14 +1,13 @@
 <form class="container-fluid">
   <div class="row">
     <div class="col-md-4 col-md-offset-4">
-      <h1>Welcome to Buckets!</h1>
-
-      <p>Let’s get you an admin account:</p>
-      {{input 'name' '' placeholder="Full name"}}
+      {{logo}}
+      <h4>Hi! First, let’s set you up as the admin:</h4>
+      {{input 'name' '' placeholder="Name"}}
       {{input 'email' '' placeholder="Email"}}
       {{input 'password' '' placeholder="Password" type="password"}}
 
-      {{submit 'Get Started'}}
+      {{submit 'Sign Up'}}
     </div>
   </div>
 </form>

@@ -1,36 +1,41 @@
 <form class="row">
   <h1 class="page-title background-yellow">
     Templates
-    <a href="#new" class="btn pull-right btn-link btn-icon btn-icon-small">{{icon 'plus'}}</a>
-  </h1>
-  <div class="col-xs-8">
-    <div class="input-group">
-      <input name="filename" value="{{filename}}" placeholder="Filename" class="form-control">
-      <div class="dropdown input-group-btn">
-        <a data-toggle="dropdown" href="#" class="btn"><span class="caret"></span></a>
-        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
-          {{#each items}}
-            <li{{#is filename ../filename}} class="active"{{/is}}>
-              <a href="/{{adminSegment}}/templates/{{filename}}">{{filename}}</a>
-            </li>
-          {{/each}}
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="col-xs-4" align="right">
-    <span class="notForIndex {{#is filename 'index'}}hide{{/is}}">
-    <a href="#delete" class="btn btn-icon btn-link">{{icon 'trash'}}</a>
-    </span>
-    {{submit 'Save'}}
-  </div>
 
-  <div class="col-xs-12">
-    <div class="panel">
-      <div class="panel-body">
-        {{textarea 'contents' contents label="Handlebars" className='form-control code' size='lg'}}
-        {{helpIcon 'View Template documentation' docsPath='templates.md'}}
+    <div class="pull-right">
+      {{helpIcon 'View Template documentation' docsPath='templates.md'}}
+      <a href="#new" class="btn btn-link btn-icon btn-icon-small">{{icon 'plus'}}</a>
+    </div>
+  </h1>
+
+  <div class="panel col-xs-12">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-9">
+          <div class="input-group">
+            <input name="filename" value="{{filename}}" placeholder="Filename" class="form-control">
+            <div class="dropdown input-group-btn">
+              <a data-toggle="dropdown" href="#" class="btn"><span class="caret"></span></a>
+              <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
+                {{#each items}}
+                  <li{{#is filename ../filename}} class="active"{{/is}}>
+                    <a href="/{{adminSegment}}/templates/{{filename}}">{{filename}}</a>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3" align="right">
+          <span class="notForIndex {{#is filename 'index'}}hide{{/is}}">
+          <a href="#delete" class="btn btn-icon btn-icon-small btn-link">{{icon 'trash'}}</a>
+          </span>
+          {{submit 'Save'}}
+        </div>
       </div>
+      <br>
+
+      {{textarea 'contents' contents label="Handlebars" className='form-control code' size='lg'}}
     </div>
   </div>
 </form>

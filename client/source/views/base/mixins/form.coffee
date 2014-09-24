@@ -1,38 +1,36 @@
 _ = require 'underscore'
+getSlug = require 'speakingurl'
 
 module.exports =
   render: ->
+    @delegate 'keyup', 'input[data-sluggify]', @keyUpSluggify
+
     # Defer to ensure view is fully rendered
     _.defer =>
       return if @disposed
 
       # Automatically focus the first visible input (on non-touch devices)
-      $firstField = @$('.form-control:visible').eq(0)
-      $firstField.focus() unless Modernizr.touch or $firstField.val()
+      $firstField = @$('.form-control').eq(0)
+      $firstField.focus() unless Modernizr.touch
 
       # Prep slugs
       @$('.input-slug').each (i, el) ->
         $slug = $(el)
-        $input = $slug.prev()
-
-        $inputs = $slug.parent().find('input')
+        $slug.data 'has-value', $slug.val()?.length > 0
 
   formParams: ->
     # Uses jQuery formParams, but don't try to convert number values to numbers, etc.
     @$el.formParams no
 
   submit: (promise) ->
-    @$btn = @$('.ladda-button').ladda()
-    @$btn?.ladda 'start'
+    $btn = @$('.ladda-button').ladda()
+    $btn.ladda 'start'
 
-    promise.always(
-      @$btn?.ladda 'stop'
-    ).fail(
-      _.bind(@renderServerErrors, @)
-    )
+    promise.always ->
+      $btn.ladda 'stop' if $btn?.data('ladda')
+    .fail _.bind(@renderServerErrors, @)
 
   renderServerErrors: (res) ->
-
     # First let's get rid of the old ones
     @clearFormErrors()
 
@@ -56,3 +54,12 @@ module.exports =
   clearFormErrors: ->
     @$('.help-block').remove()
     @$('.has-error').removeClass('has-error')
+
+  keyUpSluggify: (e) ->
+    $el = @$(e.currentTarget)
+    val = $el.val()
+    $target = @$("input[name=\"#{$el.data('sluggify')}\"]")
+
+    return if $target.data('has-value')
+
+    $target.val getSlug val

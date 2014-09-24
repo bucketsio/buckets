@@ -17,6 +17,7 @@ module.exports = class EntryEditView extends PageView
   region: 'detail'
   regions:
     'user-fields': '.userFields'
+  mixins: [FormMixin]
 
   events:
     'submit form': 'submitForm'
@@ -178,12 +179,8 @@ module.exports = class EntryEditView extends PageView
       collection = null
       Chaplin.utils.redirectTo 'buckets#browse', {slug: @bucket.get('slug'), entryID: newEntry.id}
 
-
-
   dispose: ->
     unless @disposed
       @$('.panel').css(opacity: 0)
       @$('[name="keywords"]').tagsinput 'destroy'
     super
-
-  @mixin FormMixin

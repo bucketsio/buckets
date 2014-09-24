@@ -1,29 +1,21 @@
-<div class="row">
-  <div class="col-md-10">
-    <form class="well">
-      <div class="row">
-        <div class="col-sm-7">
-          {{input 'urlPattern' urlPattern placeholder="/myroute/:param" size="lg" label="Route"}}
-        </div>
-        <div class="col-sm-5">
-          {{select 'template' template templates valueKey='filename' nameKey='filename' label="Template"}}
-        </div>
+<form class="well">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        {{input 'urlPattern' urlPattern placeholder="/myroute/:param" size="lg" label="Route"}}
       </div>
-      <div class="row">
-        <div class="col-sm-7">
-          <p class="help-block">Routes are simply URL patterns that map to templates. They can use tokens in the form of <code class="bkts-wildcard">:params</code>. {{helpIcon 'More about URL patterns' docsPath="routes.md"}}</p>
-        </div>
-        <div class="col-sm-5">
-          <div class="pull-right">
-            <a href="#cancel" class="btn btn-default">Cancel</a>
-            {{#if id}}
-              {{submit 'Save route'}}
-            {{else}}
-              {{submit 'Add route'}}
-            {{/if}}
-          </div>
-        </div>
+      <div class="form-group">
+        {{select 'template' template templates valueKey='filename' nameKey='filename' label="Template"}}
       </div>
-    </form>
+
+      <div class="pull-right">
+        <a href="#cancel" class="btn btn-default">Cancel</a>
+        {{#if id}}
+          {{submit 'Save route'}}
+        {{else}}
+          {{submit 'Add route'}}
+        {{/if}}
+      </div>
+    </div>
   </div>
-</div>
+</form>

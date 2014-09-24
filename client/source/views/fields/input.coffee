@@ -8,6 +8,7 @@ mediator = require 'mediator'
 module.exports = class FieldTypeInputView extends View
   template: tpl
   region: 'user-fields'
+  className: 'form-group'
   events:
     'dragover': 'hoverDropzone'
     'click .close': 'clickRemove'
@@ -23,14 +24,8 @@ module.exports = class FieldTypeInputView extends View
     return unless @model.get('fieldType') is 'cloudinary_image'
 
     $preview = @$('.preview')
-    $dropzone = @$('.dropzone')
     $progress = @$('.progress')
     $progressBar = @$('.progress-bar')
-
-    if @model.get('value')
-      $dropzone.hide()
-    else
-      $preview.hide()
 
     @$input = $input = @$("input[type=file]")
       .cloudinary_fileupload
@@ -74,9 +69,8 @@ module.exports = class FieldTypeInputView extends View
             height: $preview.find('img').height()
             ease: Sine.easeOut
 
-          $dropzone.slideUp 200
-
   getValue: ->
+    return unless @$input
     @$input.data('value-object') || @$input.val()
 
   hoverDropzone: ->

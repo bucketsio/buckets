@@ -7,6 +7,7 @@ module.exports = class ResetPasswordView extends View
   template: tpl
   container: '#bkts-content'
   className: 'loginView'
+  mixins: [FormMixin]
 
   events:
     'submit form': 'submitForm'
@@ -14,5 +15,3 @@ module.exports = class ResetPasswordView extends View
   submitForm: (e) ->
     e.preventDefault()
     @submit @model.save @formParams()
-
-  @mixin FormMixin

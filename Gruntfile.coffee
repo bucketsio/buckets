@@ -1,4 +1,3 @@
-config = require './server/config'
 mongoose = require 'mongoose'
 
 module.exports = (grunt) ->
@@ -55,7 +54,7 @@ module.exports = (grunt) ->
 
       plugins:
         options:
-          external: ['buckets', 'hbsfy/runtime']
+          exclude: ['buckets', 'hbsfy/runtime']
           alias: []
         files: [
           expand: yes
@@ -94,6 +93,8 @@ module.exports = (grunt) ->
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server -b'
       cov:
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html'
+      publish:
+        command: 'npm publish'
 
     concat:
       style:
@@ -146,16 +147,8 @@ module.exports = (grunt) ->
       dev:
         options:
           spawn: false
-      prod:
-        options:
-          background: false
-          livereload: false
-      server:
-        options:
-          background: false
-      options:
-        script: 'server/start.coffee'
-        opts: ['node_modules/coffee-script/bin/coffee']
+          script: 'server/start.coffee'
+          opts: ['node_modules/coffee-script/bin/coffee']
 
     less:
       app:
@@ -164,10 +157,6 @@ module.exports = (grunt) ->
         src: ['**/*.less']
         dest: 'public/css/'
         ext: '.css'
-
-    migrations:
-      path: "#{__dirname}/migrations"
-      mongo: config.db
 
     modernizr:
       app:
@@ -290,12 +279,6 @@ module.exports = (grunt) ->
           'public/plugins/**/*.{css,js}'
         ]
 
-  grunt.registerTask 'checkDatabase', (next, stuff...)->
-    connection = mongoose.createConnection config.db, (err) ->
-      if err
-        throw "\nBuckets could not connect to MongoDB :/\n".magenta + "See the " + 'README.md'.bold + " for more info on installing MongoDB and check your settings at " + 'server/config.coffee'.bold + "."
-        exit
-
   grunt.loadNpmTasks 'grunt-apidoc'
   grunt.loadNpmTasks 'grunt-bower-task'
   grunt.loadNpmTasks 'grunt-browserify'
@@ -310,27 +293,23 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
   grunt.loadNpmTasks 'grunt-modernizr'
-  grunt.loadNpmTasks 'grunt-mongo-migrations'
   grunt.loadNpmTasks 'grunt-shell'
 
   grunt.registerTask 'build-style', ['stylus', 'less', 'concat:style', 'concat:pluginsStyle']
   grunt.registerTask 'build-scripts', ['browserify:app']
 
   # Building
-  grunt.registerTask 'default', ['build']
-  grunt.registerTask 'build', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'uglify:plugins', 'build-scripts', 'build-style', 'modernizr']
-  grunt.registerTask 'prepublish', ['build', 'uglify:app', 'cssmin']
+  grunt.registerTask 'default', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'uglify:plugins', 'build-scripts', 'build-style', 'modernizr']
+  grunt.registerTask 'prepublish', ['clean:all', 'default', 'uglify:app', 'cssmin']
+  grunt.registerTask 'publish', ['prepublish', 'shell:publish']
 
   # Serving
-  grunt.registerTask 'dev', ['checkDatabase', 'migrate:all', 'build', 'express:dev', 'watch']
-  grunt.registerTask 'devserve', ['migrate:all', 'express:dev', 'watch']
-  grunt.registerTask 'serve', ['migrate:all', 'express:server']
+  grunt.registerTask 'start', ['express:dev', 'watch']
+  grunt.registerTask 'dev', ['default', 'start']
 
   # Tests
   grunt.registerTask 'test:server', ['shell:mocha']
   grunt.registerTask 'test:server:cov', ['shell:cov']
-  grunt.registerTask 'test:client', ['build', 'browserify:tests', 'testem:ci:basic']
+  grunt.registerTask 'test:client', ['default', 'browserify:tests', 'testem:ci:basic']
   grunt.registerTask 'test:client:html', ['browserify:tests', 'testem:ci:html']
   grunt.registerTask 'test', ['clean:all', 'test:server', 'test:client']
-
-  grunt.registerTask 'heroku:production', ['prepublish', 'migrate:all']

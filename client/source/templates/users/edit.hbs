@@ -1,7 +1,9 @@
-<form class="panel panel-default">
+<form class="panel panel-default" autocomplete="off">
   <div class="panel-body">
     {{input 'name' name placeholder="Full name" label="Name"}}
     {{input 'email' email placeholder="Email" label="Email"}}
+
+    {{!-- Viewing your own profile --}}
     {{#is id currentUser.id}}
       <h4 data-toggle="collapse" data-target="#changePassword" class="collapsed"><span class="caret"></span> Update your password</h4>
       <div id="changePassword" class="collapse">
@@ -10,6 +12,7 @@
         {{input 'passwordconfirm' '' placeholder="Confirm new password" type="password"}}
       </div>
 
+    {{!-- Viewing someone else's --}}
     {{else}}
       {{#if id}}
         {{#if last_active}}
@@ -20,13 +23,11 @@
       {{else}}
         {{input 'password' '' placeholder="Password" type="password"}}
       {{/if}}
-
-
+      {{#hasRole 'administrator'}}
+        <h4>Permissions</h4>
+        {{checkbox 'admin' isAdmin label="User is an administrator"}}
+      {{/hasRole}}
     {{/is}}
-    {{#hasRole 'administrator'}}
-      <h4>Permissions</h4>
-      {{checkbox 'admin' isAdmin label="User is an administrator"}}
-    {{/hasRole}}
 
     <div class="pull-right">
       {{#if id}}

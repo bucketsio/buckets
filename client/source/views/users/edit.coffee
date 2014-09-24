@@ -7,8 +7,7 @@ FormMixin = require 'views/base/mixins/form'
 mediator = require('chaplin').mediator
 
 module.exports = class EditUserView extends View
-  @mixin FormMixin
-
+  mixins: [FormMixin]
   template: tpl
   autoRender: yes
   region: 'contactCard'
