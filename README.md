@@ -44,7 +44,7 @@ If you plan on contributing to Buckets' development, you can install Buckets dir
 
 ### Pre-requirements
 
-[MongoDB](http://www.mongodb.org), [Node.js](http://nodejs.org) and the following global:
+[MongoDB](http://www.mongodb.org), [Node.js](http://nodejs.org), [Redis](http://redis.io) and the following global:
 
 ```
 npm install -g grunt-cli

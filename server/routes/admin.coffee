@@ -15,6 +15,8 @@ passport = require '../lib/auth'
 pkg = require '../../package'
 User = require '../models/user'
 
+
+
 module.exports = app = express()
 
 {adminSegment} = config
@@ -40,6 +42,7 @@ app.post '/login', passport.authenticate('local', failureRedirect: "/#{adminSegm
     "/#{adminSegment}/"
 
 app.post '/checkLogin', (req, res) ->
+
   passport.authenticate('local', (err, user, authErr) ->
     if authErr
       res.status(401).send errors: [authErr]
