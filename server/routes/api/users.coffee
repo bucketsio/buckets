@@ -191,12 +191,7 @@ app.route('/users/:userID')
         else
           user.password = password
 
-      {name, email} = req.body
-      if name?
-        user.name = name
-      
-      if email?
-        user.email = email
+      user.set _.pick req.body, 'name', 'email'
 
       if adminEditing and req.body.roles? and isArray(req.body.roles)
         user.roles = req.body.roles
