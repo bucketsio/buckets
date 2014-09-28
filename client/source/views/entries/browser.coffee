@@ -65,8 +65,16 @@ module.exports = class EntriesBrowser extends PageView
 
   modelSaved: (entry, newData) =>
     if newData?.id
+      notificationMessage = "You saved “#{entry.get('title')}”"
+      if newData.publishDate? && newData.status == "live"
+        notificationMessage = "You published “#{entry.get('title')}”"
+      else if newData.status == "draft"
+        if entry.previousAttributes().lastModified != newData.lastModified
+          notificationMessage = "You updated “#{entry.get('title')}”"
+        else
+          notificationMessage = "You saved “#{entry.get('title')}” draft"
+      toastr.success notificationMessage
       @model.set newData
-      toastr.success "You saved “#{entry.get('title')}”"
       @collection.add @model
     else
       toastr.success "You deleted “#{entry.get('title')}”"
