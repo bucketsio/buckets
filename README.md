@@ -9,7 +9,7 @@ A fast, simple way to build dynamic websites with [Node.js](http://nodejs.org). 
 
 # Getting Started
 
-Buckets requires [Node.js](http://nodejs.org) and [MongoDB](http://www.mongodb.org). Once you have those, the easiest way to use Buckets is to install it as an NPM module:
+Buckets requires [Node.js](http://nodejs.org), [MongoDB](http://www.mongodb.org) and [Redis](http://redis.io). Once you have those, the easiest way to use Buckets is to install it as an NPM module:
 
 ```bash
 npm install buckets
@@ -32,7 +32,9 @@ There is a [skeleton project available](https://github.com/bucketsio/skeleton) w
 
 ## Installing from this repo
 
+
 If you plan on contributing to Buckets' development, you can install and deploy Buckets directly from this repo. You will need to install a few extra dependencies for building the frontend files.
+
 
 ```bash
 npm install -g grunt-cli

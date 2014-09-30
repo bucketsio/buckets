@@ -15,6 +15,9 @@ config =
     autoStart: yes
     cloudinary: process.env.CLOUDINARY_URL
     db: "mongodb://localhost/buckets_#{env}"
+    apiHourlyLimit: 100
+    redisURL: "redis://127.0.0.1:6379"
+    loginFailLimit: 10
   production:
     smtp:
       service: 'Mandrill'
@@ -22,6 +25,7 @@ config =
         user: process.env.MANDRILL_USERNAME
         pass: process.env.MANDRILL_APIKEY
     db: process.env.MONGOHQ_URL
+    redisURL: process.env.REDISTOGO_URL
     fastly:
       api_key: process.env.FASTLY_API_KEY
       cdn_url: process.env.FASTLY_CDN_URL

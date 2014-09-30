@@ -1,6 +1,8 @@
 language: node_js
 
-services: mongodb
+services:
+  - redis-server
+  - mongodb
 
 before_install:
   - npm install -g grunt-cli
