@@ -1,6 +1,8 @@
 express = require 'express'
 async = require 'async'
 crypto = require 'crypto'
+_ = require 'underscore'
+{isArray} = require 'util'
 
 mailer = require '../../lib/mailer'
 config = require '../../config'
@@ -75,6 +77,7 @@ module.exports = app = express()
   @apiParam {String} name Full name of the user.
   @apiParam {String} email Email address of the user.
   @apiParam {String} password Password for the user. Must be between 6-20 characters and include a number.
+  @apiParam {Array} [roles] Array of roles the user is granted
 
   @apiPermission administrator
 ###
@@ -93,13 +96,19 @@ app.route('/users')
     return res.status(401).end() unless req.user?.hasRole ['administrator']
     return req.status(400).end() unless typeof req?.body is 'object'
 
-    newUser = new User req.body
+    data = _.pick req.body, 'name', 'email', 'password'
+    newUser = new User data
+    
+    # optional
+    if req.body.roles? and isArray(req.body.roles)
+      newUser.roles = req.body.roles
 
     newUser.save (err) ->
       return res.status(400).send err if err
       res.status(200).send newUser
 
   .get (req, res) ->
+    # TODO shouldn't we filter passwords and such from here?
     User.find {}, (err, users) ->
       res.status(200).send users
 
@@ -125,6 +134,7 @@ app.route('/users')
   @apiParam {String} id User ID (sent in URL)
   @apiParam {String} [name] The full name of the user.
   @apiParam {String} [email] The user’s email address.
+  @apiParam {Array} [roles] Array of roles the user has
 
   @apiPermission administrator
 
@@ -166,23 +176,27 @@ app.route('/users/:userID')
       res.status(200).end()
 
   .put (req, res) ->
-    return res.status(401).end() unless req.user?.hasRole ['administrator'] or req.user?._id is req.params.userID
+    adminEditing = req.user?.hasRole ['administrator']
+    return res.status(401).end() unless adminEditing or req.user?._id is req.params.userID
 
     User.findById req.params.userID, 'passwordDigest', (err, user) ->
       return res.status(400).end() if err or not user
 
       {password, passwordconfirm, oldpassword} = req.body
-      delete req.body.password # Only add back after checking below
       if password and passwordconfirm and oldpassword
         if password isnt passwordconfirm
           user.invalidate 'passwordconfirm', 'Your new password and confirmation don’t match.'
         else if not user.authenticate oldpassword
           user.invalidate 'oldpassword', 'The provided password is incorrect.'
         else
-          # All good
-          req.body.password = password
+          user.password = password
 
-      user.set(req.body).save (err, user) ->
+      user.set _.pick req.body, 'name', 'email'
+
+      if adminEditing and req.body.roles? and isArray(req.body.roles)
+        user.roles = req.body.roles
+
+      user.save (err, user) ->
         return res.status(400).send err if err
         res.status(200).send user
 

@@ -11,6 +11,7 @@
         {{input 'password' '' placeholder="New password" type="password"}}
         {{input 'passwordconfirm' '' placeholder="Confirm new password" type="password"}}
       </div>
+      {{hidden 'admin' isAdmin}}
 
     {{!-- Viewing someone else's --}}
     {{else}}
