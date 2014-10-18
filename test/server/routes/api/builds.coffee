@@ -52,7 +52,6 @@ describe 'REST#Builds', ->
           done()
 
     it 'returns a 401 if user isn’t authenticated', (done) ->
-      console.log 'STAGING', stagingBuild
       request app
         .put "/#{config.apiSegment}/builds/#{stagingBuild.id}/"
         .send
@@ -158,7 +157,7 @@ describe 'REST#Builds', ->
       auth.createAdmin (err, admin) ->
         admin
           .delete "/#{config.apiSegment}/builds/#{archiveBuild.id}"
-          .expect 401
+          .expect 204
           .end done
 
     it 'returns a 400 if build env is not archive', (done) ->

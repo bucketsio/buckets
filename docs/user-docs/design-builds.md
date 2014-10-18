@@ -4,9 +4,9 @@ Design Builds allow web designers to easily manage their website’s design. By 
 
 ## How Builds Work
 
-By default, builds are stored in `buckets/builds/`. At startup, Buckets will grab the current "live" build from the database and unpack it there (if none exists, it will scaffold this Build from an internal skeleton). The live build is unpacked by extracting to a folder with the name of the build and creating a symlink to this build (this is so we can later switch the live build without downtime).
+By default, builds are stored in `./builds/`. At startup, Buckets will grab the current "live" build from the database and unpack it there (if none exists, it will scaffold this Build from an internal skeleton). The live build is unpacked by extracting to a folder with the name of the build and creating a symlink to this build (this is so we can later switch the live build without downtime).
 
-For staging builds, the startup process is slightly different. Buckets will first look for a `builds/staging/` directory and, if it exists, attempt to create a staging build out of it and save to the database. We avoid saving unnecessary duplicates of staging builds by creating and verifying an md5 each time a build is created.
+For staging builds, the startup process is slightly different. Buckets will first look for a `./builds/staging/` directory and, if it exists, attempt to create a staging build out of it and save to the database. We avoid saving unnecessary duplicates of staging builds by creating and verifying an md5 each time a build is created.
 
 The staging directory does not use a symlink and remains a directory so developers who prefer to deploy via Git or FTP can consistently and easily do so.
 

@@ -52,7 +52,6 @@ buildSchema.pre 'validate', (next) ->
 
   # Only generate the zip when it’s not there and we’re saving live or staging
   if (@source and @_fromEnv not in ['live', 'staging']) or !@env
-    console.log 'skipping tar.gz', @env, @_fromEnv, 'lol'
     return next()
 
   # We need to re-create the .tar.gz
@@ -79,9 +78,6 @@ buildSchema.pre 'validate', (next) ->
 
 
 buildSchema.pre 'save', (next) ->
-
-  console.log 'saving a copied thing'.red if @copied
-
   @timestamp = Date.now()
   env = @env
   fromEnv = @_fromEnv || env
@@ -278,7 +274,6 @@ buildSchema.statics.generateTar = (dirpath, callback) ->
     output = fs.createWriteStream tarPath
     output.on 'error', ->
       logger.error 'Error writing .tar.gz'
-      console.log arguments
       return
 
     output.on 'close', =>
