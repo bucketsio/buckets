@@ -6,7 +6,7 @@ Activity = require '../../../server/models/activity'
 {expect} = require 'chai'
 sinon = require 'sinon'
 
-describe 'Activity', ->
+describe 'Model#Activity', ->
 
   afterEach (done) ->
     for _, c of db.connection.collections

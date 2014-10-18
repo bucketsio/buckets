@@ -211,7 +211,7 @@ app.post '/forgot', (req, res) ->
   ,
     (token, done) ->
       User.findOne email: req.body.email, (err, user) ->
-        return res.send {error: 'No user with that email.'}, 404 unless user
+        return res.status(404).send {error: 'No user with that email.'} unless user
 
         user.resetPasswordToken = token
         user.resetPasswordExpires = Date.now() + 3600000 # 1 hour
@@ -237,7 +237,7 @@ app.post '/forgot', (req, res) ->
 
 app.get '/reset/:token', (req, res) ->
   User.findOne resetPasswordToken: req.params.token, resetPasswordExpires: $gt: Date.now(), (err, user) ->
-    return res.send 404 unless user
+    return res.status(404).end() unless user
 
     res.send email: user.email, token: req.params.token
 

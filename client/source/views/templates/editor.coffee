@@ -1,3 +1,4 @@
+Chaplin = require 'chaplin'
 PageView = require 'views/base/page'
 Template = require 'models/template'
 _ = require 'underscore'
@@ -6,20 +7,51 @@ FormMixin = require 'views/base/mixins/form'
 
 tpl = require 'templates/templates/editor'
 
+
+handlebars = require 'hbsfy/runtime'
+handlebars.registerPartial 'directory', require('templates/templates/directory')
+
 module.exports = class TemplateEditor extends PageView
   template: tpl
   mixins: [FormMixin]
   listen:
-    'sync collection': 'render'
+    'add collection': 'render'
+
+  optionNames: PageView::optionNames.concat ['builds', 'liveFiles', 'stagingFiles', 'env', 'filename', 'env']
+
+  className: 'templateEditor'
 
   events:
     'click [href="#new"]': 'clickNew'
-    'click [href="#delete"]': 'clickDelete'
+    'click [href="#deleteFile"]': 'clickDeleteFile'
     'submit form': 'submitForm'
+    'click [href="#delete"]': 'clickDeleteBuild'
+    'click [href="#download"]': 'clickDownload'
+    'click [href="#stage"]': 'clickStage'
+    'click [href="#publish"]': 'clickPublish'
+    'click [href="#downloadLive"]': 'clickDownloadLive'
+    'keydown textarea, [type=text], [type=number]': 'keyDown'
+    'keyup textarea, [type=text], [type=number]': 'keyUp'
+
+  keyUp: (e) ->
+    if @cmdActive and e.which is 91
+      @cmdActive = false
+      e
+
+  keyDown: (e) ->
+    if @cmdActive and e.which is 13
+      @$('form').submit()
+    @cmdActive = e.metaKey
+    e
 
   getTemplateData: ->
+    archives = _.where @builds.toJSON(), env: 'archive'
+
     _.extend super,
-      items: @collection.toJSON()
+      liveFiles: @liveFiles.getTree()
+      stagingFiles: @stagingFiles.getTree()
+      archives: archives
+      env: @env
 
   render: ->
     super
@@ -27,53 +59,70 @@ module.exports = class TemplateEditor extends PageView
     @$code.after """
       <pre class="code editor hidden"></pre>
     """
-    unless Modernizr.touch
+    @aceReady = new $.Deferred
+    unless Modernizr.touch and not @editor
       @$code.addClass 'loading'
       Modernizr.load
         test: ace?
-        nope: "/#{mediator.options.adminSegment}/js/ace/ace.js"
+        nope: ["/#{mediator.options.adminSegment}/js/ace/ace.js", "/#{mediator.options.adminSegment}/js/ace/ext-modelist.js"]
         complete: @bindAceEditor
     else
-      @selectTemplate @model.get('filename')
+      @aceReady.reject() unless @editor
+      @selectTemplate @filename, @env
 
   bindAceEditor: =>
     return if @disposed
 
     ace.config.set 'basePath', "/#{mediator.options.adminSegment}/js/ace/"
+
     @editor = ace.edit(@$('.code.editor')[0])
     @editor.setTheme 'ace/theme/tomorrow'
     @editor.renderer.setShowGutter no
 
     @editorSession = @editor.getSession()
-    @editorSession.setMode 'ace/mode/handlebars'
     @editorSession.setTabSize 2
 
     @$('pre.code, textarea.code').toggleClass 'hidden'
 
-    @selectTemplate @model.get('filename')
+    @aceReady.resolve()
 
-  selectTemplate: (filename) ->
-    if filename
-      @model = @collection.findWhere(filename: filename)
+  selectTemplate: (filename, env='staging') ->
+    @clearFormErrors()
+    @env = env
 
-      if @model
-        contents = @model.get 'contents'
-        idx = @collection.indexOf @model
-        @$('.input-group li').eq(idx).addClass('active').siblings().removeClass('active')
-      else
-        @model = new Template
-          filename: filename
-
+    @collection = if env is 'live'
+      @liveFiles
     else
+      @stagingFiles
+
+    @model = @collection.findWhere(filename: filename, build_env: env)
+
+    unless @model
+      toastr.warning "File doesn’t exist. Starting a new draft." if filename
       @model = new Template
-      contents = ''
-      @$('.input-group li').removeClass 'active'
+        filename: filename or ''
+      @updateTemplateDisplay()
+    else
+      @model.fetch().done @updateTemplateDisplay
+
+    @$('.nav-stacked li').removeClass 'active'
+    @$("#env-#{env} .nav-stacked li[data-path=\"#{filename}\"]").addClass('active')
+
+  updateTemplateDisplay: =>
+    return if @disposed
+
+    {contents, filename} = @model.toJSON()
 
     @$code.val contents
     @$('[name="filename"]').val filename
-    @editorSession?.setValue contents
-    @clearFormErrors()
-    @$('.notForIndex').toggleClass 'hide', filename is 'index'
+    @filename = filename
+
+    @aceReady.done =>
+      @modelist ?= ace.require 'ace/ext/modelist'
+      mode = @modelist?.getModeForPath(filename).mode
+      @editorSession.setMode mode if mode
+      window.$session = @editorSession
+      @editorSession.setValue contents
 
   submitForm: (e) ->
     e.preventDefault()
@@ -96,11 +145,20 @@ module.exports = class TemplateEditor extends PageView
 
   clickNew: (e) ->
     e.preventDefault()
-    @selectTemplate()
+
+    # We want to create a new file based on their current tab
+    env = if @$("ul.nav-tabs li.active").text() is 'Live'
+      'live'
+    else
+      'staging'
+
+    @selectTemplate(null, env)
     @$('input').focus()
 
-  clickDelete: (e) ->
+  clickDeleteFile: (e) ->
     e.preventDefault()
+
+    $li = $(e.currentTarget).closest 'li'
 
     if confirm 'Are you sure?'
       index = @collection.indexOf @model
@@ -108,7 +166,53 @@ module.exports = class TemplateEditor extends PageView
 
       @model.destroy(wait: yes).done =>
         @model = nextTemplate
-        @render()
+
+        $li.slideUp 100, =>
+          @render()
+
+  clickDeleteBuild: (e) ->
+    e.preventDefault()
+    if confirm 'Are you sure you want to delete this archive?'
+      $build = @$(e.currentTarget).closest('.build')
+      id = $build.data('id')
+      build = @builds.findWhere(id: id)
+
+      build.destroy(wait: yes).done ->
+        $build.slideUp 150
+
+  clickStage: (e) ->
+    e.preventDefault()
+    buildId = @$(e.currentTarget).closest('.build').data('id')
+    build = @builds.findWhere id: buildId
+    if build
+      build.set(env: 'staging')
+      build.save({}, wait: yes)
+        .done =>
+          toastr.success "Restored build #{build.get('id')} to staging."
+          @render()
+        .error ->
+          toastr.error "There was a problem restoring that build."
+
+  clickDownload: (e) ->
+    e.preventDefault()
+    # todo:
+
+  clickDownloadLive: (e) ->
+    build = @builds.findWhere(env: 'live')
+    if build
+      @$(e.currentTarget).attr 'href', "/api/builds/#{build.get('id')}/download"
+
+  clickPublish: (e) ->
+    e.preventDefault()
+    build = @builds.findWhere env: 'staging'
+    return toastr.error 'Error finding the build' unless build
+    build.set env: 'live'
+    build.save(wait: yes)
+      .done =>
+        toastr.success 'Published staging!'
+        @builds.fetch().done => @render()
+      .error ->
+        toastr.error 'Couldn’t publish staging to live'
 
   dispose: ->
     @editor?.destroy()

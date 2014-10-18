@@ -15,11 +15,15 @@ module.exports = class EditUserView extends View
   events:
     'submit form': 'submitForm'
     'click [href="#remove"]': 'clickRemove'
+    'click [href="#importDropbox"]': 'clickImportDropbox'
+    'click [href="#deploy"]': 'clickDeploy'
+    'click [href="#disconnectDropbox"]': 'disconnectDropbox'
 
   getTemplateData: ->
     _.extend super,
       currentUser: mediator.user?.toJSON()
       isAdmin: @model.hasRole('administrator')
+      dropboxEnabled: mediator.options?.dropboxEnabled
 
   submitForm: (e) ->
     e.preventDefault()
@@ -32,7 +36,7 @@ module.exports = class EditUserView extends View
     else
       data.roles = _.reject data.roles, (r) ->
         r.name is 'administrator'
-
+    data.previewMode = data.previewMode?
     name = data.name
 
     @submit(@model.save(data, wait: yes)).done ->
@@ -44,3 +48,18 @@ module.exports = class EditUserView extends View
       @model.destroy(wait: yes).done =>
         toastr.success 'User has been removed.'
         @dispose()
+
+  disconnectDropbox: ->
+    e.preventDefault()
+
+  clickImportDropbox: (e) ->
+    e.preventDefault()
+    $.post '/api/dropbox/import'
+      .done ->
+        toastr.success 'Your personal preview environment has been updated.'
+
+  clickDeploy: (e) ->
+    e.preventDefault()
+    $.post '/api/builds'
+      .done ->
+        toastr.success 'The website has been updated.'

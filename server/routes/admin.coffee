@@ -108,6 +108,7 @@ app.get '/:admin*?', (req, res) ->
       needsInstall: userCount is 0
       cloudinary: cloudinaryData
       version: pkg.version
+      dropboxEnabled: process.env.DROPBOX_APP_KEY? and process.env.DROPBOX_APP_SECRET?
 
     if req.user
       req.user.last_active = Date.now()

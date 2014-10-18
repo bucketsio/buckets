@@ -8,13 +8,13 @@ Route = require "#{serverPath}/models/route"
 config = require "#{serverPath}/config"
 reset = require '../../../reset'
 auth = require '../../../auth'
-
-app = require(serverPath)().app
+buckets = require(serverPath)
+app = buckets().app
 
 {expect} = require 'chai'
 
 describe 'REST#Install', ->
-  before reset.db
+  before (done) -> reset.db -> buckets().generateBuilds done
 
   describe 'Validation', ->
 
@@ -43,7 +43,6 @@ describe 'REST#Install', ->
             password: 'secret123'
           .expect 400
           .end (err, res) ->
-            throw err if err
             expect(err).to.not.exist
             expect(res.body.errors).to.exist
             done()

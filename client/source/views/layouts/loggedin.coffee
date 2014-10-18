@@ -44,20 +44,11 @@ module.exports = class LoggedInLayout extends View
       clearTimeout @openTimeout if @openTimeout
       @openTimeout = setTimeout @collapseNav, 50
 
-    setTimeout @collapseNav, 300
-
   checkNav: (controller, params, route) ->
-    @$navLinks ?= @$('.nav-primary a')
-
-    if route.previous and not @$('#bkts-sidebar:hover').length
-      @openTimeout = setTimeout =>
-        @collapseNav()
-      , 200
-
     @$('.nav-primary li').removeClass 'active'
 
     return unless route?.path
-
+    @$navLinks ?= @$('.nav-primary a')
     for link in @$navLinks
       $link = $(link)
       href = $link.attr('href')

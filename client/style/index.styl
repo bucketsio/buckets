@@ -84,21 +84,21 @@ hr.tiny
 
 .page-title
   font-weight 400
-  margin 0 0 15px
+  margin 0 15px 15px
   letter-spacing -1px
-  padding 35px 30px 15px
-  background-color #fafafa
+  padding 40px 0 15px
+  // background-color #fff
   color #aaa
   font-size 30px
   border-bottom 1px solid rgba(#111, .1)
 
   .btn-link
-    color rgba(#fff, .9)
+    color rgba(#000, .3)
     vertical-align middle
     padding 6px
 
     &:hover
-      color #fff
+      color rgba(#000, .4)
 
 @import '_typography'
 @import '_nav'
@@ -139,6 +139,12 @@ th
   border-radius bottom 0
   position relative
   z-index 5
+  border-bottom-color transparent
+
+  &:focus
+    border-bottom-width 2px
+    border-bottom-style solid
+    z-index 15
 
 .input-slug
   font-family Menlo, 'Courier New', monospace
@@ -146,17 +152,30 @@ th
   border-radius top 0, bottom 6px
   color rgba(darken($primary, 40), .4)
   position relative
-  opacity .6
   transition all 150ms cubic-bezier(.4,0,.2,1)
   z-index 2
+  background-color #fcfcfc
+  border-top 0
 
   &:hover
-    opacity .9
+    background-color #f9f9f9
+    z-index 10
 
   &:focus
-    opacity 1
-    color darken($primary, 20)
+    border-color #e6e6e6
+    color #888
+    background-color #f6f6f6
     z-index 10
+
+.input-slug + a
+  float right
+  position relative
+  top -32px
+  z-index 30
+  color #ccc
+
+  &:active
+    top -31px
 
 input[type="text"].form-control, textarea.form-control
   -webkit-appearance none
@@ -169,8 +188,8 @@ input[type="text"].form-control, textarea.form-control
   padding-left 10px
   padding-right 10px
 
-.input-lg
-  font-weight 400
+// .input-lg
+//   font-weight 400
 
 .pageBreadcrumb
   margin 10px 0
@@ -212,3 +231,6 @@ input[type="text"].form-control, textarea.form-control
 
 .bootstrap-tagsinput
   padding 4px 6px
+
+.panel-body
+  border-radius 10px

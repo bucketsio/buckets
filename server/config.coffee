@@ -8,13 +8,17 @@ config =
     salt: 'BUCKETS4LIFE!!1'
     port: process.env.PORT || 3000
     env: env
-    templatePath: "#{__dirname}/../user/templates/"
-    publicPath: "#{__dirname}/../user/public/"
+    buildsPath: "#{__dirname}/../builds/"
     pluginsPath: "#{__dirname}/../node_modules/"
     catchAll: yes
     autoStart: yes
     cloudinary: process.env.CLOUDINARY_URL
+    db: "mongodb://localhost/buckets_development"
+    logLevel: 'info'
+  test:
     db: "mongodb://localhost/buckets_#{env}"
+    buildsPath: "#{__dirname}/../test/builds/"
+    logLevel: 'error'
   production:
     smtp:
       service: 'Mandrill'

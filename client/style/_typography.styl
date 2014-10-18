@@ -4,6 +4,9 @@
 strong, label, .label, .checkbox label
   font-weight 500
 
+label, .label
+  @extend .ui-text
+
 h4
   margin-top 14px
   margin-bottom 8px
@@ -20,6 +23,7 @@ pre.code, textarea.code
   font-size 14px
   font-family Menlo, 'Courier New', monospace
   line-height 16px
+  border-color transparent
 
 textarea.code
   padding 0 2px

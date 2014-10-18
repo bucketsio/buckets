@@ -19,7 +19,6 @@ describe 'Entry', ->
       email: 'hello@buckets.io'
       password: 'S3cr3ts'
     , (e, u) ->
-      throw e if e
       user = u
       done()
 

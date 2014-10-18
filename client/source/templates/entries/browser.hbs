@@ -1,5 +1,5 @@
 <div class="row">
-  <h1 class="page-title background-{{bucket.color}}">
+  <h1 class="page-title color-{{bucket.color}}">
     {{bucket.name}}
     <span class="hasEntries pull-right {{#empty items}}hidden{{/empty}}">
       <a class="btn btn-link btn-icon btn-icon-small show-tooltip" title="Add {{bucket.singular}}" href="/{{adminSegment}}/buckets/{{bucket.slug}}/add">{{icon 'plus'}}</a>
@@ -9,7 +9,6 @@
     {{/hasRole}}
   </h1>
   <div class="col-md-5 col-sm-4 sidebar">
-    <br>
     <div class="entries"></div>
   </div>
   <div class="col-md-7 col-sm-8 entry-detail">

@@ -1,0 +1,21 @@
+{{debug}}
+
+{{#each children}}
+  {{#is type 'file'}}
+
+    <li{{#is path ../../active}} class="active"{{/is}} data-env="{{../../env}}" data-path="{{path}}">
+      <a href="/{{adminSegment}}/design/{{../../env}}/{{path}}">{{name}}</a>
+      <div class="input-group-btn">{{../../env}}
+        <a href="#deleteFile" class="btn btn-link btn-icon btn-icon-small">{{icon 'trash'}}</a>
+      </div>
+    </li>
+  {{else}}
+
+    <li>
+      <h4 data-toggle="collapse" data-target="#collapse-{{../../env}}{{pathId}}"{{#startsWith ../../active path}}{{else}} class="collapsed"{{/startsWith}}><span class="caret"></span> {{name}}</h4>
+      <ul class="collapse{{#startsWith ../../active path}} in{{/startsWith}}" id="collapse-{{../../env}}{{pathId}}">
+        {{> directory children=children env=../../env active=../../active}}
+      </ul>
+    </li>
+  {{/is}}
+{{/each}}
