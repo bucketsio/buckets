@@ -38,7 +38,7 @@ if config.host
       fs.exists "./builds/#{buildEnv}", (exists) ->
         # console.log "Using #{buildEnv} statics".rainbow, exists
         if exists
-          app.set 'views', "./builds/#{buildEnv}"
+          app.set 'views', "#{config.buildsPath}#{buildEnv}"
           req.originalUrl = req.url
           req.url = "/#{buildEnv}#{req.url}"
           req.previewMode = yes
@@ -49,12 +49,12 @@ app.use (req, res, next) ->
   unless req.previewMode
     req.originalUrl = req.url
     req.url = "/live#{req.url}"
-    app.set 'views', "./builds/live"
+    app.set 'views', "#{config.buildsPath}live"
   # console.log 'just passing thru...', req.url
   next()
 
-# One week
-app.use express.static(config.buildsPath, maxAge: 86400000 * 7), harp.mount("./builds/"), (req, res, next) ->
+# Serve static (cached one week), and Harp pre-compiled, then reset the URL
+app.use express.static(config.buildsPath, maxAge: 86400000 * 7), harp.mount(config.buildsPath), (req, res, next) ->
   # console.log 'what?!', req.originalUrl, req.url
   req.url = req.originalUrl if req.originalUrl
   delete req.originalUrl
@@ -78,6 +78,7 @@ app.all '/:frontend*?', (req, res, next) ->
     # set the status code from a Template like this:
     # {{statusCode 404}}
     hbs.registerHelper 'statusCode', (val) ->
+      logger.info 'Template set status code to %s', val
       res.status val unless res.headersSent
       ''
 
@@ -165,3 +166,5 @@ app.all '/:frontend*?', (req, res, next) ->
             next()
         else
           res.status(404).send html
+
+
