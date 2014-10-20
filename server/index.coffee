@@ -20,12 +20,11 @@ Build = require './models/build'
 logger = require './lib/logger'
 
 class Buckets extends events.EventEmitter
-
   listening: no
 
-  constructor: (config, callback) ->
-    @config = require('./config')
-    _.extend @config, config
+  constructor: (config={}, callback) ->
+    @config = require './config'
+    @config = _.extend @config, config
 
     logger.verbose 'Starting Buckets', config: @config, callback: callback?
     callback ?= ->

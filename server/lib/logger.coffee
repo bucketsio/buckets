@@ -12,7 +12,7 @@ logger = new winston.Logger
     new winston.transports.File
       level: 'verbose'
       filename: "buckets.#{config.env}.log"
-      maxsize: 1000000
+      maxsize: 20000000 # 20mbish
   ]
 
 module.exports = logger

@@ -35,7 +35,7 @@ if config.host
       buildEnv = req.vhost[0]
 
       # Check buildEnv dir exists
-      fs.exists "./builds/#{buildEnv}", (exists) ->
+      fs.exists "#{config.buildsPath}#{buildEnv}", (exists) ->
         # console.log "Using #{buildEnv} statics".rainbow, exists
         if exists
           app.set 'views', "#{config.buildsPath}#{buildEnv}"
@@ -49,13 +49,11 @@ app.use (req, res, next) ->
   unless req.previewMode
     req.originalUrl = req.url
     req.url = "/live#{req.url}"
-    app.set 'views', "#{config.buildsPath}live"
-  # console.log 'just passing thru...', req.url
+    app.set 'views', "#{config.buildsPath}live" # This should symlink to DB build
   next()
 
 # Serve static (cached one week), and Harp pre-compiled, then reset the URL
 app.use express.static(config.buildsPath, maxAge: 86400000 * 7), harp.mount(config.buildsPath), (req, res, next) ->
-  # console.log 'what?!', req.originalUrl, req.url
   req.url = req.originalUrl if req.originalUrl
   delete req.originalUrl
   next()
@@ -166,5 +164,3 @@ app.all '/:frontend*?', (req, res, next) ->
             next()
         else
           res.status(404).send html
-
-

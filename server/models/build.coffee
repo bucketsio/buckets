@@ -63,8 +63,7 @@ buildSchema.pre 'validate', (next) ->
 
   Build.generateTar dirpath, (e, tar) =>
     if e?
-      logger.error 'Error generating the tar', path: dirpath
-      console.log e
+      logger.error 'Error generating the tar', path: dirpath, error: e
       @invalidate 'source', 'Buckets wasn’t able to compress the source.'
       next()
     else
@@ -75,7 +74,6 @@ buildSchema.pre 'validate', (next) ->
         else
           @invalidate 'source', 'A build with that md5 already exists.'
         next()
-
 
 buildSchema.pre 'save', (next) ->
   @timestamp = Date.now()
@@ -121,8 +119,8 @@ buildSchema.pre 'save', (next) ->
       Build.find {env: env, md5: $ne: @md5}, (e, builds) ->
         logger.verbose 'Found %d builds to archive', builds.length
 
-        async.map builds, (build) ->
-          callback() if build.id is id
+        async.map builds, (build, callback) ->
+          return callback() if build.id is id
           logger.verbose "Backing up from #{build.env}", id: id, buildId: build.id
           build.message = "Backed up from #{build.env}"
           build.env = 'archive'
@@ -168,8 +166,10 @@ buildSchema.statics.scaffold = (env, callback) ->
 
       fs.removeSync "#{config.buildsPath}#{env}"
 
-      fs.copy "./server/lib/skeletons/base/", "#{config.buildsPath}#{env}", ->
+      fs.copy "#{__dirname}/../lib/skeletons/base/", "#{config.buildsPath}#{env}", (e) ->
+        logger.error e if e
         createNew 'Scaffolded from base.', (e, build) ->
+          logger.error e if e
           if build
             logger.verbose 'Created a new build', build.id
             callback null, build

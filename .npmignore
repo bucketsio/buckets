@@ -5,3 +5,5 @@ tmp
 docs/api
 newrelic_agent.log
 .env
+Buckets.sublime-project
+Buckets.sublime-workspace

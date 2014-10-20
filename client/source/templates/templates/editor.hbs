@@ -26,11 +26,10 @@
 
         <br>
         <p>
-          <a href="/" class="btn btn-block btn-default" target="_blank">View Staging</a>
+          <a href="//{{stagingUrl}}" class="btn btn-block btn-default" target="_blank">View Staging</a>
           <a href="/api/builds/staging/download" class="btn btn-block btn-default">Download Staging</a>
           <a href="#publish" class="btn btn-block btn-success">Copy Staging to Live</a>
         </p>
-
       </div>
 
       {{!-- Live --}}
@@ -39,7 +38,7 @@
           {{> directory children=liveFiles env='live' active=filename}}
         </ul>
         <a href="/api/builds/live/download" class="btn btn-block btn-default noscript">Download Live</a>
-
+        <a href="/" class="btn btn-block btn-default noscript" target="_blank">View Live</a>
       </div>
 
       {{!-- Archives --}}

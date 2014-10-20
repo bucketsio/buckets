@@ -71,6 +71,7 @@ module.exports = (grunt) ->
     clean:
       app: ['public']
       all: ['public', 'bower_components', 'tmp', 'deployments/*', '!deployments/base']
+      logs: ['*.log']
 
     testem:
       basic:
@@ -306,7 +307,7 @@ module.exports = (grunt) ->
 
   # Building
   grunt.registerTask 'default', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'uglify:plugins', 'build-scripts', 'build-style', 'modernizr']
-  grunt.registerTask 'prepublish', ['clean:all', 'default', 'uglify:app', 'cssmin']
+  grunt.registerTask 'prepublish', ['clean:all', 'clean:logs', 'default', 'uglify:app', 'cssmin']
   grunt.registerTask 'publish', ['prepublish', 'shell:publish']
 
   # Serving

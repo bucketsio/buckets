@@ -58,6 +58,9 @@
           {{~#if cloudinary~}}
             ,cloudinary: {{~json cloudinary~}}
           {{~/if~}}
+          {{~#if stagingUrl~}}
+            ,stagingUrl: '{{stagingUrl}}'
+          {{~/if~}}
           {{~#if dropboxEnabled~}}
             ,dropboxEnabled: true
           {{~/if~}}

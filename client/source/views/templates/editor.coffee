@@ -1,15 +1,14 @@
+_ = require 'underscore'
 Chaplin = require 'chaplin'
 PageView = require 'views/base/page'
 Template = require 'models/template'
-_ = require 'underscore'
-mediator = require('chaplin').mediator
+mediator = require 'mediator'
 FormMixin = require 'views/base/mixins/form'
 
 tpl = require 'templates/templates/editor'
 
-
 handlebars = require 'hbsfy/runtime'
-handlebars.registerPartial 'directory', require('templates/templates/directory')
+handlebars.registerPartial 'directory', require 'templates/templates/directory'
 
 module.exports = class TemplateEditor extends PageView
   template: tpl
@@ -29,20 +28,17 @@ module.exports = class TemplateEditor extends PageView
     'click [href="#download"]': 'clickDownload'
     'click [href="#stage"]': 'clickStage'
     'click [href="#publish"]': 'clickPublish'
-    'click [href="#downloadLive"]': 'clickDownloadLive'
     'keydown textarea, [type=text], [type=number]': 'keyDown'
     'keyup textarea, [type=text], [type=number]': 'keyUp'
 
   keyUp: (e) ->
     if @cmdActive and e.which is 91
       @cmdActive = false
-      e
 
   keyDown: (e) ->
     if @cmdActive and e.which is 13
       @$('form').submit()
     @cmdActive = e.metaKey
-    e
 
   getTemplateData: ->
     archives = _.where @builds.toJSON(), env: 'archive'
@@ -52,6 +48,7 @@ module.exports = class TemplateEditor extends PageView
       stagingFiles: @stagingFiles.getTree()
       archives: archives
       env: @env
+      stagingUrl: mediator.options.stagingUrl
 
   render: ->
     super
@@ -196,11 +193,6 @@ module.exports = class TemplateEditor extends PageView
   clickDownload: (e) ->
     e.preventDefault()
     # todo:
-
-  clickDownloadLive: (e) ->
-    build = @builds.findWhere(env: 'live')
-    if build
-      @$(e.currentTarget).attr 'href', "/api/builds/#{build.get('id')}/download"
 
   clickPublish: (e) ->
     e.preventDefault()
