@@ -40,11 +40,14 @@ module.exports = class BucketsController extends Controller
       fields: @newFields
 
   review: ->
+    @entries = new Entries
+    
+    for role, i in mediator.user.get('roles')
+      currentBucket = mediator.buckets?.findWhere id: role.resourceId
+      @entries.fetch( data: { bucket: currentBucket.get('slug'), status: 'pending', add : true})
 
     reviewBucket = new Bucket
     reviewBucket.set('name','Entries under Review')
-    @entries = new Entries
-    @entries.fetch( data: { status: 'draft'} )
 
     @view = new EntriesBrowser
      collection: @entries

@@ -24,9 +24,8 @@
           {{/each}}
           {{#hasRole 'administrator'}}
             <li><a href="/{{adminSegment}}/buckets/add">{{icon 'add'}} New Bucket</a></li>
-            <li><a href="/{{adminSegment}}/buckets/review">{{icon 'add'}} Review Entries</a></li>
           {{/hasRole}}
-
+          <li><a href="/{{adminSegment}}/buckets/review">{{icon 'add'}} Review Entries</a></li>
           {{#hasRole 'administrator'}}
             <li class="divider"></li>
             <li><a href="/{{adminSegment}}/routes">{{icon 'direction-sign'}} Routes</a></li>
