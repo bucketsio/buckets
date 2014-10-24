@@ -1,6 +1,6 @@
 {
   "name": "buckets",
-  "version": "0.0.7-rc2",
+  "version": "0.0.7-rc3",
   "description": "Manage content better.",
   "scripts": {
     "start": "./node_modules/coffee-script/bin/coffee ./server/start.coffee",
