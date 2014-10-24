@@ -28,13 +28,22 @@ app.all '/buildfiles/:env*', (req, res, next) ->
 app.get '/buildfiles/:env?', (req, res) ->
   return res.status(401).end() unless req.user?.hasRole ['administrator']
 
-  BuildFile.findAll req.params.env, (err, files) ->
-    logger.verbose 'Finished finding BuildFiles', files
-    if err
-      logger.error err
-      res.status(500).send err
-    else
-      res.send files
+  if req.query.type is 'template'
+    BuildFile.findTemplates req.params.env, (err, files) ->
+      logger.verbose 'Finished finding BuildFiles', files
+      if err
+        logger.error err
+        res.status(500).send err
+      else
+        res.send files
+  else
+    BuildFile.findAll req.params.env, (err, files) ->
+      logger.verbose 'Finished finding BuildFiles', files
+      if err
+        logger.error err
+        res.status(500).send err
+      else
+        res.send files
 
 app.all '/buildfiles/:env/:filename', (req, res, next) ->
   return res.status(401).end() unless req.user?.hasRole ['administrator']

@@ -1,7 +1,7 @@
 Controller = require 'lib/controller'
-Templates = require 'models/templates'
+BuildFiles = require 'models/buildfiles'
+BuildFile = require 'models/buildfile'
 Builds = require 'models/builds'
-Template = require 'models/template'
 TemplateEditor = require 'views/templates/editor'
 
 module.exports = class TemplatesController extends Controller
@@ -10,14 +10,14 @@ module.exports = class TemplatesController extends Controller
     unless params.filename
       return @redirectTo 'templates#edit', filename: 'index.hbs', env: 'staging'
 
-    @adjustTitle 'Templates'
+    @adjustTitle 'Design'
 
-    @reuse 'Templates',
+    @reuse 'TemplateEditor',
       compose: ->
         @builds = new Builds
 
-        @stagingFiles = new Templates
-        @liveFiles = new Templates
+        @stagingFiles = new BuildFiles
+        @liveFiles = new BuildFiles
         @liveFiles.build_env = 'live'
         $.when(
           @liveFiles.fetch()

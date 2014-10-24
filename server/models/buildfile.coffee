@@ -102,7 +102,9 @@ buildFileSchema.statics.findAll = (build_env='staging', callback) ->
     callback null, ({filename: item, build_env: build_env} for item in items)
 
 # FS-level search for just Handlebars Templates
-buildFileSchema.statics.findTemplates = (build_env='staging', callback) ->
-  glob '**/*.hbs', cwd: "#{config.buildsPath}#{build_env}/", callback
+buildFileSchema.statics.findTemplates = (build_env, callback) ->
+  glob '**/*.hbs', cwd: "#{config.buildsPath}#{build_env}/", (e, items) ->
+    return callback e if e
+    callback null, ({filename: item.replace(/\.hbs$/, '')} for item in items)
 
 module.exports = BuildFile = db.model 'BuildFile', buildFileSchema

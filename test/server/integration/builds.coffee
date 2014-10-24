@@ -7,13 +7,17 @@ config = require '../../../server/config'
 BuildFile = require '../../../server/models/buildfile'
 Build = require '../../../server/models/build'
 reset = require '../../reset'
+hbs = require 'hbs'
+request = require 'supertest'
 
 describe 'Integration#Builds', ->
   @timeout 5000
 
   beforeEach (done) ->
     buckets ->
-      reset.builds -> buckets().generateBuilds done
+      reset.builds ->
+        buckets().generateBuilds ->
+          done()
 
   it 'has live & staging builds by default', (done) ->
     Build.find (e, builds) ->
@@ -41,8 +45,6 @@ describe 'Integration#Builds', ->
       Build.find (e, builds) ->
         expect(builds.length).to.equal 2
         done()
-
-  # it 'stays persistent through a second generation', (done) ->
 
   # describe 'Startup'
   describe 'Integrity', ->
@@ -103,3 +105,53 @@ describe 'Integration#Builds', ->
                   BuildFile.count (err, count) ->
                     expect(count).to.equal 0
                     done()
+
+    it 'clears BuildFiles when pushing staging to live', (done) ->
+      # console.log 'TEST START'.rainbow
+      BuildFile.create
+        filename: 'layout.hbs'
+        contents: 'NewLayout'
+        build_env: 'live'
+      , ->
+
+        # Promote staging to live
+        Build.getStaging (e, build) ->
+          build.env = 'live'
+
+          build.save (e, build) ->
+            BuildFile.find (e, buildfiles) ->
+              expect(buildfiles.length).to.equal 0
+              done()
+
+
+    it 'clears the internal HBS view cache when live is updated', (done) ->
+      # Manually turn on view caching
+      app = buckets().app
+      app.set 'view cache', true
+
+      # Cache is empty by default
+      expect(hbs.cache).to.be.empty
+
+      # Load the homepage
+      request buckets().app
+        .get '/'
+        .end (e, res) ->
+          expect(e).to.be.null
+
+          # Cache is no longer empty
+          expect(hbs.cache).to.not.be.empty
+
+          # Create edit, promote to live
+          BuildFile.create
+            filename: 'layout.hbs'
+            contents: 'NewLayout'
+            build_env: 'live'
+          , ->
+            # Promote staging to live
+            Build.getStaging (e, build) ->
+              build.env = 'live'
+
+              build.save (e, build) ->
+                # Cache is empty again
+                expect(hbs.cache).to.be.empty
+                done()

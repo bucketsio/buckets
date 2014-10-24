@@ -46,12 +46,11 @@ describe 'Model#Build', ->
         build = new Build env: 'staging'
 
         build.save (e, build) ->
-          console.log e
+          expect(e).to.not.exist
 
           build2 = new Build env: 'staging'
           build2.save (e, build2) ->
             expect(e).to.exist
-            console.log e
             expect(build2).to.be.undefined
 
             Build.find {}, (e, builds) ->

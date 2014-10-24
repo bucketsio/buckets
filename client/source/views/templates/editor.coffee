@@ -1,7 +1,7 @@
 _ = require 'underscore'
 Chaplin = require 'chaplin'
 PageView = require 'views/base/page'
-Template = require 'models/template'
+BuildFile = require 'models/buildfile'
 mediator = require 'mediator'
 FormMixin = require 'views/base/mixins/form'
 
@@ -96,7 +96,7 @@ module.exports = class TemplateEditor extends PageView
 
     unless @model
       toastr.warning "File doesn’t exist. Starting a new draft." if filename
-      @model = new Template
+      @model = new BuildFile
         filename: filename or ''
       @updateTemplateDisplay()
     else

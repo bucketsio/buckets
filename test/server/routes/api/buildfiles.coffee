@@ -31,6 +31,16 @@ describe 'REST#BuildFiles', ->
               expect(file).to.have.keys ['filename', 'build_env']
             done()
 
+    it '?type=template returns 200 and templates for admins', (done) ->
+      auth.createAdmin (err, admin) ->
+        admin
+          .get "/#{config.apiSegment}/buildfiles/live/?type=template"
+          .expect 200
+          .end (e, res) ->
+            expect(e).to.not.exist
+            expect(res.body.length).to.equal 3
+            done()
+
   describe 'GET /buildfiles/:env/:filename', ->
     it 'returns a 401 for anonymous users', (done) ->
       request app

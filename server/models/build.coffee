@@ -5,6 +5,7 @@ async = require 'async'
 fs = require 'fs-extra'
 path = require 'path'
 filesize = require 'filesize'
+hbs = require 'hbs'
 crypto = require 'crypto'
 tarball = require 'tarball-extract'
 uniqueValidator = require 'mongoose-unique-validator'
@@ -67,13 +68,19 @@ buildSchema.pre 'validate', (next) ->
       @invalidate 'source', 'Buckets wasn’t able to compress the source.'
       next()
     else
-      Build.count {env: @env, md5: tar.md5}, (err, count) =>
-        logger.warn 'Found a matching md5, invalidating build.'
+      BuildFile = mongoose.model 'BuildFile'
+      BuildFile.count build_env: @env, (e, count) =>
         if count is 0
-          @set tar
+          Build.count {env: @env, md5: tar.md5}, (err, count) =>
+            logger.warn 'Found a matching md5, invalidating build.'
+            if count is 0
+              @set tar
+            else
+              @invalidate 'source', 'A build with that md5 already exists.'
+            next()
         else
-          @invalidate 'source', 'A build with that md5 already exists.'
-        next()
+          @set tar
+          next()
 
 buildSchema.pre 'save', (next) ->
   @timestamp = Date.now()
@@ -81,8 +88,9 @@ buildSchema.pre 'save', (next) ->
   fromEnv = @_fromEnv || env
   id = @id
 
-  return next() unless env in ['live', 'staging'] and fromEnv isnt env
+  logger.verbose 'Build#presave', fromEnv: fromEnv, env: env, id: id
 
+  return next() unless env in ['live', 'staging'] and fromEnv isnt env
 
   if fromEnv is 'staging' and env is 'live'
     @message = 'Published from staging'
@@ -106,11 +114,11 @@ buildSchema.pre 'save', (next) ->
         callback()
   ,
     (callback) ->
-      return callback() unless fromEnv isnt 'archive'
+      return callback() if fromEnv is 'archive'
 
       # Clear BuildFiles for this env
-      logger.verbose 'Clearing %s buildfile(s)', fromEnv
-      mongoose.model('BuildFile').remove build_env: fromEnv, callback
+      logger.verbose 'Clearing %s buildfile(s)', env
+      mongoose.model('BuildFile').remove build_env: $in: [env, fromEnv], callback
   ,
     (callback) =>
       return callback() if fromEnv is 'staging' and env is 'staging'
@@ -138,8 +146,7 @@ buildSchema.pre 'save', (next) ->
       next()
 
 buildSchema.post 'save', ->
-  # Build.remove {md5: @md5, env: @env, _id: $ne: @id}, (e, count) =>
-  #   logger.verbose 'Build#postSave: Removed %d duplicate build(s) (based on md5)', count, env: @env, md5: @md5
+  hbs.cache = {} if @env is 'live'
 
 buildSchema.statics.scaffold = (env, callback) ->
   return callback 'Invalid env' unless env in ['live', 'staging']
@@ -164,18 +171,19 @@ buildSchema.statics.scaffold = (env, callback) ->
       logger.verbose 'Scaffold: No directory, copying from base.'
       logger.info 'No existing directory, creating %s from base.', env
 
-      fs.removeSync "#{config.buildsPath}#{env}"
-
-      fs.copy "#{__dirname}/../lib/skeletons/base/", "#{config.buildsPath}#{env}", (e) ->
+      fs.remove "#{config.buildsPath}#{env}", (e) ->
         logger.error e if e
-        createNew 'Scaffolded from base.', (e, build) ->
+
+        fs.copy "#{__dirname}/../lib/skeletons/base/", "#{config.buildsPath}#{env}", (e) ->
           logger.error e if e
-          if build
-            logger.verbose 'Created a new build', build.id
-            callback null, build
-          else
-            logger.warn 'Did not create the build', arguments
-            callback false
+          createNew 'Scaffolded from base.', (e, build) ->
+            logger.error e if e
+            if build
+              logger.verbose 'Created a new build', build.id
+              callback null, build
+            else
+              logger.warn 'Did not create the build', arguments
+              callback false
 
 # Writes a deployment to live
 # (service agnostic at this point)
@@ -282,7 +290,6 @@ buildSchema.statics.generateTar = (dirpath, callback) ->
       logger.verbose 'Wrote', filename, filesize size
 
       if size > 15000000 # Cap at 15mb for now
-
         return callback(new Error 'File size too big')
 
       md5hash.end()
@@ -300,7 +307,7 @@ buildSchema.statics.generateTar = (dirpath, callback) ->
 
         # Then delete the compressed version
         logger.verbose 'Removing tar', path: tarPath
-        fs.remove tarPath
+        fs.remove tarPath, (e) -> logger.error e if e
 
     archive = archiver.create 'tar',
       name: '' # Required so md5s don’t include timestamps (just match on contents)

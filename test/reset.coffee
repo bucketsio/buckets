@@ -23,5 +23,6 @@ module.exports =
   builds: (done) ->
     fs.remove config.buildsPath, (e) ->
       logger.error e if e
-      fs.ensureDir config.buildsPath, ->
+      fs.ensureDir config.buildsPath, (e) ->
+        logger.error e if e
         dropDatabase done
