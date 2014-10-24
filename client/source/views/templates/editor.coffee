@@ -34,11 +34,13 @@ module.exports = class TemplateEditor extends PageView
   keyUp: (e) ->
     if @cmdActive and e.which is 91
       @cmdActive = false
+    e
 
   keyDown: (e) ->
     if @cmdActive and e.which is 13
       @$('form').submit()
     @cmdActive = e.metaKey
+    e
 
   getTemplateData: ->
     archives = _.where @builds.toJSON(), env: 'archive'
@@ -157,11 +159,17 @@ module.exports = class TemplateEditor extends PageView
 
     $li = $(e.currentTarget).closest 'li'
 
-    if confirm 'Are you sure?'
-      index = @collection.indexOf @model
-      nextTemplate = @collection.at if index+1 is @collection.length then index-1 else index+1
+    collection = if $li.data('env') is 'staging'
+      @stagingFiles
+    else
+      @liveFiles
+    model = collection.findWhere filename: $li.data('path')
 
-      @model.destroy(wait: yes).done =>
+    if confirm 'Are you sure?'
+      index = collection.indexOf model
+      nextTemplate = collection.at if index+1 is collection.length then index-1 else index+1
+
+      model.destroy(wait: yes).done =>
         @model = nextTemplate
 
         $li.slideUp 100, =>
