@@ -85,15 +85,3 @@ describe 'Model#Build', ->
           Build.find (e, builds) ->
             expect(builds.length).to.equal 2
             done()
-
-    it 'can cleanup after itself (staging)', (done) ->
-      build = new Build env: 'staging'
-
-      build.save (e, build) ->
-        exists = fs.existsSync "#{config.buildsPath}staging/"
-        expect(exists).to.be.true
-
-        build.cleanup ->
-          exists = fs.existsSync "#{config.buildsPath}/staging/"
-          expect(exists).to.be.false
-          done()

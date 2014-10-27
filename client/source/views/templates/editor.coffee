@@ -16,7 +16,7 @@ module.exports = class TemplateEditor extends PageView
   listen:
     'add collection': 'render'
 
-  optionNames: PageView::optionNames.concat ['builds', 'liveFiles', 'stagingFiles', 'env', 'filename', 'env']
+  optionNames: PageView::optionNames.concat ['builds', 'liveFiles', 'stagingFiles', 'env', 'filename']
 
   className: 'templateEditor'
 
@@ -25,7 +25,6 @@ module.exports = class TemplateEditor extends PageView
     'click [href="#deleteFile"]': 'clickDeleteFile'
     'submit form': 'submitForm'
     'click [href="#delete"]': 'clickDeleteBuild'
-    'click [href="#download"]': 'clickDownload'
     'click [href="#stage"]': 'clickStage'
     'click [href="#publish"]': 'clickPublish'
     'keydown textarea, [type=text], [type=number]': 'keyDown'
@@ -193,24 +192,37 @@ module.exports = class TemplateEditor extends PageView
       build.set(env: 'staging')
       build.save({}, wait: yes)
         .done =>
-          toastr.success "Restored build #{build.get('id')} to staging."
-          @render()
+          $.when(
+            @builds.fetch()
+            @stagingFiles.fetch()
+          ).done =>
+            toastr.success "Restored build #{build.get('id')} to staging."
+            @render()
+            @selectTemplate @filename, @env
+
         .error ->
           toastr.error "There was a problem restoring that build."
-
-  clickDownload: (e) ->
-    e.preventDefault()
-    # todo:
 
   clickPublish: (e) ->
     e.preventDefault()
     build = @builds.findWhere env: 'staging'
     return toastr.error 'Error finding the build' unless build
     build.set env: 'live'
+    $btn = $(e.currentTarget).ladda()
+    $btn.ladda 'start'
     build.save(wait: yes)
       .done =>
-        toastr.success 'Published staging!'
-        @builds.fetch().done => @render()
+        $.when(
+          @builds.fetch()
+          @liveFiles.fetch()
+        ).done( =>
+          toastr.success 'Published staging!'
+          _.defer =>
+            @render()
+            @selectTemplate @filename, @env
+        ).always =>
+          $btn.ladda 'stop'
+
       .error ->
         toastr.error 'Couldn’t publish staging to live'
 

@@ -107,13 +107,11 @@ describe 'Integration#Builds', ->
                     done()
 
     it 'clears BuildFiles when pushing staging to live', (done) ->
-      # console.log 'TEST START'.rainbow
       BuildFile.create
         filename: 'layout.hbs'
         contents: 'NewLayout'
         build_env: 'live'
       , ->
-
         # Promote staging to live
         Build.getStaging (e, build) ->
           build.env = 'live'
@@ -154,4 +152,66 @@ describe 'Integration#Builds', ->
               build.save (e, build) ->
                 # Cache is empty again
                 expect(hbs.cache).to.be.empty
+                done()
+
+    describe 'Archives', ->
+      # beforeEach (done) ->
+      #   buckets -> reset.builds -> buckets().generateBuilds done
+
+      it 'Should archive live when a staging build is pushed', (done) ->
+        # Write a new file to live
+        BuildFile.create
+          filename: 'liveTest.md'
+          contents: '**NewLiveFile**'
+          build_env: 'live'
+        , (e, buildfile) ->
+          expect(e).to.not.exist
+
+          # Push staging live, should archive liveTest.md
+          Build.getStaging (e, build) ->
+            build.env = 'live'
+            build.save (e, build) ->
+              expect(e).to.not.exist
+
+              # Find all builds grouped by env
+              Build.findOne env: 'archive', (e, build) ->
+                expect(build).to.exist
+                expect(build.message).to.equal 'Backed up from live'
+
+                build.unpack ->
+                  exists = fs.existsSync "#{config.buildsPath}#{build.id}/liveTest.md"
+                  expect(exists).to.be.true
+
+                  stagingExists = fs.existsSync "#{config.buildsPath}staging/liveTest.md"
+                  expect(stagingExists).to.be.false
+
+                  liveExists = fs.existsSync "#{config.buildsPath}live/liveTest.md"
+                  expect(liveExists).to.be.false
+                  done()
+
+      it 'Should archive staging when a new file is detected', (done) ->
+
+        fs.outputFile "#{config.buildsPath}staging/stagingTest.md", '**NewStagingFile**', (e) ->
+          expect(e).to.not.exist
+
+          # Manually re-generate builds
+          buckets().generateBuilds ->
+
+            # Look for our new archive
+            Build.findOne env: 'archive', (e, build) ->
+              expect(build).to.exist
+              expect(build.message).to.equal 'Backed up from staging'
+
+              build.unpack ->
+                # Here the archive should _not_ have the updated file
+                exists = fs.existsSync "#{config.buildsPath}#{build.id}/stagingTest.md"
+                expect(exists).to.be.false
+
+                # But staging should
+                stagingExists = fs.existsSync "#{config.buildsPath}staging/stagingTest.md"
+                expect(stagingExists).to.be.true
+
+                # And of course live should not
+                liveExists = fs.existsSync "#{config.buildsPath}live/stagingTest.md"
+                expect(liveExists).to.be.false
                 done()

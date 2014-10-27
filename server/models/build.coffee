@@ -49,10 +49,9 @@ buildSchema.path('env').set (newVal) ->
 
 # todo: Switch to GridFS and stream to it directly (as opposed to saving/deleting zip...)
 buildSchema.pre 'validate', (next) ->
-  @_blend = yes
-
   # Only generate the zip when it’s not there and we’re saving live or staging
-  if (@source and @_fromEnv not in ['live', 'staging']) or !@env
+  logger.verbose 'Deciding to build tar from FS', env: @env, source: @source?, fromEnv: @_fromEnv, rebuild: !(@source and @_fromEnv not in ['live', 'staging'] or @env isnt 'archive')
+  if (@source and (@_fromEnv not in ['live', 'staging'] or @env is 'archive')) or !@env
     return next()
 
   # We need to re-create the .tar.gz
@@ -90,8 +89,6 @@ buildSchema.pre 'save', (next) ->
 
   logger.verbose 'Build#presave', fromEnv: fromEnv, env: env, id: id
 
-  return next() unless env in ['live', 'staging'] and fromEnv isnt env
-
   if fromEnv is 'staging' and env is 'live'
     @message = 'Published from staging'
 
@@ -114,17 +111,16 @@ buildSchema.pre 'save', (next) ->
         callback()
   ,
     (callback) ->
-      return callback() if fromEnv is 'archive'
-
       # Clear BuildFiles for this env
       logger.verbose 'Clearing %s buildfile(s)', env
       mongoose.model('BuildFile').remove build_env: $in: [env, fromEnv], callback
   ,
     (callback) =>
-      return callback() if fromEnv is 'staging' and env is 'staging'
+      return callback() if env is 'archive'
 
       logger.verbose "Looking for other #{env} builds to archive.", env: env, id: @id, md5: @md5
-      Build.find {env: env, md5: $ne: @md5}, (e, builds) ->
+
+      Build.find env: env, (e, builds) ->
         logger.verbose 'Found %d builds to archive', builds.length
 
         async.map builds, (build, callback) ->
@@ -137,10 +133,8 @@ buildSchema.pre 'save', (next) ->
             callback arguments...
         , callback
   ], =>
-    logger.verbose 'Scanning for archives with matching md5s', md5: @md5
-
-    if env is 'live'
-      logger.info 'Preparing a new live build'
+    if env is 'live' or (env is 'staging' and fromEnv is 'archive')
+      logger.info 'Unpacking live build'
       @unpack next
     else
       next()
@@ -325,15 +319,6 @@ buildSchema.statics.generateTar = (dirpath, callback) ->
       cwd: fs.realpathSync(dirpath)
       src: ['**']
     archive.finalize()
-
-buildSchema.methods.cleanup = (callback) ->
-  dirpath = if @env is 'staging' then @env else @id
-  logger.info 'Attempting to delete ', dirpath
-  if fs.existsSync "#{config.buildsPath}#{dirpath}"
-    fs.remove "#{config.buildsPath}#{dirpath}", callback
-  else
-    logger.warn 'Build directory doesn’t exist.', dirpath
-    callback new Error 'Build directory doesn’t exist.'
 
 buildSchema.statics.getLive = (callback) ->
   @findOne env: 'live', callback
