@@ -18,10 +18,6 @@
 
     <footer id="page-footer">
       {{#if user}}
-        {{#if user.previewMode}}
-        Streaming Dropbox Changes
-        ·
-        {{/if}}
         <a href="{{req.path}}{{#unless req.query.debugPage}}?debugPage=1#debugPanel{{/unless}}">Toggle Debug</a> ·
         <a href="/{{adminSegment}}/">Buckets Admin</a>
          · {{user.name}} <a href="/{{adminSegment}}/logout">Log out</a>
