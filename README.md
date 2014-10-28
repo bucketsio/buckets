@@ -12,10 +12,10 @@ A fast, simple way to build dynamic websites with [Node.js](http://nodejs.org). 
 Buckets requires [Node.js](http://nodejs.org) and [MongoDB](http://www.mongodb.org). Once you have those, the easiest way to use Buckets is to install it as an NPM module:
 
 ```bash
-npm install buckets
+npm install buckets@latest
 ```
 
-You can also run the above command with `--save` to add Buckets to your app’s package.json. From here, you can run Buckets in a script like so:
+You can also run the above command with `--save` to add Buckets to your app’s package.json (recommended). From here, you can run Buckets in a script like this:
 
 ```javascript
 buckets = require('buckets');
@@ -69,6 +69,7 @@ If you're deploying directly from this repo, you'll need to make one change to y
 
 * [Routes](docs/user-docs/routes.md)
 * [Templates](docs/user-docs/templates.md)
+* [Design](docs/user-docs/design.md)
 
 # Community
 

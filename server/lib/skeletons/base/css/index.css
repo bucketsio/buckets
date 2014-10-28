@@ -3,12 +3,14 @@ body {
   padding: 0;
   font-family: "Avenir Next", Avenir, Helvetica, sans-serif;
   color: #555;
+  font-size: 16px;
 }
 
 #content {
   margin: 0 auto;
   max-width: 600px;
   color: #222;
+  padding: 20px;
 }
 
 strong, h1, h2, h3, h4, h5, h6 {
@@ -17,6 +19,9 @@ strong, h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-weight: 500;
+  margin: 18px 0 6px;
+  font-weight: 600;
+  font-size: 24px;
 }
 
 h2 {
@@ -28,31 +33,29 @@ p {
 }
 
 a {
-  color: #418497;
+  color: #222;
   text-decoration: none;
 }
-
+a:hover {
+  text-decoration: underline;
+}
 pre {
   overflow: auto;
 }
 
 #page-header {
-  padding: 80px 40px;
-  background-color: #f5ce55;
-  color: #111;
+  padding: 90px 40px 6px;
   text-align: center;
   margin-bottom: 40px;
 }
 
 #page-header a {
-  color: #111;
-  text-decoration: none;
+  color: #f5ce55;
 }
 
 #page-header h1 {
-  font-weight: 600;
   font-size: 30pt;
-  margin: 60px 0;
+  margin: 0;
   letter-spacing: -1px;
 }
 
@@ -72,7 +75,7 @@ pre {
 }
 
 #page-footer {
-  font-size: 14px;
+  color: #aaa;
   padding: 20px 0;
   text-align: center;
 }
@@ -90,8 +93,7 @@ pre {
 
 .debug pre {
   font-family: Menlo, monospace;
-  max-width: 900px;
-  margin: 0 auto;
+  margin: 0 50px;
   overflow: auto;
   font-weight: 500;
 }

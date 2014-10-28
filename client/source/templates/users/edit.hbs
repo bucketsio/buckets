@@ -11,7 +11,7 @@
         {{input 'password' '' placeholder="New password" type="password"}}
         {{input 'passwordconfirm' '' placeholder="Confirm new password" type="password"}}
       </div>
-
+      {{hidden 'admin' isAdmin}}
     {{!-- Viewing someone else's --}}
     {{else}}
       {{#if id}}
@@ -28,6 +28,22 @@
         {{checkbox 'admin' isAdmin label="User is an administrator"}}
       {{/hasRole}}
     {{/is}}
+
+    {{checkbox 'previewMode' previewMode label="View site in staging mode" help="View upcoming design changes, if any exist."}}
+
+    {{#if dropboxEnabled}}
+
+      <h5>Dropbox</h5>
+      {{#if dropbox}}
+        <a href="#importDropbox" class="btn btn-default">Import</a>
+        <a href="#deploy" class="btn btn-primary">Deploy your preview site</a>
+        <a href="/api/disconnect/dropbox" class="btn btn-xs btn-link btn-icon btn-icon-small">{{icon 'dropbox'}} Disconnect</a>
+      {{else}}
+        <a href="/api/connect/dropbox" class="btn btn-link btn-large btn-icon noscript">{{icon 'dropbox'}} Connect to Dropbox</a>
+        <p>Deploy design updates with one click or stage changes and preview them.</p>
+      {{/if}}
+
+    {{/if}}
 
     <div class="pull-right">
       {{#if id}}

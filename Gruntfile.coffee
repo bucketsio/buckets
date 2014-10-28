@@ -1,5 +1,4 @@
 mongoose = require 'mongoose'
-
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
@@ -71,7 +70,8 @@ module.exports = (grunt) ->
 
     clean:
       app: ['public']
-      all: ['public', 'bower_components', 'tmp']
+      all: ['public', 'bower_components', 'tmp', 'deployments/*', '!deployments/base']
+      logs: ['*.log']
 
     testem:
       basic:
@@ -125,9 +125,10 @@ module.exports = (grunt) ->
         cwd: 'bower_components/ace-builds/src-min-noconflict/'
         src: [
           'ace.js'
-          'mode-handlebars.js'
-          'worker-handlebars.js'
+          'mode-*.js'
+          'worker-*.js'
           'theme-*.js' # These are loaded on the fly anyway
+          'ext-*.js' # These are loaded on the fly anyway
         ]
         dest: 'public/js/ace/'
       fontastic:
@@ -147,8 +148,12 @@ module.exports = (grunt) ->
       dev:
         options:
           spawn: false
+          # background: false
           script: 'server/start.coffee'
           opts: ['node_modules/coffee-script/bin/coffee']
+          args: ['--debug-brk']
+          delay: 10
+          debug: yes
 
     less:
       app:
@@ -252,7 +257,7 @@ module.exports = (grunt) ->
         tasks: ['copy']
 
       style:
-        files: ['client/style/**/*.{styl,less}']
+        files: ['client/style/**/*.{styl,less}', 'node_modules/buckets-*/**/*.styl']
         tasks: ['build-style']
 
       express:
@@ -268,7 +273,9 @@ module.exports = (grunt) ->
 
       pluginStyles:
         files: ['node_modules/buckets-*/**/*.styl']
-        tasks: ['stylus:plugins', 'concat:plugins']
+        tasks: ['stylus:plugins', 'concat:pluginsStyle']
+        options:
+          livereload: true
 
       livereload:
         options:
@@ -300,7 +307,7 @@ module.exports = (grunt) ->
 
   # Building
   grunt.registerTask 'default', ['clean:app', 'bower', 'apidoc', 'copy', 'uglify:vendor', 'browserify:plugins', 'uglify:plugins', 'build-scripts', 'build-style', 'modernizr']
-  grunt.registerTask 'prepublish', ['clean:all', 'default', 'uglify:app', 'cssmin']
+  grunt.registerTask 'prepublish', ['clean:all', 'clean:logs', 'default', 'uglify:app', 'cssmin']
   grunt.registerTask 'publish', ['prepublish', 'shell:publish']
 
   # Serving

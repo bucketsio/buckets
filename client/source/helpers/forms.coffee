@@ -74,7 +74,9 @@ Handlebars.registerHelper 'input', (name, value, options) ->
       placeholder: 'slug'
       tabindex: 0
     })
-    input += slug
+    input += slug += """
+      <a href="/admin/help/slugs.md" class="btn btn-link btn-icon btn-icon-small">#{Handlebars.helpers.icon('question')}</a>
+    """
 
   wrap input,
     label: settings.label
@@ -101,7 +103,7 @@ Handlebars.registerHelper 'textarea', (name, value, options) ->
     rows: settings.rows
   , value
 
-  if settings.label
+  new Handlebars.SafeString if settings.label
     wrap textarea,
       label: settings.label
       help: settings.help

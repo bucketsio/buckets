@@ -32,7 +32,7 @@ module.exports =
       user
         .post "/#{config.adminSegment}/login"
         .send
-          username: 'test+admin@buckets.io'
+          username: 'test+user@buckets.io'
           password: 'testing123'
         .end (err, res) ->
           done err, user

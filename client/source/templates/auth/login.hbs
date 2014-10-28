@@ -1,7 +1,6 @@
 <form class="container-fluid" action="/{{adminSegment}}/login" method="POST">
   <div class="row">
     <div class="col-sm-4 col-sm-offset-4">
-
       <header id="bkts-hdr">
         {{logo}}
       </header>
@@ -15,13 +14,10 @@
       <h3>Please log in{{#if next}} to continue{{/if}}:</h3>
       {{input 'username' '' autocomplete="on" placeholder="Email" type='email' size='lg'}}
       {{input 'password' '' autocomplete="on" placeholder="Password" type='password' size='lg'}}
-
       {{submit 'Log in' className='btn btn-lg btn-block btn-primary ladda-button'}}
 
       <p><br><br><a href="#forgot">Forget your password?</a></p>
       </fieldset>
-
     </div>
   </div>
-
 </form>

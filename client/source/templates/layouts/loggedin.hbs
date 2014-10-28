@@ -29,7 +29,7 @@
           {{#hasRole 'administrator'}}
             <li class="divider"></li>
             <li><a href="/{{adminSegment}}/routes">{{icon 'direction-sign'}} Routes</a></li>
-            <li><a href="/{{adminSegment}}/templates">{{icon 'html'}} Templates</a></li>
+            <li><a href="/{{adminSegment}}/design/">{{icon 'html'}} Design</a></li>
             <li class="divider"></li>
             {{!-- <li><a href="/{{adminSegment}}/settings">{{icon 'setting-gear'}} Settings</a></li> --}}
             <li><a href="/{{adminSegment}}/users">{{icon 'user'}} People</a></li>
@@ -39,13 +39,15 @@
             <a href="#" data-toggle="dropdown">
               {{gravatar email_hash}} <span class="caret"></span>
               <span class="sr-only">Toggle Dropdown</span>
+
+              {{name}}
             </a>
             <ul class="dropdown-menu" role="menu">
               <li class="logout">
-                <a href="/" class="noscript">Return to website</a>
+                <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
                 <a href="/{{adminSegment}}/docs/api/" target="_blank">API Docs</a>
                 <a href="/{{adminSegment}}/users/{{email}}">Profile</a>
-                <a class="noscript" href="/{{adminSegment}}/logout">Log&nbsp;out</a>
+                <a href="/" class="noscript">Return to website</a>
               </li>
             </ul>
           </li>

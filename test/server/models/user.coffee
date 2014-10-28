@@ -15,14 +15,12 @@ describe 'Model#User', ->
       name: 'Images'
       slug: 'images'
     , (e, b) ->
-      throw e if e
       bucket = b
       User.create
         name: 'Bucketer'
         email: 'hello@buckets.io'
         password: 'S3cr3ts'
       , (e, u) ->
-        throw e if e
         user = u
         done()
 

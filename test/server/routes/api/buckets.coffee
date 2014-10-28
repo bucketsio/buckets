@@ -19,11 +19,11 @@ describe 'REST#Buckets', ->
         .expect 401
         .end done
 
-    it 'returns a 401 if user isn’t an admin', (done) ->
+    it 'returns a 200 if user isn’t an admin, with accessible Buckets', (done) ->
       auth.createUser (err, user) ->
         user
           .get "/#{config.apiSegment}/buckets"
-          .expect 401
+          .expect 200
           .end done
 
     it 'returns a 200 and Buckets', (done) ->

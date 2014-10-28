@@ -83,3 +83,8 @@ Handlebars.registerHelper 'hasRole', (role..., options) ->
   else
     options.inverse @
 
+Handlebars.registerHelper 'startsWith', (string1, string2, options) ->
+  if string1?.indexOf(string2) is 0
+    options.fn @
+  else
+    options.inverse @

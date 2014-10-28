@@ -1,7 +1,5 @@
-Collection = require 'lib/collection'
-Template = require 'models/template'
+BuildFiles = require 'models/buildfiles'
 
-module.exports = class Templates extends Collection
-  url: '/api/templates/'
-  model: Template
-  comparator: 'filename'
+module.exports = class Templates extends BuildFiles
+  build_env: 'live'
+  url: "/api/buildfiles/live/?type=template"

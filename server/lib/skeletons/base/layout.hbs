@@ -18,6 +18,10 @@
 
     <footer id="page-footer">
       {{#if user}}
+        {{#if user.previewMode}}
+        Streaming Dropbox Changes
+        ·
+        {{/if}}
         <a href="{{req.path}}{{#unless req.query.debugPage}}?debugPage=1#debugPanel{{/unless}}">Toggle Debug</a> ·
         <a href="/{{adminSegment}}/">Buckets Admin</a>
          · {{user.name}} <a href="/{{adminSegment}}/logout">Log out</a>
@@ -29,13 +33,9 @@
     {{#if req.query.debugPage}}
       <div class="debug" id="debugPanel">
         <h4>Template Data</h4>
-        <p align="center"><strong>{{req.path}}</strong> rendered in {{renderTime}}.</p>
+        <p align="center"><strong>{{req.path}}</strong> rendered {{#if user.previewMode}}Blah{{/if}} in {{renderTime}}.</p>
         {{inspect .}}
       </div>
     {{/if}}
-
-    {{#is settings.env 'development'}}
-      <script src="//localhost:35729/livereload.js"></script>
-    {{/is}}
   </body>
 </html>

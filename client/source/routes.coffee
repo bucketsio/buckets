@@ -22,7 +22,7 @@ module.exports = (match) ->
 
   match 'buckets/:slug/:entryID', 'buckets#browse'
 
-  match 'templates(/*filename)', 'templates#edit'
+  match 'design(/:env)(/*filename)', 'templates#edit'
   match 'routes', 'routes#list'
 
   match 'help(/*doc)', 'help#index'

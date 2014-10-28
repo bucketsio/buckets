@@ -105,9 +105,11 @@ app.get '/:admin*?', (req, res) ->
         else
           "/#{adminSegment}"
       apiSegment: config.apiSegment
+      stagingUrl: "staging." + (config.host || req.hostname) + if config.port isnt 80 then ":#{config.port}" else ''
       needsInstall: userCount is 0
       cloudinary: cloudinaryData
       version: pkg.version
+      dropboxEnabled: process.env.DROPBOX_APP_KEY? and process.env.DROPBOX_APP_SECRET?
 
     if req.user
       req.user.last_active = Date.now()

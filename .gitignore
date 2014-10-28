@@ -1,9 +1,10 @@
 .DS_Store
+.env
+*.log
 coverage.html
 bower_components
-/public
+public
 node_modules
 tmp
 docs/api
-newrelic_agent.log
-.env
+builds

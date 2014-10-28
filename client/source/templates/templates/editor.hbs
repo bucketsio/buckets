@@ -1,41 +1,77 @@
 <form class="row">
-  <h1 class="page-title background-yellow">
-    Templates
+  <h1 class="page-title">
+    Design
 
     <div class="pull-right">
       {{helpIcon 'View Template documentation' docsPath='templates.md'}}
-      <a href="#new" class="btn btn-link btn-icon btn-icon-small">{{icon 'plus'}}</a>
+      <a href="#new" class="btn btn-link btn-icon">{{icon 'plus'}}</a>
     </div>
   </h1>
 
-  <div class="panel col-xs-12">
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-9">
+  <div class="col-md-3">
+    <ul class="nav nav-tabs" role="tablist">
+      <li{{#is env 'staging'}} class="active"{{/is}}><a href="#env-staging" role="tab" data-toggle="tab">Staging</a></li>
+      <li{{#is env 'live'}} class="active"{{/is}}><a href="#env-live" role="tab" data-toggle="tab">Live</a></li>
+      <li><a href="#env-archives" role="tab" data-toggle="tab">Archives</a></li>
+    </ul>
+
+    {{!-- Tabs --}}
+    <div class="tab-content">
+      {{!-- Staging --}}
+      <div class="tab-pane fade in{{#is env 'staging'}} active{{/is}}" id="env-staging">
+
+        <ul class="nav nav-pills nav-stacked">
+          {{> directory children=stagingFiles env='staging' active=filename}}
+        </ul>
+
+        <br>
+        <p>
+          <a href="//{{stagingUrl}}" class="btn btn-block btn-default" target="_blank">View Staging</a>
+          <a href="/api/builds/staging/download" class="btn btn-block btn-default">Download Staging</a>
+          <a href="#publish" class="btn btn-block btn-success button-ladda" data-style="zoom-in">Copy Staging to Live</a>
+        </p>
+      </div>
+
+      {{!-- Live --}}
+      <div class="tab-pane fade in{{#is env 'live'}} active{{/is}}" id="env-live">
+        <ul class="nav nav-pills nav-stacked">
+          {{> directory children=liveFiles env='live' active=filename}}
+        </ul>
+        <a href="/api/builds/live/download" class="btn btn-block btn-default noscript">Download Live</a>
+        <a href="/" class="btn btn-block btn-default noscript" target="_blank">View Live</a>
+      </div>
+
+      {{!-- Archives --}}
+      <div class="tab-pane fade in" id="env-archives">
+        {{#each archives}}
+          <div class="build {{env}}" data-id="{{id}}">
+            <p class="text-muted">
+              <strong>{{message}}</strong> · {{timeAgo timestamp}}
+              <br>
+              <a href="#stage" class="btn btn-default btn-sm">Copy to Staging</a>
+              <a href="#delete" class="btn btn-icon btn-link btn-icon-small">{{icon 'trash'}}</a>
+              <hr>
+            </p>
+          </div>
+          {{else}}
+          <h5>No Archives created yet.</h5><p>Archives are automatically generated when a build is pushed to live, or a new staging environment is detected.</p>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="panel">
+      <div class="panel-body">
+        {{textarea 'contents' contents className='form-control code' size='lg'}}
+        <div class="form-group">
           <div class="input-group">
             <input name="filename" value="{{filename}}" placeholder="Filename" class="form-control">
-            <div class="dropdown input-group-btn">
-              <a data-toggle="dropdown" href="#" class="btn"><span class="caret"></span></a>
-              <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
-                {{#each items}}
-                  <li{{#is filename ../filename}} class="active"{{/is}}>
-                    <a href="/{{adminSegment}}/templates/{{filename}}">{{filename}}</a>
-                  </li>
-                {{/each}}
-              </ul>
+            <div class="input-group-btn">
+              {{submit 'Save file'}}
             </div>
           </div>
         </div>
-        <div class="col-xs-3" align="right">
-          <span class="notForIndex {{#is filename 'index'}}hide{{/is}}">
-          <a href="#delete" class="btn btn-icon btn-icon-small btn-link">{{icon 'trash'}}</a>
-          </span>
-          {{submit 'Save'}}
-        </div>
       </div>
-      <br>
-
-      {{textarea 'contents' contents label="Handlebars" className='form-control code' size='lg'}}
     </div>
   </div>
 </form>
