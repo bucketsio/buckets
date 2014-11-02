@@ -8,7 +8,6 @@ filesize = require 'filesize'
 hbs = require 'hbs'
 crypto = require 'crypto'
 tarball = require 'tarball-extract'
-uniqueValidator = require 'mongoose-unique-validator'
 config = require '../config'
 logger = require '../lib/logger'
 
@@ -325,7 +324,5 @@ buildSchema.statics.getLive = (callback) ->
 
 buildSchema.statics.getStaging = (callback) ->
   @findOne env: 'staging', callback
-
-buildSchema.plugin uniqueValidator
 
 module.exports = Build = db.model 'Build', buildSchema

@@ -38,8 +38,7 @@ userSchema = new Schema
     required: true
     lowercase: true
     trim: true
-    index:
-      unique: yes
+    unique: yes
   passwordDigest:
     type: String
     required: yes
