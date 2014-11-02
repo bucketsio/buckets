@@ -1,17 +1,17 @@
 # Buckets
 
-## A modern Open Source CMS for Node.js and MongoDB
+## Simple and friendly
 
-Buckets primary mission is to help people manage content better. It serves many different use-cases for publishers, web designers, and developers. We aim to do this by crafting a friendly, first-rate experience around defining data structures and allowing users to relate, extract, and publish their content in the fastest, easiest way possible. Content creators on the platform will enjoy a streamlined, customized interface for adding and managing data.
+Buckets primary goal is to help people manage content and websites better. It strives to be simple and friendly, both to everyday content contributors or web designers and developers.
 
 ## General Philosophies
 
-* Content management should be de-coupled from web publishing
-* Managing content should not feel like administrating a database
-* Open Source software can have the same level of polish and detail as world-class social services
+* Content management should be de-coupled from web publishing.
+* Managing content should not feel like administrating a database.
+* Open Source software can have the same level of polish and detail as world-class social services.
 * Delight plays a critical role in the user experience. Speed, animations, and intuitive interfaces are all major priorities.
 * Leverage and expose portions of the technical stack with a simple interface to keep the architecture light, but consumer-usable.
-* Building Buckets should be just as enjoyable as using Buckets
+* Building Buckets (or building _on_ Buckets) should be just as enjoyable as using Buckets
 
 ## The Future
 
@@ -19,7 +19,7 @@ There are several high-level features we are considering after we deliver on eve
 
 * **Version control for posts**
 * **Smart Buckets** which can import content from a variety of social sources, [IFTTT](https://ifttt.com)-style
-* **Built-in tooling for web designers**: This means supporting things like Sass/Compass/CoffeeScript compilation, image optimization, etc. through a synced file-based system.
+* @@**Built-in tooling for web designers**: This means supporting things like Sass/Compass/CoffeeScript compilation, image optimization, etc. through a synced file-based system.@@
 
 ## Monetization
 

@@ -20,8 +20,7 @@ You can also run the above command with `--save` to add Buckets to your app’s 
 ```javascript
 buckets = require('buckets');
 buckets({
-  templatePath: __dirname + "/templates/",
-  publicPath: __dirname + "/public/",
+  buildsPath: __dirname + "/builds/",
   // Additional configuration…
 });
 ```
@@ -64,6 +63,7 @@ If you're deploying directly from this repo, you'll need to make one change to y
 * [Frontend Architecture](docs/frontend.md)
 * [Database](docs/database.md)
 * [Tests](docs/tests.md)
+* [Plugins](docs/plugins.md)
 
 ### User Documentation
 

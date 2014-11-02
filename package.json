@@ -1,9 +1,10 @@
 {
   "name": "buckets",
-  "version": "0.0.7",
+  "version": "0.0.8-rc1",
   "description": "Manage content better.",
   "scripts": {
     "start": "./node_modules/coffee-script/bin/coffee ./server/start.coffee",
+    "prepublish": "grunt prepublish",
     "test": "grunt test",
     "test-cov": "grunt test:server:cov"
   },
@@ -40,7 +41,7 @@
     "url": "/api"
   },
   "dependencies": {
-    "archiver": "^0.11.0",
+    "archiver": "^0.12.0",
     "async": "^0.9.0",
     "bcrypt": "^0.8.0",
     "body-parser": "^1.0.2",
@@ -50,7 +51,7 @@
     "chrono-node": "^0.1.10",
     "cloudinary": "^1.0.12",
     "coffee-script": "^1.7.1",
-    "colors": "^0.6.2",
+    "colors": "^1.0.0",
     "compression": "^1.0.11",
     "cookie-parser": "^1.3.1",
     "cookie-session": "^1.0.2",
@@ -62,7 +63,7 @@
     "express-winston": "^0.2.8",
     "fastly": "^1.2.0",
     "filesize": "^2.0.3",
-    "fs-extra": "^0.11.1",
+    "fs-extra": "^0.12.0",
     "glob": "^4.0.0",
     "handlebars": "^2.0.0",
     "harp": "^0.14.0",
@@ -72,7 +73,7 @@
     "moment": "^2.7.0",
     "mongoose": "^3.8.15",
     "mongoose-regexp": "0.0.1",
-    "mongoose-unique-validator": "^0.3.0",
+    "mongoose-unique-validator": "^0.4.0",
     "munge": "^0.1.4",
     "newrelic": "^1.11.0",
     "nodemailer": "^1.2.1",
@@ -83,7 +84,7 @@
     "response-time": "^2.0.1",
     "serve-favicon": "^2.1.1",
     "serve-static": "^1.4.3",
-    "speakingurl": "^0.11.0",
+    "speakingurl": "^0.16.0",
     "swag": "^0.7.0",
     "tarball-extract": "0.0.3",
     "underscore": "^1.6.0",

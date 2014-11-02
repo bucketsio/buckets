@@ -16,8 +16,10 @@ bkts.plugin('plugin_slug', {
 
 ### CoffeeScript Support
 
-By default, because plugin code is either built into JavaScript or run live on the server, CoffeeScript is supported by default.
+By default, because plugin code is either built into JavaScript or run live on the server, CoffeeScript is supported (but optional).
 
 ### CommonJS Support
 
-JavaScript or CoffeeScript files in your plugin have access to a `require` function. On the client-side, files are grouped together using browserify as they are built to be included in the app. On the server side (NodeJS) this is supported by default. This way, we can have a standard "manifest" file for the plugin both client and server-side (in `client.js` and `server.js`), but that manifest can import powerful libraries and classes.
+JavaScript or CoffeeScript files in your plugin have access to a `require` function. On the client-side, files are grouped together using browserify as they are built to be included in the app. This way, we can have simple "manifest" files for the plugin both client and server-side (in `client.js` and `server.js`), and those manifests can import any NPM modules.
+
+Handlebars template paths (`.hbs`) can be `require`d as well.
