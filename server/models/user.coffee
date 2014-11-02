@@ -1,4 +1,4 @@
-bcrypt = require 'bcrypt'
+bcrypt = require 'bcryptjs'
 crypto = require 'crypto'
 mongoose = require 'mongoose'
 uniqueValidator = require 'mongoose-unique-validator'
