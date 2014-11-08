@@ -67,7 +67,6 @@
     "cors": "^2.4.1",
     "datejs": "^1.0.0-beta",
     "dbox": "^0.6.3",
-    "dotenv": "^0.4.0",
     "express": "^4.2.0",
     "express-winston": "^0.2.8",
     "fastly": "^1.2.0",

@@ -5,10 +5,10 @@ mongoose = require 'mongoose'
 _ = require 'underscore'
 hbs = require 'hbs'
 
-db = require '../lib/database'
-config = require '../config'
+db = require './database'
+config = require './config'
 
-cwd = config?.pluginsPath
+cwd = config.get('pluginsPath')
 
 # todo: Re-write this to be non-blocking
 module.exports =

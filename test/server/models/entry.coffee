@@ -87,10 +87,7 @@ describe 'Entry', ->
       , (e, entry) ->
         expect(e).to.not.exist
         expect(entry.keywords).to.be.empty
-        # expect(entry).to.be.undefined
-        # expect(e).to.have.deep.property 'errors.author'
         done()
-
 
   describe '#findByParams', ->
     # Set up a bunch of entries to filter/search

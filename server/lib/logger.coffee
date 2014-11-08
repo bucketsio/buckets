@@ -1,18 +1,17 @@
-config = require '../config'
 winston = require 'winston'
-
-level = config.logLevel
+config = require './config'
 
 logger = new winston.Logger
   transports: [
     new winston.transports.Console
       colorize: yes
-      level: level
+      level: config.get('logLevel')
   ,
     new winston.transports.File
       level: 'verbose'
-      filename: "buckets.#{config.env}.log"
+      filename: "buckets.#{config.get('env')}.log"
       maxsize: 20000000 # 20mbish
+      level: config.get('logLevel')
   ]
 
 module.exports = logger

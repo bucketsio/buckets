@@ -5,7 +5,7 @@ serverPath = path.resolve __dirname, '../../../../server'
 
 Entry = require "#{serverPath}/models/entry"
 Route = require "#{serverPath}/models/route"
-config = require "#{serverPath}/config"
+config = require "#{serverPath}/lib/config"
 reset = require '../../../reset'
 auth = require '../../../auth'
 buckets = require(serverPath)
@@ -22,7 +22,7 @@ describe 'REST#Install', ->
 
     it 'returns an error if password isn’t valid', (done) ->
       request app
-        .post "/#{config.apiSegment}/install"
+        .post "/#{config.get('apiSegment')}/install"
         .send
           name: 'Test User'
           email: 'user@buckets.io'
@@ -36,7 +36,7 @@ describe 'REST#Install', ->
     it 'should not install if a user exists', (done) ->
       auth.createUser ->
         request app
-          .post "/#{config.apiSegment}/install"
+          .post "/#{config.get('apiSegment')}/install"
           .send
             name: 'Test User'
             email: 'user@buckets.io'
@@ -53,7 +53,7 @@ describe 'REST#Install', ->
 
     it 'should return a populated user object w/administrator permissions', (done) ->
       request app
-        .post "/#{config.apiSegment}/install"
+        .post "/#{config.get('apiSegment')}/install"
         .send
           name: 'Test User'
           email: 'user@buckets.io'

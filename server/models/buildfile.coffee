@@ -3,7 +3,7 @@ mongoose = require 'mongoose'
 async = require 'async'
 db = require '../lib/database'
 logger = require '../lib/logger'
-config = require '../config'
+config = require '../lib/config'
 fs = require 'fs-extra'
 path = require 'path'
 glob = require 'glob'
@@ -49,11 +49,11 @@ buildFileSchema.pre 'save', (next) ->
     logger.verbose 'Writing BuildFile to FS', filename: @filename
     async.parallel [
       (callback) =>
-        fs.outputFile "#{config.buildsPath}#{@build_env}/#{@filename}", @contents, callback
+        fs.outputFile "#{config.get('buildsPath')}#{@build_env}/#{@filename}", @contents, callback
     ,
       (callback) =>
         if @_removedFile
-          fs.remove "#{config.buildsPath}#{@build_env}/#{@_removedFile}", callback
+          fs.remove "#{config.get('buildsPath')}#{@build_env}/#{@_removedFile}", callback
         else
           callback()
     ], next
@@ -64,8 +64,8 @@ buildFileSchema.statics.quarantine = (filename) ->
   return false unless filename
 
   try
-    realBuildsPath = fs.realpathSync config.buildsPath
-    target = path.resolve config.buildsPath + filename
+    realBuildsPath = fs.realpathSync config.get('buildsPath')
+    target = path.resolve config.get('buildsPath') + filename
   catch e
     logger.error e
 
@@ -77,7 +77,7 @@ buildFileSchema.statics.quarantine = (filename) ->
 # When we delete a file, we remove from fs, then save with contents: null to the DB
 # (so we can reconstruct state on startup)
 buildFileSchema.statics.rm = (env, filename, callback) ->
-  fs.remove fs.realpathSync("#{config.buildsPath}#{env}/#{filename}"), (err) =>
+  fs.remove fs.realpathSync("#{config.get('buildsPath')}#{env}/#{filename}"), (err) =>
     return callback err if err
 
     deletedObject =
@@ -90,10 +90,10 @@ buildFileSchema.statics.rm = (env, filename, callback) ->
 
 # FS-level search for "editable" text files
 buildFileSchema.statics.findAll = (build_env='staging', callback) ->
-  filepath = "#{config.buildsPath}#{build_env}"
+  filepath = "#{config.get('buildsPath')}#{build_env}"
   return callback?('Build file path doesn’t exist.') unless fs.existsSync filepath
 
-  realpath = fs.realpathSync "#{config.buildsPath}#{build_env}"
+  realpath = fs.realpathSync "#{config.get('buildsPath')}#{build_env}"
   glob '**/*.{hbs,css,js,html,json,jade,eco,styl,scss,sass,md,markdown,coffee}',
     cwd: realpath
     mark: yes
@@ -103,7 +103,7 @@ buildFileSchema.statics.findAll = (build_env='staging', callback) ->
 
 # FS-level search for just Handlebars Templates
 buildFileSchema.statics.findTemplates = (build_env, callback) ->
-  glob '**/*.hbs', cwd: "#{config.buildsPath}#{build_env}/", (e, items) ->
+  glob '**/*.hbs', cwd: "#{config.get('buildsPath')}#{build_env}/", (e, items) ->
     return callback e if e
     callback null, ({filename: item.replace(/\.hbs$/, '')} for item in items)
 

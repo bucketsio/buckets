@@ -12,7 +12,7 @@ A fast, simple way to build dynamic websites with [Node.js](http://nodejs.org). 
 Buckets requires [Node.js](http://nodejs.org) and [MongoDB](http://www.mongodb.org). Once you have those, the easiest way to use Buckets is to install it as an NPM module:
 
 ```bash
-npm install buckets@latest
+npm install buckets
 ```
 
 You can also run the above command with `--save` to add Buckets to your app’s package.json (recommended). From here, you can run Buckets in a script like this:
@@ -21,6 +21,8 @@ You can also run the above command with `--save` to add Buckets to your app’s 
 buckets = require('buckets');
 buckets({
   buildsPath: __dirname + "/builds/",
+  // Add your Gmail to use features that send email (Mandrill and others also supported)
+  smtp:
   // Additional configuration…
 });
 ```
@@ -60,10 +62,12 @@ If you're deploying directly from this repo, you'll need to make one change to y
 
 ### Developer Documentation
 
+* [Config](docs/config.md)
 * [Frontend Architecture](docs/frontend.md)
 * [Database](docs/database.md)
 * [Tests](docs/tests.md)
 * [Plugins](docs/plugins.md)
+* [REST API Docs](docs/api/)
 
 ### User Documentation
 

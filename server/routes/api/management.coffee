@@ -2,8 +2,6 @@ express = require 'express'
 async = require 'async'
 _ = require 'underscore'
 
-config = require '../../config'
-
 Bucket = require '../../models/bucket'
 Entry = require '../../models/entry'
 Route = require '../../models/route'
@@ -41,4 +39,3 @@ app.get '/export', (req, res, next) ->
       templates: results[2]
 
 # app.post '/import', ->
-

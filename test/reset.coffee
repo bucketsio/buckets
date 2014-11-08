@@ -1,9 +1,9 @@
-db = require '../server/lib/database'
 fs = require 'fs-extra'
-config = require '../server/config'
 buckets = require('../server')
 Entry = require '../server/models/entry'
 logger = require '../server/lib/logger'
+config = require '../server/lib/config'
+db = require '../server/lib/database'
 
 dropDatabase = (done) ->
   prep ->
@@ -21,8 +21,8 @@ module.exports =
   all: (done) ->
     dropDatabase done
   builds: (done) ->
-    fs.remove config.buildsPath, (e) ->
+    fs.remove config.get('buildsPath'), (e) ->
       logger.error e if e
-      fs.ensureDir config.buildsPath, (e) ->
+      fs.ensureDir config.get('buildsPath'), (e) ->
         logger.error e if e
         dropDatabase done

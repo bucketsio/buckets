@@ -2,7 +2,7 @@ request = require 'supertest'
 {assert} = require 'chai'
 User = require '../../../../server/models/user'
 Bucket = require '../../../../server/models/bucket'
-config = require '../../../../server/config'
+config = require '../../../../server/lib/config'
 reset = require '../../../reset'
 auth = require '../../../auth'
 app = require('../../../../server')().app
@@ -10,13 +10,15 @@ app = require('../../../../server')().app
 {expect} = require 'chai'
 
 describe 'REST#Users', ->
+
+  apiSegment = config.get('apiSegment')
   before reset.db
   afterEach reset.db
 
   describe 'GET /users', ->
     it 'returns a empty array of users if nothing was found', (done) ->
       request app
-        .get "/#{config.apiSegment}/users"
+        .get "/#{apiSegment}/users"
         .expect 200
           .end (e, res) ->
             users = res.body
@@ -28,7 +30,7 @@ describe 'REST#Users', ->
     it 'returns a 200 and Users', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/users"
+          .get "/#{apiSegment}/users"
           .expect 200
           .end (e, res) ->
             users = res.body
@@ -43,7 +45,7 @@ describe 'REST#Users', ->
   describe 'POST /users', ->
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .post "/#{config.apiSegment}/users"
+        .post "/#{apiSegment}/users"
         .send
           name: 'Phil'
           email: 'phil@buckets.io'
@@ -54,7 +56,7 @@ describe 'REST#Users', ->
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             name: 'Phil'
             email: 'phil@buckets.io'
@@ -65,7 +67,7 @@ describe 'REST#Users', ->
     it 'returns a 400 if name is empty', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             email: 'phil@buckets.io'
             password: 'plainpassword2014'
@@ -75,7 +77,7 @@ describe 'REST#Users', ->
     it 'returns a 400 if email is empty', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             name: 'Phil'
             password: 'plainpassword2014'
@@ -85,7 +87,7 @@ describe 'REST#Users', ->
     it 'returns a 400 if password is empty', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             name: 'Phil'
             email: 'phil@buckets.io'
@@ -95,7 +97,7 @@ describe 'REST#Users', ->
     it 'returns a 400 if password is less than 6 characters', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             name: 'Phil'
             email: 'phil@buckets.io'
@@ -106,7 +108,7 @@ describe 'REST#Users', ->
     it 'returns a 400 if password is more than 20 characters', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             name: 'Phil'
             email: 'phil@buckets.io'
@@ -117,7 +119,7 @@ describe 'REST#Users', ->
     it 'returns a 400 if password doesnot have a number', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             name: 'Phil'
             email: 'phil@buckets.io'
@@ -128,7 +130,7 @@ describe 'REST#Users', ->
     it 'returns a 200 and User', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             name: 'Phil'
             email: 'phil@buckets.io'
@@ -144,7 +146,7 @@ describe 'REST#Users', ->
     it 'returns a 400 if creating user with duplicate email', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send
             name: 'Peter Johnson'
             email: 'phil@buckets.io'
@@ -155,7 +157,7 @@ describe 'REST#Users', ->
     it 'returns a 400 if payload is not JSON', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/users"
+          .post "/#{apiSegment}/users"
           .send 'Invalid JSON payload'
           .expect 400
           .end done
@@ -177,7 +179,7 @@ describe 'REST#Users', ->
 
       it 'returns a 200 and User', (done) ->
         request app
-          .get "/#{config.apiSegment}/users/#{sampleUser.id}"
+          .get "/#{apiSegment}/users/#{sampleUser.id}"
           .expect 200
           .end (e, res) ->
             user = res.body
@@ -188,7 +190,7 @@ describe 'REST#Users', ->
 
       it 'returns a 400 if user does not exist', (done) ->
         request app
-          .get "/#{config.apiSegment}/users/0000000000000"
+          .get "/#{apiSegment}/users/0000000000000"
           .expect 400
           .end done
 
@@ -196,7 +198,7 @@ describe 'REST#Users', ->
 
       it 'returns a 401 if user isn’t authenticated', (done) ->
         request app
-          .put "/#{config.apiSegment}/users/#{sampleUser.id}"
+          .put "/#{apiSegment}/users/#{sampleUser.id}"
           .send
             name: 'Phil'
           .expect 401
@@ -205,7 +207,7 @@ describe 'REST#Users', ->
       it 'returns a 401 if user isn’t an admin', (done) ->
         auth.createUser (err, user) ->
           user
-            .put "/#{config.apiSegment}/users/#{sampleUser.id}"
+            .put "/#{apiSegment}/users/#{sampleUser.id}"
             .send
               name: 'Phil'
             .expect 401
@@ -214,7 +216,7 @@ describe 'REST#Users', ->
       it 'returns a 400 if user does not exist', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .put "/#{config.apiSegment}/users/0000000000000"
+            .put "/#{apiSegment}/users/0000000000000"
             .send
               name: 'Phil'
             .expect 400
@@ -223,7 +225,7 @@ describe 'REST#Users', ->
       it 'returns a 200 and updated user', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .put "/#{config.apiSegment}/users/#{sampleUser.id}"
+            .put "/#{apiSegment}/users/#{sampleUser.id}"
             .send
               name: 'Mr. Phil'
             .expect 200
@@ -238,7 +240,7 @@ describe 'REST#Users', ->
       it.skip 'returns a 400 if payload is not json', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .put "/#{config.apiSegment}/users/#{sampleUser.id}"
+            .put "/#{apiSegment}/users/#{sampleUser.id}"
             .send 'Invalid JSON payload'
             .expect 400
             .end done
@@ -247,28 +249,28 @@ describe 'REST#Users', ->
 
       it 'returns a 401 if user isn’t authenticated', (done) ->
         request app
-          .delete "/#{config.apiSegment}/users/#{sampleUser.id}"
+          .delete "/#{apiSegment}/users/#{sampleUser.id}"
           .expect 401
           .end done
 
       it 'returns a 401 if user isn’t an admin', (done) ->
         auth.createUser (err, user) ->
           user
-            .delete "/#{config.apiSegment}/users/#{sampleUser.id}"
+            .delete "/#{apiSegment}/users/#{sampleUser.id}"
             .expect 401
             .end done
 
       it 'returns a 400 if user is not exist', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .delete "/#{config.apiSegment}/users/0000000000000"
+            .delete "/#{apiSegment}/users/0000000000000"
             .expect 400
             .end done
 
       it 'returns a 200 and user is gone', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .delete "/#{config.apiSegment}/users/#{sampleUser.id}"
+            .delete "/#{apiSegment}/users/#{sampleUser.id}"
             .expect 200
             .end (e, res) ->
               User.findById sampleUser.id, (err, dbUser) ->
@@ -278,7 +280,7 @@ describe 'REST#Users', ->
   describe 'POST /forget', ->
     it 'returns a 404 if user does not exist', (done) ->
       request app
-        .post "/#{config.apiSegment}/forget"
+        .post "/#{apiSegment}/forget"
         .send
           email: 'random@example.com'
         .expect 404
@@ -286,7 +288,7 @@ describe 'REST#Users', ->
 
     it 'returns a 404 if payload is not json', (done) ->
       request app
-        .post "/#{config.apiSegment}/forget"
+        .post "/#{apiSegment}/forget"
         .send 'Invalid JSON payload'
         .expect 404
         .end done
@@ -294,13 +296,13 @@ describe 'REST#Users', ->
   describe 'GET /reset/:token', ->
     it 'returns a 404 if token does not exist', (done) ->
       request app
-        .get "/#{config.apiSegment}/reset/12312213"
+        .get "/#{apiSegment}/reset/12312213"
         .expect 404
         .end done
 
   describe 'PUT /reset/:token', ->
     it 'returns a 404 if token does not exist', (done) ->
       request app
-        .put "/#{config.apiSegment}/reset/12312213"
+        .put "/#{apiSegment}/reset/12312213"
         .expect 404
         .end done

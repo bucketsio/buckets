@@ -1,6 +1,6 @@
 serverPath = '../../../server'
 
-config = require "#{serverPath}/config"
+config = require "#{serverPath}/lib/config"
 
 app = require(serverPath)().app
 
@@ -12,7 +12,7 @@ describe 'Admin routes', ->
   describe 'GET /admin/', (done) ->
     it 'loads the admin panel', (done) ->
       request app
-        .get "/#{config.adminSegment}/"
+        .get "/#{config.get('adminSegment')}/"
         .expect 200
         .end (err, res) ->
           expect(err).to.not.exist

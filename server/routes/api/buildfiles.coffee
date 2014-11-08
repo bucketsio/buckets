@@ -1,6 +1,6 @@
 express = require 'express'
 hbs = require 'hbs'
-config = require '../../config'
+config = require '../../lib/config'
 logger = require '../../lib/logger'
 BuildFile = require '../../models/buildfile'
 fs = require 'fs-extra'
@@ -54,7 +54,7 @@ app.route('/buildfiles/:env/:filename')
   .get (req, res) ->
     return res.status(400).end() unless req.params.env
 
-    path = "#{config.buildsPath}#{req.params.env}/#{req.params.filename}"
+    path = "#{config.get('buildsPath')}#{req.params.env}/#{req.params.filename}"
 
     # Return from DB first if available
     fs.exists path, (exists) ->

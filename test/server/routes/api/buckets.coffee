@@ -1,7 +1,7 @@
 request = require 'supertest'
 User = require '../../../../server/models/user'
 Bucket = require '../../../../server/models/bucket'
-config = require '../../../../server/config'
+config = require '../../../../server/lib/config'
 reset = require '../../../reset'
 auth = require '../../../auth'
 app = require('../../../../server')().app
@@ -15,28 +15,28 @@ describe 'REST#Buckets', ->
   describe 'GET /buckets', ->
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .get "/#{config.apiSegment}/buckets"
+        .get "/#{config.get('apiSegment')}/buckets"
         .expect 401
         .end done
 
     it 'returns a 200 if user isn’t an admin, with accessible Buckets', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/buckets"
+          .get "/#{config.get('apiSegment')}/buckets"
           .expect 200
           .end done
 
     it 'returns a 200 and Buckets', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/buckets"
+          .get "/#{config.get('apiSegment')}/buckets"
           .expect 200
           .end done
 
   describe 'POST /buckets', ->
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .post "/#{config.apiSegment}/buckets"
+        .post "/#{config.get('apiSegment')}/buckets"
         .send
           name: 'Articles'
           slug: 'articles'
@@ -46,7 +46,7 @@ describe 'REST#Buckets', ->
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .post "/#{config.apiSegment}/buckets"
+          .post "/#{config.get('apiSegment')}/buckets"
           .send
             name: 'Articles'
             slug: 'articles'
@@ -56,7 +56,7 @@ describe 'REST#Buckets', ->
     it 'returns a 201 and a Bucket', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/buckets"
+          .post "/#{config.get('apiSegment')}/buckets"
           .send
             name: 'Articles'
             slug: 'articles'
@@ -82,7 +82,7 @@ describe 'REST#Buckets', ->
 
       it 'returns a 401 if user isn’t authenticated', (done) ->
         request app
-          .put "/#{config.apiSegment}/buckets/#{sampleBucket.id}"
+          .put "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}"
           .send
             color: 'red'
           .expect 401
@@ -91,7 +91,7 @@ describe 'REST#Buckets', ->
       it 'returns a 401 if user isn’t an admin', (done) ->
         auth.createUser (err, user) ->
           user
-            .put "/#{config.apiSegment}/buckets/#{sampleBucket.id}"
+            .put "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}"
             .send
               color: 'red'
             .expect 401
@@ -100,7 +100,7 @@ describe 'REST#Buckets', ->
       it 'returns a 200 and a Bucket', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .put "/#{config.apiSegment}/buckets/#{sampleBucket.id}"
+            .put "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}"
             .send
               color: 'red'
             .expect 200
@@ -112,21 +112,21 @@ describe 'REST#Buckets', ->
 
       it 'returns a 401 if user isn’t authenticated', (done) ->
         request app
-          .delete "/#{config.apiSegment}/buckets/#{sampleBucket.id}"
+          .delete "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}"
           .expect 401
           .end done
 
       it 'returns a 401 if user isn’t an admin', (done) ->
         auth.createUser (err, user) ->
           user
-            .delete "/#{config.apiSegment}/buckets/#{sampleBucket.id}"
+            .delete "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}"
             .expect 401
             .end done
 
       it 'returns a 204', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .delete "/#{config.apiSegment}/buckets/#{sampleBucket.id}"
+            .delete "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}"
             .expect 204
             .end done
 
@@ -134,21 +134,21 @@ describe 'REST#Buckets', ->
       describe 'GET /buckets/:bucketId/members', ->
         it 'returns a 401 if user isn’t authenticated', (done) ->
           request app
-            .get "/#{config.apiSegment}/buckets/#{sampleBucket.id}/members"
+            .get "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}/members"
             .expect 401
             .end done
 
         it 'returns a 401 if user isn’t an admin', (done) ->
           auth.createUser (err, user) ->
             user
-              .get "/#{config.apiSegment}/buckets/#{sampleBucket.id}/members"
+              .get "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}/members"
               .expect 401
               .end done
 
         it 'returns a 200', (done) ->
           auth.createAdmin (err, admin) ->
             admin
-              .get "/#{config.apiSegment}/buckets/#{sampleBucket.id}/members"
+              .get "/#{config.get('apiSegment')}/buckets/#{sampleBucket.id}/members"
               .expect 200
               .end (e, res) ->
                 expect(res.body).to.exist

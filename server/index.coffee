@@ -1,6 +1,3 @@
-dotenv = require 'dotenv'
-dotenv.load()
-
 async = require 'async'
 
 _ = require 'underscore'
@@ -18,17 +15,16 @@ events = require 'events'
 Build = require './models/build'
 
 logger = require './lib/logger'
+config = require './lib/config'
 
 class Buckets extends events.EventEmitter
   listening: no
 
-  constructor: (config={}, callback) ->
-    @config = require './config'
-    @config = _.extend @config, config
+  constructor: (options={}, callback) ->
+    @config = config.load options
+    logger.verbose 'Starting Buckets', config: config.toString(), callback: callback?
 
-    logger.verbose 'Starting Buckets', config: @config, callback: callback?
-    callback ?= ->
-    @generateBuilds callback
+    @generateBuilds callback || ->
 
     # Turn on NewRelic
     try
@@ -43,9 +39,9 @@ class Buckets extends events.EventEmitter
       logger.error 'There was an error loading NewRelic', e
 
     # Purge Fastly on prod pushes
-    if @config.fastly?.api_key and @config.fastly?.service_id and @config.env is 'production'
-      fastly = require('fastly')(@config.fastly.api_key)
-      fastly.purgeAll @config.fastly.service_id, -> logger.error 'Purged Fastly Cache'.red
+    if config.get('fastlyApiKey')?.api_key and config.get('fastlyServiceId')?.service_id and config.get('env') is 'production'
+      @fastly = require('fastly') config.get 'fastlyApiKey'
+      @fastly.purgeAll config.get('fastlyServiceId'), -> logger.info 'Purged Fastly Cache'
 
     passport = require './lib/auth'
 
@@ -62,12 +58,11 @@ class Buckets extends events.EventEmitter
 
     # Handle cookies and sessions and stuff
     @app.use compression level: 4
-    @app.use responseTime() if @config.env isnt 'production'
-    @app.use cookieParser @config.salt
+    @app.use responseTime() if config.get('env') isnt 'production'
+    @app.use cookieParser config.get('salt')
     @app.use session
-      secret: @config.salt
+      secret: config.get('salt')
       name: 'buckets'
-      # domain: ".#{@config.host}" if @config.host
 
     @app.use bodyParser.json()
     @app.use bodyParser.urlencoded extended: true
@@ -75,7 +70,7 @@ class Buckets extends events.EventEmitter
     @app.use passport.session()
 
     @app.set 'view engine', 'hbs'
-    @app.set 'view cache', no
+    @app.set 'view cache', false
 
     @app.use expressWinston.logger
       winstonInstance: logger
@@ -94,20 +89,20 @@ class Buckets extends events.EventEmitter
         # statusLevels: yes
 
     # Load Routes for the API, admin, and frontend
-    @app.use "/#{@config.apiSegment}", @routers.api
-    @app.use "/#{@config.adminSegment}", @routers.admin
+    @app.use "/#{config.get('apiSegment')}", @routers.api
+    @app.use "/#{config.get('adminSegment')}", @routers.admin
     @app.use @routers.frontend
 
     @app.use expressWinston.errorLogger
       winstonInstance: logger
 
-    @start() if @config.autoStart
+    @start() if config.get('autoStart')
 
   start: (done) ->
     done?() if @server
-    @server = @app.listen @config.port, =>
+    @server = @app.listen config.get('port'), =>
       @listening = yes
-      logger.info ("Buckets is running at " + "http://localhost:#{@config.port}/".underline.bold).yellow
+      logger.info ("Buckets is running at " + "http://localhost:#{config.get('port')}/".underline.bold).yellow
 
   stop: (done) ->
     return done?() unless @listening or not @server
@@ -116,7 +111,7 @@ class Buckets extends events.EventEmitter
       done()
 
   generateBuilds: (callback) ->
-    path = @config.buildsPath
+    path = config.get('buildsPath')
     logger.profile 'Generated builds'
 
     async.parallel [
@@ -140,19 +135,18 @@ class Buckets extends events.EventEmitter
 
 # There can be only one #highlander
 buckets = null
-module.exports = (config={}, callback) ->
-  if _.isFunction(config) and !callback
-    callback = config
-    config = {}
+module.exports = (options={}, callback) ->
+  if _.isFunction(options) and !callback
+    callback = options
+    options = {}
 
   if buckets?
-    buckets.config = config
+    buckets.config.load options
     if callback
       if buckets.generated
         callback()
       else
         buckets.once 'buildsGenerated', callback
-
     buckets
   else
-    buckets = new Buckets config, callback
+    buckets = new Buckets options, callback

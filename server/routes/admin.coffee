@@ -9,7 +9,7 @@ favicon = require 'serve-favicon'
 _ = require 'underscore'
 marked = require 'marked'
 
-config = require '../config'
+config = require '../lib/config'
 plugins = require '../lib/plugins'
 passport = require '../lib/auth'
 pkg = require '../../package'
@@ -17,7 +17,7 @@ User = require '../models/user'
 
 module.exports = app = express()
 
-{adminSegment} = config
+adminSegment = config.get('adminSegment')
 
 hbs.registerHelper 'json', (context) ->
   new hbs.handlebars.SafeString JSON.stringify(context)
@@ -68,15 +68,15 @@ app.get '/:admin*?', (req, res) ->
     localPlugins = _.filter app.get('plugins'), (plugin) ->
       plugin.client or plugin.clientStyle
 
-    if config.cloudinary
-      parsed = url.parse(config.cloudinary)
+    if config.get('cloudinary')
+      parsed = url.parse config.get('cloudinary')
       [api_key,api_secret] = parsed.auth.split(':')
       cloud_name = parsed.host
 
       cloudinaryData =
         timestamp: Date.now() # Lasts 1 hour
         use_filename: yes
-        callback: "http://#{req.get('host')}/vendor/cloudinary_js/html/cloudinary_cors.html"
+        callback: "http://#{req.hostname}/vendor/cloudinary_js/html/cloudinary_cors.html"
         image_metadata: yes
         exif: yes
         colors: yes
@@ -97,15 +97,15 @@ app.get '/:admin*?', (req, res) ->
 
     res.render 'admin',
       user: req.user
-      env: config.env
+      env: config.get('env')
       plugins: localPlugins
       adminSegment: adminSegment
-      assetPath: if config.fastly?.cdn_url and config.env is 'production'
+      assetPath: if config.get('fastlyCdnUrl') and config.get('env') is 'production'
           "http://#{config.fastly.cdn_url}/#{adminSegment}"
         else
           "/#{adminSegment}"
-      apiSegment: config.apiSegment
-      stagingUrl: "staging." + (config.host || req.hostname) + if config.port isnt 80 then ":#{config.port}" else ''
+      apiSegment: config.get 'apiSegment'
+      stagingUrl: "staging." + req.hostname
       needsInstall: userCount is 0
       cloudinary: cloudinaryData
       version: pkg.version
