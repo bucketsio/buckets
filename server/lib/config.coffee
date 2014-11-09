@@ -1,8 +1,6 @@
 convict = require 'convict'
 fs = require 'fs-extra'
 
-logger = require './logger'
-
 config = convict
   autoStart:
     doc: 'Should the app start listenening? (Pass no to use as middleware)'
@@ -78,11 +76,9 @@ config = convict
         default: ''
 
 if fs.existsSync "./config/config.json"
-  logger.info 'Loading config from config/config.json'
   config.loadFile "./config/config.json"
 
 if fs.existsSync "./config/#{config.get('env')}.json"
-  logger.info "Loading config from config/#{config.get('env')}.json"
   config.loadFile "./config/#{config.get('env')}.json"
 
 config.validate()
