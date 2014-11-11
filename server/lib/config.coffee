@@ -62,7 +62,7 @@ config = convict
     service:
       doc: 'Nodemailer service type for sending email.'
       format: String
-      default: ''
+      default: 'gmail'
     auth:
       user:
         doc: 'SMTP Username'

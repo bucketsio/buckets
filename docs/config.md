@@ -22,6 +22,10 @@ The URL segment at which the server will serve the Buckets admin interface.
 
 The URL segment at which the server will serve the Buckets [API](../api/).
 
+### buildsPath _'./builds'_
+
+The file to where builds are stored (Buckets will look for a "staging" directory here, the others are created on the fly). This is going to be better.
+
 ### cloudinary `CLOUDINARY_URL`
 
 The connection URL for [Cloudinary](http://cloudinary.com/). Set up for default Heroku installation.
@@ -30,17 +34,17 @@ The connection URL for [Cloudinary](http://cloudinary.com/). Set up for default 
 
 A MongoDB connection string. The env variable is set up for a default Heroku installation.
 
+### env `NODE_ENV` _'development'_ [production|development|test]
+
+The app environment.
+
 ### fastlyApiKey `FASTLY_API_KEY`
 
-For Fastly CDN support.
+Fastly CDN support for a default Heroku installation.
 
 ### fastlyServiceId `FASTLY_SERVICE_ID`
 
-For Fastly CDN support.
-
 ### fastlyCdnUrl `FASTLY_CDN_URL`
-
-For Fastly CDN support.
 
 ### port `PORT` _3000_
 
@@ -54,8 +58,9 @@ The level at which the logger reports. Possible values are "none", "debug", "ver
 
 Path to where plugins are loaded from. All plugins are node modules with a naming convention of "buckets-_name_".
 
+#### smtp.service _'gmail' (or `mandrill` in production)_
 
-#### smtp.service _'GMAIL'_
+For local development, you can use a Gmail username/password (or [any other format supported by Nodemailer](https://github.com/andris9/nodemailer-wellknown#supported-services)). For our default Heroku setup, we currently support Mandrill.
 
 #### smtp.auth.user `MANDRILL_USERNAME`
 
