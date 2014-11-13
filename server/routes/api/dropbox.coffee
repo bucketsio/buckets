@@ -2,7 +2,7 @@ express = require 'express'
 passport = require 'passport'
 DropboxStrategy = require('passport-dropbox').Strategy
 dbox = require 'dbox'
-config = require '../../config'
+config = require '../../lib/config'
 
 module.exports = app = express()
 
@@ -44,6 +44,6 @@ if process.env.DROPBOX_APP_KEY and process.env.DROPBOX_APP_SECRET and process.en
 
   app.get '/auth/dropbox/callback',
     passport.authorize 'dropbox',
-      failureRedirect: "/#{config.adminSegment}/nope"
+      failureRedirect: "/#{config.get('adminSegment')}/nope"
   , (req, res) ->
-    res.redirect "/#{config.adminSegment}/users/#{req.user.email}"
+    res.redirect "/#{config.get('adminSegment')}/users/#{req.user.email}"

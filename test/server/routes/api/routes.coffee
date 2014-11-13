@@ -3,7 +3,7 @@ reset = require '../../../reset'
 auth = require '../../../auth'
 
 app = require('../../../../server')().app
-config = require '../../../../server/config'
+config = require '../../../../server/lib/config'
 Route = require '../../../../server/models/route'
 
 {expect} = require 'chai'
@@ -16,28 +16,28 @@ describe 'REST#Routes', ->
   describe 'GET /routes', ->
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .get "/#{config.apiSegment}/routes"
+        .get "/#{config.get('apiSegment')}/routes"
         .expect 401
         .end done
 
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/routes"
+          .get "/#{config.get('apiSegment')}/routes"
           .expect 401
           .end done
 
     it 'returns a 200 and Routes', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/routes"
+          .get "/#{config.get('apiSegment')}/routes"
           .expect 200
           .end done
 
   describe 'POST /routes', ->
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .post "/#{config.apiSegment}/routes"
+        .post "/#{config.get('apiSegment')}/routes"
         .send
           urlPattern: '/'
           template: 'index'
@@ -47,7 +47,7 @@ describe 'REST#Routes', ->
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .post "/#{config.apiSegment}/routes"
+          .post "/#{config.get('apiSegment')}/routes"
           .send
             urlPattern: '/'
             template: 'index'
@@ -57,7 +57,7 @@ describe 'REST#Routes', ->
     it 'returns a 201 and a Route', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .post "/#{config.apiSegment}/routes"
+          .post "/#{config.get('apiSegment')}/routes"
           .send
             urlPattern: '/'
             template: 'index'
@@ -82,7 +82,7 @@ describe 'REST#Routes', ->
 
       it 'returns a 401 if user isn’t authenticated', (done) ->
         request app
-          .put "/#{config.apiSegment}/routes/#{sampleRoute.id}"
+          .put "/#{config.get('apiSegment')}/routes/#{sampleRoute.id}"
           .send
             urlPattern: '/new'
           .expect 401
@@ -91,7 +91,7 @@ describe 'REST#Routes', ->
       it 'returns a 401 if user isn’t an admin', (done) ->
         auth.createUser (err, user) ->
           user
-            .put "/#{config.apiSegment}/routes/#{sampleRoute.id}"
+            .put "/#{config.get('apiSegment')}/routes/#{sampleRoute.id}"
             .send
               urlPattern: '/new'
             .expect 401
@@ -101,7 +101,7 @@ describe 'REST#Routes', ->
         # Unfortunately this works
         auth.createAdmin (err, admin) ->
           admin
-            .put "/#{config.apiSegment}/routes/#{sampleRoute.id}"
+            .put "/#{config.get('apiSegment')}/routes/#{sampleRoute.id}"
             .send
               urlPattern: '...'
             .expect 400
@@ -112,7 +112,7 @@ describe 'REST#Routes', ->
       it 'returns a 200 and a Route', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .put "/#{config.apiSegment}/routes/#{sampleRoute.id}"
+            .put "/#{config.get('apiSegment')}/routes/#{sampleRoute.id}"
             .send
               urlPattern: '/new'
             .expect 200
@@ -125,20 +125,20 @@ describe 'REST#Routes', ->
 
       it 'returns a 401 if user isn’t authenticated', (done) ->
         request app
-          .delete "/#{config.apiSegment}/routes/#{sampleRoute.id}"
+          .delete "/#{config.get('apiSegment')}/routes/#{sampleRoute.id}"
           .expect 401
           .end done
 
       it 'returns a 401 if user isn’t an admin', (done) ->
         auth.createUser (err, user) ->
           user
-            .delete "/#{config.apiSegment}/routes/#{sampleRoute.id}"
+            .delete "/#{config.get('apiSegment')}/routes/#{sampleRoute.id}"
             .expect 401
             .end done
 
       it 'returns a 204', (done) ->
         auth.createAdmin (err, admin) ->
           admin
-            .delete "/#{config.apiSegment}/routes/#{sampleRoute.id}"
+            .delete "/#{config.get('apiSegment')}/routes/#{sampleRoute.id}"
             .expect 204
             .end done

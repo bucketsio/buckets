@@ -29,7 +29,7 @@
     {{#if req.query.debugPage}}
       <div class="debug" id="debugPanel">
         <h4>Template Data</h4>
-        <p align="center"><strong>{{req.path}}</strong> rendered {{#if user.previewMode}}Blah{{/if}} in {{renderTime}}.</p>
+        <p align="center"><strong>{{req.path}}</strong> rendered in {{renderTime}}.</p>
         {{inspect .}}
       </div>
     {{/if}}

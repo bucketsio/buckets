@@ -3,7 +3,7 @@ request = require 'supertest'
 fs = require 'fs-extra'
 buckets = require '../../../../server'
 app = buckets().app
-config = require('../../../../server/config')
+config = require('../../../../server/lib/config')
 auth = require '../../../auth'
 reset = require '../../../reset'
 
@@ -15,14 +15,14 @@ describe 'REST#BuildFiles', ->
   describe 'GET /buildfiles/:env', ->
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .get "/#{config.apiSegment}/buildfiles/staging"
+        .get "/#{config.get('apiSegment')}/buildfiles/staging"
         .expect 401
         .end done
 
     it 'returns a directory of files for admins', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/buildfiles/staging"
+          .get "/#{config.get('apiSegment')}/buildfiles/staging"
           .expect 200
           .end (err, res) ->
             expect(err).to.not.exist
@@ -34,7 +34,7 @@ describe 'REST#BuildFiles', ->
     it '?type=template returns 200 and templates for admins', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/buildfiles/live/?type=template"
+          .get "/#{config.get('apiSegment')}/buildfiles/live/?type=template"
           .expect 200
           .end (e, res) ->
             expect(e).to.not.exist
@@ -44,28 +44,28 @@ describe 'REST#BuildFiles', ->
   describe 'GET /buildfiles/:env/:filename', ->
     it 'returns a 401 for anonymous users', (done) ->
       request app
-        .get "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+        .get "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
         .expect 401
         .end done
 
     it 'returns a 401 for non-admin users', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+          .get "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
           .expect 401
           .end done
 
     it 'returns a 404 for non-existent file', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/buildfiles/staging/index-nope.hbs"
+          .get "/#{config.get('apiSegment')}/buildfiles/staging/index-nope.hbs"
           .expect 404
           .end done
 
     it 'returns a 200 and file contents for admins', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+          .get "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
           .expect 401
           .end (e, res) ->
             expect(e).to.be.empty
@@ -78,12 +78,12 @@ describe 'REST#BuildFiles', ->
       badPath = '../../../index.js'
 
       # Pretend it’s in staging, show it exists
-      exists = fs.existsSync(config.buildsPath + "staging/" + badPath)
+      exists = fs.existsSync(config.get('buildsPath') + "staging/" + badPath)
       expect(exists).to.be.true
 
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/buildfiles/staging/#{encodeURIComponent(badPath)}"
+          .get "/#{config.get('apiSegment')}/buildfiles/staging/#{encodeURIComponent(badPath)}"
           .expect 403
           .end (e, res) ->
             expect(e).to.be.null
@@ -95,7 +95,7 @@ describe 'REST#BuildFiles', ->
 
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .put "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+        .put "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
         .send
           contents: 'New template content.'
         .expect 401
@@ -104,7 +104,7 @@ describe 'REST#BuildFiles', ->
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .put "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+          .put "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
           .send
             contents: 'New template content.'
           .expect 401
@@ -113,7 +113,7 @@ describe 'REST#BuildFiles', ->
     it 'returns a 200 if user is an admin', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .put "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+          .put "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
           .send
             contents: 'New template content.'
           .expect 200
@@ -122,7 +122,7 @@ describe 'REST#BuildFiles', ->
     it 'returns a 200 with a body filename (rename/move)', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .put "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+          .put "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
           .send
             filename: 'newfile.hbs'
             contents: 'New template content.'
@@ -135,7 +135,7 @@ describe 'REST#BuildFiles', ->
     it 'validates Handlebars templates', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .put "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+          .put "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
           .send
             contents: '{{#funkyTemplate'
           .expect 400
@@ -150,20 +150,20 @@ describe 'REST#BuildFiles', ->
 
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .delete "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+        .delete "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
         .expect 401
         .end done
 
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .delete "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+          .delete "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
           .expect 401
           .end done
 
     it 'returns a 204 if user is an admin', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .delete "/#{config.apiSegment}/buildfiles/staging/index.hbs"
+          .delete "/#{config.get('apiSegment')}/buildfiles/staging/index.hbs"
           .expect 204
           .end done

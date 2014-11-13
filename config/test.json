@@ -1,0 +1,6 @@
+{
+  // Buckets’ local testing environment
+  "db": "mongodb://localhost/buckets_test",
+  "buildsPath": "./test/builds/",
+  "logLevel": "none"
+}

@@ -3,7 +3,7 @@
 fs = require 'fs-extra'
 
 buckets = require '../../../server'
-config = require '../../../server/config'
+config = require '../../../server/lib/config'
 BuildFile = require '../../../server/models/buildfile'
 Build = require '../../../server/models/build'
 reset = require '../../reset'
@@ -60,11 +60,11 @@ describe 'Integration#Builds', ->
           build.env = 'live'
           build.save ->
             # Edited text should now be in live
-            fs.readFile "#{config.buildsPath}live/index.hbs", (err, buffer) ->
+            fs.readFile "#{config.get('buildsPath')}live/index.hbs", (err, buffer) ->
               expect(buffer.toString()).to.equal 'editedText'
 
               # Edited text should still be on staging
-              fs.readFile "#{config.buildsPath}staging/index.hbs", (err, buffer) ->
+              fs.readFile "#{config.get('buildsPath')}staging/index.hbs", (err, buffer) ->
                 expect(buffer.toString()).to.equal 'editedText'
 
                 # There should be 3 builds and no buildfiles
@@ -82,11 +82,11 @@ describe 'Integration#Builds', ->
           build.env = 'live'
           build.save ->
             # Live should not have an error.hbs now
-            fs.exists "#{config.buildsPath}live/error.hbs", (exists) ->
+            fs.exists "#{config.get('buildsPath')}live/error.hbs", (exists) ->
               expect(exists).to.be.false
 
               # Nor should staging
-              fs.exists "#{config.buildsPath}staging/error.hbs", (exists) ->
+              fs.exists "#{config.get('buildsPath')}staging/error.hbs", (exists) ->
                 expect(exists).to.be.false
 
                 # There should be 3 builds and no buildfiles
@@ -130,33 +130,41 @@ describe 'Integration#Builds', ->
       # Cache is empty by default
       expect(hbs.cache).to.be.empty
 
-      # Load the homepage
-      request buckets().app
-        .get '/'
-        .end (e, res) ->
-          expect(e).to.be.null
+      # "Install" for Routes
+      request app
+        .post "/#{config.get('apiSegment')}/install"
+        .send
+          name: 'Test User'
+          email: 'user@buckets.io'
+          password: 'abc123'
+        .expect 400
+        .end (err, res) ->
 
-          # Cache is no longer empty
-          expect(hbs.cache).to.not.be.empty
+          # Load the homepage
+          request app
+            .get '/'
+            .end (e, res) ->
+              expect(e).to.be.null
 
-          # Create edit, promote to live
-          BuildFile.create
-            filename: 'layout.hbs'
-            contents: 'NewLayout'
-            build_env: 'live'
-          , ->
-            # Promote staging to live
-            Build.getStaging (e, build) ->
-              build.env = 'live'
+              # Cache is no longer empty
+              expect(hbs.cache).to.not.be.empty
 
-              build.save (e, build) ->
-                # Cache is empty again
-                expect(hbs.cache).to.be.empty
-                done()
+              # Create edit, promote to live
+              BuildFile.create
+                filename: 'layout.hbs'
+                contents: 'NewLayout'
+                build_env: 'live'
+              , ->
+                # Promote staging to live
+                Build.getStaging (e, build) ->
+                  build.env = 'live'
+
+                  build.save (e, build) ->
+                    # Cache is empty again
+                    expect(hbs.cache).to.be.empty
+                    done()
 
     describe 'Archives', ->
-      # beforeEach (done) ->
-      #   buckets -> reset.builds -> buckets().generateBuilds done
 
       it 'Should archive live when a staging build is pushed', (done) ->
         # Write a new file to live
@@ -179,19 +187,19 @@ describe 'Integration#Builds', ->
                 expect(build.message).to.equal 'Backed up from live'
 
                 build.unpack ->
-                  exists = fs.existsSync "#{config.buildsPath}#{build.id}/liveTest.md"
+                  exists = fs.existsSync "#{config.get('buildsPath')}#{build.id}/liveTest.md"
                   expect(exists).to.be.true
 
-                  stagingExists = fs.existsSync "#{config.buildsPath}staging/liveTest.md"
+                  stagingExists = fs.existsSync "#{config.get('buildsPath')}staging/liveTest.md"
                   expect(stagingExists).to.be.false
 
-                  liveExists = fs.existsSync "#{config.buildsPath}live/liveTest.md"
+                  liveExists = fs.existsSync "#{config.get('buildsPath')}live/liveTest.md"
                   expect(liveExists).to.be.false
                   done()
 
       it 'Should archive staging when a new file is detected', (done) ->
 
-        fs.outputFile "#{config.buildsPath}staging/stagingTest.md", '**NewStagingFile**', (e) ->
+        fs.outputFile "#{config.get('buildsPath')}staging/stagingTest.md", '**NewStagingFile**', (e) ->
           expect(e).to.not.exist
 
           # Manually re-generate builds
@@ -204,14 +212,14 @@ describe 'Integration#Builds', ->
 
               build.unpack ->
                 # Here the archive should _not_ have the updated file
-                exists = fs.existsSync "#{config.buildsPath}#{build.id}/stagingTest.md"
+                exists = fs.existsSync "#{config.get('buildsPath')}#{build.id}/stagingTest.md"
                 expect(exists).to.be.false
 
                 # But staging should
-                stagingExists = fs.existsSync "#{config.buildsPath}staging/stagingTest.md"
+                stagingExists = fs.existsSync "#{config.get('buildsPath')}staging/stagingTest.md"
                 expect(stagingExists).to.be.true
 
                 # And of course live should not
-                liveExists = fs.existsSync "#{config.buildsPath}live/stagingTest.md"
+                liveExists = fs.existsSync "#{config.get('buildsPath')}live/stagingTest.md"
                 expect(liveExists).to.be.false
                 done()

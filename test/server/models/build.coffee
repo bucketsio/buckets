@@ -2,7 +2,7 @@ reset = require '../../reset'
 
 Build = require '../../../server/models/build'
 buckets = require '../../../server'
-config = require '../../../server/config'
+config = require '../../../server/lib/config'
 
 fs = require 'fs-extra'
 {expect} = require 'chai'
@@ -60,7 +60,7 @@ describe 'Model#Build', ->
     it 'Changing a build to live writes its FS changes', (done) ->
 
       # Write a custom file (via FS) to staging and save build
-      fs.outputFile "#{config.buildsPath}staging/canary.txt", 'PUSHTEST', ->
+      fs.outputFile "#{config.get('buildsPath')}staging/canary.txt", 'PUSHTEST', ->
         build = new Build env: 'staging'
         build.save (e, build) ->
 
@@ -68,7 +68,7 @@ describe 'Model#Build', ->
           build.env = 'live'
           build.save (e, build) ->
             # Check that the udpated file exist
-            fs.readFile "#{config.buildsPath}live/canary.txt", (e, buffer) ->
+            fs.readFile "#{config.get('buildsPath')}live/canary.txt", (e, buffer) ->
               expect(buffer.toString()).to.equal 'PUSHTEST'
               done()
 

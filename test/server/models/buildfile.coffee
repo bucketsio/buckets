@@ -1,7 +1,7 @@
 {expect} = require 'chai'
 
 BuildFile = require '../../../server/models/buildfile'
-config = require '../../../server/config'
+config = require '../../../server/lib/config'
 reset = require '../../reset'
 fs = require 'fs-extra'
 
@@ -65,7 +65,7 @@ describe 'Model#BuildFile', ->
       buildfile.save (e, buildfile) ->
         expect(e).to.not.exist
 
-        expectedPath = "#{config.buildsPath}staging/#{buildfile.filename}"
+        expectedPath = "#{config.get('buildsPath')}staging/#{buildfile.filename}"
 
         fs.exists expectedPath, (exists) ->
           expect(exists).to.be.true
@@ -86,8 +86,8 @@ describe 'Model#BuildFile', ->
         buildfile.filename = 'renamed.txt'
 
         buildfile.save (e, buildfile) ->
-          expect(fs.existsSync("#{config.buildsPath}staging/first.txt")).to.be.false
-          expect(fs.existsSync("#{config.buildsPath}staging/renamed.txt")).to.be.true
+          expect(fs.existsSync("#{config.get('buildsPath')}staging/first.txt")).to.be.false
+          expect(fs.existsSync("#{config.get('buildsPath')}staging/renamed.txt")).to.be.true
           done()
 
     describe '#rm', ->
@@ -97,7 +97,7 @@ describe 'Model#BuildFile', ->
           contents: 'Sample contents'
 
         buildfile.save (e, buildfile) ->
-          expectedPath = "#{config.buildsPath}staging/#{buildfile.filename}"
+          expectedPath = "#{config.get('buildsPath')}staging/#{buildfile.filename}"
 
           BuildFile.rm 'staging', 'rmtest.txt', (e, buildfile) ->
             expect(e).to.not.exist

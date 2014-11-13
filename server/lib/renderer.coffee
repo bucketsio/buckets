@@ -1,9 +1,10 @@
 Swag = require 'swag'
 _ = require 'underscore'
 cloudinary = require 'cloudinary'
-config = require '../config'
+
 Entry = require '../models/entry'
 Bucket = require '../models/bucket'
+
 moment = require 'moment'
 munge = require 'munge'
 

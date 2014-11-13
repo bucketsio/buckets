@@ -70,7 +70,7 @@ module.exports = (grunt) ->
 
     clean:
       app: ['public']
-      all: ['public', 'bower_components', 'tmp', 'deployments/*', '!deployments/base']
+      all: ['public', 'bower_components', 'tmp', 'builds/*', '!builds/staging', 'test/builds']
       logs: ['*.log']
 
     testem:

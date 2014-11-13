@@ -8,7 +8,7 @@ filesize = require 'filesize'
 hbs = require 'hbs'
 crypto = require 'crypto'
 tarball = require 'tarball-extract'
-config = require '../config'
+config = require '../lib/config'
 logger = require '../lib/logger'
 
 buildSchema = new mongoose.Schema
@@ -58,7 +58,7 @@ buildSchema.pre 'validate', (next) ->
 
   logger.verbose "Building tar from #{target}"
 
-  dirpath = path.resolve config.buildsPath, target
+  dirpath = path.resolve config.get('buildsPath'), target
 
   Build.generateTar dirpath, (e, tar) =>
     if e?
@@ -145,7 +145,7 @@ buildSchema.statics.scaffold = (env, callback) ->
   return callback 'Invalid env' unless env in ['live', 'staging']
 
   # We simultaneously look in the DB and check the FS
-  exists = fs.existsSync "#{config.buildsPath}#{env}"
+  exists = fs.existsSync "#{config.get('buildsPath')}#{env}"
 
   Build.findOne env: env, (err, build) ->
     return callback err if err
@@ -164,10 +164,10 @@ buildSchema.statics.scaffold = (env, callback) ->
       logger.verbose 'Scaffold: No directory, copying from base.'
       logger.info 'No existing directory, creating %s from base.', env
 
-      fs.remove "#{config.buildsPath}#{env}", (e) ->
+      fs.remove "#{config.get('buildsPath')}#{env}", (e) ->
         logger.error e if e
 
-        fs.copy "#{__dirname}/../lib/skeletons/base/", "#{config.buildsPath}#{env}", (e) ->
+        fs.copy "#{__dirname}/../lib/skeletons/base/", "#{config.get('buildsPath')}#{env}", (e) ->
           logger.error e if e
           createNew 'Scaffolded from base.', (e, build) ->
             logger.error e if e
@@ -196,7 +196,7 @@ buildSchema.methods.unpack = (callback) ->
         # First, write the files from DB .tar.gz
         (callback) ->
           destination = if env is 'staging' then env else id
-          finalDestination = path.resolve config.buildsPath, destination
+          finalDestination = path.resolve config.get('buildsPath'), destination
 
           logger.verbose "Extracting tarball",
             from: tarPath
@@ -214,9 +214,9 @@ buildSchema.methods.unpack = (callback) ->
             (callback) ->
               if env is 'live'
                 logger.verbose "Rebuilding Symlink, #{env} » #{id}"
-                liveSlPath = "#{config.buildsPath}live"
+                liveSlPath = "#{config.get('buildsPath')}live"
                 fs.remove liveSlPath, ->
-                  fs.symlink fs.realpathSync("#{config.buildsPath}#{id}"), liveSlPath, 'dir', ->
+                  fs.symlink fs.realpathSync("#{config.get('buildsPath')}#{id}"), liveSlPath, 'dir', ->
                     logger.profile "Rebuilding Symlink, #{env} » #{id}"
                     callback arguments...
               else
@@ -233,7 +233,7 @@ buildSchema.methods.unpack = (callback) ->
 buildSchema.methods.unpackBuildFiles = (callback) ->
   mongoose.model('BuildFile').find build_env: @env, (e, buildfiles) ->
     async.map buildfiles, (buildfile, cb) ->
-      filePath = "#{config.buildsPath}#{buildfile.build_env}/#{buildfile.filename}"
+      filePath = "#{config.get('buildsPath')}#{buildfile.build_env}/#{buildfile.filename}"
       if buildfile.contents is null
         logger.info 'Deleting %s from %s', buildfile.filename, buildfile.build_env
         fs.remove filePath, cb
@@ -243,7 +243,7 @@ buildSchema.methods.unpackBuildFiles = (callback) ->
     , callback
 
 buildSchema.methods.getTarPath = ->
-  path.resolve "#{config.buildsPath}#{@id}.tar.gz"
+  path.resolve "#{config.get('buildsPath')}#{@id}.tar.gz"
 
 buildSchema.methods.writeTar = (callback) ->
   logger.verbose "Writing #{@id}.tar.gz from database (to #{@env})"
@@ -265,7 +265,7 @@ buildSchema.statics.generateTar = (dirpath, callback) ->
     # Generate the source, md5, size, and niceSize
     time = new Date().toISOString().replace(/\:/g, '.')
     filename = "#{path.basename(dirpath)}.tar.gz"
-    tarPath = config.buildsPath + filename
+    tarPath = config.get('buildsPath') + filename
     tarInfo = {}
 
     md5hash = crypto.createHash 'md5'

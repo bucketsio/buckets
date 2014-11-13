@@ -1,7 +1,7 @@
 request = require 'supertest'
 
 User = require '../server/models/user'
-config = require '../server/config'
+config = require '../server/lib/config'
 
 app = require('../server')().app
 
@@ -15,7 +15,7 @@ module.exports =
     , ->
       adminUser = request.agent app
       adminUser
-        .post "/#{config.adminSegment}/login"
+        .post "/#{config.get('adminSegment')}/login"
         .send
           username: 'test+admin@buckets.io'
           password: 'testing123'
@@ -30,7 +30,7 @@ module.exports =
     , ->
       user = request.agent app
       user
-        .post "/#{config.adminSegment}/login"
+        .post "/#{config.get('adminSegment')}/login"
         .send
           username: 'test+user@buckets.io'
           password: 'testing123'

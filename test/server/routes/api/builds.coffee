@@ -3,7 +3,7 @@ request = require 'supertest'
 fs = require 'fs-extra'
 buckets = require '../../../../server'
 app = buckets().app
-config = require('../../../../server/config')
+config = require('../../../../server/lib/config')
 Build = require '../../../../server/models/build'
 auth = require '../../../auth'
 reset = require '../../../reset'
@@ -16,21 +16,21 @@ describe 'REST#Builds', ->
   describe 'GET /builds/', ->
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .get "/#{config.apiSegment}/builds"
+        .get "/#{config.get('apiSegment')}/builds"
         .expect 401
         .end done
 
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/builds"
+          .get "/#{config.get('apiSegment')}/builds"
           .expect 401
           .end done
 
     it 'returns a list of builds for admins', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/builds"
+          .get "/#{config.get('apiSegment')}/builds"
           .expect 200
           .end (err, res) ->
             expect(res.body).to.be.an 'Array'
@@ -53,7 +53,7 @@ describe 'REST#Builds', ->
 
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .put "/#{config.apiSegment}/builds/#{stagingBuild.id}/"
+        .put "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/"
         .send
           env: 'live'
         .expect 401
@@ -62,7 +62,7 @@ describe 'REST#Builds', ->
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .put "/#{config.apiSegment}/builds/#{stagingBuild.id}/"
+          .put "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/"
           .send
             env: 'live'
           .expect 401
@@ -71,7 +71,7 @@ describe 'REST#Builds', ->
     it 'returns a 404 if build doesn’t exist', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .put "/#{config.apiSegment}/builds/543ae3e1d3ae3a350e4eb924/" # Rando Mongo ID
+          .put "/#{config.get('apiSegment')}/builds/543ae3e1d3ae3a350e4eb924/" # Rando Mongo ID
           .send
             env: 'live'
           .expect 404
@@ -80,14 +80,14 @@ describe 'REST#Builds', ->
     it 'returns a 400 if no env is provided', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .put "/#{config.apiSegment}/builds/#{stagingBuild.id}/"
+          .put "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/"
           .expect 400
           .end done
 
     it 'returns a 500 if build id is wonky', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .put "/#{config.apiSegment}/builds/abc/"
+          .put "/#{config.get('apiSegment')}/builds/abc/"
           .send
             env: 'live'
           .expect 500
@@ -96,10 +96,10 @@ describe 'REST#Builds', ->
     it 'returns a 200 if build was updated (staging to live) and adds an author', (done) ->
 
       # First we need to create a diff or the staging build will be rejected
-      fs.outputFile "#{config.buildsPath}staging/newfile.txt", 'test', ->
+      fs.outputFile "#{config.get('buildsPath')}staging/newfile.txt", 'test', ->
         auth.createAdmin (err, admin) ->
           admin
-            .put "/#{config.apiSegment}/builds/#{stagingBuild.id}/"
+            .put "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/"
             .send
               env: 'live'
             .expect 200
@@ -112,7 +112,7 @@ describe 'REST#Builds', ->
     it 'returns a 400 if attempting to change env to archive', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .put "/#{config.apiSegment}/builds/#{stagingBuild.id}/"
+          .put "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/"
           .send
             env: 'archive'
           .expect 400
@@ -142,28 +142,28 @@ describe 'REST#Builds', ->
 
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .delete "/#{config.apiSegment}/builds/#{stagingBuild.id}"
+        .delete "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}"
         .expect 401
         .end done
 
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .delete "/#{config.apiSegment}/builds/#{stagingBuild.id}"
+          .delete "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}"
           .expect 401
           .end done
 
     it.skip 'returns a 204 if build was deleted', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .delete "/#{config.apiSegment}/builds/#{archiveBuild.id}"
+          .delete "/#{config.get('apiSegment')}/builds/#{archiveBuild.id}"
           .expect 204
           .end done
 
     it 'returns a 400 if build env is not archive', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .delete "/#{config.apiSegment}/builds/#{stagingBuild.id}"
+          .delete "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}"
           .expect 400
           .end done
 
@@ -186,28 +186,28 @@ describe 'REST#Builds', ->
 
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .get "/#{config.apiSegment}/builds/#{stagingBuild.id}/download"
+        .get "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/download"
         .expect 401
         .end done
 
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/builds/#{stagingBuild.id}/download"
+          .get "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/download"
           .expect 401
           .end done
 
     it 'returns a 404 if build doesn’t exist', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/builds/0000000000000/download"
+          .get "/#{config.get('apiSegment')}/builds/0000000000000/download"
           .expect 401
           .end done
 
     it 'returns a 200 (download) if build exists', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/builds/#{stagingBuild.id}/download"
+          .get "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/download"
           .expect 200
           .end (err, res) ->
             expect(res.headers['content-disposition']).to.match /^attachment/
@@ -233,28 +233,28 @@ describe 'REST#Builds', ->
 
     it 'returns a 401 if user isn’t authenticated', (done) ->
       request app
-        .get "/#{config.apiSegment}/builds/#{stagingBuild.id}/download"
+        .get "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/download"
         .expect 401
         .end done
 
     it 'returns a 401 if user isn’t an admin', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/builds/#{stagingBuild.id}/download"
+          .get "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/download"
           .expect 401
           .end done
 
     it 'returns a 404 if build doesn’t exist', (done) ->
       auth.createUser (err, user) ->
         user
-          .get "/#{config.apiSegment}/builds/0000000000000/download"
+          .get "/#{config.get('apiSegment')}/builds/0000000000000/download"
           .expect 401
           .end done
 
     it 'returns a 200 (download) if build exists', (done) ->
       auth.createAdmin (err, admin) ->
         admin
-          .get "/#{config.apiSegment}/builds/#{stagingBuild.id}/download"
+          .get "/#{config.get('apiSegment')}/builds/#{stagingBuild.id}/download"
           .expect 200
           .end (err, res) ->
             expect(res.headers['content-disposition']).to.match /^attachment/

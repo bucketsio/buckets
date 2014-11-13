@@ -6,7 +6,7 @@ pathRegexp = require 'path-to-regexp'
 express = require 'express'
 _ = require 'underscore'
 path = require 'path'
-config = require '../config'
+config = require '../lib/config'
 logger = require '../lib/logger'
 Route = require '../models/route'
 fs = require 'fs'
@@ -20,25 +20,21 @@ require('../lib/renderer')(hbs)
 
 plugins = app.get 'plugins'
 
-if config.host
+if config.has('host')
   # Handle staging/personal build environments
-  app.use vhost "*.#{config.host}", (req, res, next) ->
+  app.use vhost "*.#{config.get('host')}", (req, res, next) ->
     unless req.user?.hasRole ['administrator']
       # This isn’t authorized, do a redirect
-      # console.log 'Unauthorized user on staging', req.user
-      port = if config.port isnt '80'
-        ":#{config.port}"
-      else
-        ''
-      res.redirect "#{req.protocol}://#{config.host}#{port}#{req.url}"
+      logger.verbose 'Unauthorized user on staging', req.user
+      res.redirect "#{req.protocol}://#{config.get('host')}#{req.url}"
     else
       buildEnv = req.vhost[0]
 
       # Check buildEnv dir exists
-      fs.exists "#{config.buildsPath}#{buildEnv}", (exists) ->
+      fs.exists "#{config.get('buildsPath')}#{buildEnv}", (exists) ->
         # console.log "Using #{buildEnv} statics".rainbow, exists
         if exists
-          app.set 'views', "#{config.buildsPath}#{buildEnv}"
+          app.set 'views', "#{config.get('buildsPath')}#{buildEnv}"
           req.originalUrl = req.url
           req.url = "/#{buildEnv}#{req.url}"
           req.previewMode = yes
@@ -49,11 +45,11 @@ app.use (req, res, next) ->
   unless req.previewMode
     req.originalUrl = req.url
     req.url = "/live#{req.url}"
-    app.set 'views', "#{config.buildsPath}live" # This should symlink to DB build
+    app.set 'views', "#{config.get('buildsPath')}live" # This should symlink to DB build
   next()
 
 # Serve static (cached one week), and Harp pre-compiled, then reset the URL
-app.use express.static(config.buildsPath, maxAge: 86400000 * 7), harp.mount(config.buildsPath), (req, res, next) ->
+app.use express.static(config.get('buildsPath'), maxAge: 86400000 * 7), harp.mount(config.get('buildsPath')), (req, res, next) ->
   req.url = req.originalUrl if req.originalUrl
   delete req.originalUrl
   next()
@@ -65,7 +61,7 @@ app.all '/:frontend*?', (req, res, next) ->
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
   Route.find {}, 'urlPattern urlPatternRegex template keys', sort: 'sort', (err, routes) ->
-    return next() unless routes?.length or config.catchAll is yes
+    return next() unless routes?.length or config.has('catchAll') is yes
 
     # dynamic renderTime helper
     # (startTime is set in index.coffee)
@@ -88,10 +84,10 @@ app.all '/:frontend*?', (req, res, next) ->
     matchingRoutes = []
 
     templateData =
-      adminSegment: config.adminSegment
+      adminSegment: config.get('adminSegment')
       user: req.user
-      assetPath: if config.fastly?.cdn_url and config.env is 'production' and not req.user?.previewMode
-          "http://#{config.fastly.cdn_url}/"
+      assetPath: if config.get('fastlyCdnUrl') and config.get('env') is 'production'
+          "http://#{config.get('fastlyCdnUrl')}/"
         else
           "/"
       errors: []
@@ -105,7 +101,7 @@ app.all '/:frontend*?', (req, res, next) ->
       # Prepare the global template data
       localTemplateData = _.clone templateData
 
-      localTemplateData.route = route
+      localTemplateData.route = route.toJSON()
       localTemplateData.req =
         body: req.body
         path: req.path
@@ -113,6 +109,8 @@ app.all '/:frontend*?', (req, res, next) ->
         params: {}
       localTemplateData.req.params[key.name] = matches[i+1] for key, i in route.keys
       matchingRoutes.push localTemplateData
+
+    logger.debug 'Matching Routes', routes: matchingRoutes.length
 
     # The magical, time-traveling Template lookup/renderer
     async.detectSeries matchingRoutes, (localTemplateData, callback) ->
@@ -152,13 +150,13 @@ app.all '/:frontend*?', (req, res, next) ->
     , (rendered) ->
       return if rendered
       # console.log 'Rendering error page'
-      return next() unless config.catchAll
+      return next() unless config.has('catchAll')
 
       res.render 'error', templateData, (err, html) ->
         logger.error 'Buckets caught an error trying to render the error page.' if err
         if err
           res.status(404)
-          if config.env is 'production' or res.headersSent or config.catchAll
+          if config.get('env') is 'production' or res.headersSent or config.has('catchAll')
             res.end()
           else
             next()

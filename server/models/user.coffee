@@ -132,7 +132,7 @@ userSchema.methods.getRolesForType = (resourceType) ->
 
 userSchema.methods.getDropboxClient = ->
   return no unless dbox_app? and @dropbox?.token and @dropbox?.tokenSecret and @dropbox?.id
-  @dropboxClient ?= dbox_app.client
+  @dropboxClient ?= dbox_app?.client
     oauth_token: @dropbox.token
     oauth_token_secret: @dropbox.tokenSecret
     uid: @dropbox.id
