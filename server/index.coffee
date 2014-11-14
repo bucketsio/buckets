@@ -91,7 +91,7 @@ class Buckets extends events.EventEmitter
         # statusLevels: yes
 
     @app.use "/#{config.get('apiSegment')}", (req, res, next) ->
-      badObject = bucketUtil.checkForDollarKeys req.body, res
+      badObject = bucketUtil.checkForDollarKeys req.body
       if badObject
         res.status(403).send("Disallowed object in request: " + JSON.stringify(badObject))
       else
