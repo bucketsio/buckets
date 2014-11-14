@@ -296,7 +296,7 @@ describe 'REST#Users', ->
     it 'returns a 403 if body contains Mongo injection-style $ object key', (done) ->
       badObject = {'$gt': ''}
       r = request app
-        .post "/#{config.apiSegment}/forget"
+        .post "/#{apiSegment}/forget"
         .send
           email: badObject
         .expect 403
