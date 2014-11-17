@@ -16,6 +16,7 @@ Build = require './models/build'
 
 logger = require './lib/logger'
 config = require './lib/config'
+bucketUtil = require './lib/util'
 
 class Buckets extends events.EventEmitter
   listening: no
@@ -71,6 +72,7 @@ class Buckets extends events.EventEmitter
 
     @app.set 'view engine', 'hbs'
     @app.set 'view cache', false
+    @app.set 'query parser', 'simple' # reduces risk of MongoDB injection attack
 
     @app.use expressWinston.logger
       winstonInstance: logger
@@ -87,6 +89,13 @@ class Buckets extends events.EventEmitter
         level: 'info'
         meta: no
         # statusLevels: yes
+
+    @app.use "/#{config.get('apiSegment')}", (req, res, next) ->
+      badObject = bucketUtil.checkForDollarKeys req.body
+      if badObject
+        res.status(403).send("Disallowed object in request: " + JSON.stringify(badObject))
+      else
+        next()
 
     # Load Routes for the API, admin, and frontend
     @app.use "/#{config.get('apiSegment')}", @routers.api

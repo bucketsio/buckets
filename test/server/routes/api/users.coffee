@@ -277,7 +277,7 @@ describe 'REST#Users', ->
                 expect(dbUser).to.not.exist
                 done()
 
-  describe 'POST /forget', ->
+  describe 'POST /forgot', ->
     it 'returns a 404 if user does not exist', (done) ->
       request app
         .post "/#{apiSegment}/forget"
@@ -288,10 +288,21 @@ describe 'REST#Users', ->
 
     it 'returns a 404 if payload is not json', (done) ->
       request app
-        .post "/#{apiSegment}/forget"
+        .post "/#{apiSegment}/forgot"
         .send 'Invalid JSON payload'
         .expect 404
         .end done
+    
+    it 'returns a 403 if body contains Mongo injection-style $ object key', (done) ->
+      badObject = {'$gt': ''}
+      r = request app
+        .post "/#{apiSegment}/forgot"
+        .send
+          email: badObject
+        .expect 403
+        .end (e, res) ->
+          expect(res.text).equal('Disallowed object in request: ' + JSON.stringify(badObject))
+          done()
 
   describe 'GET /reset/:token', ->
     it 'returns a 404 if token does not exist', (done) ->

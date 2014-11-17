@@ -108,8 +108,8 @@ app.route('/routes/:routeID')
   .put (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
-    Route.find _id: req.params.routeID, null, limit: 1, (err, routes) ->
-      return res.status(404).end() unless route = routes?[0]
+    Route.findById req.params.routeID, (err, route) ->
+      return res.status(404).end() unless route?
 
       route.set req.body
       route.save (err, route) ->
