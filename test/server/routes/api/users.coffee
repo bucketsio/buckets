@@ -10,6 +10,7 @@ app = require('../../../../server')().app
 {expect} = require 'chai'
 
 describe 'REST#Users', ->
+  @timeout 3000
 
   apiSegment = config.get('apiSegment')
   before reset.db
@@ -292,7 +293,7 @@ describe 'REST#Users', ->
         .send 'Invalid JSON payload'
         .expect 404
         .end done
-    
+
     it 'returns a 403 if body contains Mongo injection-style $ object key', (done) ->
       badObject = {'$gt': ''}
       r = request app
