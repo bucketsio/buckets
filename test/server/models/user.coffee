@@ -5,6 +5,8 @@ reset = require '../../reset'
 {assert} = require 'chai'
 
 describe 'Model#User', ->
+  @timeout 3000
+
   bucket = null
   user = null
 
