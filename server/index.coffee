@@ -73,6 +73,7 @@ class Buckets extends events.EventEmitter
     @app.set 'view engine', 'hbs'
     @app.set 'view cache', false
     @app.set 'query parser', 'simple' # reduces risk of MongoDB injection attack
+    @app.set 'json spaces', 2 if @config.get('env') is 'development'
 
     @app.use expressWinston.logger
       winstonInstance: logger
