@@ -4,6 +4,7 @@ uniqueValidator = require 'mongoose-unique-validator'
 
 Route = require '../models/route'
 db = require '../lib/database'
+{Sortable} = require '../lib/mongoose-plugins'
 
 fieldSchema = new mongoose.Schema
   name:
@@ -100,6 +101,8 @@ bucketSchema.pre 'validate', (next) ->
   next()
 
 bucketSchema.plugin uniqueValidator, message: '“{VALUE}” is already taken.'
+bucketSchema.plugin Sortable
+bucketSchema.plugin Sortable, embedded: 'fields'
 
 bucketSchema.post 'remove', ->
   @model('Entry').remove(bucket: @_id).exec()

@@ -21,6 +21,19 @@ module.exports = class BucketFieldsView extends View
     'add collection': 'render'
     'remove collection': 'render'
 
+  attach: ->
+    super
+    $sortable = @$el.find('#sortable-fields')
+    new Sortable $sortable.get(0),
+      handle: '.handle'
+      onUpdate: @updateSort
+
+  updateSort: =>
+    $sortable = @$el.find('#sortable-fields')
+    $sortable.children().each (i, li) =>
+      model = @collection.findWhere slug: $(li).data 'field-slug'
+      model.set sort: i if model
+
   getTemplateData: ->
     fieldTypes = [
         name: 'Add a field…'
@@ -70,6 +83,7 @@ module.exports = class BucketFieldsView extends View
     @listenToOnce field, 'change', (field) ->
       @subview('editField').dispose()
       @collection.add field, at: 0
+      @updateSort()
       @render()
 
   clickRemove: (e) ->
