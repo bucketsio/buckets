@@ -11,10 +11,13 @@
 
 {{#if length}}
 
-  <ul class="fieldsList sortable list-group">
+  <ul id="sortable-fields" class="fieldsList sortable list-group">
   {{#each items}}
-    <li class="list-group-item">
-      <h3 class="list-group-item-heading"><a href="#edit">{{name}}</a></h2>
+    <li class="list-group-item field" data-field-slug="{{slug}}">
+      <div class="pull-right">
+        <a class="btn btn-link btn-icon btn-icon-small handle" href="#">{{icon 'cursor-move'}}</a>
+      </div>
+      <h3 class="list-group-item-heading"><a href="#edit">{{name}}</a></h3>
       <p class="list-group-item-text">
         <span class="label label-default">{{fieldType}}</span>
         <code>\{{{{slug}}<span></span>}}</code>
