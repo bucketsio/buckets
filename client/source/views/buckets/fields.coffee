@@ -23,10 +23,11 @@ module.exports = class BucketFieldsView extends View
 
   attach: ->
     super
-    $sortable = @$el.find('#sortable-fields')
-    new Sortable $sortable.get(0),
-      handle: '.handle'
-      onUpdate: @updateSort
+    $sortable = @$('#sortable-fields')
+    if $sortable.length
+      new Sortable $sortable.get(0),
+        handle: '.handle'
+        onUpdate: @updateSort
 
   updateSort: =>
     $sortable = @$el.find('#sortable-fields')

@@ -1,6 +1,5 @@
 <p class="lead">Custom fields define what your bucket holds.</p>
 
-
 <div class="row">
   <div class="col-sm-6">
     {{select 'fieldType' '' fieldTypes valueKey="value"}}
@@ -9,9 +8,7 @@
 
 <div class="editField"></div>
 
-{{#if length}}
-
-  <ul id="sortable-fields" class="fieldsList sortable list-group">
+<ul id="sortable-fields" class="fieldsList sortable list-group">
   {{#each items}}
     <li class="list-group-item field" data-field-slug="{{slug}}">
       <div class="pull-right">
@@ -25,7 +22,6 @@
       </p>
     </li>
   {{/each}}
-  </ul>
-{{/if}}
+</ul>
 
 {{submit 'Save'}}
