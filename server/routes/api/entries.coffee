@@ -1,5 +1,6 @@
 express = require 'express'
 
+Activity = require '../../models/activity'
 Bucket = require '../../models/bucket'
 Entry = require '../../models/entry'
 
@@ -72,6 +73,7 @@ app.route '/entries'
           res.status(400).send err
         else
           entry.populate 'bucket author', ->
+            entry.createActivity 'created', req.user
             res.status(200).send entry
 
   .get (req, res) ->
@@ -161,11 +163,17 @@ app.route('/entries/:entryID')
         return res.status(400).send err if err
 
         entry.populate 'bucket author', ->
+          entry.createActivity 'updated', req.user
           res.status(200).send entry
 
   .delete (req, res) ->
-    Entry.findById(req.params.entryID).remove (err) ->
-      if err
-        res.status(400).send e: err
-      else
-        res.status(204).end()
+    Entry.findById req.params.entryID, (error, entry) ->
+      entry.remove (err) ->
+        if err
+          res.status(400).send e: err
+        else
+          entry.populate 'bucket', ->
+            entry.createActivity 'deleted', req.user, ->
+              Activity.unlinkActivities entry
+
+          res.status(204).end()

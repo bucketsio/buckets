@@ -4,30 +4,55 @@ db = require '../lib/database'
 # Conforms, at least somewhat, to the activity stream spec outlined at
 # http://activitystrea.ms/specs/json/1.0
 activitySchema = new mongoose.Schema
-  published:
+  publishDate:
     type: Date
     default: Date.now
   actor:
+    type: mongoose.Schema.Types.ObjectId
+    ref: 'User'
+    required: true
+  action:
+    type: String
+    enum: ['created', 'updated', 'deleted']
+    required: true
+  resource:
     id:
       type: mongoose.Schema.Types.ObjectId
-      ref: 'User'
-      required: true
-  verb:
-    name:
-      type: String
-      enum: ['post', 'update']
-      required: true
-  object:
-    objectType:
+    type:
       type: String
       required: true
       enum: ['entry', 'bucket', 'user']
-    id:
-      type: mongoose.Schema.Types.ObjectId
+    name:
+      type: String
       required: true
+    # for users
+    email:
+      type: String
+    bucket:
+      id:
+        type: mongoose.Schema.Types.ObjectId
+      slug:
+        type: String
+      singular:
+        type: String
 ,
   autoIndex: no
 
 activitySchema.set 'toJSON', virtuals: true
+
+activitySchema.virtual 'kind'
+  .get ->
+    if @resource.type is 'entry' then @resource.bucket.singular.toLowerCase() else @resource.type
+
+activitySchema.statics.createForResource = (resource, action, actor, callback) ->
+  @model('Activity').create { resource, action, actor }, (err, activity) ->
+    if err
+      console.log 'Error creating Activity', activity, err
+    else
+      callback(action) if callback
+
+activitySchema.statics.unlinkActivities = (resource) ->
+  @model('Activity').update { 'resource.id': resource._id }, { $set: { 'resource.id': null }}, { multi: true }, (err) ->
+    console.log 'Error unlinking Activities', resource, err if err
 
 module.exports = db.model 'Activity', activitySchema

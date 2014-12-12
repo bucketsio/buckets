@@ -4,6 +4,7 @@ Chaplin = require 'chaplin'
 
 PageView = require 'views/base/page'
 EntriesList = require 'views/entries/list'
+Activity = require 'models/activity'
 Entry = require 'models/entry'
 
 EntryEditView = require 'views/entries/edit'

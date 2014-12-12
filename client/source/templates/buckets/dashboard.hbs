@@ -1,11 +1,33 @@
 <div class="row">
   <h1 class="page-title color-yellow">Buckets</h1>
 
-  <div class="col-md-4 col-sm-6">
+  <div class="col-md-12 col-sm-6">
     <div class="panel">
       <div class="panel-body">
-        <p class="lead">Buckets is an open-source CMS, built in Node.js, which is being actively developed by <a href="https://assembly.com/buckets" target="_blank">the community at Assembly</a>.</p>
+        <p class="lead">Buckets is an open-source CMS, built in Node.js, which is being actively developed by <a
+          href="https://assembly.com/buckets" target="_blank">the community at Assembly</a>.</p>
       </div>
+    </div>
+  </div>
+
+  <h1 class="page-title">Recent Activity</h1>
+
+  <div class="col-md-12 col-sm-4">
+    <div class="activities">
+      {{#if activities}}
+        {{#each activities}}
+          <div class="activity">
+            <a class="link-with-avatar" href="/{{adminSegment}}/users/{{actor.email}}">{{gravatar actor.email_hash}} <span class="actor-name">{{actor.name}}</span></a>
+            {{action}} {{kind}}
+            {{activityResourceLink resource}}
+            {{timeAgo publishDate}}
+          </div>
+        {{/each}}
+      {{else}}
+        <div class="activity">
+          There has been no activity yet.
+        </div>
+      {{/if}}
     </div>
   </div>
 </div>

@@ -88,3 +88,25 @@ Handlebars.registerHelper 'startsWith', (string1, string2, options) ->
     options.fn @
   else
     options.inverse @
+
+Handlebars.registerHelper 'activityResourceLink', (resource) ->
+  escapeExpression = (expression) ->
+    Handlebars.Utils.escapeExpression expression
+  id = escapeExpression resource.id
+  type = escapeExpression resource.type
+  name = escapeExpression resource.name
+  email = escapeExpression resource.email
+  bucketSlug = escapeExpression resource.bucket?.slug
+
+  if resource.id
+    switch resource.type
+      when 'entry' then href = '/' + mediator.options.adminSegment + '/buckets/' + bucketSlug + '/' + id
+      when 'bucket' then href = '/' + mediator.options.adminSegment + '/buckets/' + bucketSlug
+      when 'user' then href = '/' + mediator.options.adminSegment + '/users/' + email
+
+    link = '<a href="' + href + '">' + name + '</a>'
+  else
+    link = name
+
+  new Handlebars.SafeString link;
+

@@ -8,6 +8,7 @@ async = require 'async'
 fs = require 'fs-extra'
 _ = require 'underscore'
 db = require '../lib/database'
+Activity = require '../models/activity'
 
 if process.env.DROPBOX_APP_KEY and process.env.DROPBOX_APP_SECRET
   dbox_app = dbox.app
@@ -264,6 +265,14 @@ userSchema.methods.syncDropbox = (host='', reset, callback) ->
       user.save ->
         callback e, written
         console.log "Saved new Dropbox cursor for User."
+
+userSchema.methods.createActivity = (action, actor, callback) ->
+  Activity.createForResource
+    id: @_id
+    type: 'user'
+    name: @name
+    email: @email
+  , action, actor, callback
 
 userSchema.virtual 'email_hash'
   .get ->

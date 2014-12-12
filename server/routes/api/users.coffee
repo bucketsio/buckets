@@ -5,6 +5,7 @@ crypto = require 'crypto'
 mailer = require '../../lib/mailer'
 config = require '../../lib/config'
 
+Activity = require '../../models/activity'
 User = require '../../models/user'
 
 module.exports = app = express()
@@ -97,6 +98,7 @@ app.route('/users')
 
     newUser.save (err) ->
       return res.status(400).send err if err
+      newUser.createActivity 'created', req.user
       res.status(200).send newUser
 
   .get (req, res) ->
@@ -161,9 +163,14 @@ app.route('/users/:userID')
   .delete (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
-    User.remove _id: req.params.userID, (err) ->
-      return res.status(400).end() if err
-      res.status(200).end()
+    User.findById req.params.userID, (err, user) ->
+      return res.status(400).end() if err or not user
+
+      user.remove (err) ->
+        return res.status(400).end() if err
+        user.createActivity 'deleted', req.user, ->
+          Activity.unlinkActivities user
+        res.status(200).end()
 
   .put (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator'] or req.user?._id is req.params.userID
@@ -184,6 +191,7 @@ app.route('/users/:userID')
 
       user.set(req.body).save (err, user) ->
         return res.status(400).send err if err
+        user.createActivity 'updated', req.user
         res.status(200).send user
 
 ###
