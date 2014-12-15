@@ -9,16 +9,16 @@ Find below a list of actions that currently create activities:
 ## For Entries
 
 When a user adds, updates or deletes an entry, the following activity will be created:  
-`[USER NAME] [added|udpated|deleted] [SINGULAR BUCKET NAME] [ENTRY TITLE]`
+`[USER NAME] [added|updated|deleted] [SINGULAR BUCKET NAME] [ENTRY TITLE]`
 
 ## For Buckets
 
 When a user adds, updates or deletes a bucket, the following activity will be created:  
-`[USER NAME] [added|udpated|deleted] bucket [BUCKET NAME]`
+`[USER NAME] [added|updated|deleted] bucket [BUCKET NAME]`
 
 ## For Users
 
 When a user adds, updates or deletes a user, the following activity will be created:  
-`[USER NAME] [added|udpated|deleted] user [USER NAME]`
+`[USER NAME] [added|updated|deleted] user [USER NAME]`
 
 
