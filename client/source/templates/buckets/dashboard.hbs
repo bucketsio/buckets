@@ -18,8 +18,12 @@
         {{#each activities}}
           <div class="activity">
             <a class="link-with-avatar" href="/{{adminSegment}}/users/{{actor.email}}">{{gravatar actor.email_hash}} <span class="actor-name">{{actor.name}}</span></a>
-            {{action}} {{kind}}
-            {{activityResourceLink resource}}
+            {{action}} {{resource.kind}}
+            {{#if resource.id}}
+              <a href="/{{adminSegment}}{{resource.path}}">{{resource.name}}</a>
+            {{else}}
+              {{resource.name}}
+            {{/if}}
             {{timeAgo publishDate}}
           </div>
         {{/each}}

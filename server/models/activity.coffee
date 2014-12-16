@@ -40,9 +40,17 @@ activitySchema = new mongoose.Schema
 
 activitySchema.set 'toJSON', virtuals: true
 
-activitySchema.virtual 'kind'
+activitySchema.virtual 'resource.kind'
   .get ->
     if @resource.type is 'entry' then @resource.bucket.singular.toLowerCase() else @resource.type
+
+activitySchema.virtual 'resource.path'
+  .get ->
+    switch @resource.type
+      when 'entry' then path = '/buckets/' + @resource.bucket.slug + '/' + @resource.id
+      when 'bucket' then path = '/buckets/' + @resource.bucket.slug
+      when 'user' then path = '/users/' + @resource.email
+    path
 
 activitySchema.statics.createForResource = (resource, action, actor, callback) ->
   @model('Activity').create { resource, action, actor }, (err, activity) ->
