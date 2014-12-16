@@ -117,13 +117,9 @@ bucketSchema.methods.getMembers = (callback) ->
 
 bucketSchema.methods.createActivity = (action, actor, callback) ->
   Activity.createForResource
-    id: @_id
-    type: 'bucket'
+    kind: 'bucket'
     name: @name
-    bucket:
-      id: @_id
-      slug: @slug
-      singular: @singular
+    bucket: @
   , action, actor, callback
 
 module.exports = db.model 'Bucket', bucketSchema

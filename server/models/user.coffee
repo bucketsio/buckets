@@ -268,10 +268,9 @@ userSchema.methods.syncDropbox = (host='', reset, callback) ->
 
 userSchema.methods.createActivity = (action, actor, callback) ->
   Activity.createForResource
-    id: @_id
-    type: 'user'
+    kind: 'user'
     name: @name
-    email: @email
+    user: @
   , action, actor, callback
 
 userSchema.virtual 'email_hash'

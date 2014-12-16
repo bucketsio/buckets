@@ -16,41 +16,32 @@ activitySchema = new mongoose.Schema
     enum: ['created', 'updated', 'deleted']
     required: true
   resource:
-    id:
-      type: mongoose.Schema.Types.ObjectId
-    type:
+    kind:
       type: String
-      required: true
-      enum: ['entry', 'bucket', 'user']
     name:
       type: String
       required: true
-    # for users
-    email:
-      type: String
+    entry:
+      type: mongoose.Schema.Types.ObjectId
+      ref: 'Entry'
     bucket:
-      id:
-        type: mongoose.Schema.Types.ObjectId
-      slug:
-        type: String
-      singular:
-        type: String
+      type: mongoose.Schema.Types.ObjectId
+      ref: 'Bucket'
+    user:
+      type: mongoose.Schema.Types.ObjectId
+      ref: 'User'
 ,
   autoIndex: no
 
 activitySchema.set 'toJSON', virtuals: true
 
-activitySchema.virtual 'resource.kind'
-  .get ->
-    if @resource.type is 'entry' then @resource.bucket.singular.toLowerCase() else @resource.type
-
 activitySchema.virtual 'resource.path'
   .get ->
-    switch @resource.type
-      when 'entry' then path = '/buckets/' + @resource.bucket.slug + '/' + @resource.id
-      when 'bucket' then path = '/buckets/' + @resource.bucket.slug
-      when 'user' then path = '/users/' + @resource.email
-    path
+    if @resource.entry or @resource.bucket or @resource.user
+      switch @resource.kind
+        when 'bucket' then '/buckets/' + @resource.bucket.slug
+        when 'user' then '/users/' + @resource.user.email
+        else '/buckets/' + @resource.bucket.slug + '/' + @resource.entry.id
 
 activitySchema.statics.createForResource = (resource, action, actor, callback) ->
   @model('Activity').create { resource, action, actor }, (err, activity) ->
@@ -59,8 +50,16 @@ activitySchema.statics.createForResource = (resource, action, actor, callback) -
     else
       callback(action) if callback
 
-activitySchema.statics.unlinkActivities = (resource) ->
-  @model('Activity').update { 'resource.id': resource._id }, { $set: { 'resource.id': null }}, { multi: true }, (err) ->
-    console.log 'Error unlinking Activities', resource, err if err
+activitySchema.statics.unlinkActivities = (conditions) ->
+  @model('Activity').update conditions,
+    {
+      $set:
+        'resource.entry': null
+        'resource.bucket': null
+        'resource.user': null
+    },
+    { multi: true },
+    (err) ->
+      console.log 'Error unlinking Activities', resource, err if err
 
 module.exports = db.model 'Activity', activitySchema
