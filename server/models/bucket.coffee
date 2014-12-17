@@ -24,7 +24,7 @@ fieldSchema = new mongoose.Schema
   settings: {}
 ,
   toJSON:
-    getters: true
+    getters: yes
 
 fieldSchema
   .path 'slug'
@@ -52,15 +52,16 @@ fieldSchema.post 'init', ->
   @set 'slug.old', @get 'slug'
 
 fieldSchema.post 'save', ->
-  if @get('slug.old') isnt @get('slug')
+  # There is a very annoying case where slug.old doesn't get filled in properly
+  if @get('slug.old') and @get('slug.old') isnt @get('slug')
     oldPath = "content.#{@get 'slug.old'}"
     newPath = "content.#{@get 'slug'}"
     q = {}
     q[oldPath] = $exists: yes
-    u = {$rename: {}}
+    u = $rename: {}
     u.$rename[oldPath] = newPath
-
     # TODO will probably have to change due to #168
+    # careful with this, updates circumvent middleware
     mongoose.model('Entry').update q, u, {}, (err) ->
       winston.error err if err?
 

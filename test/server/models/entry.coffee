@@ -9,7 +9,7 @@ reset = require '../../reset'
 
 {expect} = require 'chai'
 
-describe 'Entry', ->
+describe 'Model#Entry', ->
 
   user = null
 
