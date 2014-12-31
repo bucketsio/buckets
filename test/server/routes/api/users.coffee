@@ -117,7 +117,7 @@ describe 'REST#Users', ->
           .expect 400
           .end done
 
-    it 'returns a 400 if password doesnot have a number', (done) ->
+    it 'returns a 400 if password doesn’t have a number', (done) ->
       auth.createAdmin (err, admin) ->
         admin
           .post "/#{apiSegment}/users"

@@ -1,5 +1,6 @@
 mongoose = require 'mongoose'
 db = require '../lib/database'
+logger = require '../lib/logger'
 
 # Conforms, at least somewhat, to the activity stream spec outlined at
 # http://activitystrea.ms/specs/json/1.0
@@ -18,6 +19,7 @@ activitySchema = new mongoose.Schema
   resource:
     id:
       type: mongoose.Schema.Types.ObjectId
+      required: true
     type:
       type: String
       required: true
@@ -36,31 +38,36 @@ activitySchema = new mongoose.Schema
       singular:
         type: String
 ,
-  autoIndex: no
-
-activitySchema.set 'toJSON', virtuals: true
+  toJSON:
+    virtuals: yes
+    transform: (doc, ret, options) ->
+      delete ret._id
+      delete ret.__v
+      ret
 
 activitySchema.virtual 'resource.kind'
   .get ->
-    if @resource.type is 'entry' then @resource.bucket.singular.toLowerCase() else @resource.type
+    if @resource.type is 'entry'
+      @resource.bucket.singular.toLowerCase()
+    else
+      @resource.type
 
 activitySchema.virtual 'resource.path'
   .get ->
     switch @resource.type
-      when 'entry' then path = '/buckets/' + @resource.bucket.slug + '/' + @resource.id
-      when 'bucket' then path = '/buckets/' + @resource.bucket.slug
-      when 'user' then path = '/users/' + @resource.email
-    path
+      when 'entry' then "/buckets/#{@resource.bucket.slug}/#{@resource.id}"
+      when 'bucket' then "/buckets/#{@resource.bucket.slug}"
+      when 'user' then "/users/#{@resource.email}"
 
 activitySchema.statics.createForResource = (resource, action, actor, callback) ->
-  @model('Activity').create { resource, action, actor }, (err, activity) ->
+  @create { resource, action, actor }, (err, activity) ->
     if err
-      console.log 'Error creating Activity', activity, err
+      logger.error 'Error creating Activity', activity, err
     else
       callback(action) if callback
 
 activitySchema.statics.unlinkActivities = (resource) ->
-  @model('Activity').update { 'resource.id': resource._id }, { $set: { 'resource.id': null }}, { multi: true }, (err) ->
-    console.log 'Error unlinking Activities', resource, err if err
+  @update { 'resource.id': resource._id }, { $set: { 'resource.id': null }}, { multi: true }, (err) ->
+    logger.error 'Error unlinking Activities', resource, err if err
 
 module.exports = db.model 'Activity', activitySchema
