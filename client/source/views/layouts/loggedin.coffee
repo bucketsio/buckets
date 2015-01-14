@@ -64,6 +64,7 @@ module.exports = class LoggedInLayout extends View
     $view = $('.loggedInView')
 
     $menuBtn = @$('.btn-menu').css display: 'block'
+    @$('.usernav.open').trigger 'click.bs.dropdown'
 
     @killTweens()
 
