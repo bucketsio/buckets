@@ -169,7 +169,7 @@ app.route('/users/:userID')
       user.remove (err) ->
         return res.status(400).end() if err
         user.createActivity 'deleted', req.user, ->
-          Activity.unlinkActivities user
+          Activity.unlinkActivities { 'resource.user': user }
         res.status(200).end()
 
   .put (req, res) ->

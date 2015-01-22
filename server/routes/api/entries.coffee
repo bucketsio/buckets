@@ -174,6 +174,6 @@ app.route('/entries/:entryID')
         else
           entry.populate 'bucket', ->
             entry.createActivity 'deleted', req.user, ->
-              Activity.unlinkActivities entry
+              Activity.unlinkActivities { 'resource.entry': entry }
 
           res.status(204).end()

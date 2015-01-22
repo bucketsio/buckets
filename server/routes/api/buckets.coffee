@@ -208,7 +208,7 @@ app.route('/buckets/:bucketID')
             res.status(400).send err
           else
             bucket.createActivity 'deleted', req.user, ->
-              Activity.unlinkActivities bucket
+              Activity.unlinkActivities { 'resource.bucket': bucket }
             res.status(204).end()
 
   .put (req, res) ->

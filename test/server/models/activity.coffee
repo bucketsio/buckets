@@ -1,23 +1,48 @@
 db = require '../../../server/lib/database'
+logger = require '../../../server/lib/logger'
 reset = require '../../reset'
 mongoose = require 'mongoose'
 
 Activity = require '../../../server/models/activity'
+Bucket = require '../../../server/models/bucket'
+Entry = require '../../../server/models/entry'
 
 {expect} = require 'chai'
 sinon = require 'sinon'
 
 describe 'Model#Activity', ->
+  @timeout 3000
+
+  bucket = null
+  entry = null
+
+  before reset.db
+
+  beforeEach (done) ->
+    userId = new mongoose.Types.ObjectId()
+
+    Bucket.create
+      name: 'Articles'
+      slug: 'articles'
+    , (e, _bucket) ->
+      bucket = _bucket
+
+      Entry.create
+        title: 'Test Article'
+        bucket: bucket._id
+        author: userId
+        status: 'live'
+        publishDate: '2 days ago'
+      , (e, _entry) ->
+        entry = _entry
+        done()
+
   afterEach reset.db
 
   describe 'Validation', ->
     it 'requires an actor', (done) ->
       Activity.create
         verb: 'created'
-        resource:
-          type: 'entry'
-          id: new mongoose.Types.ObjectId()
-
       , (e, activity) ->
         expect(activity).to.be.undefined
         expect(e).to.be.an 'Object'
@@ -27,38 +52,20 @@ describe 'Model#Activity', ->
     it 'requires an action', (done) ->
       Activity.create
         actor: new mongoose.Types.ObjectId()
-        resource:
-          type: 'entry'
-          id: new mongoose.Types.ObjectId()
       , (e, activity) ->
         expect(activity).to.be.undefined
         expect(e).to.be.an 'Object'
         expect(e.errors).to.have.property 'action'
         done()
 
-    it 'requires a resource type', (done) ->
+    it 'requires a resource name', (done) ->
       Activity.create
         actor: new mongoose.Types.ObjectId()
-        verb: 'created'
-        resource:
-          id: new mongoose.Types.ObjectId()
+        action: 'created'
       , (e, activity) ->
         expect(activity).to.be.undefined
         expect(e).to.be.an 'Object'
-        expect(e.errors).to.have.property 'resource.type'
-        done()
-
-    it 'requires a resource id', (done) ->
-      Activity.create
-        actor: new mongoose.Types.ObjectId()
-        action:
-          name: 'post',
-        resource:
-          type: 'entry'
-      , (e, activity) ->
-        expect(activity).to.be.undefined
-        expect(e).to.be.an 'Object'
-        expect(e.errors).to.have.property 'resource.id'
+        expect(e.errors).to.have.property 'resource.name'
         done()
 
   describe 'Creation', ->
@@ -68,26 +75,24 @@ describe 'Model#Activity', ->
         action: 'created'
         resource:
           type: 'entry'
-          id: new mongoose.Types.ObjectId()
           name: 'Test Activity'
       , (e, activity) ->
         expect(activity.publishDate.toISOString()).to.exist
         done()
 
     it 'automatically creates a resource.path for an Entry', (done) ->
-      entryId = new mongoose.Types.ObjectId()
       Activity.create
         actor: new mongoose.Types.ObjectId()
         action: 'created'
         resource:
-          type: 'entry'
-          id: entryId
-          name: 'Test Activity'
-          bucket:
-            slug: 'test'
+          kind: 'article'
+          name: 'Test Article'
+          entry: entry
+          bucket: bucket
       , (e, activity) ->
-        expect(activity.resource.path).to.equal "/buckets/test/#{entryId}"
-        done()
+        Activity.populate activity, 'resource.entry resource.bucket', (e, activity) ->
+          expect(activity.resource.path).to.equal "/buckets/articles/#{entry.id}"
+          done()
 
     it 'automatically creates a resource.path for a Bucket'
     it 'automatically creates a resource.path for a User'

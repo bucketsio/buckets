@@ -110,13 +110,10 @@ entrySchema.path 'keywords'
 
 entrySchema.methods.createActivity = (action, actor, callback) ->
   Activity.createForResource
-    id: @_id
-    type: 'entry'
+    kind: @bucket.singular.toLowerCase()
     name: @title
-    bucket:
-      id: @bucket._id
-      slug: @bucket.slug
-      singular: @bucket.singular
+    entry: @
+    bucket: @bucket
   , action, actor, callback
 
 entrySchema.statics.findByParams = (params, callback) ->
