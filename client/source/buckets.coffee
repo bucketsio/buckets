@@ -26,10 +26,10 @@ module.exports = class BucketsApp extends Chaplin.Application
     mediator.user = new User @options.user if @options.user
     mediator.plugins = {}
 
-    if options.cloudinary
+    if @options.cloudinary
       $.cloudinary.config
-        api_key: options.cloudinary.api_key
-        cloud_name: options.cloudinary.cloud_name
+        api_key: @options.cloudinary.api_key
+        cloud_name: @options.cloudinary.cloud_name
 
     mediator.layout = new Layout
       title: 'Buckets'
