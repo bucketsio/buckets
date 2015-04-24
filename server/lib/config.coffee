@@ -26,7 +26,7 @@ config = convict
     doc: 'A MongoDB connection string.'
     format: String
     default: "mongodb://localhost/buckets_development"
-    env: 'MONGOHQ_URL'
+    env: 'MONGOLAB_URI'
   env:
     doc: 'The app environment.'
     format: ['production', 'development', 'test']

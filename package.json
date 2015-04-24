@@ -1,6 +1,6 @@
 {
   "name": "buckets",
-  "version": "0.0.8-pre3",
+  "version": "0.0.8",
   "description": "Manage content better.",
   "homepage": "http://buckets.io",
   "scripts": {
@@ -84,7 +84,7 @@
     "inquirer": "^0.8.0",
     "marked": "^0.3.2",
     "moment": "^2.7.0",
-    "mongoose": "^3.8.15",
+    "mongoose": "legacy",
     "mongoose-regexp": "0.0.1",
     "mongoose-unique-validator": "^0.4.0",
     "munge": "^0.1.4",
