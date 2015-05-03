@@ -9,7 +9,7 @@ Once you’ve installed the project dependencies, use Grunt.js to build, serve, 
 * `grunt` (default) — Builds a development version of Buckets (unminified, with source maps).
 * `grunt prepublish` (default) — Builds a production version of Buckets (minified).
 * `grunt start` — **This’ll be your main jam.** Creates a local server (localhost:3000) and runs “watch” for all files. Any changes to server CoffeeScript will restart the Node server and then reload the browser. Any changes to client-side CoffeeScript, Stylus, or Handlebars will re-compile, then reload the browser.
-* `grunt dev` — Shortcut for `grunt && grunt start`
+* `grunt dev` — Shortcut for `grunt && grunt start`, with Node Debugger (for node-inspector) added.
 
 There are also specific [Grunt tasks for testing](./tests.md).
 

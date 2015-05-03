@@ -7,7 +7,11 @@ glob = require 'glob'
 fs = require 'fs'
 favicon = require 'serve-favicon'
 _ = require 'underscore'
-marked = require 'marked'
+md = require('markdown-it')(
+  typographer: yes
+  linkify: yes
+  breaks: yes
+)
 
 config = require '../lib/config'
 plugins = require '../lib/plugins'
@@ -56,8 +60,9 @@ app.get '/logout', (req, res) ->
 app.get "/help-html/*", (req, res, next) ->
   glob "../../docs/user-docs/#{req.params[0]}", cwd: __dirname, (e, files) ->
     return res.status(404).end() unless files.length
+
     fs.readFile "#{__dirname}/#{files[0]}", encoding: 'utf-8', (e, content) ->
-      return res.status(400).end() unless content and html = marked(content)
+      return res.status(400).end() unless content and html = md.render(content)
       res.status(200).send html
 
 app.get '/:admin*?', (req, res) ->

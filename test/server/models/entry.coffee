@@ -1,5 +1,4 @@
 db = require '../../../server/lib/database'
-mongoose = require 'mongoose'
 
 Entry = require '../../../server/models/entry'
 Bucket = require '../../../server/models/bucket'
@@ -110,8 +109,7 @@ describe 'Entry', ->
           bucket: photoBucket._id
           author: user._id
           status: 'live'
-        ], ->
-          done()
+        ], done
 
     it 'filters by bucket slug (empty)', (done) ->
       Entry.findByParams bucket: '', (e, entries) ->

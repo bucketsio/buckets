@@ -70,10 +70,10 @@ buildSchema.pre 'validate', (next) ->
       BuildFile.count build_env: @env, (e, count) =>
         if count is 0
           Build.count {env: @env, md5: tar.md5}, (err, count) =>
-            logger.warn 'Found a matching md5, invalidating build.'
             if count is 0
               @set tar
             else
+              logger.info 'Found a matching md5, invalidating build.'
               @invalidate 'source', 'A build with that md5 already exists.'
             next()
         else
@@ -277,7 +277,7 @@ buildSchema.statics.generateTar = (dirpath, callback) ->
       logger.error 'Error writing .tar.gz'
       return
 
-    output.on 'close', =>
+    output.on 'close', ->
       size = archive.pointer()
 
       logger.verbose 'Wrote', filename, filesize size
