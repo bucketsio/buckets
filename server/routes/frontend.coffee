@@ -61,7 +61,12 @@ app.all '/:frontend*?', (req, res, next) ->
   # We could use a $where here, but it's basically the same
   # since a basic $where scans all rows (plus this gives us more flexibility)
   Route.find {}, 'urlPattern urlPatternRegex template keys', sort: 'sort', (err, routes) ->
-    return next() unless routes?.length or config.has('catchAll') is yes
+    
+    unless routes?.length
+      logger.info 'No routes found. Redirecting to admin panel'
+      return res.redirect('/' + config.get('adminSegment'))
+
+    return next() if config.has('catchAll') is yes
 
     # dynamic renderTime helper
     # (startTime is set in index.coffee)
