@@ -4,6 +4,7 @@ Model = require 'lib/model'
 PageView = require 'views/base/page'
 FormMixin = require 'views/base/mixins/form'
 FieldTypeInputView = require 'views/fields/input'
+FieldData = require 'models/field_data'
 Chaplin = require 'chaplin'
 
 tpl = require 'templates/entries/edit'
@@ -59,7 +60,7 @@ module.exports = class EntryEditView extends PageView
     content = @model.get('content')
 
     _.each @bucket.get('fields'), (field) =>
-      fieldValue = content[field.slug]
+      fieldValue = content[field.slug]?.getValue()
       fieldModel = new Model _.extend field, value: fieldValue
 
       @subview 'field_'+field.slug, new FieldTypeInputView
@@ -118,15 +119,15 @@ module.exports = class EntryEditView extends PageView
 
     content = {}
     for field in @bucket.get('fields')
-      content[field.slug] = @subview("field_#{field.slug}").getValue?()
-      continue if content[field.slug]
+      content[field.slug] = new FieldData fieldType: field.fieldType
+      content[field.slug].setValue @subview("field_#{field.slug}").getValue?()
+      continue if content[field.slug].getValue()
 
       data = @subview "field_#{field.slug}"
         .$el.formParams no
       simpleValue = data[field.slug]
 
-      content[field.slug] = if simpleValue? then simpleValue else data
-
+      content[field.slug].setValue if simpleValue? then simpleValue else data
     @model.set content: content
 
     status = @model.get 'status'

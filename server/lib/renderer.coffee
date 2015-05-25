@@ -39,7 +39,14 @@ module.exports = (hbs) ->
       for entry in entries
 
         # Make content attributes first-level tags, ie. `{{body}}` instead of `{{content.body}}`
-        entryJSON = _.extend entry, entry.content
+        # `{{body.data.value}}` becomes `{{body}}` while `{{body.data.html}}` becomes `{{body.html}}`
+        content = {}
+        for slug, fieldData of entry.content
+          for key, value of fieldData.data
+            newKey = if key is 'value' then slug else "#{slug}_#{key}"
+            content[newKey] = value
+
+        entryJSON = _.extend entry, content
         delete entryJSON.content
 
         try

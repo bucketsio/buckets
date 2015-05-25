@@ -32,6 +32,14 @@ chrono.parsers.NowParser = (text, ref, opt) ->
 
   parser
 
+fieldDataSchema = new mongoose.Schema
+  fieldType:
+    type: String
+    required: yes
+  data:
+    type: Object
+    default: value: null
+
 entrySchema = new mongoose.Schema
   title:
     type: String
