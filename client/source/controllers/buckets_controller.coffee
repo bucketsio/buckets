@@ -39,9 +39,22 @@ module.exports = class BucketsController extends Controller
       model: newBucket
       fields: @newFields
 
+  review: ->
+    @entries = new Entries
+    
+    for role, i in mediator.user.get('roles')
+      currentBucket = mediator.buckets?.findWhere id: role.resourceId
+      @entries.fetch( data: { bucket: currentBucket.get('slug'), status: 'pending', add : true})
+
+    reviewBucket = new Bucket
+    reviewBucket.set('name','Entries under Review')
+
+    @view = new EntriesBrowser
+     collection: @entries
+     bucket: reviewBucket
+
   browse: (params) ->
     bucket = mediator.buckets?.findWhere slug: params.slug
-
     return @bucketNotFound() unless bucket
 
     if params.add

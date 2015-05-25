@@ -13,6 +13,7 @@ module.exports = (match) ->
   match 'reset/:token', 'auth#resetPassword', params: authRequired: no
 
   match 'buckets/add', 'buckets#add'
+  match 'buckets/review', 'buckets#review'
   match 'buckets/:slug', 'buckets#browse'
   match 'buckets/:slug/add', 'buckets#browse', params: add: yes
   match 'buckets/:slug/fields', 'buckets#editFields'
