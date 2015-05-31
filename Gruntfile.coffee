@@ -20,41 +20,29 @@ module.exports = (grunt) ->
     browserify:
       options:
         transform: ['coffeeify', 'hbsfy']
-        # bundleOptions:
-        #   debug: yes
-        browserifyOptions:
-          fullPaths: true
-          extensions: ['.coffee', '.hbs']
-          paths: ['./client/source', 'node_modules']
-          detectGlobals: no # Disable "detect-globals" for faster build
-          noParse: [
-            'bower_components/backbone/backbone.js'
-            'bower_components/chaplin/chaplin.js'
-            'bower_components/cocktail/Cocktail.js'
-            'bower_components/underscore/underscore.js'
-          ]
-        alias: [
-          'bower_components/backbone/backbone.js:backbone'
-          'bower_components/chaplin/chaplin.js:chaplin'
-          'bower_components/cocktail/Cocktail.js:cocktail'
-          'bower_components/underscore/underscore.js:underscore'
-          'hbsfy/runtime:hbsfy/runtime'
-          'client/source/buckets.coffee:buckets'
-        ]
-      app:
-        files:
-          'public/js/buckets.js': [
-            'client/source/**/*.{coffee,hbs}'
-          ]
 
+        # We build these explicitly into buckets.js:
+        external: [
+          'buckets'
+          'handlebars'
+          'hbsfy/runtime'
+          'backbone'
+          'underscore'
+          'chaplin'
+          'cocktail'
+        ]
+
+        browserifyOptions:
+          debug: yes
+          extensions: ['.coffee', '.hbs']
+
+      # browserify:tests
       tests:
         files:
           'tmp/tests.js': ['test/client/**/*.coffee']
 
+      # browserify:plugins
       plugins:
-        options:
-          exclude: ['buckets', 'hbsfy/runtime']
-          alias: []
         files: [
           expand: yes
           cwd: 'node_modules/'
@@ -67,6 +55,66 @@ module.exports = (grunt) ->
             pluginName = path.split('/')[0]?.replace('buckets-', '')
             dest + pluginName + '.js' if pluginName
         ]
+
+      # browserify:app
+      app:
+        options:
+          external: []
+          browserifyOptions:
+            debug: yes
+            extensions: ['.coffee', '.hbs']
+            paths: ['./client/source', 'node_modules']
+            detectGlobals: no # Disable "detect-globals" for faster build
+            noParse: [
+              './bower_components/backbone/backbone.js'
+              './bower_components/chaplin/chaplin.js'
+              './bower_components/cocktail/Cocktail.js'
+              './bower_components/underscore/underscore.js'
+            ]
+          require: [
+            ['./client/source/buckets.coffee', expose: 'buckets']
+            [
+              './client/source/controllers/buckets_controller.coffee',
+              expose: 'controllers/buckets_controller'
+            ]
+            [
+              './client/source/controllers/auth_controller.coffee'
+              expose: 'controllers/auth_controller'
+            ]
+            [
+              './client/source/controllers/error_controller.coffee'
+              expose: 'controllers/error_controller'
+            ]
+            [
+              './client/source/controllers/help_controller.coffee'
+              expose: 'controllers/help_controller'
+            ]
+            [
+              './client/source/controllers/install_controller.coffee'
+              expose: 'controllers/install_controller'
+            ]
+            [
+              './client/source/controllers/routes_controller.coffee'
+              expose: 'controllers/routes_controller'
+            ]
+            [
+              './client/source/controllers/settings_controller.coffee'
+              expose: 'controllers/settings_controller'
+            ]
+            [
+              './client/source/controllers/templates_controller.coffee'
+              expose: 'controllers/templates_controller'
+            ]
+            ['./bower_components/cocktail/Cocktail.js', expose: 'cocktail']
+            ['./bower_components/chaplin/chaplin.js', expose: 'chaplin']
+            ['./bower_components/backbone/backbone.js', expose: 'backbone']
+            ['./bower_components/underscore/underscore.js', expose: 'underscore']
+            ['hbsfy/runtime', expose: 'hbsfy/runtime']
+          ]
+        files:
+          'public/js/buckets.js': [
+            'client/source/buckets/buckets.coffee'
+          ]
 
     clean:
       app: ['public']

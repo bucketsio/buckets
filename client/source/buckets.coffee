@@ -18,9 +18,7 @@ module.exports = class BucketsApp extends Chaplin.Application
   initialize: (@options = {}) ->
     @initRouter routes, root: "/#{@options.adminSegment}/"
 
-    @initDispatcher
-      controllerPath: 'client/source/controllers/'
-      controllerSuffix: '_controller.coffee'
+    @initDispatcher()
 
     mediator.options = @options
     mediator.user = new User @options.user if @options.user

@@ -3,6 +3,8 @@ _ = require 'underscore'
 
 mediator = Chaplin.mediator
 
+helpers = require 'helpers'
+
 module.exports = class Layout extends Chaplin.Layout
 
   regions:
