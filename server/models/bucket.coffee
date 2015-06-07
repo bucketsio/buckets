@@ -1,6 +1,7 @@
 inflection = require 'inflection'
 mongoose = require 'mongoose'
 uniqueValidator = require 'mongoose-unique-validator'
+winston = require 'winston'
 
 Route = require '../models/route'
 db = require '../lib/database'
@@ -21,6 +22,9 @@ fieldSchema = new mongoose.Schema
     type: String
     required: yes
   settings: {}
+,
+  toJSON:
+    getters: yes
 
 fieldSchema
   .path 'slug'
@@ -39,6 +43,27 @@ fieldSchema
       'content'
     ]
   , 'Sorry, that’s a reserved field slug.'
+
+fieldSchema.virtual 'slug.old'
+  .get -> @_slug
+  .set (slug) -> @_slug = slug
+
+fieldSchema.post 'init', ->
+  @set 'slug.old', @get 'slug'
+
+fieldSchema.post 'save', ->
+  # There is a very annoying case where slug.old doesn't get filled in properly
+  if @get('slug.old') and @get('slug.old') isnt @get('slug')
+    oldPath = "content.#{@get 'slug.old'}"
+    newPath = "content.#{@get 'slug'}"
+    q = {}
+    q[oldPath] = $exists: yes
+    u = $rename: {}
+    u.$rename[oldPath] = newPath
+    # TODO will probably have to change due to #168
+    # careful with this, updates circumvent middleware
+    mongoose.model('Entry').update q, u, {}, (err) ->
+      winston.error err if err?
 
 bucketSchema = new mongoose.Schema
   name:

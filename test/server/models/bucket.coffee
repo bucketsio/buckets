@@ -31,6 +31,62 @@ describe 'Model#Bucket', ->
         expect(bucket.singular).to.equal 'Article'
         done()
 
+  describe 'Update', ->
+    Entry = require '../../../server/models/entry'
+
+    before reset.db
+
+    user = null
+    before (done) ->
+      User.create {name: 'Bucketer', email: 'hello@buckets.io', password: 'S3cr3ts'}, (err, u) ->
+        expect(err).to.not.exist
+        user = u
+        done()
+
+    bucket = null
+    beforeEach (done) ->
+      bucket = new Bucket
+        name: 'Articles'
+        slug: 'articles'
+        #fields: [
+        #  fieldType: 'markdown'
+        #  slug: 'body'
+        #  name: 'body'
+        #]
+      bucket.fields.push
+        fieldType: 'markdown'
+        slug: 'body'
+        name: 'body'
+      bucket.save (err, b) ->
+        expect(err).to.not.exist
+        done()
+
+    afterEach (done) -> Bucket.remove {}, -> done()
+
+    it 'updates entry fields when slug changes', (done) ->
+      Entry.create
+        title: 'Some Entry'
+        bucket: bucket._id
+        author: user._id
+        content: body: 'Bodyslam'
+      , (err, entry) ->
+        expect(err).to.not.exist
+        expect(entry.get 'content.body').to.exist
+
+        Bucket.findById bucket._id, (err, bucket) ->
+          field = bucket.get('fields')[0]
+          field.set 'slug', 'new-body'
+
+          bucket.save (err, field) ->
+            expect(err).to.not.exist
+            Entry.find {bucket: bucket._id}, (err, entries) ->
+              expect(err).to.not.exist
+              expect(entries.length).to.not.equal 0
+              for entry in entries
+                expect(entry.get 'content.body').to.not.exist
+                expect(entry.get 'content.new-body').to.exist
+              done()
+
   describe '#getMembers', ->
     u = null
     b = null
