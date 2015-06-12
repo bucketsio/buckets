@@ -6,6 +6,8 @@ getSlug = require 'speakingurl'
 
 db = require '../lib/database'
 
+Activity = require '../models/activity'
+
 # Add a parser to Chrono to understand "now"
 # A bit hacky because Chrono doesn't support ms yet
 chrono.parsers.NowParser = (text, ref, opt) ->
@@ -97,7 +99,6 @@ entrySchema.path('publishDate').set (val='') ->
   parsed = chrono.parse(val)?[0]?.startDate
   parsed || Date.now()
 
-
 entrySchema.path('description').validate (val) ->
   val?.length < 140
 , 'Descriptions must be less than 140 characters.'
@@ -106,6 +107,14 @@ entrySchema.path 'keywords'
   .set (val) ->
     return unless _.isString val
     _.compact _.map val.split(','), (val) -> val.trim()
+
+entrySchema.methods.createActivity = (action, actor, callback) ->
+  Activity.createForResource
+    kind: @bucket.singular.toLowerCase()
+    name: @title
+    entry: @
+    bucket: @bucket
+  , action, actor, callback
 
 entrySchema.statics.findByParams = (params, callback) ->
 

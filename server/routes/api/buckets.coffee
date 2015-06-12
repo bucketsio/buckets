@@ -1,5 +1,6 @@
 express = require 'express'
 
+Activity = require '../../models/activity'
 Bucket = require '../../models/bucket'
 User = require '../../models/user'
 
@@ -159,6 +160,7 @@ app.route('/buckets')
       if err
         res.status(400).send err
       else if bucket
+        bucket.createActivity 'created', req.user
         res.status(200).send bucket
 
   .get (req, res) ->
@@ -197,14 +199,16 @@ app.route('/buckets/:bucketID')
   .delete (req, res) ->
     return res.status(401).end() unless req.user?.hasRole ['administrator']
 
-    Bucket.findById req.params.bucketID, (err, bkt) ->
+    Bucket.findById req.params.bucketID, (err, bucket) ->
       if err
         res.send 400, err
       else
-        bkt.remove (err) ->
+        bucket.remove (err) ->
           if err
             res.status(400).send err
           else
+            bucket.createActivity 'deleted', req.user, ->
+              Activity.unlinkActivities { 'resource.bucket': bucket }
             res.status(204).end()
 
   .put (req, res) ->
@@ -215,6 +219,7 @@ app.route('/buckets/:bucketID')
       return res.status(400).send e: err if err
       bucket.set(req.body).save (err, bucket) ->
         return res.status(400).send err if err
+        bucket.createActivity 'updated', req.user
         res.status(200).send bucket
 
 ###

@@ -2,6 +2,7 @@ inflection = require 'inflection'
 mongoose = require 'mongoose'
 uniqueValidator = require 'mongoose-unique-validator'
 
+Activity = require '../models/activity'
 Route = require '../models/route'
 db = require '../lib/database'
 {Sortable} = require '../lib/mongoose-plugins'
@@ -113,5 +114,12 @@ bucketSchema.methods.getMembers = (callback) ->
       $elemMatch:
         resourceId: @_id
   , callback
+
+bucketSchema.methods.createActivity = (action, actor, callback) ->
+  Activity.createForResource
+    kind: 'bucket'
+    name: @name
+    bucket: @
+  , action, actor, callback
 
 module.exports = db.model 'Bucket', bucketSchema

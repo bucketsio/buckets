@@ -11,8 +11,6 @@ hbs = require 'hbs'
 request = require 'supertest'
 
 describe 'Integration#Builds', ->
-  @timeout 5000
-
   beforeEach (done) ->
     buckets ->
       reset.builds ->

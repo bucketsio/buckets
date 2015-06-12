@@ -7,6 +7,8 @@ DashboardView = require 'views/buckets/dashboard'
 EntriesBrowser = require 'views/entries/browser'
 EntryEditView = require 'views/entries/edit'
 
+Activity = require 'models/activity'
+Activities = require 'models/activities'
 Bucket = require 'models/bucket'
 Buckets = require 'models/buckets'
 Fields = require 'models/fields'
@@ -20,7 +22,11 @@ mediator = require('chaplin').mediator
 module.exports = class BucketsController extends Controller
 
   dashboard: ->
-    @view = new DashboardView
+    @activities = new Activities
+
+    @activities.fetch().done =>
+      @view = new DashboardView
+        collection: @activities
 
   add: ->
     @adjustTitle 'New Bucket'

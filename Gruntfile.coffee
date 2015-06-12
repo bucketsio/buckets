@@ -90,7 +90,7 @@ module.exports = (grunt) ->
 
     shell:
       mocha:
-        command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server -b'
+        command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server -b --timeout 5000' # 5000ms timeout to prevent timeout on older/slow? machines
       cov:
         command: 'NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers coffee:coffee-script/register --recursive test/server --require blanket --reporter html-cov > coverage.html'
       publish:

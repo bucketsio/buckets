@@ -1,33 +1,69 @@
 mongoose = require 'mongoose'
 db = require '../lib/database'
+logger = require '../lib/logger'
 
 # Conforms, at least somewhat, to the activity stream spec outlined at
 # http://activitystrea.ms/specs/json/1.0
 activitySchema = new mongoose.Schema
-  published:
+  publishDate:
     type: Date
     default: Date.now
   actor:
-    id:
-      type: mongoose.Schema.Types.ObjectId
-      ref: 'User'
-      required: true
-  verb:
+    type: mongoose.Schema.Types.ObjectId
+    ref: 'User'
+    required: true
+  action:
+    type: String
+    enum: ['created', 'updated', 'deleted']
+    required: true
+  resource:
+    kind:
+      type: String
     name:
       type: String
-      enum: ['post', 'update']
       required: true
-  object:
-    objectType:
-      type: String
-      required: true
-      enum: ['entry', 'bucket', 'user']
-    id:
+    entry:
       type: mongoose.Schema.Types.ObjectId
-      required: true
+      ref: 'Entry'
+    bucket:
+      type: mongoose.Schema.Types.ObjectId
+      ref: 'Bucket'
+    user:
+      type: mongoose.Schema.Types.ObjectId
+      ref: 'User'
 ,
-  autoIndex: no
+  toJSON:
+    virtuals: yes
+    transform: (doc, ret, options) ->
+      delete ret._id
+      delete ret.__v
+      ret
 
-activitySchema.set 'toJSON', virtuals: true
+activitySchema.virtual 'resource.path'
+  .get ->
+    if @resource.entry or @resource.bucket or @resource.user
+      switch @resource.kind
+        when 'bucket' then "/buckets/#{@resource.bucket.slug}"
+        when 'user' then "/users/#{@resource.user.email}"
+        else "/buckets/#{@resource.bucket.slug}/#{@resource.entry.id}"
+
+activitySchema.statics.createForResource = (resource, action, actor, callback) ->
+  @create { resource, action, actor }, (err, activity) ->
+    if err
+      logger.error 'Error creating Activity', activity, err
+    else
+      callback(action) if callback
+
+activitySchema.statics.unlinkActivities = (conditions) ->
+  @update conditions,
+    {
+      $set:
+        'resource.entry': null
+        'resource.bucket': null
+        'resource.user': null
+    },
+    { multi: true },
+    (err) ->
+      logger.error 'Error unlinking Activities', resource, err if err
 
 module.exports = db.model 'Activity', activitySchema
