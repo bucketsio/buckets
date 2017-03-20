@@ -138,3 +138,20 @@ describe 'Entry', ->
         expect(entries).to.have.length 1
         expect(entries?[0]?.title).to.equal 'Test Article'
         done()
+
+    it 'filters by negative bucket slug', (done) ->
+      Entry.findByParams bucket: '-photos', (e, entries) ->
+        expect(entries).to.have.length 1
+        expect(entries?[0]?.title).to.equal 'Test Article'
+        done()
+
+    it 'filters by multiple negative bucket slugs', (done) ->
+      Entry.findByParams bucket: '-photos|-articles', (e, entries) ->
+        expect(entries).to.have.length 0
+        done()
+
+    it 'filters by negative and positive bucket slug', (done) ->
+      Entry.findByParams bucket: '-photos|articles', (e, entries) ->
+          expect(entries).to.have.length 1
+          expect(entries?[0]?.title).to.equal 'Test Article'
+          done()
